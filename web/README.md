@@ -1,27 +1,35 @@
-# PolskiPlatform
+# polski.
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 17.3.11.
+Interaktywny kurs języka polskiego zbudowany w Angularze. Pierwszy moduł obejmuje pięć lekcji, ćwiczenia pisemne i wyboru, klasyfikowanie form gramatycznych, nagrania, wynik lekcji oraz lokalnie zapisywane postępy.
 
-## Development server
+## Uruchomienie
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+Projekt wymaga Node.js 22.22.3+, 24.15.0+ albo 26+. Zgodność wersji sprawdza się w [tabeli Angular](https://angular.dev/reference/versions).
 
-## Code scaffolding
+```sh
+nvm install
+nvm use
+npm install
+npm start
+```
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+Serwer deweloperski udostępnia aplikację pod `http://localhost:4200/`. W trybie deweloperskim service worker wyłączony. Produkcyjna kompilacja włącza cache aplikacji, danych lekcji i nagrań:
 
-## Build
+```sh
+npm run build
+npm run preview:pwa
+```
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+PWA można zainstalować z menu przeglądarki. Na iOS użyj menu Udostępnij → Dodaj do ekranu początkowego. Po pierwszym pobraniu kursu aplikacja przechowuje interfejs, dane i odsłuchiwane nagrania na urządzeniu.
 
-## Running unit tests
+## Struktura
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+- `src/app/data/lesson-bank.ts` — сценарии интерактивных упражнений для первых пяти уроков.
+- `src/app/pages/dashboard/` — путь курса и экран прогресса.
+- `src/app/pages/lesson/` — проверка ответов, результаты и переход между заданиями.
+- `src/app/services/progress.service.ts` — XP, серия занятий и локальное сохранение.
+- `public/content/` — пять машиночитаемых JSONL-файлов workbook.
+- `public/assets/telegram_audio/` — аудиозаписи, используемые в уроках 1–5.
+- `ngsw-config.json`, `public/manifest.webmanifest` — кеширование и установка PWA.
 
-## Running end-to-end tests
-
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
-
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+Сейчас доступны пять подготовленных уроков. В банке заданий собраны интерактивные выборки упражнений из материалов; полные задания и ответы сохранены в JSONL для дальнейшего импорта и расширения курса. Прогресс пока хранится в `localStorage` на устройстве.

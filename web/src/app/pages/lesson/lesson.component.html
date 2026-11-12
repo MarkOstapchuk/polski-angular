@@ -1,0 +1,90 @@
+@if (lesson(); as lesson) {
+  <div class="lesson-shell">
+    <header class="lesson-topbar">
+      <a class="close-button" routerLink="/" aria-label="Wróć do ścieżki">×</a>
+      <div class="top-progress" aria-label="Postęp lekcji">
+        <div class="progress-track"><span [style.width.%]="finished() ? 100 : activityProgress()"></span></div>
+        <small>{{ finished() ? lesson.activities.length : activeIndex() + 1 }} / {{ lesson.activities.length }}</small>
+      </div>
+      <div class="lesson-xp"><span>✦</span> {{ finished() ? '+' + awardedXp() : 'do 20' }} XP</div>
+    </header>
+
+    @if (!finished()) {
+      @if (activity(); as activity) {
+        <main class="lesson-main">
+          <div class="lesson-heading">
+            <p class="lesson-breadcrumb">LEKCJA {{ lesson.id }} <span>·</span> {{ lesson.topic }}</p>
+            <h1>{{ activity.title }}</h1>
+            <p class="instruction">{{ activity.instruction }}</p>
+            <div class="source-line"><span class="source-dot"></span>{{ activity.sourceLabel }} <span class="source-id">{{ activity.sourceExerciseId }}</span></div>
+          </div>
+
+          <section class="exercise-card" [class.is-checked]="checked()">
+            @if (activity.audioUrl) {
+              <div class="audio-panel">
+                <div class="audio-icon" aria-hidden="true">♫</div>
+                <div class="audio-copy"><strong>{{ activity.audioLabel || 'Nagranie' }}</strong><small>Możesz odtworzyć nagranie ponownie.</small></div>
+                <audio controls preload="none" [src]="activity.audioUrl">Twoja przeglądarka nie obsługuje audio.</audio>
+              </div>
+            }
+
+            <div class="question-list" [class.choice-list]="activity.kind !== 'typed'">
+              @for (item of activity.items; track item.id; let index = $index) {
+                <div class="question-row" [class.answer-correct]="checked() && isItemCorrect(item)" [class.answer-wrong]="checked() && !isItemCorrect(item)">
+                  <div class="question-number">{{ index + 1 }}</div>
+                  <div class="question-body">
+                    <label class="question-prompt" [for]="activity.id + '-' + item.id">{{ item.prompt }}</label>
+                    @if (item.options; as options) {
+                      <div class="option-list" role="group" [attr.aria-label]="item.prompt">
+                        @for (option of options; track option) {
+                          <button class="option-button" type="button" [class.selected]="answerFor(item.id) === option" [class.option-right]="checked() && optionIsAccepted(item, option)" [class.option-error]="checked() && answerFor(item.id) === option && !isItemCorrect(item)" [disabled]="checked()" (click)="selectOption(item.id, option)">{{ option }}</button>
+                        }
+                      </div>
+                    } @else {
+                      <input class="answer-input" [id]="activity.id + '-' + item.id" [ngModel]="answerFor(item.id)" (ngModelChange)="setAnswer(item.id, $event)" [disabled]="checked()" [placeholder]="activity.audioUrl ? 'Wpisz to, co słyszysz' : 'Twoja odpowiedź'" [attr.autocomplete]="'off'" [attr.aria-label]="item.prompt" (keydown.enter)="$event.preventDefault()">
+                    }
+                    @if (checked()) {
+                      <div class="answer-feedback" [class.feedback-right]="isItemCorrect(item)" [class.feedback-wrong]="!isItemCorrect(item)" aria-live="polite">
+                        @if (isItemCorrect(item)) { <span>✓ Dobrze</span> }
+                        @else { <span>Poprawna odpowiedź: <strong>{{ expectedAnswer(item) }}</strong></span> }
+                      </div>
+                      @if (item.explanation) { <small class="answer-explanation">{{ item.explanation }}</small> }
+                    }
+                  </div>
+                </div>
+              }
+            </div>
+
+            <div class="exercise-footer">
+              @if (!checked()) {
+                <div class="answer-count">Odpowiedz na wszystkie pytania, aby sprawdzić.</div>
+                <button class="check-button" type="button" [disabled]="!hasAnsweredAll()" (click)="checkAnswers()">Sprawdź odpowiedzi <span>→</span></button>
+              } @else {
+                <div class="result-strip" [class.result-perfect]="currentCorrectCount() === activity.items.length">
+                  <span class="result-icon">{{ currentCorrectCount() === activity.items.length ? '✦' : '↗' }}</span>
+                  <span><strong>{{ currentCorrectCount() }} z {{ activity.items.length }} poprawnie</strong><small>{{ currentCorrectCount() === activity.items.length ? 'Świetna robota!' : 'Zapamiętaj poprawne formy i idź dalej.' }}</small></span>
+                </div>
+                <button class="check-button next-button" type="button" (click)="next()">{{ isLastActivity() ? 'Zobacz wynik' : 'Dalej' }} <span>→</span></button>
+              }
+            </div>
+          </section>
+          <p class="offline-note">✦ Lekcja działa także offline po pierwszym otwarciu aplikacji.</p>
+        </main>
+      }
+    } @else {
+      <main class="completion-main">
+        <div class="completion-spark">✦</div>
+        <p class="lesson-breadcrumb">LEKCJA {{ lesson.id }} · UKOŃCZONA</p>
+        <h1>Świetna praca!</h1>
+        <p class="completion-copy">{{ lesson.title }} — masz już za sobą całą lekcję.</p>
+        <div class="score-orb" [class.score-high]="finalScore() >= 80"><strong>{{ finalScore() }}<small>%</small></strong><span>poprawnych odpowiedzi</span></div>
+        <div class="completion-stats">
+          <div><strong>{{ correctAnswers() }} / {{ totalQuestions() }}</strong><small>poprawne odpowiedzi</small></div>
+          <div><strong>+{{ awardedXp() }} XP</strong><small>{{ awardedXp() ? 'dodano do postępów' : 'najlepszy wynik zapisany' }}</small></div>
+        </div>
+        <p class="next-unlock">{{ finalScore() === 100 ? 'Perfekcyjnie. Każdy poprawny zwrot zostaje z Tobą.' : 'Błędy są częścią nauki. Poprawne odpowiedzi zobaczysz w podsumowaniu ćwiczeń.' }}</p>
+        <a class="return-button" routerLink="/">Wróć do ścieżki <span>→</span></a>
+      </main>
+    }
+  </div>
+}

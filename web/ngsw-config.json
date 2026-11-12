@@ -1,0 +1,32 @@
+{
+  "$schema": "./node_modules/@angular/service-worker/config/schema.json",
+  "index": "/index.html",
+  "assetGroups": [
+    {
+      "name": "app-shell",
+      "installMode": "prefetch",
+      "resources": {
+        "files": [
+          "/index.html",
+          "/*.css",
+          "/*.js",
+          "/manifest.webmanifest",
+          "/favicon.svg",
+          "/icons/**"
+        ]
+      }
+    },
+    {
+      "name": "course-data",
+      "installMode": "prefetch",
+      "updateMode": "prefetch",
+      "resources": { "files": ["/content/**"] }
+    },
+    {
+      "name": "lesson-audio",
+      "installMode": "lazy",
+      "updateMode": "prefetch",
+      "resources": { "files": ["/assets/telegram_audio/**"] }
+    }
+  ]
+}
