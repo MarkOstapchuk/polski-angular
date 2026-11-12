@@ -1,0 +1,64 @@
+{
+  "workbook": {
+    "pages_checked_by_second_ocr": 105,
+    "mean_character_agreement": 0.65,
+    "status_counts": {
+      "partial_agreement": 55,
+      "close_two_passes": 23,
+      "manual_visual_review": 27
+    },
+    "manual_visual_review_pages": [
+      9,
+      11,
+      16,
+      18,
+      22,
+      24,
+      25,
+      27,
+      28,
+      29,
+      31,
+      32,
+      33,
+      34,
+      36,
+      38,
+      48,
+      50,
+      58,
+      62,
+      69,
+      83,
+      89,
+      90,
+      102,
+      105,
+      107
+    ]
+  },
+  "teacher_lesson_pages": {
+    "pages_checked_by_second_ocr": 127,
+    "mean_character_agreement": 0.798,
+    "status_counts": {
+      "close_two_passes": 89,
+      "manual_visual_review": 13,
+      "partial_agreement": 25
+    },
+    "manual_visual_review_pages": [
+      18,
+      20,
+      24,
+      29,
+      48,
+      53,
+      68,
+      69,
+      70,
+      73,
+      79,
+      111,
+      113
+    ]
+  }
+}

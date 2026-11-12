@@ -1,0 +1,52 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "polski-platform-content-v1",
+  "title": "Polski krok po kroku source content records",
+  "description": "JSONL files share stable lesson and exercise IDs; item-level workbook records retain source scans, normalized Polish prompts and answers, audio links, and explicit QA status.",
+  "common_fields": {
+    "lesson_id": "integer 1..26",
+    "exercise_id": "WB-Lnn-Enn for workbook exercise",
+    "source_id": "stable source page identifier such as workbook-pdf-p102",
+    "source_file": "path relative to project root",
+    "pdf_page": "1-based page index in original PDF",
+    "printed_page": "printed page number when available",
+    "text": "verbatim extracted page text, not assumed corrected",
+    "text_status": "explicit transcription/QA state"
+  },
+  "files": {
+    "workbook-pages.jsonl": "one record per source page",
+    "workbook-lessons.jsonl": "one record per lesson",
+    "workbook-key-pages.jsonl": "one record per workbook answer-key scan page",
+    "workbook-answer-index.jsonl": "one lesson record containing exercise-to-key-page locators",
+    "workbook-audio-exercises.jsonl": "one record per workbook audio asset",
+    "teacher-manual-pages.jsonl": "one record per source page",
+    "teacher-lessons.jsonl": "one record per teacher-guide lesson section",
+    "workbook-exercise-index.jsonl": "Global exercise index with content_record_ref links for item-level lesson 1–5 records.",
+    "coursebook-exercises.jsonl": "exercise blocks extracted from the searchable coursebook PDF and teacher-guide lesson references",
+    "workbook-scan-compare.jsonl": "second-pass scan OCR and page agreement flags for workbook",
+    "teacher-scan-compare.jsonl": "second-pass scan OCR and page agreement flags for teacher-guide lesson pages",
+    "qa-summary.json": "aggregate OCR agreement statistics",
+    "qa-report.md": "human-readable verification and import-readiness report",
+    "workbook-lesson01-content.jsonl": "Item-level transcribed and scan-checked prompt/answer records for lesson 1 (16 exercises).",
+    "workbook-lesson02-content.jsonl": "Item-level transcribed and scan-checked prompt/answer records for lesson 2 (18 exercises); L02/E04 retains a printed-key morphology anomaly flag.",
+    "workbook-lesson03-content.jsonl": "Item-level transcribed and scan-checked prompt/answer records for lesson 3 (14 exercises).",
+    "workbook-lesson04-content.jsonl": "Item-level transcribed and scan-checked prompt/answer records for lesson 4 (15 exercises).",
+    "workbook-lesson05-content.jsonl": "Item-level transcribed and scan-checked prompt/answer records for lesson 5 (17 exercises).",
+    "workbook-item-review-queue.jsonl": "Global per-exercise review queue; lessons 1–5 include normalized prompt and answer fields and direct content_record_ref links."
+  },
+  "item_level_content_fields": {
+    "prompt.instruction_pl": "Printed Polish instruction transcribed from workbook scan.",
+    "prompt.content_pl": "Exercise stimulus and response slots in readable Polish.",
+    "prompt.page_ocr_ref": "Reference to the raw OCR page record.",
+    "prompt.scan_ref": "Rendered workbook source page.",
+    "prompt.visual_dependency": "Indicates a source illustration must be included/cropped for the interactive activity.",
+    "answer.text": "Printed key response(s), structured as strings, arrays, or objects to preserve grouping.",
+    "answer.source_printed_page": "Printed answer-key page number.",
+    "answer.scan_ref": "Rendered answer-key source page.",
+    "answer.status": "Transcription and scan-review state; anomalies are called out rather than silently corrected.",
+    "audio_assets": "Array of relative audio-file paths explicitly mapped to the exercise.",
+    "prompt.interaction_type": "Stable task-family label for interactive renderer selection.",
+    "prompt.requires_audio": "Boolean; true when one or more audio_assets are linked.",
+    "prompt.requires_visual": "Boolean; true when the activity depends on a workbook illustration."
+  }
+}
