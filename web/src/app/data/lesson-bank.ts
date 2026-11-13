@@ -1,50 +1,13 @@
-export type ActivityKind = 'choice' | 'typed' | 'classify';
+import { choice, Lesson, typed } from './lesson-types';
+import { LESSON_06 } from './lessons/lesson-06';
+import { LESSON_07 } from './lessons/lesson-07';
+import { LESSON_08 } from './lessons/lesson-08';
+import { LESSON_09 } from './lessons/lesson-09';
+import { LESSON_10 } from './lessons/lesson-10';
+import { LESSON_11 } from './lessons/lesson-11';
+import { LESSON_12 } from './lessons/lesson-12';
 
-export interface ActivityItem {
-  id: string;
-  prompt: string;
-  accepted: string[];
-  options?: string[];
-  hint?: string;
-  explanation?: string;
-}
-
-export interface Activity {
-  id: string;
-  sourceExerciseId: string;
-  sourceLabel: string;
-  kind: ActivityKind;
-  title: string;
-  instruction: string;
-  audioUrl?: string;
-  audioLabel?: string;
-  items: ActivityItem[];
-}
-
-export interface Lesson {
-  id: number;
-  title: string;
-  subtitle: string;
-  topic: string;
-  pages: string;
-  color: 'coral' | 'blue' | 'lime' | 'violet' | 'yellow';
-  activities: Activity[];
-}
-
-const choice = (
-  id: string,
-  prompt: string,
-  accepted: string | string[],
-  options: string[],
-  hint?: string,
-): ActivityItem => ({ id, prompt, accepted: Array.isArray(accepted) ? accepted : [accepted], options, hint });
-
-const typed = (
-  id: string,
-  prompt: string,
-  accepted: string | string[],
-  hint?: string,
-): ActivityItem => ({ id, prompt, accepted: Array.isArray(accepted) ? accepted : [accepted], hint });
+export * from './lesson-types';
 
 export const LESSONS: Lesson[] = [
   {
@@ -593,6 +556,7 @@ export const LESSONS: Lesson[] = [
       },
     ],
   },
+  LESSON_06, LESSON_07, LESSON_08, LESSON_09, LESSON_10, LESSON_11, LESSON_12,
 ];
 
 export function getLesson(id: number): Lesson | undefined {

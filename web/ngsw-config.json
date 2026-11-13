@@ -20,13 +20,31 @@
       "name": "course-data",
       "installMode": "prefetch",
       "updateMode": "prefetch",
-      "resources": { "files": ["/content/**"] }
+      "resources": {
+        "files": [
+          "/content/**"
+        ]
+      }
     },
     {
       "name": "lesson-audio",
       "installMode": "lazy",
       "updateMode": "prefetch",
-      "resources": { "files": ["/assets/telegram_audio/**"] }
+      "resources": {
+        "files": [
+          "/assets/telegram_audio/**"
+        ]
+      }
+    },
+    {
+      "name": "workbook-images",
+      "installMode": "lazy",
+      "updateMode": "prefetch",
+      "resources": {
+        "files": [
+          "/assets/workbook/**"
+        ]
+      }
     }
   ]
 }

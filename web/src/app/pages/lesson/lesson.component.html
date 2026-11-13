@@ -28,6 +28,14 @@
               </div>
             }
 
+            @if (images().length) {
+              <div class="image-strip">
+                @for (image of images(); track image.src) {
+                  <figure><img [src]="image.src" [alt]="image.alt" loading="lazy">@if (image.label) {<figcaption>{{ image.label }}</figcaption>}</figure>
+                }
+              </div>
+            }
+
             <div class="question-list" [class.choice-list]="activity.kind !== 'typed'">
               @for (item of activity.items; track item.id; let index = $index) {
                 <div class="question-row" [class.answer-correct]="checked() && isItemCorrect(item)" [class.answer-wrong]="checked() && !isItemCorrect(item)">

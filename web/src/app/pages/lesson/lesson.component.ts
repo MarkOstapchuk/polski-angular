@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component, computed, inject, OnInit, signal } 
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { ActivityItem, getLesson } from '../../data/lesson-bank';
+import { WORKBOOK_IMAGES } from '../../data/workbook-images';
 import { ProgressService } from '../../services/progress.service';
 
 @Component({
@@ -24,6 +25,7 @@ export class LessonComponent implements OnInit {
   readonly finished = signal(false);
   readonly awardedXp = signal(0);
   readonly activity = computed(() => this.lesson()?.activities[this.activeIndex()]);
+  readonly images = computed(() => WORKBOOK_IMAGES[this.activity()?.sourceExerciseId ?? ''] ?? []);
   readonly activityProgress = computed(() => this.lesson() ? Math.round((this.activeIndex() / this.lesson()!.activities.length) * 100) : 0);
   readonly totalQuestions = computed(() => this.lesson()?.activities.reduce((count, activity) => count + activity.items.length, 0) ?? 0);
   readonly correctAnswers = computed(() => Object.values(this.results()).reduce((count, result) => count + Object.values(result).filter(Boolean).length, 0));

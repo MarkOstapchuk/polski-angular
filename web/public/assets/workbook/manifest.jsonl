@@ -1,0 +1,241 @@
+{"lesson_id": 1, "pdf_page": 4, "exercise_number": 1, "label": "", "description": "Diagram with two cartoon portraits illustrating informal ('nieoficjalnie') and formal ('oficjalnie') introductions with fill-in-the-blank speech bubbles", "file": "assets/workbook/lesson01/p004-e01-1.png", "box_2d": [374, 470, 534, 944], "model": "gemini-4-carbon"}
+{"lesson_id": 1, "pdf_page": 4, "exercise_number": 3, "label": "", "description": "Comic panel of people waving and saying informal greetings and farewells in Polish", "file": "assets/workbook/lesson01/p004-e03-2.png", "box_2d": [821, 125, 944, 444], "model": "gemini-4-carbon"}
+{"lesson_id": 1, "pdf_page": 5, "exercise_number": 8, "label": "", "description": "Policeman pointing left with a left-pointing arrow below", "file": "assets/workbook/lesson01/p005-e08-1.png", "box_2d": [514, 129, 588, 205], "model": "gemini-4-carbon"}
+{"lesson_id": 1, "pdf_page": 5, "exercise_number": 8, "label": "", "description": "Policeman pointing down to the spot right in front with an upward arrow below", "file": "assets/workbook/lesson01/p005-e08-2.png", "box_2d": [507, 353, 587, 402], "model": "gemini-4-carbon"}
+{"lesson_id": 1, "pdf_page": 5, "exercise_number": 8, "label": "", "description": "Long arrow pointing toward three small policemen in the distance", "file": "assets/workbook/lesson01/p005-e08-3.png", "box_2d": [494, 526, 592, 602], "model": "gemini-4-carbon"}
+{"lesson_id": 1, "pdf_page": 5, "exercise_number": 8, "label": "", "description": "Policeman pointing right with a right-pointing arrow below", "file": "assets/workbook/lesson01/p005-e08-4.png", "box_2d": [510, 729, 593, 816], "model": "gemini-4-carbon"}
+{"lesson_id": 1, "pdf_page": 6, "file": null, "model": "gemini-4-carbon"}
+{"lesson_id": 2, "pdf_page": 7, "file": null, "model": "gemini-4-carbon"}
+{"lesson_id": 2, "pdf_page": 8, "file": null, "model": "gemini-4-carbon"}
+{"lesson_id": 2, "pdf_page": 9, "file": null, "model": "gemini-4-carbon"}
+{"lesson_id": 2, "pdf_page": 10, "exercise_number": 17, "label": "", "description": "Black circle icon with three plus signs (+++)", "file": "assets/workbook/lesson02/p010-e17-1.png", "box_2d": [647, 125, 673, 161], "model": "gemini-4-carbon"}
+{"lesson_id": 2, "pdf_page": 10, "exercise_number": 17, "label": "", "description": "Black circle icon with two plus signs (++)", "file": "assets/workbook/lesson02/p010-e17-2.png", "box_2d": [647, 237, 673, 273], "model": "gemini-4-carbon"}
+{"lesson_id": 2, "pdf_page": 10, "exercise_number": 17, "label": "", "description": "Black circle icon with one plus sign (+)", "file": "assets/workbook/lesson02/p010-e17-3.png", "box_2d": [647, 349, 673, 385], "model": "gemini-4-carbon"}
+{"lesson_id": 2, "pdf_page": 10, "exercise_number": 17, "label": "", "description": "Black circle icon with a plus-minus sign (+/-)", "file": "assets/workbook/lesson02/p010-e17-4.png", "box_2d": [647, 460, 673, 496], "model": "gemini-4-carbon"}
+{"lesson_id": 2, "pdf_page": 10, "exercise_number": 17, "label": "", "description": "Black circle icon with one minus sign (-)", "file": "assets/workbook/lesson02/p010-e17-5.png", "box_2d": [647, 572, 673, 608], "model": "gemini-4-carbon"}
+{"lesson_id": 2, "pdf_page": 10, "exercise_number": 17, "label": "", "description": "Black circle icon with two minus signs (--)", "file": "assets/workbook/lesson02/p010-e17-6.png", "box_2d": [647, 684, 673, 720], "model": "gemini-4-carbon"}
+{"lesson_id": 2, "pdf_page": 10, "exercise_number": 17, "label": "", "description": "Black circle icon with three minus signs (---)", "file": "assets/workbook/lesson02/p010-e17-7.png", "box_2d": [647, 795, 673, 832], "model": "gemini-4-carbon"}
+{"lesson_id": 3, "pdf_page": 11, "exercise_number": 3, "label": "", "description": "Puzzle pieces with word halves to match together", "file": "assets/workbook/lesson03/p011-e03-1.png", "box_2d": [512, 171, 713, 862], "model": "gemini-4-carbon"}
+{"lesson_id": 3, "pdf_page": 11, "exercise_number": 4, "label": "1.", "description": "Key", "file": "assets/workbook/lesson03/p011-e04-2.png", "box_2d": [775, 157, 795, 192], "model": "gemini-4-carbon"}
+{"lesson_id": 3, "pdf_page": 11, "exercise_number": 4, "label": "2.", "description": "Woman pointing upward", "file": "assets/workbook/lesson03/p011-e04-3.png", "box_2d": [790, 185, 818, 236], "model": "gemini-4-carbon"}
+{"lesson_id": 3, "pdf_page": 11, "exercise_number": 4, "label": "3.", "description": "Book or notebook", "file": "assets/workbook/lesson03/p011-e04-4.png", "box_2d": [815, 149, 839, 187], "model": "gemini-4-carbon"}
+{"lesson_id": 3, "pdf_page": 11, "exercise_number": 4, "label": "4.", "description": "Pencil", "file": "assets/workbook/lesson03/p011-e04-5.png", "box_2d": [847, 156, 855, 229], "model": "gemini-4-carbon"}
+{"lesson_id": 3, "pdf_page": 11, "exercise_number": 4, "label": "5.", "description": "Mug", "file": "assets/workbook/lesson03/p011-e04-6.png", "box_2d": [858, 174, 881, 210], "model": "gemini-4-carbon"}
+{"lesson_id": 3, "pdf_page": 11, "exercise_number": 4, "label": "6.", "description": "Young man", "file": "assets/workbook/lesson03/p011-e04-7.png", "box_2d": [887, 193, 916, 230], "model": "gemini-4-carbon"}
+{"lesson_id": 3, "pdf_page": 11, "exercise_number": 4, "label": "7.", "description": "Small animal silhouette icon", "file": "assets/workbook/lesson03/p011-e04-8.png", "box_2d": [907, 150, 930, 182], "model": "gemini-4-carbon"}
+{"lesson_id": 3, "pdf_page": 12, "file": null, "model": "gemini-4-carbon"}
+{"lesson_id": 3, "pdf_page": 13, "exercise_number": 12, "label": "", "description": "Blackboard", "file": "assets/workbook/lesson03/p013-e12-1.png", "box_2d": [287, 738, 306, 806], "model": "gemini-4-carbon"}
+{"lesson_id": 3, "pdf_page": 13, "exercise_number": 12, "label": "", "description": "Chair", "file": "assets/workbook/lesson03/p013-e12-2.png", "box_2d": [316, 774, 349, 803], "model": "gemini-4-carbon"}
+{"lesson_id": 3, "pdf_page": 13, "exercise_number": 12, "label": "", "description": "Mug", "file": "assets/workbook/lesson03/p013-e12-3.png", "box_2d": [352, 811, 375, 846], "model": "gemini-4-carbon"}
+{"lesson_id": 3, "pdf_page": 13, "exercise_number": 12, "label": "", "description": "Notebook", "file": "assets/workbook/lesson03/p013-e12-4.png", "box_2d": [386, 811, 415, 869], "model": "gemini-4-carbon"}
+{"lesson_id": 3, "pdf_page": 13, "exercise_number": 12, "label": "", "description": "Open book", "file": "assets/workbook/lesson03/p013-e12-5.png", "box_2d": [424, 751, 448, 810], "model": "gemini-4-carbon"}
+{"lesson_id": 3, "pdf_page": 13, "exercise_number": 12, "label": "", "description": "Mobile phone", "file": "assets/workbook/lesson03/p013-e12-6.png", "box_2d": [444, 823, 465, 878], "model": "gemini-4-carbon"}
+{"lesson_id": 3, "pdf_page": 13, "exercise_number": 12, "label": "", "description": "Handbag", "file": "assets/workbook/lesson03/p013-e12-7.png", "box_2d": [479, 791, 521, 838], "model": "gemini-4-carbon"}
+{"lesson_id": 3, "pdf_page": 13, "exercise_number": 12, "label": "", "description": "Pen", "file": "assets/workbook/lesson03/p013-e12-8.png", "box_2d": [539, 774, 545, 845], "model": "gemini-4-carbon"}
+{"lesson_id": 4, "pdf_page": 14, "file": null, "model": "gemini-4-carbon"}
+{"lesson_id": 4, "pdf_page": 15, "file": null, "model": "gemini-4-carbon"}
+{"lesson_id": 4, "pdf_page": 16, "exercise_number": 10, "label": "", "description": "Cartoon drawing of a tall, slim woman and a shorter, overweight man in swimwear on a beach", "file": "assets/workbook/lesson04/p016-e10-1.png", "box_2d": [716, 688, 901, 913], "model": "gemini-4-carbon"}
+{"lesson_id": 4, "pdf_page": 17, "exercise_number": 12, "label": "", "description": "Puzzle pieces with Polish adjective stems and suffixes to match together", "file": "assets/workbook/lesson04/p017-e12-1.png", "box_2d": [91, 349, 381, 847], "model": "gemini-4-carbon"}
+{"lesson_id": 5, "pdf_page": 18, "file": null, "model": "gemini-4-carbon"}
+{"lesson_id": 5, "pdf_page": 19, "file": null, "model": "gemini-4-carbon"}
+{"lesson_id": 5, "pdf_page": 20, "exercise_number": 12, "label": "", "description": "Portrait drawing of a smiling man with short hair", "file": "assets/workbook/lesson05/p020-e12-1.png", "box_2d": [125, 203, 167, 259], "model": "gemini-4-carbon"}
+{"lesson_id": 5, "pdf_page": 20, "exercise_number": 12, "label": "", "description": "Portrait drawing of a young woman with dark shoulder-length hair", "file": "assets/workbook/lesson05/p020-e12-2.png", "box_2d": [177, 203, 218, 259], "model": "gemini-4-carbon"}
+{"lesson_id": 5, "pdf_page": 20, "exercise_number": 12, "label": "", "description": "Portrait drawing of a man wearing glasses", "file": "assets/workbook/lesson05/p020-e12-3.png", "box_2d": [228, 203, 269, 259], "model": "gemini-4-carbon"}
+{"lesson_id": 5, "pdf_page": 20, "exercise_number": 12, "label": "", "description": "Portrait drawing of an older man in a suit and tie", "file": "assets/workbook/lesson05/p020-e12-4.png", "box_2d": [279, 203, 320, 259], "model": "gemini-4-carbon"}
+{"lesson_id": 5, "pdf_page": 20, "exercise_number": 12, "label": "", "description": "Portrait drawing of a woman with wavy short hair", "file": "assets/workbook/lesson05/p020-e12-5.png", "box_2d": [330, 203, 371, 260], "model": "gemini-4-carbon"}
+{"lesson_id": 5, "pdf_page": 20, "exercise_number": 13, "label": "", "description": "Pictogram of a dumbbell", "file": "assets/workbook/lesson05/p020-e13-6.png", "box_2d": [480, 574, 509, 623], "model": "gemini-4-carbon"}
+{"lesson_id": 5, "pdf_page": 20, "exercise_number": 13, "label": "", "description": "Smiley face icon", "file": "assets/workbook/lesson05/p020-e13-7.png", "box_2d": [511, 466, 529, 491], "model": "gemini-4-carbon"}
+{"lesson_id": 5, "pdf_page": 20, "exercise_number": 13, "label": "", "description": "Waving Spanish flag", "file": "assets/workbook/lesson05/p020-e13-8.png", "box_2d": [529, 464, 567, 551], "model": "gemini-4-carbon"}
+{"lesson_id": 5, "pdf_page": 21, "file": null, "model": "gemini-4-carbon"}
+{"lesson_id": 6, "pdf_page": 22, "exercise_number": 1, "label": "a)", "description": "A person standing and reading a newspaper", "file": "assets/workbook/lesson06/p022-e01-1.png", "box_2d": [368, 114, 502, 223], "model": "gemini-4-carbon"}
+{"lesson_id": 6, "pdf_page": 22, "exercise_number": 1, "label": "b)", "description": "A girl sitting at a desk writing", "file": "assets/workbook/lesson06/p022-e01-2.png", "box_2d": [377, 255, 492, 421], "model": "gemini-4-carbon"}
+{"lesson_id": 6, "pdf_page": 22, "exercise_number": 1, "label": "c)", "description": "Two hands resting on a dark surface", "file": "assets/workbook/lesson06/p022-e01-3.png", "box_2d": [395, 466, 485, 637], "model": "gemini-4-carbon"}
+{"lesson_id": 6, "pdf_page": 22, "exercise_number": 1, "label": "d)", "description": "A pile of photographs or postcards showing buildings", "file": "assets/workbook/lesson06/p022-e01-4.png", "box_2d": [391, 688, 489, 890], "model": "gemini-4-carbon"}
+{"lesson_id": 6, "pdf_page": 23, "file": null, "model": "gemini-4-carbon"}
+{"lesson_id": 6, "pdf_page": 24, "file": null, "model": "gemini-4-carbon"}
+{"lesson_id": 6, "pdf_page": 25, "exercise_number": 10, "label": "1)", "description": "Cartoon person taking photos with a camera", "file": "assets/workbook/lesson06/p025-e10-1.png", "box_2d": [75, 98, 152, 179], "model": "gemini-4-carbon"}
+{"lesson_id": 6, "pdf_page": 25, "exercise_number": 10, "label": "2)", "description": "Cartoon person riding a horse", "file": "assets/workbook/lesson06/p025-e10-2.png", "box_2d": [71, 286, 154, 371], "model": "gemini-4-carbon"}
+{"lesson_id": 6, "pdf_page": 25, "exercise_number": 10, "label": "3)", "description": "Cartoon woman carrying shopping bags", "file": "assets/workbook/lesson06/p025-e10-3.png", "box_2d": [74, 453, 155, 532], "model": "gemini-4-carbon"}
+{"lesson_id": 6, "pdf_page": 25, "exercise_number": 10, "label": "4)", "description": "Cartoon man singing into a microphone", "file": "assets/workbook/lesson06/p025-e10-4.png", "box_2d": [74, 628, 156, 725], "model": "gemini-4-carbon"}
+{"lesson_id": 6, "pdf_page": 25, "exercise_number": 10, "label": "5)", "description": "Cartoon boy walking with a backpack", "file": "assets/workbook/lesson06/p025-e10-5.png", "box_2d": [204, 106, 279, 181], "model": "gemini-4-carbon"}
+{"lesson_id": 6, "pdf_page": 25, "exercise_number": 10, "label": "6)", "description": "Cartoon person kicking a soccer ball", "file": "assets/workbook/lesson06/p025-e10-6.png", "box_2d": [206, 263, 281, 355], "model": "gemini-4-carbon"}
+{"lesson_id": 6, "pdf_page": 25, "exercise_number": 10, "label": "7)", "description": "Cartoon hiker with a backpack reading a map", "file": "assets/workbook/lesson06/p025-e10-7.png", "box_2d": [203, 433, 284, 524], "model": "gemini-4-carbon"}
+{"lesson_id": 6, "pdf_page": 25, "exercise_number": 10, "label": "8)", "description": "Cartoon chef cooking with a pot", "file": "assets/workbook/lesson06/p025-e10-8.png", "box_2d": [209, 588, 285, 692], "model": "gemini-4-carbon"}
+{"lesson_id": 6, "pdf_page": 25, "exercise_number": 10, "label": "9)", "description": "Cartoon diver swimming underwater with mask and snorkel", "file": "assets/workbook/lesson06/p025-e10-9.png", "box_2d": [212, 743, 282, 882], "model": "gemini-4-carbon"}
+{"lesson_id": 6, "pdf_page": 25, "exercise_number": 10, "label": "10)", "description": "Cartoon student studying with dictionaries and books", "file": "assets/workbook/lesson06/p025-e10-10.png", "box_2d": [334, 98, 405, 249], "model": "gemini-4-carbon"}
+{"lesson_id": 6, "pdf_page": 25, "exercise_number": 10, "label": "11)", "description": "Cartoon person sitting on a stool reading a book", "file": "assets/workbook/lesson06/p025-e10-11.png", "box_2d": [335, 292, 417, 358], "model": "gemini-4-carbon"}
+{"lesson_id": 6, "pdf_page": 25, "exercise_number": 10, "label": "12)", "description": "Cartoon person sitting and listening to music with headphones", "file": "assets/workbook/lesson06/p025-e10-12.png", "box_2d": [335, 438, 407, 545], "model": "gemini-4-carbon"}
+{"lesson_id": 6, "pdf_page": 25, "exercise_number": 10, "label": "13)", "description": "Two cartoon people dancing together", "file": "assets/workbook/lesson06/p025-e10-13.png", "box_2d": [341, 596, 424, 727], "model": "gemini-4-carbon"}
+{"lesson_id": 6, "pdf_page": 25, "exercise_number": 10, "label": "14)", "description": "Cartoon person running and sweating", "file": "assets/workbook/lesson06/p025-e10-14.png", "box_2d": [336, 796, 415, 885], "model": "gemini-4-carbon"}
+{"lesson_id": 6, "pdf_page": 25, "exercise_number": 10, "label": "15)", "description": "Cartoon person playing an electric guitar", "file": "assets/workbook/lesson06/p025-e10-15.png", "box_2d": [469, 96, 565, 211], "model": "gemini-4-carbon"}
+{"lesson_id": 6, "pdf_page": 25, "exercise_number": 10, "label": "16)", "description": "Cartoon person playing tennis with a racket and ball", "file": "assets/workbook/lesson06/p025-e10-16.png", "box_2d": [471, 258, 540, 396], "model": "gemini-4-carbon"}
+{"lesson_id": 6, "pdf_page": 25, "exercise_number": 10, "label": "17)", "description": "Cartoon person skiing", "file": "assets/workbook/lesson06/p025-e10-17.png", "box_2d": [472, 444, 557, 539], "model": "gemini-4-carbon"}
+{"lesson_id": 6, "pdf_page": 25, "exercise_number": 10, "label": "18)", "description": "Cartoon man sitting in an armchair watching TV with a remote", "file": "assets/workbook/lesson06/p025-e10-18.png", "box_2d": [470, 582, 528, 713], "model": "gemini-4-carbon"}
+{"lesson_id": 6, "pdf_page": 25, "exercise_number": 10, "label": "19)", "description": "Cartoon artist painting on a canvas on an easel", "file": "assets/workbook/lesson06/p025-e10-19.png", "box_2d": [467, 775, 552, 881], "model": "gemini-4-carbon"}
+{"lesson_id": 7, "pdf_page": 26, "file": null, "model": "gemini-4-carbon"}
+{"lesson_id": 7, "pdf_page": 27, "exercise_number": 6, "label": "", "description": "Illustration of a woman in hair curlers drinking from a mug, surrounded by thought bubbles (two children, a house, a bicycle, a cat and dog) and objects (books labeled 'Impresjonizm' and 'Słownik', a wallet, a chocolate bar, a juice carton, a milk carton, and a small item).", "file": "assets/workbook/lesson07/p027-e06-1.png", "box_2d": [634, 232, 978, 729], "model": "gemini-4-carbon"}
+{"lesson_id": 7, "pdf_page": 28, "exercise_number": 7, "label": "1 zł", "description": "Drawing of a pencil with price 1 zł", "file": "assets/workbook/lesson07/p028-e07-1.png", "box_2d": [87, 688, 102, 807], "model": "gemini-4-carbon"}
+{"lesson_id": 7, "pdf_page": 28, "exercise_number": 7, "label": "8 zł, 50 gr", "description": "Drawing of a pack of cigarettes with price 8 zł, 50 gr", "file": "assets/workbook/lesson07/p028-e07-2.png", "box_2d": [110, 739, 161, 884], "model": "gemini-4-carbon"}
+{"lesson_id": 7, "pdf_page": 28, "exercise_number": 7, "label": "2 zł, 50 gr", "description": "Drawing of a bus/tram ticket with price 2 zł, 50 gr", "file": "assets/workbook/lesson07/p028-e07-3.png", "box_2d": [158, 742, 221, 837], "model": "gemini-4-carbon"}
+{"lesson_id": 7, "pdf_page": 28, "exercise_number": 7, "label": "5 zł, 20 gr", "description": "Drawing of a bag of Lay's chips with price 5 zł, 20 gr", "file": "assets/workbook/lesson07/p028-e07-4.png", "box_2d": [235, 811, 311, 922], "model": "gemini-4-carbon"}
+{"lesson_id": 7, "pdf_page": 28, "exercise_number": 7, "label": "5 zł, 20 gr", "description": "Drawing of a jar of honey labeled MIÓD with price 5 zł, 20 gr", "file": "assets/workbook/lesson07/p028-e07-5.png", "box_2d": [257, 712, 328, 790], "model": "gemini-4-carbon"}
+{"lesson_id": 7, "pdf_page": 28, "exercise_number": 7, "label": "339 zł", "description": "Drawing of a mobile phone with price 339 zł", "file": "assets/workbook/lesson07/p028-e07-6.png", "box_2d": [358, 643, 400, 758], "model": "gemini-4-carbon"}
+{"lesson_id": 7, "pdf_page": 28, "exercise_number": 7, "label": "3 zł", "description": "Drawing of four bottles of Coca-Cola with price 3 zł", "file": "assets/workbook/lesson07/p028-e07-7.png", "box_2d": [329, 783, 408, 881], "model": "gemini-4-carbon"}
+{"lesson_id": 7, "pdf_page": 28, "exercise_number": 7, "label": "12 zł", "description": "Drawing of a notebook with bookmark ribbon and price 12 zł", "file": "assets/workbook/lesson07/p028-e07-8.png", "box_2d": [419, 658, 490, 802], "model": "gemini-4-carbon"}
+{"lesson_id": 7, "pdf_page": 28, "exercise_number": 10, "label": "Kupon 1 - Kupon 6", "description": "Lottery slip showing six numbered coupon grids (Kupon 1 to Kupon 6) from 1 to 49", "file": "assets/workbook/lesson07/p028-e10-9.png", "box_2d": [776, 115, 943, 838], "model": "gemini-4-carbon"}
+{"lesson_id": 7, "pdf_page": 29, "exercise_number": 14, "label": "", "description": "Drawing of photography equipment: a camera, a photo album labeled FOTO, a tripod, and a camera bag", "file": "assets/workbook/lesson07/p029-e14-1.png", "box_2d": [863, 591, 926, 820], "model": "gemini-4-carbon"}
+{"lesson_id": 8, "pdf_page": 30, "exercise_number": 1, "label": "1-16", "description": "Labeled illustration of breakfast foods and drinks arranged with numbered blanks 1 to 16", "file": "assets/workbook/lesson08/p030-e01-1.png", "box_2d": [360, 101, 530, 849], "model": "gemini-4-carbon"}
+{"lesson_id": 8, "pdf_page": 31, "file": null, "model": "gemini-4-carbon"}
+{"lesson_id": 8, "pdf_page": 32, "file": null, "model": "gemini-4-carbon"}
+{"lesson_id": 8, "pdf_page": 33, "exercise_number": 13, "label": "1)", "description": "fork", "file": "assets/workbook/lesson08/p033-e13-1.png", "box_2d": [156, 108, 221, 211], "model": "gemini-4-carbon"}
+{"lesson_id": 8, "pdf_page": 33, "exercise_number": 13, "label": "2)", "description": "knife", "file": "assets/workbook/lesson08/p033-e13-2.png", "box_2d": [181, 229, 204, 373], "model": "gemini-4-carbon"}
+{"lesson_id": 8, "pdf_page": 33, "exercise_number": 13, "label": "3)", "description": "pitcher", "file": "assets/workbook/lesson08/p033-e13-3.png", "box_2d": [153, 411, 216, 496], "model": "gemini-4-carbon"}
+{"lesson_id": 8, "pdf_page": 33, "exercise_number": 13, "label": "4)", "description": "bowl", "file": "assets/workbook/lesson08/p033-e13-4.png", "box_2d": [167, 541, 209, 634], "model": "gemini-4-carbon"}
+{"lesson_id": 8, "pdf_page": 33, "exercise_number": 13, "label": "5)", "description": "drinking glass", "file": "assets/workbook/lesson08/p033-e13-5.png", "box_2d": [155, 730, 215, 772], "model": "gemini-4-carbon"}
+{"lesson_id": 8, "pdf_page": 33, "exercise_number": 13, "label": "6)", "description": "tablespoon", "file": "assets/workbook/lesson08/p033-e13-6.png", "box_2d": [261, 111, 321, 205], "model": "gemini-4-carbon"}
+{"lesson_id": 8, "pdf_page": 33, "exercise_number": 13, "label": "7)", "description": "teaspoon", "file": "assets/workbook/lesson08/p033-e13-7.png", "box_2d": [277, 263, 311, 342], "model": "gemini-4-carbon"}
+{"lesson_id": 8, "pdf_page": 33, "exercise_number": 13, "label": "8)", "description": "mug", "file": "assets/workbook/lesson08/p033-e13-8.png", "box_2d": [276, 420, 320, 480], "model": "gemini-4-carbon"}
+{"lesson_id": 8, "pdf_page": 33, "exercise_number": 13, "label": "9)", "description": "dinner plate", "file": "assets/workbook/lesson08/p033-e13-9.png", "box_2d": [279, 541, 317, 646], "model": "gemini-4-carbon"}
+{"lesson_id": 8, "pdf_page": 33, "exercise_number": 13, "label": "10)", "description": "stemmed glass", "file": "assets/workbook/lesson08/p033-e13-10.png", "box_2d": [271, 731, 323, 781], "model": "gemini-4-carbon"}
+{"lesson_id": 8, "pdf_page": 33, "exercise_number": 13, "label": "11)", "description": "bottle opener", "file": "assets/workbook/lesson08/p033-e13-11.png", "box_2d": [375, 112, 437, 207], "model": "gemini-4-carbon"}
+{"lesson_id": 8, "pdf_page": 33, "exercise_number": 13, "label": "12)", "description": "napkin", "file": "assets/workbook/lesson08/p033-e13-12.png", "box_2d": [373, 245, 436, 355], "model": "gemini-4-carbon"}
+{"lesson_id": 8, "pdf_page": 33, "exercise_number": 13, "label": "13)", "description": "cooking pot", "file": "assets/workbook/lesson08/p033-e13-13.png", "box_2d": [366, 390, 426, 506], "model": "gemini-4-carbon"}
+{"lesson_id": 8, "pdf_page": 33, "exercise_number": 13, "label": "14)", "description": "teacup", "file": "assets/workbook/lesson08/p033-e13-14.png", "box_2d": [388, 563, 423, 618], "model": "gemini-4-carbon"}
+{"lesson_id": 8, "pdf_page": 33, "exercise_number": 13, "label": "15)", "description": "small plate", "file": "assets/workbook/lesson08/p033-e13-15.png", "box_2d": [383, 712, 420, 816], "model": "gemini-4-carbon"}
+{"lesson_id": 8, "pdf_page": 33, "exercise_number": 13, "label": "16)", "description": "kettle", "file": "assets/workbook/lesson08/p033-e13-16.png", "box_2d": [465, 542, 541, 635], "model": "gemini-4-carbon"}
+{"lesson_id": 8, "pdf_page": 33, "exercise_number": 13, "label": "17)", "description": "frying pan", "file": "assets/workbook/lesson08/p033-e13-17.png", "box_2d": [469, 708, 534, 840], "model": "gemini-4-carbon"}
+{"lesson_id": 9, "pdf_page": 34, "file": null, "model": "gemini-4-carbon"}
+{"lesson_id": 9, "pdf_page": 35, "exercise_number": 4, "label": "", "description": "oval shape with letter blanks inside", "file": "assets/workbook/lesson09/p035-e04-1.png", "box_2d": [82, 444, 152, 600], "model": "gemini-4-carbon"}
+{"lesson_id": 9, "pdf_page": 35, "exercise_number": 4, "label": "", "description": "circle shape with letter blanks inside", "file": "assets/workbook/lesson09/p035-e04-2.png", "box_2d": [54, 643, 167, 800], "model": "gemini-4-carbon"}
+{"lesson_id": 9, "pdf_page": 35, "exercise_number": 4, "label": "", "description": "oblong rectangle shape with letter blanks inside", "file": "assets/workbook/lesson09/p035-e04-3.png", "box_2d": [170, 493, 213, 683], "model": "gemini-4-carbon"}
+{"lesson_id": 9, "pdf_page": 36, "file": null, "model": "gemini-4-carbon"}
+{"lesson_id": 9, "pdf_page": 37, "exercise_number": 12, "label": "", "description": "A wicker shopping basket filled with fruits and vegetables", "file": "assets/workbook/lesson09/p037-e12-1.png", "box_2d": [268, 601, 400, 782], "model": "gemini-4-carbon"}
+{"lesson_id": 10, "pdf_page": 38, "exercise_number": 2, "label": "wieprzowina", "description": "Silhouette of a pig", "file": "assets/workbook/lesson10/p038-e02-1.png", "box_2d": [911, 175, 931, 217], "model": "gemini-4-carbon"}
+{"lesson_id": 10, "pdf_page": 38, "exercise_number": 2, "label": "wołowina", "description": "Silhouette of a cow's head", "file": "assets/workbook/lesson10/p038-e02-2.png", "box_2d": [909, 278, 935, 320], "model": "gemini-4-carbon"}
+{"lesson_id": 10, "pdf_page": 38, "exercise_number": 2, "label": "cielęcina", "description": "Silhouette of a calf", "file": "assets/workbook/lesson10/p038-e02-3.png", "box_2d": [912, 364, 936, 417], "model": "gemini-4-carbon"}
+{"lesson_id": 10, "pdf_page": 38, "exercise_number": 2, "label": "drób", "description": "Silhouettes of a rooster, a duck, and a turkey", "file": "assets/workbook/lesson10/p038-e02-4.png", "box_2d": [901, 464, 935, 600], "model": "gemini-4-carbon"}
+{"lesson_id": 10, "pdf_page": 39, "exercise_number": 5, "label": "", "description": "Frowning face pictogram with two thumbs down indicating bad taste", "file": "assets/workbook/lesson10/p039-e05-1.png", "box_2d": [556, 487, 603, 605], "model": "gemini-4-carbon"}
+{"lesson_id": 10, "pdf_page": 39, "exercise_number": 5, "label": "", "description": "Smiling face pictogram with two thumbs up indicating great taste", "file": "assets/workbook/lesson10/p039-e05-2.png", "box_2d": [602, 85, 659, 223], "model": "gemini-4-carbon"}
+{"lesson_id": 10, "pdf_page": 39, "exercise_number": 5, "label": "", "description": "Neutral face pictogram with flat gesturing hands indicating mediocre taste", "file": "assets/workbook/lesson10/p039-e05-3.png", "box_2d": [614, 742, 655, 891], "model": "gemini-4-carbon"}
+{"lesson_id": 10, "pdf_page": 39, "exercise_number": 5, "label": "A", "description": "Frowning face pictogram with two thumbs down", "file": "assets/workbook/lesson10/p039-e05-4.png", "box_2d": [756, 361, 785, 431], "model": "gemini-4-carbon"}
+{"lesson_id": 10, "pdf_page": 39, "exercise_number": 5, "label": "D", "description": "Smiling face pictogram with two thumbs up", "file": "assets/workbook/lesson10/p039-e05-5.png", "box_2d": [760, 801, 791, 875], "model": "gemini-4-carbon"}
+{"lesson_id": 10, "pdf_page": 39, "exercise_number": 5, "label": "B", "description": "Smiling face pictogram with two thumbs up", "file": "assets/workbook/lesson10/p039-e05-6.png", "box_2d": [835, 417, 861, 480], "model": "gemini-4-carbon"}
+{"lesson_id": 10, "pdf_page": 39, "exercise_number": 5, "label": "E", "description": "Frowning face pictogram with two thumbs down", "file": "assets/workbook/lesson10/p039-e05-7.png", "box_2d": [846, 797, 874, 866], "model": "gemini-4-carbon"}
+{"lesson_id": 10, "pdf_page": 39, "exercise_number": 5, "label": "C", "description": "Neutral face pictogram with flat gesturing hands", "file": "assets/workbook/lesson10/p039-e05-8.png", "box_2d": [910, 372, 936, 460], "model": "gemini-4-carbon"}
+{"lesson_id": 10, "pdf_page": 39, "exercise_number": 5, "label": "F", "description": "Neutral face pictogram with flat gesturing hands", "file": "assets/workbook/lesson10/p039-e05-9.png", "box_2d": [916, 758, 943, 845], "model": "gemini-4-carbon"}
+{"lesson_id": 10, "pdf_page": 40, "file": null, "model": "gemini-4-carbon"}
+{"lesson_id": 10, "pdf_page": 41, "file": null, "model": "gemini-4-carbon"}
+{"lesson_id": 11, "pdf_page": 42, "exercise_number": 1, "label": "siostra, szwagier, siostrzenica, siostrzeniec", "description": "Labeled line drawing of a family group: sister, brother-in-law, niece, and nephew", "file": "assets/workbook/lesson11/p042-e01-1.png", "box_2d": [274, 490, 401, 774], "model": "gemini-4-carbon"}
+{"lesson_id": 11, "pdf_page": 42, "exercise_number": 1, "label": "bratowa, brat, bratanica, bratanek", "description": "Labeled line drawing of a family group: sister-in-law, brother, niece, and nephew", "file": "assets/workbook/lesson11/p042-e01-2.png", "box_2d": [358, 719, 496, 911], "model": "gemini-4-carbon"}
+{"lesson_id": 11, "pdf_page": 43, "file": null, "model": "gemini-4-carbon"}
+{"lesson_id": 11, "pdf_page": 44, "file": null, "model": "gemini-4-carbon"}
+{"lesson_id": 11, "pdf_page": 45, "file": null, "model": "gemini-4-carbon"}
+{"lesson_id": 12, "pdf_page": 46, "file": null, "model": "gemini-4-carbon"}
+{"lesson_id": 12, "pdf_page": 47, "file": null, "model": "gemini-4-carbon"}
+{"lesson_id": 12, "pdf_page": 48, "exercise_number": 7, "label": "", "description": "Digital wristwatch showing 18:00", "file": "assets/workbook/lesson12/p048-e07-1.png", "box_2d": [107, 504, 172, 582], "model": "gemini-4-carbon"}
+{"lesson_id": 12, "pdf_page": 48, "exercise_number": 7, "label": "", "description": "Small round analog clock showing 1:00", "file": "assets/workbook/lesson12/p048-e07-2.png", "box_2d": [133, 632, 202, 726], "model": "gemini-4-carbon"}
+{"lesson_id": 12, "pdf_page": 48, "exercise_number": 7, "label": "", "description": "Digital desk clock", "file": "assets/workbook/lesson12/p048-e07-3.png", "box_2d": [99, 748, 145, 827], "model": "gemini-4-carbon"}
+{"lesson_id": 12, "pdf_page": 48, "exercise_number": 8, "label": "I.", "description": "Analog clock showing 12:55", "file": "assets/workbook/lesson12/p048-e08-4.png", "box_2d": [593, 144, 684, 272], "model": "gemini-4-carbon"}
+{"lesson_id": 12, "pdf_page": 48, "exercise_number": 8, "label": "II.", "description": "Analog clock showing 1:00", "file": "assets/workbook/lesson12/p048-e08-5.png", "box_2d": [593, 300, 684, 429], "model": "gemini-4-carbon"}
+{"lesson_id": 12, "pdf_page": 48, "exercise_number": 8, "label": "III.", "description": "Analog clock showing 1:05", "file": "assets/workbook/lesson12/p048-e08-6.png", "box_2d": [594, 459, 684, 587], "model": "gemini-4-carbon"}
+{"lesson_id": 12, "pdf_page": 48, "exercise_number": 8, "label": "IV.", "description": "Analog clock showing 1:30", "file": "assets/workbook/lesson12/p048-e08-7.png", "box_2d": [592, 609, 683, 738], "model": "gemini-4-carbon"}
+{"lesson_id": 12, "pdf_page": 48, "exercise_number": 8, "label": "V.", "description": "Analog clock showing between 1:05 and 1:10 with shaded sector", "file": "assets/workbook/lesson12/p048-e08-8.png", "box_2d": [591, 761, 682, 889], "model": "gemini-4-carbon"}
+{"lesson_id": 12, "pdf_page": 49, "file": null, "model": "gemini-4-carbon"}
+{"lesson_id": 13, "pdf_page": 50, "exercise_number": 1, "label": "", "description": "Black-and-white portrait drawing of Adam Mickiewicz", "file": "assets/workbook/lesson13/p050-e01-1.png", "box_2d": [329, 599, 505, 828], "model": "gemini-4-carbon"}
+{"lesson_id": 13, "pdf_page": 51, "file": null, "model": "gemini-4-carbon"}
+{"lesson_id": 13, "pdf_page": 52, "exercise_number": 7, "label": "", "description": "Black-and-white drawing of Polish highlanders (men with axes/ciupagi and a woman in traditional folk costume) performing a traditional dance.", "file": "assets/workbook/lesson13/p052-e07-1.png", "box_2d": [491, 458, 619, 709], "model": "gemini-4-carbon"}
+{"lesson_id": 13, "pdf_page": 53, "exercise_number": 10, "label": "", "description": "Black-and-white drawing of a man eating sushi with chopsticks", "file": "assets/workbook/lesson13/p053-e10-1.png", "box_2d": [358, 656, 526, 838], "model": "gemini-4-carbon"}
+{"lesson_id": 14, "pdf_page": 54, "file": null, "model": "gemini-4-carbon"}
+{"lesson_id": 14, "pdf_page": 55, "exercise_number": 4, "label": "1)", "description": "Drawing of elevator doors", "file": "assets/workbook/lesson14/p055-e04-1.png", "box_2d": [137, 95, 230, 267], "model": "gemini-4-carbon"}
+{"lesson_id": 14, "pdf_page": 55, "exercise_number": 4, "label": "2)", "description": "Drawing of a tram", "file": "assets/workbook/lesson14/p055-e04-2.png", "box_2d": [135, 314, 223, 471], "model": "gemini-4-carbon"}
+{"lesson_id": 14, "pdf_page": 55, "exercise_number": 4, "label": "3)", "description": "Drawing of a taxi", "file": "assets/workbook/lesson14/p055-e04-3.png", "box_2d": [167, 498, 212, 663], "model": "gemini-4-carbon"}
+{"lesson_id": 14, "pdf_page": 55, "exercise_number": 4, "label": "4)", "description": "Drawing of a motor scooter", "file": "assets/workbook/lesson14/p055-e04-4.png", "box_2d": [284, 94, 369, 261], "model": "gemini-4-carbon"}
+{"lesson_id": 14, "pdf_page": 55, "exercise_number": 4, "label": "5)", "description": "Drawing of an airplane", "file": "assets/workbook/lesson14/p055-e04-5.png", "box_2d": [307, 302, 357, 468], "model": "gemini-4-carbon"}
+{"lesson_id": 14, "pdf_page": 55, "exercise_number": 4, "label": "6)", "description": "Drawing of a small car", "file": "assets/workbook/lesson14/p055-e04-6.png", "box_2d": [314, 501, 369, 665], "model": "gemini-4-carbon"}
+{"lesson_id": 14, "pdf_page": 55, "exercise_number": 4, "label": "7)", "description": "Drawing of a bicycle", "file": "assets/workbook/lesson14/p055-e04-7.png", "box_2d": [297, 701, 371, 865], "model": "gemini-4-carbon"}
+{"lesson_id": 14, "pdf_page": 55, "exercise_number": 4, "label": "8)", "description": "Drawing of a passenger ferry", "file": "assets/workbook/lesson14/p055-e04-8.png", "box_2d": [465, 95, 498, 262], "model": "gemini-4-carbon"}
+{"lesson_id": 14, "pdf_page": 55, "exercise_number": 4, "label": "9)", "description": "Drawing of a train", "file": "assets/workbook/lesson14/p055-e04-9.png", "box_2d": [425, 299, 507, 469], "model": "gemini-4-carbon"}
+{"lesson_id": 14, "pdf_page": 55, "exercise_number": 4, "label": "10)", "description": "Drawing of a motorcycle", "file": "assets/workbook/lesson14/p055-e04-10.png", "box_2d": [443, 502, 508, 667], "model": "gemini-4-carbon"}
+{"lesson_id": 14, "pdf_page": 55, "exercise_number": 4, "label": "11)", "description": "Drawing of a metro train", "file": "assets/workbook/lesson14/p055-e04-11.png", "box_2d": [429, 696, 507, 868], "model": "gemini-4-carbon"}
+{"lesson_id": 14, "pdf_page": 55, "exercise_number": 4, "label": "12)", "description": "Drawing of a sailing yacht", "file": "assets/workbook/lesson14/p055-e04-12.png", "box_2d": [567, 94, 665, 240], "model": "gemini-4-carbon"}
+{"lesson_id": 14, "pdf_page": 55, "exercise_number": 4, "label": "13)", "description": "Drawing of a horse-drawn carriage", "file": "assets/workbook/lesson14/p055-e04-13.png", "box_2d": [575, 297, 664, 464], "model": "gemini-4-carbon"}
+{"lesson_id": 14, "pdf_page": 55, "exercise_number": 4, "label": "14)", "description": "Drawing of a bus", "file": "assets/workbook/lesson14/p055-e04-14.png", "box_2d": [582, 504, 658, 673], "model": "gemini-4-carbon"}
+{"lesson_id": 14, "pdf_page": 55, "exercise_number": 4, "label": "15)", "description": "Drawing of a ship", "file": "assets/workbook/lesson14/p055-e04-15.png", "box_2d": [597, 701, 655, 866], "model": "gemini-4-carbon"}
+{"lesson_id": 14, "pdf_page": 56, "file": null, "model": "gemini-4-carbon"}
+{"lesson_id": 14, "pdf_page": 57, "exercise_number": 1, "label": "", "description": "Drawings of food containers and portions: a jar of jam, a wedge of cheese, a block of butter, a packet of tea, two cans, and a carton of juice", "file": "assets/workbook/lesson14/p057-e01-1.png", "box_2d": [332, 695, 480, 886], "model": "gemini-4-carbon"}
+{"lesson_id": 15, "pdf_page": 58, "file": null, "model": "gemini-4-carbon"}
+{"lesson_id": 15, "pdf_page": 59, "file": null, "model": "gemini-4-carbon"}
+{"lesson_id": 16, "pdf_page": 60, "exercise_number": 1, "label": "1)", "description": "sun", "file": "assets/workbook/lesson16/p060-e01-1.png", "box_2d": [358, 197, 428, 293], "model": "gemini-4-carbon"}
+{"lesson_id": 16, "pdf_page": 60, "exercise_number": 1, "label": "2)", "description": "rain cloud", "file": "assets/workbook/lesson16/p060-e01-2.png", "box_2d": [354, 361, 446, 495], "model": "gemini-4-carbon"}
+{"lesson_id": 16, "pdf_page": 60, "exercise_number": 1, "label": "3)", "description": "snow cloud", "file": "assets/workbook/lesson16/p060-e01-3.png", "box_2d": [353, 565, 445, 697], "model": "gemini-4-carbon"}
+{"lesson_id": 16, "pdf_page": 60, "exercise_number": 1, "label": "4)", "description": "dark cloud with hail", "file": "assets/workbook/lesson16/p060-e01-4.png", "box_2d": [356, 738, 447, 869], "model": "gemini-4-carbon"}
+{"lesson_id": 16, "pdf_page": 60, "exercise_number": 1, "label": "5)", "description": "thermometer with sun", "file": "assets/workbook/lesson16/p060-e01-5.png", "box_2d": [466, 180, 558, 281], "model": "gemini-4-carbon"}
+{"lesson_id": 16, "pdf_page": 60, "exercise_number": 1, "label": "6)", "description": "thermometer with cloud", "file": "assets/workbook/lesson16/p060-e01-6.png", "box_2d": [466, 347, 556, 479], "model": "gemini-4-carbon"}
+{"lesson_id": 16, "pdf_page": 60, "exercise_number": 1, "label": "7)", "description": "thermometer with snowflakes", "file": "assets/workbook/lesson16/p060-e01-7.png", "box_2d": [472, 552, 562, 681], "model": "gemini-4-carbon"}
+{"lesson_id": 16, "pdf_page": 60, "exercise_number": 1, "label": "8)", "description": "cloud with lightning bolt", "file": "assets/workbook/lesson16/p060-e01-8.png", "box_2d": [477, 737, 568, 869], "model": "gemini-4-carbon"}
+{"lesson_id": 16, "pdf_page": 60, "exercise_number": 1, "label": "9)", "description": "cloud with wind or fog", "file": "assets/workbook/lesson16/p060-e01-9.png", "box_2d": [602, 152, 665, 322], "model": "gemini-4-carbon"}
+{"lesson_id": 16, "pdf_page": 60, "exercise_number": 1, "label": "10)", "description": "barometer dial with downward arrow", "file": "assets/workbook/lesson16/p060-e01-10.png", "box_2d": [589, 386, 681, 477], "model": "gemini-4-carbon"}
+{"lesson_id": 16, "pdf_page": 60, "exercise_number": 1, "label": "11)", "description": "cloud partly covering sun", "file": "assets/workbook/lesson16/p060-e01-11.png", "box_2d": [603, 554, 686, 686], "model": "gemini-4-carbon"}
+{"lesson_id": 16, "pdf_page": 60, "exercise_number": 1, "label": "12)", "description": "cluster of clouds", "file": "assets/workbook/lesson16/p060-e01-12.png", "box_2d": [598, 731, 679, 869], "model": "gemini-4-carbon"}
+{"lesson_id": 16, "pdf_page": 61, "file": null, "model": "gemini-4-carbon"}
+{"lesson_id": 16, "pdf_page": 62, "file": null, "model": "gemini-4-carbon"}
+{"lesson_id": 16, "pdf_page": 63, "file": null, "model": "gemini-4-carbon"}
+{"lesson_id": 17, "pdf_page": 64, "file": null, "model": "gemini-4-carbon"}
+{"lesson_id": 17, "pdf_page": 65, "file": null, "model": "gemini-4-carbon"}
+{"lesson_id": 17, "pdf_page": 66, "file": null, "model": "gemini-4-carbon"}
+{"lesson_id": 17, "pdf_page": 67, "file": null, "model": "gemini-4-carbon"}
+{"lesson_id": 18, "pdf_page": 68, "file": null, "model": "gemini-4-carbon"}
+{"lesson_id": 18, "pdf_page": 69, "exercise_number": 7, "label": "", "description": "drawing of a wine glass", "file": "assets/workbook/lesson18/p069-e07-1.png", "box_2d": [621, 265, 673, 312], "model": "gemini-4-carbon"}
+{"lesson_id": 18, "pdf_page": 69, "exercise_number": 7, "label": "", "description": "drawing of a tall drinking glass", "file": "assets/workbook/lesson18/p069-e07-2.png", "box_2d": [626, 372, 685, 415], "model": "gemini-4-carbon"}
+{"lesson_id": 18, "pdf_page": 69, "exercise_number": 7, "label": "", "description": "drawing of a mug", "file": "assets/workbook/lesson18/p069-e07-3.png", "box_2d": [629, 467, 673, 527], "model": "gemini-4-carbon"}
+{"lesson_id": 18, "pdf_page": 69, "exercise_number": 7, "label": "", "description": "drawing of a juice carton labeled SOK", "file": "assets/workbook/lesson18/p069-e07-4.png", "box_2d": [600, 565, 676, 617], "model": "gemini-4-carbon"}
+{"lesson_id": 18, "pdf_page": 69, "exercise_number": 7, "label": "", "description": "drawing of a jam jar labeled DŻEM", "file": "assets/workbook/lesson18/p069-e07-5.png", "box_2d": [608, 659, 656, 703], "model": "gemini-4-carbon"}
+{"lesson_id": 18, "pdf_page": 70, "file": null, "model": "gemini-4-carbon"}
+{"lesson_id": 18, "pdf_page": 71, "exercise_number": 12, "label": "", "description": "Cutaway 3D drawing of a furnished apartment interior", "file": "assets/workbook/lesson18/p071-e12-1.png", "box_2d": [120, 472, 285, 824], "model": "gemini-4-carbon"}
+{"lesson_id": 19, "pdf_page": 72, "file": null, "model": "gemini-4-carbon"}
+{"lesson_id": 19, "pdf_page": 73, "file": null, "model": "gemini-4-carbon"}
+{"lesson_id": 19, "pdf_page": 74, "file": null, "model": "gemini-4-carbon"}
+{"lesson_id": 19, "pdf_page": 75, "exercise_number": 12, "label": "", "description": "Black-and-white drawing of a five-shelf bookcase filled with various items including a flower vase, plush dog, framed photos, glasses, camera, chess set, books, rollerblades, and dumbbells, with bags hanging on the sides.", "file": "assets/workbook/lesson19/p075-e12-1.png", "box_2d": [209, 591, 526, 953], "model": "gemini-4-carbon"}
+{"lesson_id": 20, "pdf_page": 76, "exercise_number": 1, "label": "", "description": "Map of Poland showing major cities and neighboring countries", "file": "assets/workbook/lesson20/p076-e01-1.png", "box_2d": [447, 589, 683, 984], "model": "gemini-4-carbon"}
+{"lesson_id": 20, "pdf_page": 77, "exercise_number": 5, "label": "", "description": "Drawing of a train on railway tracks", "file": "assets/workbook/lesson20/p077-e05-1.png", "box_2d": [272, 626, 396, 873], "model": "gemini-4-carbon"}
+{"lesson_id": 20, "pdf_page": 77, "exercise_number": 6, "label": "", "description": "Drawing of a woman standing at a ticket window labeled KASA", "file": "assets/workbook/lesson20/p077-e06-2.png", "box_2d": [615, 616, 810, 855], "model": "gemini-4-carbon"}
+{"lesson_id": 20, "pdf_page": 78, "file": null, "model": "gemini-4-carbon"}
+{"lesson_id": 20, "pdf_page": 79, "file": null, "model": "gemini-4-carbon"}
+{"lesson_id": 21, "pdf_page": 80, "file": null, "model": "gemini-4-carbon"}
+{"lesson_id": 21, "pdf_page": 81, "file": null, "model": "gemini-4-carbon"}
+{"lesson_id": 21, "pdf_page": 82, "file": null, "model": "gemini-4-carbon"}
+{"lesson_id": 21, "pdf_page": 83, "file": null, "model": "gemini-4-carbon"}
+{"lesson_id": 22, "pdf_page": 84, "exercise_number": 4, "label": "", "description": "Woman going for a walk", "file": "assets/workbook/lesson22/p084-e04-1.png", "box_2d": [762, 184, 822, 315], "model": "gemini-4-carbon"}
+{"lesson_id": 22, "pdf_page": 84, "exercise_number": 4, "label": "", "description": "Woman taking photos with a camera", "file": "assets/workbook/lesson22/p084-e04-2.png", "box_2d": [753, 360, 818, 410], "model": "gemini-4-carbon"}
+{"lesson_id": 22, "pdf_page": 84, "exercise_number": 4, "label": "", "description": "Woman painting a picture on an easel", "file": "assets/workbook/lesson22/p084-e04-3.png", "box_2d": [728, 474, 813, 555], "model": "gemini-4-carbon"}
+{"lesson_id": 22, "pdf_page": 84, "exercise_number": 4, "label": "", "description": "Woman cooking and mixing ingredients in a bowl", "file": "assets/workbook/lesson22/p084-e04-4.png", "box_2d": [752, 588, 812, 730], "model": "gemini-4-carbon"}
+{"lesson_id": 22, "pdf_page": 84, "exercise_number": 4, "label": "", "description": "Woman playing tennis", "file": "assets/workbook/lesson22/p084-e04-5.png", "box_2d": [728, 770, 808, 896], "model": "gemini-4-carbon"}
+{"lesson_id": 22, "pdf_page": 84, "exercise_number": 4, "label": "", "description": "Woman listening to music with headphones", "file": "assets/workbook/lesson22/p084-e04-6.png", "box_2d": [837, 127, 893, 200], "model": "gemini-4-carbon"}
+{"lesson_id": 22, "pdf_page": 84, "exercise_number": 4, "label": "", "description": "Woman drinking tea at a table", "file": "assets/workbook/lesson22/p084-e04-7.png", "box_2d": [828, 258, 889, 366], "model": "gemini-4-carbon"}
+{"lesson_id": 22, "pdf_page": 84, "exercise_number": 4, "label": "", "description": "Person sitting in an armchair watching television", "file": "assets/workbook/lesson22/p084-e04-8.png", "box_2d": [832, 412, 885, 545], "model": "gemini-4-carbon"}
+{"lesson_id": 22, "pdf_page": 84, "exercise_number": 4, "label": "", "description": "Audience watching a film at the cinema", "file": "assets/workbook/lesson22/p084-e04-9.png", "box_2d": [831, 587, 889, 718], "model": "gemini-4-carbon"}
+{"lesson_id": 22, "pdf_page": 84, "exercise_number": 4, "label": "", "description": "Woman reading a newspaper", "file": "assets/workbook/lesson22/p084-e04-10.png", "box_2d": [834, 761, 908, 860], "model": "gemini-4-carbon"}
+{"lesson_id": 22, "pdf_page": 85, "file": null, "model": "gemini-4-carbon"}
+{"lesson_id": 22, "pdf_page": 86, "file": null, "model": "gemini-4-carbon"}
+{"lesson_id": 22, "pdf_page": 87, "file": null, "model": "gemini-4-carbon"}
+{"lesson_id": 23, "pdf_page": 88, "exercise_number": 3, "label": "", "description": "Drawing of a man in a suit holding a briefcase", "file": "assets/workbook/lesson23/p088-e03-1.png", "box_2d": [661, 149, 780, 206], "model": "gemini-4-carbon"}
+{"lesson_id": 23, "pdf_page": 88, "exercise_number": 3, "label": "", "description": "Drawing of a girl in a turtleneck and short plaid skirt holding a handbag", "file": "assets/workbook/lesson23/p088-e03-2.png", "box_2d": [697, 780, 821, 840], "model": "gemini-4-carbon"}
+{"lesson_id": 23, "pdf_page": 88, "exercise_number": 3, "label": "", "description": "Drawing of a football player kicking a soccer ball", "file": "assets/workbook/lesson23/p088-e03-3.png", "box_2d": [805, 102, 926, 234], "model": "gemini-4-carbon"}
+{"lesson_id": 23, "pdf_page": 88, "exercise_number": 3, "label": "", "description": "Drawing of a girl in a short fringed blouse and a long floral skirt", "file": "assets/workbook/lesson23/p088-e03-4.png", "box_2d": [843, 694, 959, 833], "model": "gemini-4-carbon"}
+{"lesson_id": 23, "pdf_page": 89, "file": null, "model": "gemini-4-carbon"}
+{"lesson_id": 23, "pdf_page": 90, "file": null, "model": "gemini-4-carbon"}
+{"lesson_id": 23, "pdf_page": 91, "file": null, "model": "gemini-4-carbon"}
+{"lesson_id": 24, "pdf_page": 92, "file": null, "model": "gemini-4-carbon"}
+{"lesson_id": 24, "pdf_page": 93, "exercise_number": 5, "label": "a", "description": "Portrait of a young woman with dark, short, thick, wavy hair and a center part", "file": "assets/workbook/lesson24/p093-e05-1.png", "box_2d": [404, 123, 500, 267], "model": "gemini-4-carbon"}
+{"lesson_id": 24, "pdf_page": 93, "exercise_number": 5, "label": "b", "description": "Portrait of a bearded man with short, receding hair", "file": "assets/workbook/lesson24/p093-e05-2.png", "box_2d": [402, 276, 489, 419], "model": "gemini-4-carbon"}
+{"lesson_id": 24, "pdf_page": 93, "exercise_number": 5, "label": "c", "description": "Portrait of a young woman with curly, shoulder-length hair", "file": "assets/workbook/lesson24/p093-e05-3.png", "box_2d": [409, 438, 499, 566], "model": "gemini-4-carbon"}
+{"lesson_id": 24, "pdf_page": 93, "exercise_number": 5, "label": "d", "description": "Portrait of a young man with very short dark hair", "file": "assets/workbook/lesson24/p093-e05-4.png", "box_2d": [401, 583, 479, 718], "model": "gemini-4-carbon"}
+{"lesson_id": 24, "pdf_page": 93, "exercise_number": 5, "label": "e", "description": "Portrait of a young woman with long, straight, light-colored hair and bangs", "file": "assets/workbook/lesson24/p093-e05-5.png", "box_2d": [401, 732, 498, 862], "model": "gemini-4-carbon"}
+{"lesson_id": 24, "pdf_page": 94, "file": null, "model": "gemini-4-carbon"}
+{"lesson_id": 24, "pdf_page": 95, "file": null, "model": "gemini-4-carbon"}
+{"lesson_id": 25, "pdf_page": 96, "file": null, "model": "gemini-4-carbon"}
+{"lesson_id": 25, "pdf_page": 97, "file": null, "model": "gemini-4-carbon"}
+{"lesson_id": 25, "pdf_page": 98, "file": null, "model": "gemini-4-carbon"}
+{"lesson_id": 26, "pdf_page": 99, "file": null, "model": "gemini-4-carbon"}
+{"lesson_id": 26, "pdf_page": 100, "file": null, "model": "gemini-4-carbon"}
+{"lesson_id": 26, "pdf_page": 101, "file": null, "model": "gemini-4-carbon"}
