@@ -11,9 +11,12 @@
 
     @if (!finished()) {
       @if (activity(); as activity) {
-        <main class="lesson-main">
+        <main class="lesson-main" (pointerdown)="startWordLookup($event)" (pointermove)="moveWordLookup($event)"
+          (pointerup)="cancelWordLookup()" (pointercancel)="cancelWordLookup()" (pointerleave)="cancelWordLookup()"
+          (contextmenu)="suppressWordContextMenu($event)">
           <div class="lesson-heading lesson-context">
             <p class="lesson-breadcrumb">LEKCJA {{ lesson.id }} <span>·</span> {{ lesson.topic }}</p>
+            <p class="dictionary-hint">Зажмите польское слово, чтобы увидеть перевод</p>
           </div>
 
           @if (activeIndex() === 0) {
@@ -152,6 +155,26 @@
         <p class="next-unlock">{{ finalScore() === 100 ? 'Perfekcyjnie. Każdy poprawny zwrot zostaje z Tobą.' : 'Błędy są częścią nauki. Poprawne odpowiedzi zobaczysz w podsumowaniu ćwiczeń.' }}</p>
         <a class="return-button" routerLink="/">Wróć do ścieżki <span>→</span></a>
       </main>
+    }
+    @if (dictionaryWord(); as word) {
+      <div class="dictionary-backdrop" (click)="closeDictionary()">
+        <section class="dictionary-sheet" role="dialog" aria-modal="true" aria-labelledby="dictionary-title" (click)="$event.stopPropagation()">
+          <button class="dictionary-close" type="button" aria-label="Закрыть перевод" (click)="closeDictionary()">×</button>
+          <p class="dictionary-kicker">ПЕРЕВОД С ПОЛЬСКОГО</p>
+          <h2 id="dictionary-title" lang="pl">{{ word }}</h2>
+          @if (dictionaryLoading()) { <p class="dictionary-state" aria-live="polite">Ищу перевод…</p> }
+          @if (dictionaryError(); as error) { <p class="dictionary-state dictionary-error" role="alert">{{ error }}</p> }
+          @if (dictionaryTranslations().length) {
+            <ul class="dictionary-translations" aria-live="polite">
+              @for (translation of dictionaryTranslations(); track translation) { <li>{{ translation }}</li> }
+            </ul>
+          }
+          @if (!dictionaryLoading() && !dictionaryError() && !dictionaryTranslations().length) {
+            <p class="dictionary-state">Перевод не найден.</p>
+          }
+          <a class="dictionary-source" href="https://de.pons.com/" target="_blank" rel="noopener noreferrer">Dictionary powered by PONS ↗</a>
+        </section>
+      </div>
     }
   </div>
 }

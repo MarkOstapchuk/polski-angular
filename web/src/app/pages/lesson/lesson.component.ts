@@ -1,10 +1,11 @@
-import { ChangeDetectionStrategy, Component, computed, inject, OnInit, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, OnDestroy, OnInit, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { ActivityItem, ActivityKind, getLesson } from '../../data/lesson-bank';
 import { LESSON_THEORY, LessonTheoryId } from '../../data/lesson-theory';
 import { WORKBOOK_IMAGES, WorkbookImage } from '../../data/workbook-images';
 import { ProgressService } from '../../services/progress.service';
+import { supabase } from '../../services/supabase.client';
 
 @Component({
   selector: 'app-lesson',
@@ -14,11 +15,20 @@ import { ProgressService } from '../../services/progress.service';
   styleUrl: './lesson.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class LessonComponent implements OnInit {
+export class LessonComponent implements OnInit, OnDestroy {
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
   private readonly progress = inject(ProgressService);
   readonly syncError = this.progress.syncError;
+  readonly dictionaryWord = signal<string | null>(null);
+  readonly dictionaryTranslations = signal<string[]>([]);
+  readonly dictionaryLoading = signal(false);
+  readonly dictionaryError = signal<string | null>(null);
+  private longPressTimer: ReturnType<typeof setTimeout> | null = null;
+  private longPressOrigin: { x: number; y: number } | null = null;
+  private dictionaryRequest = 0;
+  private ignoreOptionClick = false;
+  private ignoreOptionClickTimer: ReturnType<typeof setTimeout> | null = null;
 
   readonly lesson = signal(getLesson(Number(this.route.snapshot.paramMap.get('lessonId'))));
   readonly theory = computed(() => {
@@ -73,6 +83,95 @@ export class LessonComponent implements OnInit {
     }
   }
 
+  ngOnDestroy(): void {
+    this.cancelWordLookup();
+    if (this.ignoreOptionClickTimer) clearTimeout(this.ignoreOptionClickTimer);
+    this.dictionaryRequest++;
+  }
+
+  startWordLookup(event: PointerEvent): void {
+    if (event.button !== 0) return;
+    const target = event.target instanceof HTMLElement ? event.target : null;
+    if (!target || target.closest('input, textarea, select, audio, button:not(.option-button), a')) return;
+    this.cancelWordLookup();
+    this.ignoreOptionClick = false;
+    if (this.ignoreOptionClickTimer) clearTimeout(this.ignoreOptionClickTimer);
+    const x = event.clientX;
+    const y = event.clientY;
+    this.longPressOrigin = { x, y };
+    this.longPressTimer = setTimeout(() => {
+      this.longPressTimer = null;
+      this.longPressOrigin = null;
+      const word = this.wordAtPoint(x, y);
+      if (word) {
+        if (target.closest('.option-button')) {
+          this.ignoreOptionClick = true;
+          this.ignoreOptionClickTimer = setTimeout(() => this.ignoreOptionClick = false, 1000);
+        }
+        void this.lookupDictionary(word);
+      }
+    }, 450);
+  }
+
+  moveWordLookup(event: PointerEvent): void {
+    const origin = this.longPressOrigin;
+    if (origin && Math.hypot(event.clientX - origin.x, event.clientY - origin.y) > 12) this.cancelWordLookup();
+  }
+
+  cancelWordLookup(): void {
+    if (this.longPressTimer) clearTimeout(this.longPressTimer);
+    this.longPressTimer = null;
+    this.longPressOrigin = null;
+  }
+
+  suppressWordContextMenu(event: MouseEvent): void {
+    const target = event.target instanceof HTMLElement ? event.target : null;
+    if (target && !target.closest('input, textarea, select, audio, button:not(.option-button), a')) event.preventDefault();
+  }
+
+  closeDictionary(): void {
+    this.dictionaryRequest++;
+    this.dictionaryWord.set(null);
+    this.dictionaryTranslations.set([]);
+    this.dictionaryError.set(null);
+  }
+
+  private wordAtPoint(x: number, y: number): string | null {
+    const doc = document as Document & {
+      caretPositionFromPoint?: (x: number, y: number) => { offsetNode: Node; offset: number } | null;
+      caretRangeFromPoint?: (x: number, y: number) => Range | null;
+    };
+    const position = doc.caretPositionFromPoint?.(x, y);
+    const range = doc.caretRangeFromPoint?.(x, y);
+    const node = position?.offsetNode ?? range?.startContainer;
+    const offset = position?.offset ?? range?.startOffset;
+    if (!node || node.nodeType !== Node.TEXT_NODE || offset === undefined) return null;
+    const text = node.textContent ?? '';
+    for (const match of text.matchAll(/[\p{Script=Latin}]+(?:[-'’][\p{Script=Latin}]+)*/gu)) {
+      const start = match.index ?? 0;
+      if (offset >= start && offset <= start + match[0].length) return match[0];
+    }
+    return null;
+  }
+
+  private async lookupDictionary(word: string): Promise<void> {
+    const request = ++this.dictionaryRequest;
+    this.dictionaryWord.set(word);
+    this.dictionaryTranslations.set([]);
+    this.dictionaryError.set(null);
+    this.dictionaryLoading.set(true);
+    try {
+      const { data, error } = await supabase.functions.invoke<{ translations: string[] }>('pons-dictionary', { body: { word } });
+      if (request !== this.dictionaryRequest) return;
+      if (error) throw error;
+      this.dictionaryTranslations.set(data?.translations ?? []);
+    } catch {
+      if (request === this.dictionaryRequest) this.dictionaryError.set('Nie udało się pobrać tłumaczenia. Spróbuj ponownie.');
+    } finally {
+      if (request === this.dictionaryRequest) this.dictionaryLoading.set(false);
+    }
+  }
+
   setAnswer(itemId: string, value: string): void {
     this.answers.update((current) => ({ ...current, [this.answerKey(itemId)]: value }));
   }
@@ -104,6 +203,11 @@ export class LessonComponent implements OnInit {
   }
 
   selectOption(itemId: string, value: string): void {
+    if (this.ignoreOptionClick) {
+      this.ignoreOptionClick = false;
+      if (this.ignoreOptionClickTimer) clearTimeout(this.ignoreOptionClickTimer);
+      return;
+    }
     if (!this.checked()) this.setAnswer(itemId, value);
   }
 
