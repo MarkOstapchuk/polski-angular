@@ -77,50 +77,87 @@
               </div>
             }
 
-            <div class="question-list" [class.choice-list]="activity.kind === activityKind.Choice || activity.kind === activityKind.Classify">
-              @for (item of activity.items; track item.id; let index = $index) {
-                <div class="question-row" [class.answer-correct]="checked() && isItemCorrect(item)" [class.answer-wrong]="checked() && !isItemCorrect(item)">
-                  <div class="question-number">{{ index + 1 }}</div>
-                  <div class="question-body">
-                    @if (itemImage(item); as image) { <img class="question-image" [src]="image.src" [alt]="image.alt" loading="lazy"> }
-                    @if (activity.kind === activityKind.LetterCloze) {
-                      @if (item.letterCloze; as cloze) {
-                        <div class="letter-cloze-line" role="group" [attr.aria-label]="item.prompt">
-                          @for (part of cloze.parts; track $index; let gapIndex = $index) {
-                            <span>{{ part }}</span>
-                            @if (gapIndex < cloze.gaps.length) {
-                              <input class="letter-cloze-gap" type="text" [value]="letterClozeAnswerFor(item.id, gapIndex)"
-                                (input)="setLetterClozeAnswer(item, gapIndex, $event)" [disabled]="checked()"
-                                [attr.maxlength]="cloze.gaps[gapIndex].length" [style.width.ch]="cloze.gaps[gapIndex].length + 1"
-                                [attr.aria-label]="item.prompt + ', brakująca litera ' + (gapIndex + 1)"
-                                autocomplete="off" autocapitalize="off" spellcheck="false">
-                            }
-                          }
-                        </div>
-                      }
-                    } @else {
-                      <label class="question-prompt" [for]="activity.id + '-' + item.id">{{ item.prompt }}</label>
-                      @if (item.options; as options) {
-                        <div class="option-list" role="group" [attr.aria-label]="item.prompt">
-                          @for (option of options; track option) {
-                            <button class="option-button" type="button" [class.selected]="answerFor(item.id) === option" [class.option-right]="checked() && optionIsAccepted(item, option)" [class.option-error]="checked() && answerFor(item.id) === option && !isItemCorrect(item)" [disabled]="checked()" (click)="selectOption(item.id, option)">{{ option }}</button>
-                          }
-                        </div>
-                      } @else {
-                        <input class="answer-input" [id]="activity.id + '-' + item.id" [ngModel]="answerFor(item.id)" (ngModelChange)="setAnswer(item.id, $event)" [disabled]="checked()" [placeholder]="activity.audioUrl ? 'Wpisz to, co słyszysz' : 'Twoja odpowiedź'" [attr.autocomplete]="'off'" [attr.aria-label]="item.prompt" (keydown.enter)="$event.preventDefault()">
-                      }
-                    }
-                    @if (checked()) {
-                      <div class="answer-feedback" [class.feedback-right]="isItemCorrect(item)" [class.feedback-wrong]="!isItemCorrect(item)" aria-live="polite">
-                        @if (isItemCorrect(item)) { <span>✓ Dobrze</span> }
-                        @else { <span>Poprawna odpowiedź: <strong>{{ expectedAnswer(item) }}</strong></span> }
+            @if (activity.kind === activityKind.Classify) {
+              <div class="classify-activity">
+                <p class="classify-hint">Нажмите слово, затем категорию. Категорию можно выбрать для нескольких слов.</p>
+                <div class="classify-board">
+                  <section class="classify-column" aria-label="Слова">
+                    <h3>Слова</h3>
+                    @for (item of activity.items; track item.id) {
+                      <div class="classify-entry">
+                        <button class="classify-word" type="button" [class.selected]="selectedClassifyItem() === item.id"
+                          [class.has-answer]="!!answerFor(item.id)" [disabled]="checked()"
+                          [attr.aria-pressed]="selectedClassifyItem() === item.id" (click)="selectClassifyItem(item.id)">
+                          <span>{{ item.prompt }}</span>
+                          @if (answerFor(item.id)) { <small>→ {{ answerFor(item.id) }}</small> }
+                        </button>
+                        @if (checked()) {
+                          <small class="classify-feedback" [class.feedback-right]="isItemCorrect(item)" [class.feedback-wrong]="!isItemCorrect(item)" aria-live="polite">
+                            @if (isItemCorrect(item)) { ✓ Dobrze }
+                            @else { Poprawna kategoria: {{ expectedAnswer(item) }} }
+                          </small>
+                        }
                       </div>
-                      @if (item.explanation) { <small class="answer-explanation">{{ item.explanation }}</small> }
                     }
-                  </div>
+                  </section>
+                  <section class="classify-column" aria-label="Kategorie">
+                    <h3>Kategorie</h3>
+                    <div class="classify-options" role="group" aria-label="Kategorie">
+                      @for (option of classifyOptions(); track option) {
+                        <button class="classify-option" type="button" [class.selected]="selectedClassifyOption() === option"
+                          [disabled]="checked()" [attr.aria-pressed]="selectedClassifyOption() === option"
+                          (click)="selectClassifyOption(option)">{{ option }}</button>
+                      }
+                    </div>
+                  </section>
                 </div>
-              }
-            </div>
+              </div>
+            } @else {
+              <div class="question-list" [class.choice-list]="activity.kind === activityKind.Choice">
+                @for (item of activity.items; track item.id; let index = $index) {
+                  <div class="question-row" [class.answer-correct]="checked() && isItemCorrect(item)" [class.answer-wrong]="checked() && !isItemCorrect(item)">
+                    <div class="question-number">{{ index + 1 }}</div>
+                    <div class="question-body">
+                      @if (itemImage(item); as image) { <img class="question-image" [src]="image.src" [alt]="image.alt" loading="lazy"> }
+                      @if (activity.kind === activityKind.LetterCloze) {
+                        @if (item.letterCloze; as cloze) {
+                          <div class="letter-cloze-line" role="group" [attr.aria-label]="item.prompt">
+                            @for (part of cloze.parts; track $index; let gapIndex = $index) {
+                              <span>{{ part }}</span>
+                              @if (gapIndex < cloze.gaps.length) {
+                                <input class="letter-cloze-gap" type="text" [value]="letterClozeAnswerFor(item.id, gapIndex)"
+                                  (input)="setLetterClozeAnswer(item, gapIndex, $event)" [disabled]="checked()"
+                                  [attr.maxlength]="cloze.gaps[gapIndex].length" [style.width.ch]="cloze.gaps[gapIndex].length + 1"
+                                  [attr.aria-label]="item.prompt + ', brakująca litera ' + (gapIndex + 1)"
+                                  autocomplete="off" autocapitalize="off" spellcheck="false">
+                              }
+                            }
+                          </div>
+                        }
+                      } @else {
+                        <label class="question-prompt" [for]="activity.id + '-' + item.id">{{ item.prompt }}</label>
+                        @if (item.options; as options) {
+                          <div class="option-list" role="group" [attr.aria-label]="item.prompt">
+                            @for (option of options; track option) {
+                              <button class="option-button" type="button" [class.selected]="answerFor(item.id) === option" [class.option-right]="checked() && optionIsAccepted(item, option)" [class.option-error]="checked() && answerFor(item.id) === option && !isItemCorrect(item)" [disabled]="checked()" (click)="selectOption(item.id, option)">{{ option }}</button>
+                            }
+                          </div>
+                        } @else {
+                          <input class="answer-input" [id]="activity.id + '-' + item.id" [ngModel]="answerFor(item.id)" (ngModelChange)="setAnswer(item.id, $event)" [disabled]="checked()" [placeholder]="activity.audioUrl ? 'Wpisz to, co słyszysz' : 'Twoja odpowiedź'" [attr.autocomplete]="'off'" [attr.aria-label]="item.prompt" (keydown.enter)="$event.preventDefault()">
+                        }
+                      }
+                      @if (checked()) {
+                        <div class="answer-feedback" [class.feedback-right]="isItemCorrect(item)" [class.feedback-wrong]="!isItemCorrect(item)" aria-live="polite">
+                          @if (isItemCorrect(item)) { <span>✓ Dobrze</span> }
+                          @else { <span>Poprawna odpowiedź: <strong>{{ expectedAnswer(item) }}</strong></span> }
+                        </div>
+                        @if (item.explanation) { <small class="answer-explanation">{{ item.explanation }}</small> }
+                      }
+                    </div>
+                  </div>
+                }
+              </div>
+            }
 
             <div class="exercise-footer">
               @if (!checked()) {

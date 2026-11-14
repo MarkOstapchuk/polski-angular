@@ -27,8 +27,8 @@ export class LessonComponent implements OnInit, OnDestroy {
   private longPressTimer: ReturnType<typeof setTimeout> | null = null;
   private longPressOrigin: { x: number; y: number } | null = null;
   private dictionaryRequest = 0;
-  private ignoreOptionClick = false;
-  private ignoreOptionClickTimer: ReturnType<typeof setTimeout> | null = null;
+  private ignoreAnswerClick = false;
+  private ignoreAnswerClickTimer: ReturnType<typeof setTimeout> | null = null;
 
   readonly lesson = signal(getLesson(Number(this.route.snapshot.paramMap.get('lessonId'))));
   readonly theory = computed(() => {
@@ -38,10 +38,13 @@ export class LessonComponent implements OnInit, OnDestroy {
   readonly activityKind = ActivityKind;
   readonly activeIndex = signal(0);
   readonly answers = signal<Record<string, string>>({});
+  readonly selectedClassifyItem = signal<string | null>(null);
+  readonly selectedClassifyOption = signal<string | null>(null);
   readonly checked = signal(false);
   readonly finished = signal(false);
   readonly awardedXp = signal(0);
   readonly activity = computed(() => this.lesson()?.activities[this.activeIndex()]);
+  readonly classifyOptions = computed(() => [...new Set(this.activity()?.items.flatMap((item) => item.options ?? []) ?? [])]);
   private readonly allImages = computed(() => WORKBOOK_IMAGES[this.activity()?.sourceExerciseId ?? ''] ?? []);
   /** Images not attached to a specific question, shown above the list. */
   readonly images = computed(() => {
@@ -85,17 +88,17 @@ export class LessonComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.cancelWordLookup();
-    if (this.ignoreOptionClickTimer) clearTimeout(this.ignoreOptionClickTimer);
+    if (this.ignoreAnswerClickTimer) clearTimeout(this.ignoreAnswerClickTimer);
     this.dictionaryRequest++;
   }
 
   startWordLookup(event: PointerEvent): void {
     if (event.button !== 0) return;
     const target = event.target instanceof HTMLElement ? event.target : null;
-    if (!target || target.closest('input, textarea, select, audio, button:not(.option-button), a')) return;
+    if (!target || target.closest('input, textarea, select, audio, button:not(.option-button):not(.classify-word):not(.classify-option), a')) return;
     this.cancelWordLookup();
-    this.ignoreOptionClick = false;
-    if (this.ignoreOptionClickTimer) clearTimeout(this.ignoreOptionClickTimer);
+    this.ignoreAnswerClick = false;
+    if (this.ignoreAnswerClickTimer) clearTimeout(this.ignoreAnswerClickTimer);
     const x = event.clientX;
     const y = event.clientY;
     this.longPressOrigin = { x, y };
@@ -104,9 +107,9 @@ export class LessonComponent implements OnInit, OnDestroy {
       this.longPressOrigin = null;
       const word = this.wordAtPoint(x, y);
       if (word) {
-        if (target.closest('.option-button')) {
-          this.ignoreOptionClick = true;
-          this.ignoreOptionClickTimer = setTimeout(() => this.ignoreOptionClick = false, 1000);
+        if (target.closest('.option-button, .classify-word, .classify-option')) {
+          this.ignoreAnswerClick = true;
+          this.ignoreAnswerClickTimer = setTimeout(() => this.ignoreAnswerClick = false, 1000);
         }
         void this.lookupDictionary(word);
       }
@@ -126,7 +129,7 @@ export class LessonComponent implements OnInit, OnDestroy {
 
   suppressWordContextMenu(event: MouseEvent): void {
     const target = event.target instanceof HTMLElement ? event.target : null;
-    if (target && !target.closest('input, textarea, select, audio, button:not(.option-button), a')) event.preventDefault();
+    if (target && !target.closest('input, textarea, select, audio, button:not(.option-button):not(.classify-word):not(.classify-option), a')) event.preventDefault();
   }
 
   closeDictionary(): void {
@@ -203,12 +206,32 @@ export class LessonComponent implements OnInit, OnDestroy {
   }
 
   selectOption(itemId: string, value: string): void {
-    if (this.ignoreOptionClick) {
-      this.ignoreOptionClick = false;
-      if (this.ignoreOptionClickTimer) clearTimeout(this.ignoreOptionClickTimer);
-      return;
-    }
+    if (this.consumeIgnoredAnswerClick()) return;
     if (!this.checked()) this.setAnswer(itemId, value);
+  }
+
+  selectClassifyItem(itemId: string): void {
+    if (this.checked() || this.consumeIgnoredAnswerClick()) return;
+    const option = this.selectedClassifyOption();
+    if (option) {
+      this.setAnswer(itemId, option);
+      this.selectedClassifyOption.set(null);
+      this.selectedClassifyItem.set(null);
+    } else {
+      this.selectedClassifyItem.update((selected) => selected === itemId ? null : itemId);
+    }
+  }
+
+  selectClassifyOption(option: string): void {
+    if (this.checked() || this.consumeIgnoredAnswerClick()) return;
+    const itemId = this.selectedClassifyItem();
+    if (itemId) {
+      this.setAnswer(itemId, option);
+      this.selectedClassifyItem.set(null);
+      this.selectedClassifyOption.set(null);
+    } else {
+      this.selectedClassifyOption.update((selected) => selected === option ? null : option);
+    }
   }
 
   hasAnsweredAll(): boolean {
@@ -263,6 +286,8 @@ export class LessonComponent implements OnInit, OnDestroy {
     if (nextIndex >= 0) {
       this.activeIndex.set(nextIndex);
       this.answers.set({});
+      this.selectedClassifyItem.set(null);
+      this.selectedClassifyOption.set(null);
       this.checked.set(false);
       return;
     }
@@ -286,6 +311,13 @@ export class LessonComponent implements OnInit, OnDestroy {
 
   private answerKey(itemId: string): string {
     return `${this.activity()?.id ?? ''}:${itemId}`;
+  }
+
+  private consumeIgnoredAnswerClick(): boolean {
+    if (!this.ignoreAnswerClick) return false;
+    this.ignoreAnswerClick = false;
+    if (this.ignoreAnswerClickTimer) clearTimeout(this.ignoreAnswerClickTimer);
+    return true;
   }
 
   private letterClozeAnswerKey(itemId: string, gapIndex: number): string {
