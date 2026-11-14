@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { LESSONS, Lesson } from '../../data/lesson-bank';
+import { AuthService } from '../../services/auth.service';
 import { ProgressService } from '../../services/progress.service';
 import { PwaInstallService } from '../../services/pwa-install.service';
 
@@ -14,10 +15,13 @@ import { PwaInstallService } from '../../services/pwa-install.service';
 })
 export class DashboardComponent {
   private readonly router = inject(Router);
+  readonly auth = inject(AuthService);
   readonly progressService = inject(ProgressService);
   readonly pwa = inject(PwaInstallService);
   readonly lessons = LESSONS;
   readonly progress = this.progressService.progress;
+  readonly userEmail = computed(() => this.auth.user()?.email ?? 'Uczeń');
+  readonly userInitial = computed(() => this.auth.user()?.email?.slice(0, 1).toUpperCase() ?? 'U');
   readonly currentLesson = computed(() =>
     LESSONS.find((lesson) => !this.progressService.hasCompleted(lesson.id)) ?? LESSONS[LESSONS.length - 1],
   );
@@ -50,6 +54,16 @@ export class DashboardComponent {
 
   installApp(): void {
     void this.pwa.install();
+  }
+
+  async signOut(): Promise<void> {
+    try {
+      await this.progressService.flush();
+      await this.auth.signOut();
+      await this.router.navigateByUrl('/auth');
+    } catch {
+      this.progressService.syncError.set('Nie udało się wylogować. Spróbuj ponownie.');
+    }
   }
 
   private getGreeting(): string {

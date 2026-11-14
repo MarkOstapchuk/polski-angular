@@ -1,4 +1,4 @@
-import { choice, Lesson, typed } from './lesson-types';
+import { ActivityKind, choice, Lesson, letterCloze, typed, typedExercise } from './lesson-types';
 import { LESSON_06 } from './lessons/lesson-06';
 import { LESSON_07 } from './lessons/lesson-07';
 import { LESSON_08 } from './lessons/lesson-08';
@@ -6,6 +6,20 @@ import { LESSON_09 } from './lessons/lesson-09';
 import { LESSON_10 } from './lessons/lesson-10';
 import { LESSON_11 } from './lessons/lesson-11';
 import { LESSON_12 } from './lessons/lesson-12';
+import { LESSON_13 } from './lessons/lesson-13';
+import { LESSON_14 } from './lessons/lesson-14';
+import { LESSON_15 } from './lessons/lesson-15';
+import { LESSON_16 } from './lessons/lesson-16';
+import { LESSON_17 } from './lessons/lesson-17';
+import { LESSON_18 } from './lessons/lesson-18';
+import { LESSON_19 } from './lessons/lesson-19';
+import { LESSON_20 } from './lessons/lesson-20';
+import { LESSON_21 } from './lessons/lesson-21';
+import { LESSON_22 } from './lessons/lesson-22';
+import { LESSON_23 } from './lessons/lesson-23';
+import { LESSON_24 } from './lessons/lesson-24';
+import { LESSON_25 } from './lessons/lesson-25';
+import { LESSON_26 } from './lessons/lesson-26';
 
 export * from './lesson-types';
 
@@ -19,8 +33,23 @@ export const LESSONS: Lesson[] = [
     color: 'coral',
     activities: [
       {
+        id: 'l01-letters', sourceExerciseId: 'WB-L01-E01', sourceLabel: 'Zeszyt ćwiczeń · ćwiczenie 1',
+        kind: ActivityKind.LetterCloze, title: 'Uzupełnij brakujące litery',
+        instruction: 'Wpisz brakujące litery. Po wpisaniu przejdziesz do następnego pola.',
+        items: [
+          { ...letterCloze('q1', 'a) Sekretarka', 'a) Sekretarka: Dzień dobry. Jestem Ewa Potocka.', ['a) Sekretarka: D', 'ie', ' dobr', '. Je', 'tem Ewa Potocka.'], ['z', 'ń', 'y', 's']), image: 1 },
+          letterCloze('q2', 'a) Studentka', 'a) Studentka: Dzień dobry. Nazywam się Elena Sanchez.', ['a) Studentka: D', 'ień dobr', '. Na', '', '', 'am s', '', ' Elena Sanchez.'], ['z', 'y', 'z', 'y', 'w', 'i', 'ę']),
+          letterCloze('q3', 'a) Sekretarka', 'a) Sekretarka: Bardzo mi miło.', ['a) Sekretarka: Bar', '', 'o m', ' m', '', 'o.'], ['d', 'z', 'i', 'i', 'ł']),
+          letterCloze('q4', 'a) Studentka', 'a) Studentka: Miło mi.', ['a) Studentka: M', '', 'o mi.'], ['i', 'ł']),
+          letterCloze('q5', 'b) Student', 'b) Student: Cześć, jestem Jan, a ty?', ['b) Student: C', '', 'ść, jest', 'm Jan, a t', '?'], ['z', 'e', 'e', 'y']),
+          letterCloze('q6', 'b) Studentka', 'b) Studentka: Cześć, jestem Elena.', ['b) Studentka: C', '', 'ść, jes', 'em Elena.'], ['z', 'e', 't']),
+          letterCloze('q7', 'b) Student', 'b) Student: Miło mi.', ['b) Student: M', '', 'o mi.'], ['i', 'ł']),
+          letterCloze('q8', 'b) Studentka', 'b) Studentka: Mnie również.', ['b) Studentka: M', 'ie r', 'wn', 'e', '.'], ['n', 'ó', 'i', 'ż']),
+        ],
+      },
+      {
         id: 'l01-dialogue-order', sourceExerciseId: 'WB-L01-E02', sourceLabel: 'Zeszyt ćwiczeń · ćwiczenie 2',
-        kind: 'typed', title: 'Ułóż rozmowę z nagrania',
+        kind: ActivityKind.Typed, title: 'Ułóż rozmowę z nagrania',
         instruction: 'Posłuchaj dialogu, a następnie zapisz cztery wypowiedzi we właściwej kolejności.',
         audioUrl: '/assets/telegram_audio/01_L01_cwiczenie2.mp3', audioLabel: 'Pierwsze spotkanie — dialog',
         items: [
@@ -32,7 +61,7 @@ export const LESSONS: Lesson[] = [
       },
       {
         id: 'l01-registration', sourceExerciseId: 'WB-L01-E04', sourceLabel: 'Zeszyt ćwiczeń · ćwiczenie 4',
-        kind: 'typed', title: 'Wypełnij formularz ze słuchu',
+        kind: ActivityKind.Typed, title: 'Wypełnij formularz ze słuchu',
         instruction: 'Posłuchaj dialogu w sekretariacie i uzupełnij dane oraz zwroty.',
         audioUrl: '/assets/telegram_audio/02_L01_cwiczenie4.mp3', audioLabel: 'Rozmowa w sekretariacie',
         items: [
@@ -48,7 +77,7 @@ export const LESSONS: Lesson[] = [
         id: 'l01-forms',
         sourceExerciseId: 'WB-L01-E05',
         sourceLabel: 'Zeszyt ćwiczeń · ćwiczenie 5',
-        kind: 'choice',
+        kind: ActivityKind.Choice,
         title: 'Wybierz właściwą formę',
         instruction: 'Zwróć uwagę, czy zdanie mówi o imieniu, nazwisku czy tożsamości.',
         items: [
@@ -63,7 +92,7 @@ export const LESSONS: Lesson[] = [
       },
       {
         id: 'l01-audio-cloze', sourceExerciseId: 'WB-L01-E06', sourceLabel: 'Zeszyt ćwiczeń · ćwiczenie 6',
-        kind: 'typed', title: 'Uzupełnij po wysłuchaniu',
+        kind: ActivityKind.Typed, title: 'Uzupełnij po wysłuchaniu',
         instruction: 'Odtwórz scenkę i wpisz brakujące słowa.',
         audioUrl: '/assets/telegram_audio/03_L01_cwiczenie6.mp3', audioLabel: 'Wolne miejsce i kichnięcie',
         items: [
@@ -74,7 +103,7 @@ export const LESSONS: Lesson[] = [
       },
       {
         id: 'l01-dialogue-cloze', sourceExerciseId: 'WB-L01-E09', sourceLabel: 'Zeszyt ćwiczeń · ćwiczenie 9',
-        kind: 'typed', title: 'Zwroty z dialogów',
+        kind: ActivityKind.Typed, title: 'Zwroty z dialogów',
         instruction: 'Posłuchaj i uzupełnij brakujące czasowniki oraz zwroty.',
         audioUrl: '/assets/telegram_audio/04_L01_cwiczenie9.mp3', audioLabel: 'Dialogi: prośby i wyjaśnienia',
         items: [
@@ -87,7 +116,7 @@ export const LESSONS: Lesson[] = [
       },
       {
         id: 'l01-phone-dictation', sourceExerciseId: 'WB-L01-E11', sourceLabel: 'Zeszyt ćwiczeń · ćwiczenie 11',
-        kind: 'typed', title: 'Numery telefonów',
+        kind: ActivityKind.Typed, title: 'Numery telefonów',
         instruction: 'Posłuchaj i wpisz numer każdej osoby. Możesz oddzielać cyfry spacjami.',
         audioUrl: '/assets/telegram_audio/05_L01_cwiczenie11.mp3', audioLabel: 'Cztery numery telefonów',
         items: [
@@ -99,7 +128,7 @@ export const LESSONS: Lesson[] = [
         id: 'l01-spelling',
         sourceExerciseId: 'WB-L01-E12',
         sourceLabel: 'Zeszyt ćwiczeń · ćwiczenie 12',
-        kind: 'typed',
+        kind: ActivityKind.Typed,
         title: 'Uzupełnij zwroty',
         instruction: 'Uzupełnij brakujące słowo. Zachowaj polskie znaki.',
         items: [
@@ -114,7 +143,7 @@ export const LESSONS: Lesson[] = [
       },
       {
         id: 'l01-word-dictation', sourceExerciseId: 'WB-L01-E14', sourceLabel: 'Zeszyt ćwiczeń · ćwiczenie 14',
-        kind: 'typed', title: 'Siedem słów z nagrania',
+        kind: ActivityKind.Typed, title: 'Siedem słów z nagrania',
         instruction: 'Posłuchaj lektora i zapisz każde usłyszane słowo.',
         audioUrl: '/assets/telegram_audio/06_L01_cwiczenie14.mp3', audioLabel: 'Dyktando słownictwa',
         items: [
@@ -127,7 +156,7 @@ export const LESSONS: Lesson[] = [
         id: 'l01-listening-pairs',
         sourceExerciseId: 'WB-L01-E15',
         sourceLabel: 'Zeszyt ćwiczeń · ćwiczenie 15',
-        kind: 'choice',
+        kind: ActivityKind.Choice,
         title: 'Słuchaj uważnie',
         instruction: 'Odtwórz nagranie, a potem zaznacz usłyszany wyraz w każdej parze.',
         audioUrl: '/assets/telegram_audio/07_L01_cwiczenie15.mp3',
@@ -145,7 +174,7 @@ export const LESSONS: Lesson[] = [
           choice('q10', '10. czyta / cytat', 'czyta', ['czyta', 'cytat']),
           choice('q11', '11. czynnik / cynik', 'czynnik', ['czynnik', 'cynik']),
           choice('q12', '12. czarki / ciarki', 'ciarki', ['czarki', 'ciarki']),
-          choice('q13', '13. pić / być', 'być', ['pić', 'być']),
+          choice('q13', '13. pić / być', 'pić', ['pić', 'być']),
           choice('q14', '14. wić / wyć', 'wyć', ['wić', 'wyć']),
           choice('q15', '15. bić / być', 'bić', ['bić', 'być']),
           choice('q16', '16. szelka / żelka', 'żelka', ['szelka', 'żelka']),
@@ -155,7 +184,7 @@ export const LESSONS: Lesson[] = [
         id: 'l01-cities',
         sourceExerciseId: 'WB-L01-E16',
         sourceLabel: 'Zeszyt ćwiczeń · ćwiczenie 16',
-        kind: 'typed',
+        kind: ActivityKind.Typed,
         title: 'Nazwy polskich miast',
         instruction: 'Posłuchaj i wpisz nazwy miast. Liczą się polskie znaki.',
         audioUrl: '/assets/telegram_audio/08_L01_cwiczenie16.mp3',
@@ -173,6 +202,32 @@ export const LESSONS: Lesson[] = [
           typed('q19', '19', 'Zielona Góra'),
         ],
       },
+      typedExercise(1, 3, 'Co pasuje?', 'Wybierz właściwe wyrażenie.', [
+        ['1. dobry dzień / wieczór / noc', 'dobry wieczór'],
+        ['2. do widzenia / razie / widzenia', 'do widzenia'],
+        ['3. na widzenia / noc / razie', 'na razie'],
+        ['4. dziękuję miło / bardzo / mi', 'dziękuję bardzo'],
+        ['5. miło mi / bardzo / również', 'miło mi'],
+      ]),
+      typedExercise(1, 7, 'Uporządkuj zdania', 'Ułóż zdania z podanych wyrazów.', [
+        ['gdzie / toaleta / jest / przepraszam', 'Przepraszam, gdzie jest toaleta?'],
+        ['tam / i / kawa / cukier / są', ['Kawa i cukier są tam.', 'Cukier i kawa są tam.']],
+        ['na / toaleta / jest / lewo / tam', 'Toaleta jest tam na lewo.'],
+        ['pani / dziękuję / bardzo', ['Dziękuję pani bardzo.', 'Bardzo pani dziękuję.']],
+      ]),
+      typedExercise(1, 8, 'Gdzie jest sekretariat?', 'Wpisz określenia kierunku pasujące do ilustracji.', [
+        ['1 · n_a _e_o', 'na lewo'], ['2 · __u / __u__aj', ['tu', 'tutaj']],
+        ['3 · t___', 'tam'], ['4 · __a __r__o', 'na prawo'],
+      ]),
+      typedExercise(1, 10, 'Połącz początki i zakończenia', 'Wpisz całe pasujące wyrażenie.', [
+        ['1. Jak się… · mówi po polsku…?', 'Jak się mówi po polsku?'],
+        ['2. Co to… · znaczy?', 'Co to znaczy?'], ['3. Proszę… · powtórzyć?', 'Proszę powtórzyć.'],
+        ['4. Nie… · rozumiem.', 'Nie rozumiem.'], ['5. Mam… · pytanie.', 'Mam pytanie.'],
+      ]),
+      typedExercise(1, 13, 'Popraw zapis liczebników', 'Zapisz poprawnie każde słowo.', [
+        ['1. sedem', 'siedem'], ['2. tszy', 'trzy'], ['3. szesc', 'sześć'], ['4. osem', 'osiem'],
+        ['5. piec', 'pięć'], ['6. dziewiec', 'dziewięć'], ['7. ctery', 'cztery'], ['8. dziesiec', 'dziesięć'],
+      ]),
     ],
   },
   {
@@ -185,7 +240,7 @@ export const LESSONS: Lesson[] = [
     activities: [
       {
         id: 'l02-dialogue-order', sourceExerciseId: 'WB-L02-E02', sourceLabel: 'Zeszyt ćwiczeń · ćwiczenie 2',
-        kind: 'typed', title: 'Ułóż dialog „Co u ciebie?”',
+        kind: ActivityKind.Typed, title: 'Ułóż dialog „Co u ciebie?”',
         instruction: 'Posłuchaj rozmowy i wpisz kolejne wypowiedzi w poprawnej kolejności.',
         audioUrl: '/assets/telegram_audio/09_L02_cwiczenie2.mp3', audioLabel: 'Rozmowa z nauczycielką',
         items: [
@@ -199,7 +254,7 @@ export const LESSONS: Lesson[] = [
       },
       {
         id: 'l02-formal-dialogue', sourceExerciseId: 'WB-L02-E04', sourceLabel: 'Zeszyt ćwiczeń · ćwiczenie 4',
-        kind: 'typed', title: 'Oficjalny dialog',
+        kind: ActivityKind.Typed, title: 'Oficjalny dialog',
         instruction: 'Uzupełnij rozmowę po odsłuchaniu. W jednym miejscu klucz podaje wariant niezgodny z formą grzecznościową; zaakceptujemy obie wersje.',
         audioUrl: '/assets/telegram_audio/10_L02_cwiczenie4.mp3', audioLabel: 'Pytanie o kraj i miejsce zamieszkania',
         items: [
@@ -212,7 +267,7 @@ export const LESSONS: Lesson[] = [
       },
       {
         id: 'l02-byc', sourceExerciseId: 'WB-L02-E07', sourceLabel: 'Zeszyt ćwiczeń · ćwiczenie 7',
-        kind: 'typed', title: 'Odmień czasownik „być”',
+        kind: ActivityKind.Typed, title: 'Odmień czasownik „być”',
         instruction: 'Wpisz właściwą formę. Zgoda podmiotu z czasownikiem jest ważna.',
         items: [
           typed('q1', 'Kawa i herbata ___ tutaj.', 'są'), typed('q2', 'Woda ___ tam.', 'jest'),
@@ -224,7 +279,7 @@ export const LESSONS: Lesson[] = [
       },
       {
         id: 'l02-czytac', sourceExerciseId: 'WB-L02-E09', sourceLabel: 'Zeszyt ćwiczeń · ćwiczenie 9',
-        kind: 'typed', title: 'Odmień „czytać” przez osoby',
+        kind: ActivityKind.Typed, title: 'Odmień „czytać” przez osoby',
         instruction: 'Uzupełnij tabelę. Ta sama forma może pasować do kilku rodzajów gramatycznych.',
         items: [
           typed('q1', 'ja ___', 'czytam'), typed('q2', 'ty ___', 'czytasz'),
@@ -236,7 +291,7 @@ export const LESSONS: Lesson[] = [
       },
       {
         id: 'l02-numbers', sourceExerciseId: 'WB-L02-E13', sourceLabel: 'Zeszyt ćwiczeń · ćwiczenie 13',
-        kind: 'typed', title: 'Dyktando liczebników',
+        kind: ActivityKind.Typed, title: 'Dyktando liczebników',
         instruction: 'Odtwórz nagranie i zapisz wszystkie liczebniki słownie.',
         audioUrl: '/assets/telegram_audio/11_L02_cwiczenie13.mp3', audioLabel: 'Dziesięć liczebników',
         items: [
@@ -249,7 +304,7 @@ export const LESSONS: Lesson[] = [
       },
       {
         id: 'l02-addresses', sourceExerciseId: 'WB-L02-E14', sourceLabel: 'Zeszyt ćwiczeń · ćwiczenie 14',
-        kind: 'typed', title: 'Adresy z nagrania',
+        kind: ActivityKind.Typed, title: 'Adresy z nagrania',
         instruction: 'Wpisz numer domu albo brakujące słowo. Zostaw spacje między grupami cyfr.',
         audioUrl: '/assets/telegram_audio/12_L02_cwiczenie14.mp3', audioLabel: 'Nazwy ulic i numery',
         items: [
@@ -262,16 +317,75 @@ export const LESSONS: Lesson[] = [
       },
       {
         id: 'l02-rating-scale', sourceExerciseId: 'WB-L02-E17', sourceLabel: 'Zeszyt ćwiczeń · ćwiczenie 17',
-        kind: 'typed', title: 'Oceny z dialogu',
+        kind: ActivityKind.Typed, title: 'Oceny z dialogu',
         instruction: 'Posłuchaj, jak nauczyciel i studenci oceniają odpowiedzi. Uzupełnij skalę od +++ do --- .',
         audioUrl: '/assets/telegram_audio/13_L02_cwiczenie17.mp3', audioLabel: 'Siedem ocen',
         items: [
-          typed('q1', '+++', 'świetnie'), typed('q2', '++', 'bardzo dobrze'),
-          typed('q3', '+', 'dobrze'), typed('q4', '0', 'tak sobie'),
-          typed('q5', '−', 'źle'), typed('q6', '−−', 'bardzo źle'),
-          typed('q7', '−−−', 'fatalnie'),
+          { ...typed('q1', '+++', 'świetnie'), image: 1 }, { ...typed('q2', '++', 'bardzo dobrze'), image: 2 },
+          { ...typed('q3', '+', 'dobrze'), image: 3 }, { ...typed('q4', '0', 'tak sobie'), image: 4 },
+          { ...typed('q5', '−', 'źle'), image: 5 }, { ...typed('q6', '−−', 'bardzo źle'), image: 6 },
+          { ...typed('q7', '−−−', 'fatalnie'), image: 7 },
         ],
       },
+      typedExercise(2, 1, 'Uzupełnij dialog', 'Wpisz brakujące słowa z ramki: z, powtórzyć, nazywa, skąd, dzień, dziękuję.', [
+        ['Studentka: ___ dobry.', 'Dzień'], ['Jak się pani ___?', 'nazywa'], ['Proszę ___.', 'powtórzyć'],
+        ['___ pani jest?', 'Skąd'], ['Jestem ___ Hiszpanii.', 'z'], ['___ bardzo.', 'dziękuję'],
+      ]),
+      typedExercise(2, 3, 'Co pasuje?', 'Połącz początki pytań z zakończeniami, wpisując literę odpowiedzi.', [
+        ['1. co', '1d'], ['2. po', '2e'], ['3. co', '3b'], ['4. nic', '4f'], ['5. co u', '5a'], ['6. wszystko', '6c'],
+      ]),
+      typedExercise(2, 5, 'Podziel wyrazy i zapisz zdania', 'Wstaw wielkie litery, spacje i znaki przestankowe.', [
+        ['cześćcostychaćdziękujedobrzeacouciebięwszystkowporządkudziękuję', 'Cześć, co słychać? Dziękuję, dobrze, a co u ciebie? Wszystko w porządku, dziękuję.'],
+      ]),
+      typedExercise(2, 6, 'Zaimki w liczbie mnogiej', 'Uzupełnij odpowiedni zaimek: oni, one, panowie, państwo lub panie.', [
+        ['on + ___ → oni', 'on'], ['ona + ___ → oni', 'on'], ['ono + ___ → oni', 'on'],
+        ['ona + ___ → one', 'ona'], ['ona + ___ → one', 'ono'], ['ono + ___ → one', 'ono'],
+        ['ono + ___ → one', 'ona'], ['pan + ___ → panowie', 'pan'], ['pan + ___ → państwo', 'pani'],
+        ['pani + ___ → panie', 'pani'], ['panowie + ___ → państwo', 'panie'],
+      ]),
+      typedExercise(2, 8, 'Zmień liczbę pojedynczą na mnogą', 'Przekształć zdania zgodnie z podanym zaimkiem.', [
+        ['Ja jestem w szkole.', 'My jesteśmy w szkole.'], ['Pan jest w domu.', 'Panowie są w domu.'],
+        ['Gdzie ty jesteś?', 'Gdzie wy jesteście?'], ['Skąd pani jest?', 'Skąd panie są?'],
+        ['Ono jest tu.', 'One są tu.'], ['Ona jest tam.', 'One są tam.'],
+        ['On jest w sekretariacie.', 'Oni są w sekretariacie.'],
+      ]),
+      typedExercise(2, 10, 'Odmień czasownik „mieszkać”', 'Wpisz brakującą formę czasownika.', [
+        ['on · mie__ka__', 'mieszka'], ['ty · mies__ka__z', 'mieszkasz'],
+        ['oni/one · mi__s__k__j__', 'mieszkają'], ['ja · mie__ka__', 'mieszkam'],
+        ['wy · __ie__ka___', 'mieszkacie'], ['my · m__esz__am__', 'mieszkamy'],
+      ]),
+      typedExercise(2, 11, 'Czasowniki w zdaniach', 'Wpisz właściwą formę czasownika z nawiasu.', [
+        ['Oni ___ (grać) w golfa.', 'grają'], ['___ (wy–mieć) telefon?', 'macie'],
+        ['Nie ___ (my–rozumieć).', 'rozumiemy'], ['Gdzie państwo ___ (mieszkać)?', 'mieszkają'],
+        ['Czy wy ___ (grać) w tenisa?', 'gracie'], ['Nie ___ (ja–rozumieć).', 'rozumiem'],
+        ['One ___ (nazywać się) Nowak.', 'nazywają się'],
+        ['Jak wy ___ (nazywać się)?', ['nazywacie się', 'się nazywacie']],
+        ['Czy ty ___ (grać) na gitarze?', 'grasz'], ['Oni ___ (mieć) intensywny kurs polskiego.', 'mają'],
+      ]),
+      typedExercise(2, 12, 'Zaimki i czasowniki', 'Dopasuj zaimek do właściwej formy czasownika.', [
+        ['1. ja', '1e'], ['2. ty', '2g'], ['3. on', ['3f', '3i']], ['4. ona', '4a'],
+        ['5. ono', ['5i', '5f']], ['6. my', '6h'], ['7. wy', '7c'],
+        ['8. oni', ['8b', '8d']], ['9. one', ['9d', '9b']],
+      ]),
+      typedExercise(2, 15, '„Żeby” czy „bo”?', 'Wpisz właściwy spójnik.', [
+        ['Angela jest w Krakowie, ___ uczyć się polskiego.', 'żeby'],
+        ['Ona uczy się polskiego, ___ jej mama jest z Polski.', 'bo'],
+        ['Mami uczy się polskiego, ___ studiować w Krakowie.', 'żeby'],
+        ['Tom uczy się polskiego, ___ jego dziewczyna jest z Polski.', 'bo'],
+        ['Julia uczy się hiszpańskiego, ___ to jej hobby.', 'bo'],
+      ]),
+      typedExercise(2, 16, 'ON czy ONA?', 'Wpisz brakujący odpowiednik rodzaju męskiego lub żeńskiego.', [
+        ['pan → ___', 'pani'], ['student → ___', 'studentka'], ['nauczyciel → ___', 'nauczycielka'],
+        ['chłopak → ___', 'dziewczyna'], ['kolega → ___', 'koleżanka'], ['syn → ___', 'córka'], ['mąż → ___', 'żona'],
+      ]),
+      typedExercise(2, 18, 'Ułóż pytania', 'Ułóż pytanie oficjalne lub nieoficjalne do każdej odpowiedzi.', [
+        ['a) Mam na imię Anna.', ['Jak pani ma na imię?', 'Jak masz na imię?']],
+        ['b) Nazywam się Rojek.', ['Jak pani się nazywa?', 'Jak się nazywasz?']],
+        ['c) Jestem z Polski.', ['Skąd pani jest?', 'Skąd jesteś?']],
+        ['d) Uczę się angielskiego, bo to moje hobby.', ['Dlaczego uczy się pani angielskiego?', 'Dlaczego uczysz się angielskiego?']],
+        ['e) Tak, mam telefon.', ['Czy ma pani telefon?', 'Czy masz telefon?']],
+        ['f) Mieszkam w Krakowie.', ['Gdzie pani mieszka?', 'Gdzie mieszkasz?']],
+      ]),
     ],
   },
   {
@@ -284,7 +398,7 @@ export const LESSONS: Lesson[] = [
     activities: [
       {
         id: 'l03-dialogue-objects', sourceExerciseId: 'WB-L03-E01', sourceLabel: 'Zeszyt ćwiczeń · ćwiczenie 1',
-        kind: 'typed', title: 'Co to jest? — dialog',
+        kind: ActivityKind.Typed, title: 'Co to jest? — dialog',
         instruction: 'Odtwórz nagranie i uzupełnij wypowiedzi o przedmiotach.',
         audioUrl: '/assets/telegram_audio/14_L03_cwiczenie1.mp3', audioLabel: 'Rozmowa o przedmiotach',
         items: [
@@ -297,7 +411,7 @@ export const LESSONS: Lesson[] = [
       },
       {
         id: 'l03-classroom-dialogue', sourceExerciseId: 'WB-L03-E02', sourceLabel: 'Zeszyt ćwiczeń · ćwiczenie 2',
-        kind: 'typed', title: 'Przedmioty w klasie',
+        kind: ActivityKind.Typed, title: 'Przedmioty w klasie',
         instruction: 'Posłuchaj dialogu. Zapisz brakujące słowa i sprawdź polskie znaki.',
         audioUrl: '/assets/telegram_audio/15_L03_cwiczenie2.mp3', audioLabel: 'Nazwy rzeczy w sali',
         items: [
@@ -308,7 +422,7 @@ export const LESSONS: Lesson[] = [
       },
       {
         id: 'l03-gender', sourceExerciseId: 'WB-L03-E06', sourceLabel: 'Zeszyt ćwiczeń · ćwiczenie 6',
-        kind: 'classify', title: 'Rodzaj gramatyczny',
+        kind: ActivityKind.Classify, title: 'Rodzaj gramatyczny',
         instruction: 'Przyporządkuj rzeczownik do rodzaju: on, ona albo ono.',
         items: [
           { id: 'q1', prompt: 'student', accepted: ['on'], options: ['on', 'ona', 'ono'] },
@@ -327,7 +441,7 @@ export const LESSONS: Lesson[] = [
       },
       {
         id: 'l03-correction', sourceExerciseId: 'WB-L03-E09', sourceLabel: 'Zeszyt ćwiczeń · ćwiczenie 9',
-        kind: 'typed', title: 'Popraw zgodę w zdaniu',
+        kind: ActivityKind.Typed, title: 'Popraw zgodę w zdaniu',
         instruction: 'Przepisz zdanie w poprawnej formie. Zadbaj o końcówkę przymiotnika.',
         items: [
           typed('q1', 'To dziecko jest mały.', 'To dziecko jest małe.'),
@@ -340,18 +454,18 @@ export const LESSONS: Lesson[] = [
       },
       {
         id: 'l03-colors', sourceExerciseId: 'WB-L03-E12', sourceLabel: 'Zeszyt ćwiczeń · ćwiczenie 12',
-        kind: 'typed', title: 'Kolory i końcówki',
+        kind: ActivityKind.Typed, title: 'Kolory i końcówki',
         instruction: 'Wpisz kolor zgodny z rodzajem rzeczownika.',
         items: [
-          typed('q1', 'Ta tablica jest ___ .', 'czarna'), typed('q2', 'To krzesło jest ___ .', 'zielone'),
-          typed('q3', 'Ten kubek jest ___ .', 'pomarańczowy'), typed('q4', 'Ten zeszyt jest ___ .', 'niebieski'),
-          typed('q5', 'Ta książka jest ___ .', 'czerwona'), typed('q6', 'Ta komórka jest ___ .', 'szara'),
-          typed('q7', 'Ta torba jest ___ .', 'fioletowa'), typed('q8', 'Ten długopis jest ___ .', 'żółty'),
+          { ...typed('q1', 'Ta tablica jest ___ .', 'czarna'), image: 1 }, { ...typed('q2', 'To krzesło jest ___ .', 'zielone'), image: 2 },
+          { ...typed('q3', 'Ten kubek jest ___ .', 'pomarańczowy'), image: 3 }, { ...typed('q4', 'Ten zeszyt jest ___ .', 'niebieski'), image: 4 },
+          { ...typed('q5', 'Ta książka jest ___ .', 'czerwona'), image: 5 }, { ...typed('q6', 'Ta komórka jest ___ .', 'szara'), image: 6 },
+          { ...typed('q7', 'Ta torba jest ___ .', 'fioletowa'), image: 7 }, { ...typed('q8', 'Ten długopis jest ___ .', 'żółty'), image: 8 },
         ],
       },
       {
         id: 'l03-colors-spelling', sourceExerciseId: 'WB-L03-E13', sourceLabel: 'Zeszyt ćwiczeń · ćwiczenie 13',
-        kind: 'typed', title: 'Zapisz kolory poprawnie',
+        kind: ActivityKind.Typed, title: 'Zapisz kolory poprawnie',
         instruction: 'Odtwórz nagranie i popraw zapis. Polskie znaki są częścią odpowiedzi.',
         audioUrl: '/assets/telegram_audio/16_L03_cwiczenie13.mp3', audioLabel: 'Dyktando nazw kolorów',
         items: [
@@ -362,6 +476,51 @@ export const LESSONS: Lesson[] = [
           typed('q9', 'sary', 'szary'), typed('q10', 'bialy', 'biały'),
         ],
       },
+      typedExercise(3, 3, 'Ułóż nazwy przedmiotów', 'Połącz początki i końcówki wyrazów.', [
+        ['ze- + -szyt', 'zeszyt'], ['st- + -ół', 'stół'], ['segrega- + -tor', 'segregator'],
+        ['klu- + -cz', 'klucz'], ['ołó- + -wek', 'ołówek'], ['komór- + -ka', 'komórka'],
+      ]),
+      typedExercise(3, 4, 'Co to jest?', 'Odpowiedz na pytania o przedmioty z ilustracji.', [
+        ['1. Czy to jest okno?', 'Nie, to nie jest okno. To jest klucz.'],
+        ['2. Czy to jest sekretarka?', 'Nie, to nie jest sekretarka. To jest nauczycielka.'],
+        ['3. Czy to jest ołówek?', 'Nie, to nie jest ołówek. To jest gumka.'],
+        ['4. Czy to jest długopis?', 'Tak, to jest długopis.'],
+        ['5. Czy to jest zeszyt?', 'Nie, to nie jest zeszyt. To jest kubek.'],
+        ['6. Czy to jest studentka?', 'Nie, to nie jest studentka. To jest student.'],
+        ['7. Czy to jest dziecko?', 'Tak, to jest dziecko.'],
+      ]),
+      typedExercise(3, 5, 'Ułóż zdania', 'Ułóż zdania z podanych wyrazów.', [
+        ['a) jest / co / to', 'Co to jest?'], ['b) jest / to / tak / Krakowa / mapa', 'Tak, to jest mapa Krakowa.'],
+        ['c) pamiętam / nie / co / jest / to', 'Nie pamiętam, co to jest.'],
+        ['d) wiem / nie / to / jest / kto', 'Nie wiem, kto to jest.'],
+        ['e) nie / co / wiem / to / znaczy', 'Nie wiem, co to znaczy.'],
+        ['f) to / czy / jest / torba', 'Czy to jest torba?'], ['g) tak / książka / jest / to', 'Tak, to jest książka.'],
+        ['h) jest / student / to / nowy', 'To jest nowy student.'], ['i) nie / nie / klucz / jest / to', 'Nie, to nie jest klucz.'],
+      ]),
+      typedExercise(3, 7, 'Jaki? Jaka? Jakie?', 'Wpisz kategorię każdego przymiotnika.', [
+        ['atrakcyjny', 'JAKI'], ['sympatyczny', 'JAKI'], ['inteligentny', 'JAKI'], ['zestresowany', 'JAKI'],
+        ['aktywna', 'JAKA'], ['skomplikowana', 'JAKA'], ['energiczna', 'JAKA'], ['romantyczna', 'JAKA'],
+        ['spontaniczne', 'JAKIE'], ['kreatywne', 'JAKIE'], ['ambitne', 'JAKIE'], ['fajne', 'JAKIE'],
+      ]),
+      typedExercise(3, 8, 'Przeciwieństwa', 'Wpisz wyraz o przeciwnym znaczeniu.', [
+        ['nowy ≠ ___', 'stary'], ['mały ≠ ___', 'duży'], ['dobry ≠ ___', 'zły'],
+      ]),
+      typedExercise(3, 10, 'Jaki? Jaka? Jakie?', 'Uzupełnij wyrażenia właściwą formą przymiotnika.', [
+        ['___ student (inteligentny)', 'inteligentny student'], ['___ aktorka (atrakcyjny)', 'atrakcyjna aktorka'],
+        ['___ dziecko (mały)', 'małe dziecko'], ['___ kolega (sympatyczny)', 'sympatyczny kolega'],
+        ['___ auto (stary)', 'stare auto'], ['___ torba (modny)', 'modna torba'],
+        ['___ stół (duży)', 'duży stół'], ['___ słowo (skomplikowany)', 'skomplikowane słowo'],
+      ]),
+      typedExercise(3, 11, 'Połącz rzeczowniki z przymiotnikami', 'Wpisz numer i literę pasującej pary.', [
+        ['1. kawa', '1e'], ['2. herbata', '2d'], ['3. mleko', '3b'],
+        ['4. cukier', '4a'], ['5. wino', '5f'], ['6. papryka', '6c'],
+      ]),
+      typedExercise(3, 14, 'Połącz pytania z odpowiedziami', 'Wpisz literę pasującej odpowiedzi.', [
+        ['1. Kto to jest?', '1e'], ['2. Czy to jest nauczycielka?', '2a'],
+        ['3. Jaka jest ta kawa?', '3h'], ['4. Jakie jest to dziecko?', '4c'],
+        ['5. Czy to jest kawa?', '5f'], ['6. Jaki jest ten nauczyciel?', '6g'],
+        ['7. Czy to jest nauczyciel?', '7d'], ['8. Co to jest?', '8b'],
+      ]),
     ],
   },
   {
@@ -374,7 +533,7 @@ export const LESSONS: Lesson[] = [
     activities: [
       {
         id: 'l04-language-forms', sourceExerciseId: 'WB-L04-E04', sourceLabel: 'Zeszyt ćwiczeń · ćwiczenie 4',
-        kind: 'choice', title: 'Jakiego języka użyć?',
+        kind: ActivityKind.Choice, title: 'Jakiego języka użyć?',
         instruction: 'Wybierz formę odpowiednią po podanym czasowniku.',
         items: [
           choice('q1', 'Robert zna ___.', 'francuski', ['francuskiego', 'francuski', 'po francusku']),
@@ -388,7 +547,7 @@ export const LESSONS: Lesson[] = [
       },
       {
         id: 'l04-verbs', sourceExerciseId: 'WB-L04-E07', sourceLabel: 'Zeszyt ćwiczeń · ćwiczenie 7',
-        kind: 'typed', title: 'Czasowniki w rozmowie',
+        kind: ActivityKind.Typed, title: 'Czasowniki w rozmowie',
         instruction: 'Wpisz odmieniony czasownik. Zwróć uwagę na osobę i liczbę.',
         items: [
           typed('q1', '(Ja) ___ się, że ty ___ tutaj. (cieszyć się, być)', 'cieszę się; jesteś'),
@@ -405,7 +564,7 @@ export const LESSONS: Lesson[] = [
       },
       {
         id: 'l04-class-dialogue', sourceExerciseId: 'WB-L04-E08', sourceLabel: 'Zeszyt ćwiczeń · ćwiczenie 8',
-        kind: 'typed', title: 'Nauczyciel i student',
+        kind: ActivityKind.Typed, title: 'Nauczyciel i student',
         instruction: 'Posłuchaj rozmowy i wpisz brakujące słowa. Zwróć uwagę na parę „uczyć / uczyć się”.',
         audioUrl: '/assets/telegram_audio/17_L04_cwiczenie8.mp3', audioLabel: 'Rozmowa o nauce języków',
         items: [
@@ -419,7 +578,7 @@ export const LESSONS: Lesson[] = [
       },
       {
         id: 'l04-adjectives', sourceExerciseId: 'WB-L04-E14', sourceLabel: 'Zeszyt ćwiczeń · ćwiczenie 14',
-        kind: 'typed', title: 'Dopasuj przymiotnik do osoby',
+        kind: ActivityKind.Typed, title: 'Dopasuj przymiotnik do osoby',
         instruction: 'Uzupełnij zdanie formą zgodną z osobą lub rzeczownikiem.',
         items: [
           typed('q1', 'Ona ma dużo energii, jest ___.', 'energiczna'),
@@ -434,7 +593,7 @@ export const LESSONS: Lesson[] = [
       },
       {
         id: 'l04-connectors', sourceExerciseId: 'WB-L04-E15', sourceLabel: 'Zeszyt ćwiczeń · ćwiczenie 15',
-        kind: 'typed', title: 'Połącz zdania właściwym spójnikiem',
+        kind: ActivityKind.Typed, title: 'Połącz zdania właściwym spójnikiem',
         instruction: 'Wpisz spójniki w kolejności. Jeśli są dwa, rozdziel je przecinkiem.',
         items: [
           typed('q1', 'Ona nie jest ___ szczupła, ___ wysoka, ___ jest bardzo ładna.', 'ani, ani, ale'),
@@ -448,6 +607,72 @@ export const LESSONS: Lesson[] = [
           typed('q9', 'Ten długopis jest zły, ___ jest stary i nie pisze.', 'bo'),
         ],
       },
+      typedExercise(4, 1, 'Co pasuje?', 'Uzupełnij dialog właściwymi formami.', [
+        ['Javier: ___, Mami!', 'Cześć'], ['Mami: Co ___ u ciebie?', 'słychać'],
+        ['Wszystko w ___. A u ___?', 'porządku; ciebie'], ['U ___ też dobrze.', 'mnie'],
+        ['Czy ___, kto to jest?', 'wiesz'], ['To jest nowy ___ .', 'student'],
+        ['Ciekawe, czy ___ w naszej grupie?', 'jesteś'],
+      ]),
+      typedExercise(4, 2, 'Uzupełnij dialog', 'Wpisz właściwe formy czasowników.', [
+        ['Pierre: Nie ___! (rozumieć)', 'rozumiem'], ['Javier: Nie ___, jak mówimy „hola”. (pamiętać)', 'pamiętam'],
+        ['Mami: No dobrze, ___ rację. (mieć)', 'masz'], ['Pierre: ___ Pierre i nie ___ po hiszpańsku.', 'jestem; mówię'],
+        ['Javier: Ja ___ Javier i ___ z Argentyny, a to ___ Mami; ona ___ po japońsku.', 'mam; jestem; jest; mówi'],
+        ['Javier: A ty ___ z Francji? (być)', 'jesteś'],
+        ['Pierre: ___ w Paryżu. A wy, gdzie ___? (mieszkać)', 'mieszkam; mieszkacie'],
+        ['Javier: Ja ___ w Buenos Aires. (mieszkać)', 'mieszkam'],
+        ['Mami: Czy ty ___ w grupie A1? (być)', 'jesteś'], ['Pierre: To ___ moja nowa grupa. (być)', 'jest'],
+        ['Mami: To ___ też nasza grupa! (być)', 'jest'],
+      ]),
+      typedExercise(4, 3, 'Języki', 'Wpisz przysłówek utworzony od nazwy języka.', [
+        ['Jesús mówi po ___ (hiszpański).', 'hiszpańsku'], ['Joanna mówi po ___ (polski).', 'polsku'],
+        ['Florence mówi po ___ (francuski).', 'francusku'], ['Chiara mówi po ___ (włoski).', 'włosku'],
+        ['Shige mówi po ___ (japoński).', 'japońsku'], ['Emily mówi po ___ (angielski).', 'angielsku'],
+        ['Jürgen mówi po ___ (niemiecki).', 'niemiecku'], ['Lisa mówi po ___ (szwedzki).', 'szwedzku'],
+      ]),
+      typedExercise(4, 5, 'Nazwy języków', 'Wpisz brakujące formy nazw języków.', [
+        ['1. Joost: po ___; zna ___; dziewczyna jest z ___.', 'holendersku; polski; Polski'],
+        ['2. Hajnalka: po ___; mówi też po ___; uczy się ___; Laura zna ___.', 'węgiersku; polsku; węgierskiego; węgierski'],
+        ['3. Agnieszka: mówi po ___; Dorota zna ___.', 'rosyjsku; rosyjski'],
+      ]),
+      typedExercise(4, 6, 'Znać, uczyć się, mówić po', 'Wpisz formę nazwy języka odpowiednią po podanym czasowniku.', [
+        ['angielski · znać', 'angielski'], ['angielski · uczyć się', 'angielskiego'], ['angielski · mówić po', 'angielsku'],
+        ['niemiecki · znać', 'niemiecki'], ['niemiecki · uczyć się', 'niemieckiego'], ['niemiecki · mówić po', 'niemiecku'],
+        ['portugalski · znać', 'portugalski'], ['portugalski · uczyć się', 'portugalskiego'], ['portugalski · mówić po', 'portugalsku'],
+        ['japoński · znać', 'japoński'], ['japoński · uczyć się', 'japońskiego'], ['japoński · mówić po', 'japońsku'],
+        ['polski · znać', 'polski'], ['polski · uczyć się', 'polskiego'], ['polski · mówić po', 'polsku'],
+        ['hiszpański · znać', 'hiszpański'], ['hiszpański · uczyć się', 'hiszpańskiego'], ['hiszpański · mówić po', 'hiszpańsku'],
+        ['włoski · znać', 'włoski'], ['włoski · uczyć się', 'włoskiego'], ['włoski · mówić po', 'włosku'],
+        ['francuski · znać', 'francuski'], ['francuski · uczyć się', 'francuskiego'], ['francuski · mówić po', 'francusku'],
+        ['rosyjski · znać', 'rosyjski'], ['rosyjski · uczyć się', 'rosyjskiego'], ['rosyjski · mówić po', 'rosyjsku'],
+      ]),
+      typedExercise(4, 9, 'Co pasuje?', 'Połącz pytania z odpowiedziami, wpisując literę.', [
+        ['1. Co u ciebie?', '1d'], ['2. Czy lubisz pizzę?', '2a'], ['3. Czy to jest nowy student?', '3f'],
+        ['4. Czy mówisz po hiszpańsku?', '4b'], ['5. Skąd jesteś?', '5e'], ['6. Dlaczego uczysz się polskiego?', '6c'],
+      ]),
+      typedExercise(4, 10, 'Jaki? Jaka? Jakie?', 'Uzupełnij zdania właściwym przymiotnikiem.', [
+        ['Ona ma wysoką temperaturę, jest bardzo ___.', 'chora'], ['On lubi pracować, jest ___.', 'pracowity'],
+        ['Nie jest ani niski, ani średniego wzrostu — jest ___.', 'wysoki'], ['To dziecko jest czyste, a tamto jest ___.', 'brudne'],
+        ['Ten mężczyzna jest atrakcyjny, wysoki i ___.', 'przystojny'], ['To dziecko jest smutne, a tamto ___.', 'wesołe'],
+        ['On jest gruby, a ona ___.', 'szczupła'], ['Nie jest wysoki ani niski — jest ___.', 'średniego wzrostu'],
+        ['On lubi sport, jest ___.', 'wysportowany'], ['Ona nie lubi pracować, jest ___.', 'leniwy'],
+      ]),
+      typedExercise(4, 11, 'Przeciwieństwa', 'Wpisz brakujący wyraz lub wyrażenie.', [
+        ['stary ≠ ___', 'młody'], ['szczupły ≠ ___', 'gruby'], ['wysoki ≠ ___', 'niski'],
+        ['ani wysoki, ani niski = ___', 'średniego wzrostu'], ['zdrowy ≠ ___', 'chory'], ['ładny ≠ ___', 'brzydki'],
+        ['przystojny ≠ ___', 'brzydki'], ['pracowity ≠ ___', 'leniwy'], ['smutny ≠ ___', 'wesoły'],
+        ['czysty ≠ ___', 'brudny'], ['wypoczęty ≠ ___', 'zmęczony'], ['aktywny fizycznie = ___', 'wysportowany'],
+      ]),
+      typedExercise(4, 12, 'Utwórz przymiotniki', 'Połącz fragmenty wyrazów i wpisz pełne słowo.', [
+        ['romant-', 'romantyczny'], ['ambi-', 'ambitny'], ['agresyw-', 'agresywny'],
+        ['energ-', 'energiczny'], ['atrakcyj-', 'atrakcyjny'], ['zestresow-', 'zestresowany'], ['kreaty-', 'kreatywny'],
+      ]),
+      typedExercise(4, 13, 'Ułóż zdania', 'Ułóż poprawne zdania z podanych wyrazów.', [
+        ['a) że / ty / myślę / pracowity / jesteś', 'Myślę, że ty jesteś pracowity.'],
+        ['b) czy / wiem / on / nie / sympatyczny / jest', 'Nie wiem, czy on jest sympatyczny.'],
+        ['c) wiem / czy / miła / jest / ona / nie', 'Nie wiem, czy ona jest miła.'],
+        ['d) pewny / on / jest / że / energiczny / jestem', 'Jestem pewny, że on jest energiczny.'],
+        ['e) ona / jestem / że / pewna / ambitna / jest', 'Jestem pewna, że ona jest ambitna.'],
+      ]),
     ],
   },
   {
@@ -460,7 +685,7 @@ export const LESSONS: Lesson[] = [
     activities: [
       {
         id: 'l05-text-order', sourceExerciseId: 'WB-L05-E01', sourceLabel: 'Zeszyt ćwiczeń · ćwiczenie 1',
-        kind: 'typed', title: 'Historia Mami ze słuchu',
+        kind: ActivityKind.Typed, title: 'Historia Mami ze słuchu',
         instruction: 'Uporządkuj historię, a potem posłuchaj nagrania. Wpisz cały tekst w poprawnej kolejności.',
         audioUrl: '/assets/telegram_audio/18_L05_cwiczenie1.mp3', audioLabel: 'Mami opowiada o sobie',
         items: [
@@ -469,7 +694,7 @@ export const LESSONS: Lesson[] = [
       },
       {
         id: 'l05-phone-dictation', sourceExerciseId: 'WB-L05-E04', sourceLabel: 'Zeszyt ćwiczeń · ćwiczenie 4',
-        kind: 'typed', title: 'Numery telefonów ze słuchu',
+        kind: ActivityKind.Typed, title: 'Numery telefonów ze słuchu',
         instruction: 'Posłuchaj nagrania i zanotuj numery. Możesz oddzielać cyfry spacjami.',
         audioUrl: '/assets/telegram_audio/19_L05_cwiczenie4.mp3', audioLabel: 'Numery telefonów czterech osób',
         items: [
@@ -479,7 +704,7 @@ export const LESSONS: Lesson[] = [
       },
       {
         id: 'l05-numbers', sourceExerciseId: 'WB-L05-E05', sourceLabel: 'Zeszyt ćwiczeń · ćwiczenie 5',
-        kind: 'typed', title: 'Liczebniki z nagrania',
+        kind: ActivityKind.Typed, title: 'Liczebniki z nagrania',
         instruction: 'Zapisz liczby słownie. Nie pomyl form na -naście i -dziesiąt.',
         audioUrl: '/assets/telegram_audio/20_L05_cwiczenie5.mp3', audioLabel: 'Dziesięć liczebników',
         items: [
@@ -492,7 +717,7 @@ export const LESSONS: Lesson[] = [
       },
       {
         id: 'l05-jobs', sourceExerciseId: 'WB-L05-E08', sourceLabel: 'Zeszyt ćwiczeń · ćwiczenie 8',
-        kind: 'typed', title: 'Nazwy zawodów',
+        kind: ActivityKind.Typed, title: 'Nazwy zawodów',
         instruction: 'Uzupełnij nazwy zawodów. Wpisuj całe słowo, nie same brakujące litery.',
         audioUrl: '/assets/telegram_audio/21_L05_cwiczenie8.mp3', audioLabel: 'Nazwy zawodów',
         items: [
@@ -509,14 +734,10 @@ export const LESSONS: Lesson[] = [
       },
       {
         id: 'l05-inflection', sourceExerciseId: 'WB-L05-E11', sourceLabel: 'Zeszyt ćwiczeń · ćwiczenie 11',
-        kind: 'typed', title: 'Przymiotnik i rzeczownik',
+        kind: ActivityKind.Typed, title: 'Przymiotnik i rzeczownik',
         instruction: 'Uzupełnij pełne wyrażenie w poprawnym przypadku.',
         items: [
-          {
-            ...typed('q1', 'Julia jest bardzo ___ ___. (dobra córka)', 'dobrą córką'),
-            accepted: ['dobrą córką', 'dobra córka'],
-            explanation: 'W wydrukowanym kluczu widnieje „dobra córka”; standardowa forma po „jest” to „dobrą córką”. Akceptujemy obie wersje ze względu na rozbieżność ze źródłem.',
-          },
+          typed('q1', 'Julia jest bardzo ___ ___. (dobra córka)', 'dobrą córką'),
           typed('q2', 'Angela jest ___ ___. (wysoka kobieta)', 'wysoką kobietą'),
           typed('q3', 'Uwe jest ___ ___. (przystojny mężczyzna)', 'przystojnym mężczyzną'),
           typed('q4', 'Michał jest ___ ___. (małe dziecko)', 'małym dzieckiem'),
@@ -530,7 +751,7 @@ export const LESSONS: Lesson[] = [
       },
       {
         id: 'l05-dialogue-cloze', sourceExerciseId: 'WB-L05-E14', sourceLabel: 'Zeszyt ćwiczeń · ćwiczenie 14',
-        kind: 'typed', title: 'Dialog Paoli i Michaela',
+        kind: ActivityKind.Typed, title: 'Dialog Paoli i Michaela',
         instruction: 'Posłuchaj i uzupełnij dialog właściwymi słowami.',
         audioUrl: '/assets/telegram_audio/22_L05_cwiczenie14.mp3', audioLabel: 'Rozmowa o zawodzie i zainteresowaniach',
         items: [
@@ -543,7 +764,7 @@ export const LESSONS: Lesson[] = [
       },
       {
         id: 'l05-questions', sourceExerciseId: 'WB-L05-E15', sourceLabel: 'Zeszyt ćwiczeń · ćwiczenie 15',
-        kind: 'typed', title: 'Zbuduj pytanie do odpowiedzi',
+        kind: ActivityKind.Typed, title: 'Zbuduj pytanie do odpowiedzi',
         instruction: 'Dobierz zaimek pytający i zachowaj poprawny szyk zdania.',
         items: [
           typed('q1', '___ to jest? Peter.', 'Kto'), typed('q2', '___ on jest? Z Anglii.', 'Skąd'),
@@ -554,9 +775,74 @@ export const LESSONS: Lesson[] = [
           typed('q11', '___ się interesuje? Architekturą.', 'Czym'), typed('q12', '___ uczy się polskiego? Bo chce pracować w Warszawie.', 'Dlaczego'),
         ],
       },
+      typedExercise(5, 2, 'Ułóż pytania do tekstu', 'Ułóż pytania do tekstu o Mami.', [
+        ['Odpowiedź: Mami Takada.', 'Kto to jest?'], ['Odpowiedź: Z Japonii.', 'Skąd ona jest?'],
+        ['Odpowiedź: W Tokio.', 'Gdzie ona mieszka?'], ['Odpowiedź: Młoda, szczupła i ładna.', 'Jaka ona jest?'],
+        ['Odpowiedź: 20 lat.', 'Ile ona ma lat?'], ['Odpowiedź: Tak, jest szczupła.', 'Czy ona jest szczupła?'],
+        ['Odpowiedź: Słuchać muzyki.', 'Co ona lubi robić?'], ['Odpowiedź: Bo chce studiować w Polsce.', 'Dlaczego ona uczy się polskiego?'],
+      ]),
+      typedExercise(5, 3, 'Uzupełnij tekst o Manueli', 'Wpisz formy w pierwszej osobie liczby pojedynczej.', [
+        ['(nazywać się)', 'Nazywam się'], ['(być)', 'jestem'], ['(mieszkać)', 'mieszkam'], ['Teraz (być)', 'jestem'],
+        ['(uczyć się)', 'uczę się'], ['żeby (studiować)', 'studiować'], ['(mieć)', 'mam'], ['(być)', 'jestem'],
+        ['(lubić)', 'lubię'], ['(grać)', 'gram'], ['(biegać)', 'biegam'],
+      ]),
+      typedExercise(5, 6, 'Liczebniki', 'Połącz początki liczebników z końcówkami.', [
+        ['1. pięć-', '1c'], ['2. pięt-', '2a'], ['3. sześć-', '3c'], ['4. szes-', '4a'],
+        ['5. czter-', ['5a', '5b']], ['6. dziewięt-', '6a'], ['7. dziewięć-', '7c'],
+      ]),
+      typedExercise(5, 7, 'Lat czy lata?', 'Wpisz, czy liczba łączy się z „rok”, „lata” czy „lat”.', [
+        ['1', 'rok'], ['7', 'lat'], ['8', 'lat'], ['13', 'lat'], ['42', 'lata'], ['51', 'lat'], ['64', 'lata'],
+        ['22', 'lata'], ['40', 'lat'], ['14', 'lat'], ['104', 'lata'], ['101', 'lat'], ['17', 'lat'], ['12', 'lat'],
+      ]),
+      typedExercise(5, 9, 'Nazwy zawodów', 'Uzupełnij zdania nazwą zawodu.', [
+        ['Angela Merkel to znany niemiecki ___.', 'polityk'], ['Cézanne to świetny francuski ___.', 'malarz'],
+        ['Oprah Winfrey to popularna ___ telewizyjna.', 'dziennikarka'], ['Thomas Mann to doskonały niemiecki ___.', 'pisarz'],
+        ['Sylwia uczy polskiego — jest dobrą ___.', 'nauczycielką'], ['Claudia Schiffer to atrakcyjna ___.', 'modelka'],
+        ['Nigel Kennedy świetnie gra na skrzypcach — jest ___.', 'muzykiem'],
+        ['Meryl Streep to doskonała ___ filmowa.', 'aktorka'], ['David Doubilet publikuje fotografie — jest ___.', 'fotografem'],
+        ['Shelley to angielski ___ romantyczny.', 'poeta'],
+      ]),
+      typedExercise(5, 10, 'Co pasuje?', 'Wybierz właściwą formę narzędnika.', [
+        ['Paweł jest ___ tatą. (dobry)', 'dobrym'], ['Magda jest ___ architektem. (zdolny)', 'zdolnym'],
+        ['Łucja jest ___ dzieckiem. (zdrowa)', 'zdrowym'], ['Schumacher jest ___ kierowcą. (świetny)', 'świetnym'],
+        ['Miłosz jest ___ poetą. (polski)', 'polskim'], ['Maria jest ___ fotografem. (utalentowana)', 'utalentowanym'],
+        ['Javier jest ___ artystą. (spontaniczny)', 'spontanicznym'], ['Ewa jest ___ inżynierem. (dobry)', 'dobrym'],
+      ]),
+      typedExercise(5, 12, 'Czym oni się interesują?', 'Ułóż wypowiedź każdej osoby.', [
+        ['1. sport, historia, współczesny teatr', 'Interesuję się sportem, historią, współczesnym teatrem.'],
+        ['2. fotografia, moda, hiszpański film', 'Interesuję się fotografią, modą, hiszpańskim filmem.'],
+        ['3. polityka, polskie kino', 'Interesuję się polityką, polskim kinem.'],
+        ['4. ekonomia, polski folklor', 'Interesuję się ekonomią, polskim folklorem.'],
+        ['5. psychologia, muzyka klasyczna', 'Interesuję się psychologią, muzyką klasyczną.'],
+      ]),
+      typedExercise(5, 13, 'Uzupełnij tekst o Julii', 'Wpisz odpowiednią formę wyrazu.', [
+        ['Ona ma 11 ___ (lat).', 'lat'], ['Jest ___ (Polka).', 'Polką'], ['Mieszka ___ (Kraków).', 'w Krakowie'],
+        ['Jest ___ (≠ gruby).', 'szczupła'], ['Jest ___ (wysportowana).', 'wysportowana'], ['Jest ___ (wesoła).', 'wesoła'],
+        ['Jest ___ (sympatyczna dziewczyna).', 'sympatyczną dziewczyną'], ['Dobrze ___ po angielsku.', 'mówi'],
+        ['Trochę po ___.', 'hiszpańsku'], ['Julia ___ śpiewać.', 'lubi'], ['Lubi ___ książki.', 'czytać'],
+        ['Interesuje się ___ (muzyka).', 'muzyką'], ['Interesuje się ___ (sport).', 'sportem'],
+      ]),
+      typedExercise(5, 16, 'Połącz pytania z odpowiedziami', 'Wpisz literę pasującej odpowiedzi.', [
+        ['1. Co lubisz robić?', '1e'], ['2. Gdzie mieszkasz?', '2f'], ['3. Ile masz lat?', '3a'],
+        ['4. Kim on jest?', '4g'], ['5. Dlaczego jesteś zdenerwowany?', '5b'],
+        ['6. Jaką sekretarką jest Agnieszka?', '6h'], ['7. Skąd jest Ewa?', '7i'],
+        ['8. Co robisz?', '8d'], ['9. Jakim studentem jest Jonatan?', '9j'], ['10. Jaka jest Dorota?', '10c'],
+      ]),
+      typedExercise(5, 17, 'Narodowości i języki', 'Dla każdej osoby wpisz formy: ona jest, ona jest (narzędnik), on jest, on jest (narzędnik), mówią po, znają.', [
+        ['1. Anglia · Angela i Jonatan', 'Angielka; Angielką; Anglik; Anglikiem; po angielsku; angielski'],
+        ['2. Niemcy · Petra i Uwe', 'Niemka; Niemką; Niemiec; Niemcem; po niemiecku; niemiecki'],
+        ['3. Francja · Adèle i Pierre', 'Francuzka; Francuzką; Francuz; Francuzem; po francusku; francuski'],
+        ['4. Hiszpania · Manuela i Pedro', 'Hiszpanka; Hiszpanką; Hiszpan; Hiszpanem; po hiszpańsku; hiszpański'],
+        ['5. Włochy · Maria i Paolo', 'Włoszka; Włoszką; Włoch; Włochem; po włosku; włoski'],
+        ['6. Portugalia · Inês i Luis', 'Portugalka; Portugalką; Portugalczyk; Portugalczykiem; po portugalsku; portugalski'],
+        ['7. USA · Wendy i Tom', 'Amerykanka; Amerykanką; Amerykanin; Amerykaninem; po angielsku; angielski'],
+        ['8. Japonia · Ajako i Satoshi', 'Japonka; Japonką; Japończyk; Japończykiem; po japońsku; japoński'],
+      ]),
     ],
   },
   LESSON_06, LESSON_07, LESSON_08, LESSON_09, LESSON_10, LESSON_11, LESSON_12,
+  LESSON_13, LESSON_14, LESSON_15, LESSON_16, LESSON_17, LESSON_18,
+  LESSON_19, LESSON_20, LESSON_21, LESSON_22, LESSON_23, LESSON_24, LESSON_25, LESSON_26,
 ];
 
 export function getLesson(id: number): Lesson | undefined {

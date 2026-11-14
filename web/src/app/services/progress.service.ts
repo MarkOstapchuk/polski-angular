@@ -1,4 +1,5 @@
 import { Injectable, signal } from '@angular/core';
+import { supabase } from './supabase.client';
 
 export interface LearnerProgress {
   completedLessonIds: number[];
@@ -37,6 +38,41 @@ function shiftDate(dateKey: string, offset: number): string {
 @Injectable({ providedIn: 'root' })
 export class ProgressService {
   readonly progress = signal<LearnerProgress>(this.readProgress());
+  readonly syncError = signal<string | null>(null);
+  private userId: string | null = null;
+  private syncQueue = Promise.resolve();
+
+  async loadForUser(userId: string): Promise<void> {
+    if (this.userId === userId) return;
+
+    const local = this.readStoredProgress(`${STORAGE_KEY}:${userId}`);
+    const legacy = this.readStoredProgress(STORAGE_KEY);
+    const { data, error } = await supabase
+      .from('user_progress')
+      .select('progress')
+      .eq('user_id', userId)
+      .maybeSingle();
+    if (error) {
+      this.syncError.set('Nie udało się wczytać postępów z chmury.');
+      throw error;
+    }
+
+    const progress = (data?.progress as LearnerProgress | undefined) ?? local ?? legacy ?? { ...EMPTY_PROGRESS };
+    this.userId = userId;
+    this.progress.set(progress);
+    this.syncError.set(null);
+    this.storeProgress(`${STORAGE_KEY}:${userId}`, progress);
+    try {
+      if (typeof localStorage !== 'undefined') localStorage.removeItem(STORAGE_KEY);
+    } catch {
+      // The legacy key is only a one-time migration source.
+    }
+    if (!data && (local || legacy)) this.persist(progress, userId);
+  }
+
+  async flush(): Promise<void> {
+    await this.syncQueue;
+  }
 
   hasCompleted(lessonId: number): boolean {
     return this.progress().completedLessonIds.includes(lessonId);
@@ -75,20 +111,47 @@ export class ProgressService {
   }
 
   private readProgress(): LearnerProgress {
-    if (typeof localStorage === 'undefined') return { ...EMPTY_PROGRESS };
+    return this.readStoredProgress(STORAGE_KEY) ?? { ...EMPTY_PROGRESS };
+  }
+
+  private readStoredProgress(key: string): LearnerProgress | null {
+    if (typeof localStorage === 'undefined') return null;
     try {
-      const raw = localStorage.getItem(STORAGE_KEY);
-      if (!raw) return { ...EMPTY_PROGRESS };
+      const raw = localStorage.getItem(key);
+      if (!raw) return null;
       return { ...EMPTY_PROGRESS, ...JSON.parse(raw) } as LearnerProgress;
     } catch {
-      return { ...EMPTY_PROGRESS };
+      return null;
     }
   }
 
   private save(progress: LearnerProgress): void {
     this.progress.set(progress);
-    if (typeof localStorage !== 'undefined') {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(progress));
+    const userId = this.userId;
+    this.storeProgress(userId ? `${STORAGE_KEY}:${userId}` : STORAGE_KEY, progress);
+    if (userId) this.persist(progress, userId);
+  }
+
+  private storeProgress(key: string, progress: LearnerProgress): void {
+    try {
+      if (typeof localStorage !== 'undefined') localStorage.setItem(key, JSON.stringify(progress));
+    } catch {
+      // Keep the in-memory and remote progress even if browser storage is unavailable.
     }
+  }
+
+  private persist(progress: LearnerProgress, userId: string): void {
+    this.syncQueue = this.syncQueue.then(async () => {
+      const { error } = await supabase.from('user_progress').upsert({
+        user_id: userId,
+        progress,
+        updated_at: new Date().toISOString(),
+      });
+      if (this.userId === userId) {
+        this.syncError.set(error ? 'Nie udało się zapisać postępów w chmurze.' : null);
+      }
+    }).catch(() => {
+      if (this.userId === userId) this.syncError.set('Nie udało się zapisać postępów w chmurze.');
+    });
   }
 }

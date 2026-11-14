@@ -1,8 +1,9 @@
 import { ChangeDetectionStrategy, Component, computed, inject, OnInit, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import { ActivityItem, getLesson } from '../../data/lesson-bank';
-import { WORKBOOK_IMAGES } from '../../data/workbook-images';
+import { ActivityItem, ActivityKind, getLesson } from '../../data/lesson-bank';
+import { LESSON_THEORY, LessonTheoryId } from '../../data/lesson-theory';
+import { WORKBOOK_IMAGES, WorkbookImage } from '../../data/workbook-images';
 import { ProgressService } from '../../services/progress.service';
 
 @Component({
@@ -19,13 +20,23 @@ export class LessonComponent implements OnInit {
   private readonly progress = inject(ProgressService);
 
   readonly lesson = signal(getLesson(Number(this.route.snapshot.paramMap.get('lessonId'))));
+  readonly theory = computed(() => {
+    const id = this.lesson()?.id;
+    return id ? LESSON_THEORY[id as LessonTheoryId] : undefined;
+  });
+  readonly activityKind = ActivityKind;
   readonly activeIndex = signal(0);
   readonly answers = signal<Record<string, string>>({});
   readonly checked = signal(false);
   readonly finished = signal(false);
   readonly awardedXp = signal(0);
   readonly activity = computed(() => this.lesson()?.activities[this.activeIndex()]);
-  readonly images = computed(() => WORKBOOK_IMAGES[this.activity()?.sourceExerciseId ?? ''] ?? []);
+  private readonly allImages = computed(() => WORKBOOK_IMAGES[this.activity()?.sourceExerciseId ?? ''] ?? []);
+  /** Images not attached to a specific question, shown above the list. */
+  readonly images = computed(() => {
+    const used = new Set(this.activity()?.items.map((item) => item.image).filter(Boolean));
+    return this.allImages().filter((_, index) => !used.has(index + 1));
+  });
   readonly activityProgress = computed(() => this.lesson() ? Math.round((this.activeIndex() / this.lesson()!.activities.length) * 100) : 0);
   readonly totalQuestions = computed(() => this.lesson()?.activities.reduce((count, activity) => count + activity.items.length, 0) ?? 0);
   readonly correctAnswers = computed(() => Object.values(this.results()).reduce((count, result) => count + Object.values(result).filter(Boolean).length, 0));
@@ -49,16 +60,44 @@ export class LessonComponent implements OnInit {
     return this.answers()[this.answerKey(itemId)] ?? '';
   }
 
+  letterClozeAnswerFor(itemId: string, gapIndex: number): string {
+    return this.answers()[this.letterClozeAnswerKey(itemId, gapIndex)] ?? '';
+  }
+
+  setLetterClozeAnswer(item: ActivityItem, gapIndex: number, event: Event): void {
+    const cloze = item.letterCloze;
+    if (!cloze) return;
+    const input = event.target as HTMLInputElement;
+    const value = input.value.slice(0, cloze.gaps[gapIndex].length);
+    if (input.value !== value) input.value = value;
+    this.answers.update((current) => ({
+      ...current,
+      [this.letterClozeAnswerKey(item.id, gapIndex)]: value,
+    }));
+    if (value.length === cloze.gaps[gapIndex].length) {
+      input.closest('.letter-cloze-line')
+        ?.querySelectorAll<HTMLInputElement>('.letter-cloze-gap')[gapIndex + 1]
+        ?.focus();
+    }
+  }
+
   selectOption(itemId: string, value: string): void {
     if (!this.checked()) this.setAnswer(itemId, value);
   }
 
   hasAnsweredAll(): boolean {
     const activity = this.activity();
-    return !!activity && activity.items.every((item) => this.answerFor(item.id).trim().length > 0);
+    return !!activity && activity.items.every((item) => item.letterCloze
+      ? item.letterCloze.gaps.every((_, index) => this.letterClozeAnswerFor(item.id, index).length > 0)
+      : this.answerFor(item.id).trim().length > 0);
   }
 
   isCorrect(item: ActivityItem): boolean {
+    if (item.letterCloze) {
+      const { parts, gaps } = item.letterCloze;
+      const answer = parts.map((part, index) => part + (gaps[index] === undefined ? '' : this.letterClozeAnswerFor(item.id, index))).join('');
+      return item.accepted.some((expected) => this.normalize(expected) === this.normalize(answer));
+    }
     const answer = this.normalize(this.answerFor(item.id));
     return item.accepted.some((expected) => this.normalize(expected) === answer);
   }
@@ -98,6 +137,10 @@ export class LessonComponent implements OnInit {
     this.finished.set(true);
   }
 
+  itemImage(item: ActivityItem): WorkbookImage | undefined {
+    return item.image ? this.allImages()[item.image - 1] : undefined;
+  }
+
   expectedAnswer(item: ActivityItem): string {
     return item.accepted[0];
   }
@@ -110,9 +153,16 @@ export class LessonComponent implements OnInit {
     return `${this.activity()?.id ?? ''}:${itemId}`;
   }
 
+  private letterClozeAnswerKey(itemId: string, gapIndex: number): string {
+    return `${this.answerKey(itemId)}:gap:${gapIndex}`;
+  }
+
   private normalize(value: string): string {
     const normalized = value
       .toLocaleLowerCase('pl-PL')
+      .replace(/ł/g, 'l')
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
       .trim()
       .replace(/[.,!?;:]+/g, ' ')
       .replace(/\s+/g, ' ');

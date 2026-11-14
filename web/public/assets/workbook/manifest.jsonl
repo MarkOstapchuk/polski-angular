@@ -162,7 +162,7 @@
 {"lesson_id": 14, "pdf_page": 55, "exercise_number": 4, "label": "14)", "description": "Drawing of a bus", "file": "assets/workbook/lesson14/p055-e04-14.png", "box_2d": [582, 504, 658, 673], "model": "gemini-4-carbon"}
 {"lesson_id": 14, "pdf_page": 55, "exercise_number": 4, "label": "15)", "description": "Drawing of a ship", "file": "assets/workbook/lesson14/p055-e04-15.png", "box_2d": [597, 701, 655, 866], "model": "gemini-4-carbon"}
 {"lesson_id": 14, "pdf_page": 56, "file": null, "model": "gemini-4-carbon"}
-{"lesson_id": 14, "pdf_page": 57, "exercise_number": 1, "label": "", "description": "Drawings of food containers and portions: a jar of jam, a wedge of cheese, a block of butter, a packet of tea, two cans, and a carton of juice", "file": "assets/workbook/lesson14/p057-e01-1.png", "box_2d": [332, 695, 480, 886], "model": "gemini-4-carbon"}
+{"lesson_id": 15, "pdf_page": 57, "exercise_number": 1, "label": "", "description": "Drawings of food containers and portions: a jar of jam, a wedge of cheese, a block of butter, a packet of tea, two cans, and a carton of juice", "file": "assets/workbook/lesson15/p057-e01-1.png", "box_2d": [332, 695, 480, 886], "model": "gemini-4-carbon"}
 {"lesson_id": 15, "pdf_page": 58, "file": null, "model": "gemini-4-carbon"}
 {"lesson_id": 15, "pdf_page": 59, "file": null, "model": "gemini-4-carbon"}
 {"lesson_id": 16, "pdf_page": 60, "exercise_number": 1, "label": "1)", "description": "sun", "file": "assets/workbook/lesson16/p060-e01-1.png", "box_2d": [358, 197, 428, 293], "model": "gemini-4-carbon"}

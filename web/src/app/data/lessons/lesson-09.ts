@@ -1,4 +1,4 @@
-import { choice, Lesson, typed } from '../lesson-types';
+import { ActivityKind, choice, Lesson, typed, typedExercise } from '../lesson-types';
 
 const OW = ['owoc', 'warzywo'];
 const SK = ['Sprzedawca', 'Klient'];
@@ -15,7 +15,7 @@ export const LESSON_09: Lesson = {
   activities: [
     {
       id: 'l09-letters', sourceExerciseId: 'WB-L09-E01', sourceLabel: 'Zeszyt ćwiczeń · ćwiczenie 1',
-      kind: 'typed', title: 'Co to jest?',
+      kind: ActivityKind.Typed, title: 'Co to jest?',
       instruction: 'Uporządkuj litery i wpisz nazwę owocu lub warzywa.',
       items: [
         typed('q1', 'kubroły', 'brokuły'), typed('q2', 'mniakzie', 'ziemniak'),
@@ -29,7 +29,7 @@ export const LESSON_09: Lesson = {
     },
     {
       id: 'l09-fruit-veg', sourceExerciseId: 'WB-L09-E02', sourceLabel: 'Zeszyt ćwiczeń · ćwiczenie 2',
-      kind: 'choice', title: 'Owoc czy warzywo?',
+      kind: ActivityKind.Choice, title: 'Owoc czy warzywo?',
       instruction: 'Wybierz właściwą grupę.',
       items: [
         choice('q1', 'malina', 'owoc', OW), choice('q2', 'marchewka', 'warzywo', OW),
@@ -44,7 +44,7 @@ export const LESSON_09: Lesson = {
     },
     {
       id: 'l09-salad', sourceExerciseId: 'WB-L09-E03', sourceLabel: 'Zeszyt ćwiczeń · ćwiczenie 3',
-      kind: 'typed', title: 'Sałatka grecka',
+      kind: ActivityKind.Typed, title: 'Sałatka grecka',
       instruction: 'Uzupełnij dialog. Wpisz słowo w nawiasie w odpowiedniej formie.',
       items: [
         typed('q1', 'Robię ___ (sałatka) na kolację.', 'sałatkę'),
@@ -61,7 +61,7 @@ export const LESSON_09: Lesson = {
     },
     {
       id: 'l09-shop-roles', sourceExerciseId: 'WB-L09-E06', sourceLabel: 'Zeszyt ćwiczeń · ćwiczenie 6',
-      kind: 'choice', title: 'Kto to mówi?',
+      kind: ActivityKind.Choice, title: 'Kto to mówi?',
       instruction: 'Zdecyduj, czy zdanie mówi sprzedawca, czy klient.',
       items: [
         choice('q1', '„czy są kiszone ogórki?”', 'Klient', SK),
@@ -78,7 +78,7 @@ export const LESSON_09: Lesson = {
     },
     {
       id: 'l09-shop-dialogue', sourceExerciseId: 'WB-L09-E07', sourceLabel: 'Zeszyt ćwiczeń · ćwiczenie 7',
-      kind: 'choice', title: 'Na targu',
+      kind: ActivityKind.Choice, title: 'Na targu',
       instruction: 'Uzupełnij dialog właściwym słowem.',
       items: [
         choice('q1', 'Dzień dobry, ___ są jagody?', 'czy', ['drobne', 'smaczne', 'wszystko', 'kilogram', 'czy', 'jeszcze', 'więcej']),
@@ -92,7 +92,7 @@ export const LESSON_09: Lesson = {
     },
     {
       id: 'l09-plural', sourceExerciseId: 'WB-L09-E08', sourceLabel: 'Zeszyt ćwiczeń · ćwiczenie 8',
-      kind: 'typed', title: 'Liczba mnoga (2, 3, 4)',
+      kind: ActivityKind.Typed, title: 'Liczba mnoga (2, 3, 4)',
       instruction: 'Wpisz formę liczby mnogiej po liczebniku 2, 3 lub 4.',
       items: [
         typed('q1', '2 ___ (mleko)', 'mleka'), typed('q2', '2 ___ (miód)', 'miody'),
@@ -104,7 +104,7 @@ export const LESSON_09: Lesson = {
     },
     {
       id: 'l09-plural-phrases', sourceExerciseId: 'WB-L09-E09', sourceLabel: 'Zeszyt ćwiczeń · ćwiczenie 9',
-      kind: 'typed', title: 'Liczba mnoga w zdaniach',
+      kind: ActivityKind.Typed, title: 'Liczba mnoga w zdaniach',
       instruction: 'Wpisz oba słowa w liczbie mnogiej.',
       items: [
         typed('q1', 'Na stole są dwie ___ z sokiem. (wysoka szklanka)', 'wysokie szklanki'),
@@ -122,7 +122,7 @@ export const LESSON_09: Lesson = {
     },
     {
       id: 'l09-odd-one', sourceExerciseId: 'WB-L09-E11', sourceLabel: 'Zeszyt ćwiczeń · ćwiczenie 11',
-      kind: 'typed', title: 'Co nie pasuje?',
+      kind: ActivityKind.Typed, title: 'Co nie pasuje?',
       instruction: 'Wpisz słowo, które nie pasuje do pozostałych.',
       items: [
         typed('q1', 'makrela – pstrąg – kurczak – łosoś', 'kurczak', 'To jest mięso.'),
@@ -135,7 +135,7 @@ export const LESSON_09: Lesson = {
     },
     {
       id: 'l09-word-order', sourceExerciseId: 'WB-L09-E13', sourceLabel: 'Zeszyt ćwiczeń · ćwiczenie 13',
-      kind: 'typed', title: 'Uporządkuj zdania',
+      kind: ActivityKind.Typed, title: 'Uporządkuj zdania',
       instruction: 'Ułóż wyrazy w poprawne zdanie.',
       items: [
         sent('q1', 'pije / mlekiem / Kasia / z / kawę', ['Kasia pije kawę z mlekiem.']),
@@ -147,5 +147,31 @@ export const LESSON_09: Lesson = {
         sent('q7', 'niż / kurczak / zdrowszy / gotowany / jest / pieczony', ['Gotowany kurczak jest zdrowszy niż pieczony.']),
       ],
     },
+    typedExercise(9, 4, 'Jaki smak? Jaki kształt?', 'Uzupełnij określenia smaku i kształtu.', [
+      ['Smak 1', 'kwaśny'], ['Smak 2', 'ostry'], ['Smak 3', 'słodki'], ['Smak 4', 'słony'], ['Smak 5', 'gorzki'],
+      ['Kształt · owalny', 'owalny'], ['Kształt · okrągły', 'okrągły'], ['Kształt · podłużny', 'podłużny'],
+    ]),
+    typedExercise(9, 5, 'Co to za owoc lub warzywo?', 'Uzupełnij opisy wyrazami z ramki.', [
+      ['1. Jest słodka; dodajemy ją do cukru i śmietany.', 'truskawka'],
+      ['2. Jest okrągły, średni i czerwony; pasuje do oliwy.', 'pomidor'],
+      ['3. Jest żółta, miękka i kwaśna.', 'cytryna'],
+      ['4. Jest podłużny, twardy i ma ostry smak.', 'czosnek'],
+      ['5. Jest biała, ostra i mała.', 'rzodkiewka'],
+      ['6. Jest owalne, różowe i delikatne.', 'winogrono'],
+    ]),
+    typedExercise(9, 10, 'Co jemy na kolację?', 'Uzupełnij rozmowę o kolacji.', [
+      ['Gosia · składniki sałatki', 'pomidory; ogórki; zielone oliwki; sałatka'],
+      ['Dietmar · propozycja dodatków', 'wędlina; ser; tosty'],
+      ['Gosia · pieczywo', 'grzanki'], ['Dietmar · napoje', 'zimne piwa'],
+      ['Gosia · herbata', 'dobra herbata z cytryną'],
+    ]),
+    typedExercise(9, 12, 'Zakupy Mami', 'Uzupełnij tekst właściwymi formami.', [
+      ['1', 'zakupami'], ['2', 'owoce'], ['3', 'warzywa'], ['4', 'dojrzałe czerwone pomidory'],
+      ['5', 'zielone ogórki'], ['6', 'małe cebule'], ['7', 'produkty'], ['8', 'kolację'],
+      ['9', 'średnie kalafiory'], ['10', 'młode ziemniaki'], ['11', 'owoce'], ['12', 'banany'],
+      ['13', 'pomarańcze'], ['14', 'jabłka'], ['15', 'ananasy'], ['16', 'małego arbuza'],
+      ['17', 'zakupami'], ['18', 'gruszki'], ['19', 'wędzoną rybę'], ['20', 'sympatycznym kolegą'],
+      ['21', 'gruszki'], ['22', 'rybę'], ['23', 'truskawki'], ['24', 'kolację'],
+    ]),
   ],
 };

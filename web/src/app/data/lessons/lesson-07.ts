@@ -1,4 +1,4 @@
-import { choice, Lesson, typed } from '../lesson-types';
+import { ActivityKind, choice, Lesson, typed, typedExercise } from '../lesson-types';
 
 const PN = ['Prawda', 'Nieprawda'];
 
@@ -12,7 +12,7 @@ export const LESSON_07: Lesson = {
   activities: [
     {
       id: 'l07-true-false', sourceExerciseId: 'WB-L07-E01', sourceLabel: 'Zeszyt ćwiczeń · ćwiczenie 1',
-      kind: 'choice', title: 'Prawda czy nieprawda?',
+      kind: ActivityKind.Choice, title: 'Prawda czy nieprawda?',
       instruction: 'Na podstawie dialogu z ćwiczenia 2 oceń zdania.',
       items: [
         choice('q1', 'Uwe czyta gazetę.', 'Nieprawda', PN),
@@ -29,28 +29,28 @@ export const LESSON_07: Lesson = {
     },
     {
       id: 'l07-dialogue-cloze', sourceExerciseId: 'WB-L07-E02', sourceLabel: 'Zeszyt ćwiczeń · ćwiczenie 2',
-      kind: 'typed', title: 'Uzupełnij rozmowę Toma i Uwego',
+      kind: ActivityKind.Typed, title: 'Uzupełnij rozmowę Toma i Uwego',
       instruction: 'Wpisz brakujące słowa. Wybieraj z listy: mecz, polsku, czytam, czas, pomysł, piszę, albo, rozmawiamy, robimy, domu, oglądasz, wiem, nieciekawa, spacer.',
       items: [
         typed('q1', 'Tom: Po ___ ?', 'polsku'),
         typed('q2', 'Uwe: Nie, ___ niemiecką książkę.', 'czytam'),
-        typed('q3', 'Tom: Teraz ___ zadanie domowe i oglądam mecz.', 'piszę'),
-        typed('q4', 'Tom: Teraz piszę zadanie domowe i oglądam ___ .', 'mecz'),
+        typed('q3', 'Tom: Teraz ___ zadanie domowe i oglądam … .', 'piszę'),
+        typed('q4', 'Tom: Teraz … zadanie domowe i oglądam ___ .', 'mecz'),
         typed('q5', 'Uwe: Piszesz zadanie i ___ mecz?', 'oglądasz'),
         typed('q6', 'Uwe: Aha, czyli masz wolny ___ ?', 'czas'),
         typed('q7', 'Tom: Tak, mam wolny czas i nie ___ , co robić.', 'wiem'),
         typed('q8', 'Tom: W ___ mam dobre piwo.', 'domu'),
-        typed('q9', 'Tom: ___ dobrą pizzę albo gotujemy risotto.', 'robimy'),
-        typed('q10', 'Tom: Robimy dobrą pizzę ___ gotujemy risotto.', 'albo'),
+        typed('q9', 'Tom: ___ dobrą pizzę … gotujemy risotto.', 'robimy'),
+        typed('q10', 'Tom: … dobrą pizzę ___ gotujemy risotto.', 'albo'),
         typed('q11', 'Uwe: To dobry ___ .', 'pomysł'),
         typed('q12', 'Tom: Nie, telewizja jest ___ .', 'nieciekawa'),
         typed('q13', 'Tom: Potem idziemy na długi ___ .', 'spacer'),
-        typed('q14', 'Tom: Potem idziemy na spacer i ___ po polsku.', 'rozmawiamy'),
+        typed('q14', 'Tom: Potem idziemy na … i ___ po polsku.', 'rozmawiamy'),
       ],
     },
     {
       id: 'l07-accusative', sourceExerciseId: 'WB-L07-E03', sourceLabel: 'Zeszyt ćwiczeń · ćwiczenie 3',
-      kind: 'typed', title: 'Przymiotnik i rzeczownik w bierniku',
+      kind: ActivityKind.Typed, title: 'Przymiotnik i rzeczownik w bierniku',
       instruction: 'Wpisz oba słowa w bierniku (w nawiasie forma podstawowa).',
       items: [
         typed('q1', 'Angela pije ___ . (czarna kawa)', 'czarną kawę'),
@@ -67,7 +67,7 @@ export const LESSON_07: Lesson = {
     },
     {
       id: 'l07-jaki', sourceExerciseId: 'WB-L07-E04', sourceLabel: 'Zeszyt ćwiczeń · ćwiczenie 4',
-      kind: 'choice', title: 'Jaki, jaka, jakie?',
+      kind: ActivityKind.Choice, title: 'Jaki, jaka, jakie?',
       instruction: 'Wybierz właściwą formę pytania.',
       items: [
         choice('q1', '___ Uwe ma samochód?', 'Jaki', ['Jaki', 'Jakim', 'Jakiego']),
@@ -83,7 +83,7 @@ export const LESSON_07: Lesson = {
     },
     {
       id: 'l07-prosze', sourceExerciseId: 'WB-L07-E05', sourceLabel: 'Zeszyt ćwiczeń · ćwiczenie 5',
-      kind: 'typed', title: 'Proszę…',
+      kind: ActivityKind.Typed, title: 'Proszę…',
       instruction: 'Uzupełnij po „Proszę” w bierniku (forma podstawowa w nawiasie).',
       items: [
         typed('q1', 'Proszę ___ . (duży zeszyt)', 'duży zeszyt'),
@@ -95,36 +95,36 @@ export const LESSON_07: Lesson = {
     },
     {
       id: 'l07-prices', sourceExerciseId: 'WB-L07-E07', sourceLabel: 'Zeszyt ćwiczeń · ćwiczenie 7',
-      kind: 'typed', title: 'Ile to kosztuje?',
+      kind: ActivityKind.Typed, title: 'Ile to kosztuje?',
       instruction: 'Napisz zdanie z ceną słowami, np. „Chipsy kosztują pięć złotych, dwadzieścia groszy”. Wpisz tylko część od „kosztuje/kosztują”.',
       items: [
-        typed('q1', 'Ołówek · 1 zł', ['kosztuje jeden złoty', 'kosztuje złotówkę']),
-        typed('q2', 'Komórka · 339 zł', 'kosztuje trzysta trzydzieści dziewięć złotych'),
-        typed('q3', 'Miód · 5 zł, 20 gr', ['kosztuje pięć złotych, dwadzieścia groszy', 'kosztuje pięć złotych dwadzieścia groszy']),
-        typed('q4', 'Notes · 12 zł', 'kosztuje dwanaście złotych'),
-        typed('q5', 'Bilet · 2 zł, 50 gr', ['kosztuje dwa złote, pięćdziesiąt groszy', 'kosztuje dwa złote pięćdziesiąt groszy']),
-        typed('q6', 'Cola · 3 zł', 'kosztuje trzy złote'),
-        typed('q7', 'Papierosy · 8 zł, 50 gr', ['kosztują osiem złotych, pięćdziesiąt groszy', 'kosztują osiem złotych pięćdziesiąt groszy']),
+        { ...typed('q1', 'Ołówek · 1 zł', ['kosztuje jeden złoty', 'kosztuje złotówkę']), image: 1 },
+        { ...typed('q2', 'Komórka · 339 zł', 'kosztuje trzysta trzydzieści dziewięć złotych'), image: 6 },
+        { ...typed('q3', 'Miód · 5 zł, 20 gr', ['kosztuje pięć złotych, dwadzieścia groszy', 'kosztuje pięć złotych dwadzieścia groszy']), image: 5 },
+        { ...typed('q4', 'Notes · 12 zł', 'kosztuje dwanaście złotych'), image: 8 },
+        { ...typed('q5', 'Bilet · 2 zł, 50 gr', ['kosztuje dwa złote, pięćdziesiąt groszy', 'kosztuje dwa złote pięćdziesiąt groszy']), image: 3 },
+        { ...typed('q6', 'Cola · 3 zł', 'kosztuje trzy złote'), image: 7 },
+        { ...typed('q7', 'Papierosy · 8 zł, 50 gr', ['kosztują osiem złotych, pięćdziesiąt groszy', 'kosztują osiem złotych pięćdziesiąt groszy']), image: 2 },
       ],
     },
     {
       id: 'l07-shop-dialogue', sourceExerciseId: 'WB-L07-E08', sourceLabel: 'Zeszyt ćwiczeń · ćwiczenie 8',
-      kind: 'typed', title: 'Dialog w sklepie',
+      kind: ActivityKind.Typed, title: 'Dialog w sklepie',
       instruction: 'Uzupełnij dialog Karola ze sprzedawcą.',
       items: [
         typed('q1', 'Karol: Dzień dobry. Czy ___ duży zeszyt?', 'jest'),
         typed('q2', 'Karol: A ___ jest mały?', 'czy'),
         typed('q3', 'Karol: ___ kosztuje?', 'Ile'),
-        typed('q4', 'Sprzedawca: 2 ___ 10 groszy. Czy coś jeszcze?', 'złote'),
-        typed('q5', 'Sprzedawca: 2 złote 10 ___ . Czy coś jeszcze?', 'groszy'),
-        typed('q6', 'Sprzedawca: 2 złote 10 groszy. Czy coś ___ ?', 'jeszcze'),
+        typed('q4', 'Sprzedawca: 2 ___ 10 … . Czy coś … ?', 'złote'),
+        typed('q5', 'Sprzedawca: 2 … 10 ___ . Czy coś … ?', 'groszy'),
+        typed('q6', 'Sprzedawca: 2 … 10 … . Czy coś ___ ?', 'jeszcze'),
         typed('q7', 'Karol: ___ jest czarny długopis?', 'Czy'),
         typed('q8', 'Sprzedawca: Nie ___ .', 'ma'),
       ],
     },
     {
       id: 'l07-numbers', sourceExerciseId: 'WB-L07-E12', sourceLabel: 'Zeszyt ćwiczeń · ćwiczenie 12',
-      kind: 'typed', title: 'Ile to jest?',
+      kind: ActivityKind.Typed, title: 'Ile to jest?',
       instruction: 'Policz i napisz wynik słowami.',
       items: [
         typed('q1', '902 + 99 =', 'tysiąc jeden'),
@@ -135,7 +135,7 @@ export const LESSON_07: Lesson = {
     },
     {
       id: 'l07-shops', sourceExerciseId: 'WB-L07-E13', sourceLabel: 'Zeszyt ćwiczeń · ćwiczenie 13',
-      kind: 'choice', title: 'Sklep i produkt',
+      kind: ActivityKind.Choice, title: 'Sklep i produkt',
       instruction: 'Dopasuj sklep do produktu.',
       items: [
         choice('q1', 'RTV', 'telewizor, DVD', ['telewizor, DVD', 'okulary', 'aspiryna']),
@@ -152,7 +152,7 @@ export const LESSON_07: Lesson = {
     },
     {
       id: 'l07-camera-text', sourceExerciseId: 'WB-L07-E14', sourceLabel: 'Zeszyt ćwiczeń · ćwiczenie 14',
-      kind: 'typed', title: 'Karolina i Mami na zakupach',
+      kind: ActivityKind.Typed, title: 'Karolina i Mami na zakupach',
       instruction: 'Uzupełnij tekst formą z nawiasu (biernik, narzędnik lub czasownik).',
       items: [
         typed('q1', 'Karolina interesuje się ___ . (fotografia)', 'fotografią'),
@@ -161,7 +161,7 @@ export const LESSON_07: Lesson = {
         typed('q4', 'Chce też ___ . (duży album)', 'duży album'),
         typed('q5', 'Chce też ___ pamięci do aparatu. (karta)', 'kartę'),
         typed('q6', 'Chce też ___ na aparat. (ładna torba)', 'ładną torbę'),
-        typed('q7', 'Chce też torbę albo ___ . (statyw)', 'statyw'),
+        typed('q7', 'Chce też … albo ___ . (statyw)', 'statyw'),
         typed('q8', 'Mami chce ___ Krakowa. (mała mapa)', 'małą mapę'),
         typed('q9', 'Mami chce ___ . (ołówek)', 'ołówek'),
         typed('q10', 'Mami chce ___ . (gumka)', 'gumkę'),
@@ -169,5 +169,22 @@ export const LESSON_07: Lesson = {
         typed('q12', 'Mami chce ___ i kosmetyki. (kolorowy magazyn)', 'kolorowy magazyn'),
       ],
     },
+    typedExercise(7, 6, 'Opisz osobę i jej rzeczy', 'Napisz krótką wypowiedź na podstawie ilustracji. Przykładowa odpowiedź z klucza:', [
+      ['Opis osoby i przedmiotów', 'Ona ma małą, ładną córkę i sympatycznego syna. Ma ładny, stylowy dom, czarnego kota, dużego białego psa, stary, ale dobry rower, ciekawą książkę i gruby słownik. Lubi malarstwo i uczyć się języków obcych.'],
+    ]),
+    typedExercise(7, 9, 'Rozmowa w kiosku', 'Uzupełnij dialog pytaniami i odpowiedziami.', [
+      ['Czy jest karta telefoniczna?', 'Tak, jest.'], ['Ile kosztuje karta?', '25 złotych.'],
+      ['Czy coś jeszcze? · mały notes', 'Tak, czy jest mały notes?'], ['Odpowiedź sprzedawcy', 'Niestety, nie ma.'],
+    ]),
+    typedExercise(7, 10, 'Kupony zniżkowe', 'Wpisz numery produktów należących do każdego kuponu.', [
+      ['Kupon 1', '8, 12, 20, 33, 45, 49'], ['Kupon 2', '3, 7, 14, 16, 28, 39'],
+      ['Kupon 3', '2, 9, 15, 19, 24, 32'], ['Kupon 4', '5, 10, 11, 18, 30, 41'],
+      ['Kupon 5', '1, 17, 25, 34, 37, 43'], ['Kupon 6', '4, 13, 23, 31, 39, 49'],
+    ]),
+    typedExercise(7, 11, 'Zapisz liczby słownie', 'Zapisz liczby z nagrania słowami.', [
+      ['212', 'dwieście dwanaście'], ['304', 'trzysta cztery'], ['333', 'trzysta trzydzieści trzy'],
+      ['405', 'czterysta pięć'], ['507', 'pięćset siedem'], ['609', 'sześćset dziewięć'],
+      ['721', 'siedemset dwadzieścia jeden'], ['806', 'osiemset sześć'], ['901', 'dziewięćset jeden'], ['1100', 'tysiąc sto'],
+    ]),
   ],
 };

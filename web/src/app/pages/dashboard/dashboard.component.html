@@ -28,10 +28,10 @@
         <span class="note-spark">✦</span>
         <p>Krótka lekcja<br><strong>robi różnicę.</strong></p>
       </div>
-      <button class="profile-button" type="button" aria-label="Profil Anny">
-        <span class="profile-avatar">A</span>
-        <span class="profile-copy"><strong>Anna</strong><small>Uczennica</small></span>
-        <span class="profile-menu">•••</span>
+      <button class="profile-button" type="button" (click)="signOut()" aria-label="Wyloguj się">
+        <span class="profile-avatar">{{ userInitial() }}</span>
+        <span class="profile-copy"><strong>{{ userEmail() }}</strong><small>Wyloguj się</small></span>
+        <span class="profile-menu">↗</span>
       </button>
     </div>
   </aside>
@@ -49,13 +49,16 @@
       @if (pwa.installAvailable() || pwa.needsIOSInstructions()) {
         <button class="install-button" type="button" (click)="installApp()">{{ pwa.installAvailable() ? 'Zainstaluj aplikację' : 'Jak zainstalować?' }}</button>
       }
-      <button class="top-avatar" type="button" aria-label="Profil Anny">A</button>
+      <button class="top-avatar" type="button" (click)="signOut()" [attr.aria-label]="'Wyloguj konto ' + userEmail()" title="Wyloguj się">{{ userInitial() }}</button>
     </header>
 
     <div class="content-wrap">
+      @if (progressService.syncError(); as syncMessage) {
+        <p class="sync-message" role="alert">{{ syncMessage }}</p>
+      }
       <section class="welcome-row">
         <div>
-          <p class="eyebrow">{{ greeting }}, Anno <span class="wave">✦</span></p>
+            <p class="eyebrow">{{ greeting }} <span class="wave">✦</span></p>
           <h1>Jeszcze chwila i<br class="mobile-break"> mówisz po polsku.</h1>
           <p class="welcome-copy">Wróć do swojej ścieżki. Dziś wystarczy jedna dobra lekcja.</p>
         </div>
@@ -156,7 +159,7 @@
     <a class="mobile-nav-item selected" routerLink="/"><span>⌂</span><small>Ścieżka</small></a>
     <a class="mobile-nav-item" href="#lesson-path"><span>▤</span><small>Kurs</small></a>
     <a class="mobile-nav-item" href="#progress-card"><span>▥</span><small>Postępy</small></a>
-    <button class="mobile-nav-item" type="button" (click)="installApp()" [disabled]="!pwa.installAvailable() && !pwa.needsIOSInstructions()"><span>＋</span><small>Instaluj</small></button>
+    <button class="mobile-nav-item" type="button" (click)="signOut()" aria-label="Wyloguj się"><span>↗</span><small>Wyloguj</small></button>
   </nav>
 
   @if (pwa.instructionsVisible()) {

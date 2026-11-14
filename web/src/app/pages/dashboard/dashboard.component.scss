@@ -7,7 +7,7 @@
 .brand-dot { color: #e77955; }
 .course-switcher { display: flex; align-items: center; gap: 10px; margin: 35px 0 24px; padding: 11px 10px; border: 1px solid #efede7; border-radius: 13px; }
 .course-flag { display: grid; width: 36px; height: 32px; place-items: center; border-radius: 9px; background: #f9e7df; color: #bb5739; font-size: 12px; font-weight: 800; }
-.course-switcher-copy, .profile-copy { display: grid; gap: 3px; flex: 1; }
+.course-switcher-copy, .profile-copy { display: grid; gap: 3px; flex: 1; min-width: 0; }
 .course-switcher-copy strong, .profile-copy strong { font-size: 12px; }
 .course-switcher-copy small, .profile-copy small { color: #98968f; font-size: 10px; }
 .switcher-chevron { color: #88877e; }
@@ -20,6 +20,7 @@
 .note-spark { color: #d28b3b; font-size: 19px; }
 .sidebar-note p { margin: 0; font-size: 11px; line-height: 1.5; }
 .profile-button { display: flex; align-items: center; gap: 10px; width: 100%; padding: 13px 5px 0; border: 0; border-top: 1px solid #f0eee9; background: none; text-align: left; }
+.profile-copy strong { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .profile-avatar, .top-avatar { display: grid; place-items: center; width: 34px; height: 34px; border: 0; border-radius: 50%; background: #dce8dc; color: #48624a; font-weight: 800; }
 .profile-menu { color: #99978d; letter-spacing: 2px; }
 
@@ -35,6 +36,7 @@
 .install-button, .side-install { border: 1px solid #ecd9cf; border-radius: 10px; padding: 9px 12px; background: #fff; color: #a64f35; font-size: 11px; font-weight: 700; cursor: pointer; }
 .top-avatar { width: 31px; height: 31px; }
 .content-wrap { max-width: 930px; margin: 0 auto; padding: 35px clamp(22px, 4vw, 62px) 72px; }
+.sync-message { margin: 0 0 18px; padding: 11px 13px; border-radius: 9px; background: #fff0ed; color: #9f392d; font-size: 12px; }
 .welcome-row { display: flex; align-items: flex-end; justify-content: space-between; gap: 18px; margin-bottom: 24px; }
 .eyebrow { margin: 0 0 8px; color: #99968d; font-size: 9px; font-weight: 800; letter-spacing: 1.25px; }
 .welcome-row h1 { margin: 0; color: #292a23; font-size: clamp(28px, 3vw, 38px); font-weight: 750; letter-spacing: -1.35px; line-height: 1.12; }

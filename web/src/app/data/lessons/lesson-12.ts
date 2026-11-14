@@ -1,4 +1,4 @@
-import { choice, Lesson, typed } from '../lesson-types';
+import { ActivityKind, choice, Lesson, typed, typedExercise } from '../lesson-types';
 
 export const LESSON_12: Lesson = {
   id: 12,
@@ -10,7 +10,7 @@ export const LESSON_12: Lesson = {
   activities: [
     {
       id: 'l12-dialogue-cloze', sourceExerciseId: 'WB-L12-E02', sourceLabel: 'Zeszyt ćwiczeń · ćwiczenie 2',
-      kind: 'typed', title: 'Zaproszenie na wystawę',
+      kind: ActivityKind.Typed, title: 'Zaproszenie na wystawę',
       instruction: 'Uzupełnij dialog formami podanych słów. Zachowaj polskie znaki.',
       items: [
         typed('q1', 'Angela: Idziemy z ___ (Tom)', 'Tomem'),
@@ -30,7 +30,7 @@ export const LESSON_12: Lesson = {
     },
     {
       id: 'l12-where-going', sourceExerciseId: 'WB-L12-E04', sourceLabel: 'Zeszyt ćwiczeń · ćwiczenie 4',
-      kind: 'choice', title: 'Dokąd idziemy?',
+      kind: ActivityKind.Choice, title: 'Dokąd idziemy?',
       instruction: 'Połącz miejsce z pasującym celem.',
       items: (() => {
         const o = ['na przedstawienie', 'na wystawę', 'na kawę i lody', 'na koncert muzyki klasycznej', 'na świetną imprezę', 'na drinka', 'na długi spacer', 'na dużą pizzę', 'na ciekawy wykład'];
@@ -49,7 +49,7 @@ export const LESSON_12: Lesson = {
     },
     {
       id: 'l12-what-fits', sourceExerciseId: 'WB-L12-E06', sourceLabel: 'Zeszyt ćwiczeń · ćwiczenie 6',
-      kind: 'choice', title: 'Zaproszenie na koncert',
+      kind: ActivityKind.Choice, title: 'Zaproszenie na koncert',
       instruction: 'Wybierz formę, która pasuje do dialogu.',
       items: [
         choice('q1', 'Leszek: Dzień dobry ___ Ewo.', 'pani', ['panią', 'pani']),
@@ -65,29 +65,29 @@ export const LESSON_12: Lesson = {
     },
     {
       id: 'l12-clock-pictures', sourceExerciseId: 'WB-L12-E07', sourceLabel: 'Zeszyt ćwiczeń · ćwiczenie 7',
-      kind: 'choice', title: 'Dopasuj dialog do ilustracji',
+      kind: ActivityKind.Choice, title: 'Dopasuj dialog do ilustracji',
       instruction: 'Rysunki: 1 – zegarek cyfrowy, 2 – mały zegar ze wskazówkami, 3 – cyfrowy zegar stołowy.',
       items: [
-        choice('q1', 'a) – Uwe, która godzina? – Dwudziesta pierwsza.', 'rysunek 3', ['rysunek 1', 'rysunek 2', 'rysunek 3']),
-        choice('q2', 'b) – Angela, o której zwykle jesz lunch? – O pierwszej.', 'rysunek 2', ['rysunek 1', 'rysunek 2', 'rysunek 3']),
-        choice('q3', 'c) – Przepraszam, o której jest spektakl? – O osiemnastej.', 'rysunek 1', ['rysunek 1', 'rysunek 2', 'rysunek 3']),
+        { ...choice('q1', 'a) – Uwe, która godzina? – Dwudziesta pierwsza.', 'rysunek 3', ['rysunek 1', 'rysunek 2', 'rysunek 3']), image: 3 },
+        { ...choice('q2', 'b) – Angela, o której zwykle jesz lunch? – O pierwszej.', 'rysunek 2', ['rysunek 1', 'rysunek 2', 'rysunek 3']), image: 2 },
+        { ...choice('q3', 'c) – Przepraszam, o której jest spektakl? – O osiemnastej.', 'rysunek 1', ['rysunek 1', 'rysunek 2', 'rysunek 3']), image: 1 },
       ],
     },
     {
       id: 'l12-clocks', sourceExerciseId: 'WB-L12-E08', sourceLabel: 'Zeszyt ćwiczeń · ćwiczenie 8',
-      kind: 'typed', title: 'O której godzinie?',
+      kind: ActivityKind.Typed, title: 'O której godzinie?',
       instruction: 'Zapisz godzinę słowami, zgodnie z zegarem (I–V). Zachowaj polskie znaki.',
       items: [
-        typed('q1', 'Zegar I · godzina ze „za” (np. za … druga)', 'za pięć pierwsza'),
-        typed('q2', 'Zegar II · o której? (o …)', 'o pierwszej'),
-        typed('q3', 'Zegar III · pięć … (po …)', 'pięć po pierwszej'),
-        typed('q4', 'Zegar IV · o … (wpół do …)', 'o wpół do drugiej'),
-        typed('q5', 'Zegar V · przedział czasu (od … do …)', 'od pierwszej do drugiej'),
+        { ...typed('q1', 'Zegar I · godzina ze „za” (za … …)', 'za pięć pierwsza'), image: 1 },
+        { ...typed('q2', 'Zegar II · o której? (o …)', 'o pierwszej'), image: 2 },
+        { ...typed('q3', 'Zegar III · pięć … (po …)', 'pięć po pierwszej'), image: 3 },
+        { ...typed('q4', 'Zegar IV · o … (wpół do …)', 'o wpół do drugiej'), image: 4 },
+        { ...typed('q5', 'Zegar V · przedział czasu (od … do …)', 'od pierwszej do drugiej'), image: 5 },
       ],
     },
     {
       id: 'l12-time-match', sourceExerciseId: 'WB-L12-E09', sourceLabel: 'Zeszyt ćwiczeń · ćwiczenie 9',
-      kind: 'choice', title: 'Godziny słowami i cyframi',
+      kind: ActivityKind.Choice, title: 'Godziny słowami i cyframi',
       instruction: 'Dopasuj zapis słowny do godziny.',
       items: (() => {
         const o = ['17:15', '6:30', '10:00', '13:45', '12:45', '15:15', '18:30', '12:00', '20:00', '8:45'];
@@ -107,7 +107,7 @@ export const LESSON_12: Lesson = {
     },
     {
       id: 'l12-pawel-day', sourceExerciseId: 'WB-L12-E12', sourceLabel: 'Zeszyt ćwiczeń · ćwiczenie 12',
-      kind: 'typed', title: 'Dzień Pawła',
+      kind: ActivityKind.Typed, title: 'Dzień Pawła',
       instruction: 'Wpisz czasowniki w 3. osobie liczby pojedynczej (on).',
       items: [
         typed('q1', 'Paweł ___ (pić) mocną kawę.', 'pije'),
@@ -115,7 +115,7 @@ export const LESSON_12: Lesson = {
         typed('q3', 'O 10:30 ___ (jeść) śniadanie', 'je'),
         typed('q4', '… i ___ (czytać) gazetę.', 'czyta'),
         typed('q5', 'Potem ___ (myć) zęby,', 'myje'),
-        typed('q6', '… i ___ (ubierać) się.', 'ubiera się'),
+        typed('q6', '… i ___ (ubierać) się.', 'ubiera'),
         typed('q7', 'Zwykle ___ (jeździć) do szkoły tramwajem o 11:45.', 'jeździ'),
         typed('q8', '___ (przychodzić) do szkoły o 12:00.', 'Przychodzi', 'Zacznij wielką literą.'),
         typed('q9', 'Paweł ___ (uczyć) od 12:30 do 15:45.', 'uczy'),
@@ -129,7 +129,7 @@ export const LESSON_12: Lesson = {
     },
     {
       id: 'l12-verb-phrases', sourceExerciseId: 'WB-L12-E13', sourceLabel: 'Zeszyt ćwiczeń · ćwiczenie 13',
-      kind: 'choice', title: 'Czasownik i dopełnienie',
+      kind: ActivityKind.Choice, title: 'Czasownik i dopełnienie',
       instruction: 'Połącz czasownik z pasującym zwrotem.',
       items: (() => {
         const o = ['sałatkę', 'na nartach', 'z żoną', 'w brydża', 'na basen', 'z biura', 'zęby', 'film', 'rano'];
@@ -148,7 +148,7 @@ export const LESSON_12: Lesson = {
     },
     {
       id: 'l12-weekdays', sourceExerciseId: 'WB-L12-E14', sourceLabel: 'Zeszyt ćwiczeń · ćwiczenie 14',
-      kind: 'typed', title: 'Jaki to dzień?',
+      kind: ActivityKind.Typed, title: 'Jaki to dzień?',
       instruction: 'Ułóż litery w nazwę dnia tygodnia.',
       items: [
         typed('q1', 'DZIENIELA', 'niedziela'),
@@ -159,5 +159,45 @@ export const LESSON_12: Lesson = {
         typed('q6', 'BOSOTA', 'sobota'),
       ],
     },
+    typedExercise(12, 1, 'Prawda czy nieprawda?', 'Oceń informacje o planach Angeli i Mami.', [
+      ['Angela proponuje Mami wystawę fotografii.', 'P'], ['Tom i Uwe idą z Angelą.', 'N'],
+      ['Mami nie ma ochoty tam pójść.', 'N'], ['Angela umawia się z Mami po południu.', 'P'],
+      ['Mami niestety jest zajęta.', 'N'], ['Karolina może pójść z nimi.', 'P'],
+      ['Uwe mówi, że wystawa to zły pomysł.', 'N'], ['Uwe jak zwykle nie ma czasu.', 'P'],
+      ['Wszyscy spotykają się w muzeum.', 'N'],
+    ]),
+    typedExercise(12, 3, 'Idę do czy idę na?', 'Wpisz miejsca i cele w odpowiedniej kolumnie.', [
+      ['IDĘ DO · 1', 'domu'], ['IDĘ DO · 2', 'szkoły'], ['IDĘ DO · 3', 'kina'], ['IDĘ DO · 4', 'teatru'],
+      ['IDĘ DO · 5', 'muzeum'], ['IDĘ DO · 6', 'filharmonii'], ['IDĘ DO · 7', 'sklepu'], ['IDĘ DO · 8', 'kawiarni'],
+      ['IDĘ NA · 1', 'lekcję'], ['IDĘ NA · 2', 'kawę'], ['IDĘ NA · 3', 'spotkanie'], ['IDĘ NA · 4', 'koncert'],
+      ['IDĘ NA · 5', 'zakupy'], ['IDĘ NA · 6', 'spacer'], ['IDĘ NA · 7', 'wystawę'],
+    ]),
+    typedExercise(12, 5, 'Uporządkuj dialogi', 'Wpisz kolejne wypowiedzi w dwóch rozmowach.', [
+      ['Dialog A · 1', 'Robert: Cześć Pawle. Chcesz pójść do klubu na dyskotekę we wtorek?'],
+      ['Dialog A · 2', 'Paweł: Na dyskotekę? Świetny pomysł, ale we wtorek nie mogę.'],
+      ['Dialog A · 3', 'Robert: To może pójdziemy w piątek?'], ['Dialog A · 4', 'Paweł: No dobrze. A gdzie się spotkamy?'],
+      ['Dialog A · 5', 'Robert: Na Brackiej.'],
+      ['Dialog B · 1', 'Kamila: Masz ochotę pójść do kina?'], ['Dialog B · 2', 'Paulina: Jasne!'],
+      ['Dialog B · 3', 'Kamila: Może pójdziemy w czwartek wieczorem?'],
+      ['Dialog B · 4', 'Paulina: Niestety, w czwartek nie mogę, bo idę do dentysty.'],
+      ['Dialog B · 5', 'Kamila: A w środę?'], ['Dialog B · 6', 'Paulina: W środę? Dobrze. Gdzie się spotkamy?'],
+      ['Dialog B · 7', 'Kamila: Na Rynku, pod Empikiem.'],
+    ]),
+    typedExercise(12, 10, 'Zapisz godziny', 'Podaj każdą godzinę w wersji oficjalnej i nieoficjalnej.', [
+      ['6:30', ['o szóstej trzydzieści; wpół do siódmej', 'o szóstej trzydzieści; za pół do siódmej']],
+      ['14:00', ['o czternastej; o drugiej']], ['16:15', ['o szesnastej piętnaście; kwadrans po czwartej']],
+      ['12:30', ['o dwunastej trzydzieści; wpół do pierwszej']],
+      ['13:50', ['o trzynastej pięćdziesiąt; za dziesięć druga']],
+      ['19:00', ['o dziewiętnastej; o siódmej']], ['20:00', ['o dwudziestej; o ósmej']],
+      ['23:00', ['o dwudziestej trzeciej; o jedenastej']],
+    ]),
+    typedExercise(12, 11, 'Odmień czasowniki', 'Uzupełnij formy czasowników „wstawać”, „myć” i „dzwonić”.', [
+      ['ja · wstawać', 'wstaję'], ['ty · wstawać', 'wstajesz'], ['on/ona/ono · wstawać', 'wstaje'],
+      ['my · wstawać', 'wstajemy'], ['wy · wstawać', 'wstajecie'], ['oni/one · wstawać', 'wstają'],
+      ['ja · myć', 'myję'], ['ty · myć', 'myjesz'], ['on/ona/ono · myć', 'myje'],
+      ['my · myć', 'myjemy'], ['wy · myć', 'myjecie'], ['oni/one · myć', 'myją'],
+      ['ja · dzwonić', 'dzwonię'], ['ty · dzwonić', 'dzwonisz'], ['on/ona/ono · dzwonić', 'dzwoni'],
+      ['my · dzwonić', 'dzwonimy'], ['wy · dzwonić', 'dzwonicie'], ['oni/one · dzwonić', 'dzwonią'],
+    ]),
   ],
 };

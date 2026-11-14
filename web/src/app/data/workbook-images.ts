@@ -665,13 +665,6 @@ export const WORKBOOK_IMAGES: Record<string, WorkbookImage[]> = {
       "alt": "Black-and-white drawing of a man eating sushi with chopsticks"
     }
   ],
-  "WB-L14-E01": [
-    {
-      "src": "/assets/workbook/lesson14/p057-e01-1.png",
-      "label": "",
-      "alt": "Drawings of food containers and portions: a jar of jam, a wedge of cheese, a block of butter, a packet of tea, two cans, and a carton of juice"
-    }
-  ],
   "WB-L14-E04": [
     {
       "src": "/assets/workbook/lesson14/p055-e04-1.png",
@@ -747,6 +740,13 @@ export const WORKBOOK_IMAGES: Record<string, WorkbookImage[]> = {
       "src": "/assets/workbook/lesson14/p055-e04-15.png",
       "label": "15)",
       "alt": "Drawing of a ship"
+    }
+  ],
+  "WB-L15-E01": [
+    {
+      "src": "/assets/workbook/lesson15/p057-e01-1.png",
+      "label": "",
+      "alt": "Drawings of food containers and portions: a jar of jam, a wedge of cheese, a block of butter, a packet of tea, two cans, and a carton of juice"
     }
   ],
   "WB-L16-E01": [

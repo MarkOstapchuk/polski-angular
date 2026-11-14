@@ -1,4 +1,4 @@
-import { choice, Lesson, typed } from '../lesson-types';
+import { ActivityKind, choice, Lesson, typed, typedExercise } from '../lesson-types';
 
 const src = (n: number) => ({ sourceExerciseId: `WB-L10-E${String(n).padStart(2, '0')}`, sourceLabel: `Zeszyt ćwiczeń · ćwiczenie ${n}` });
 const cats = ['napoje gorące', 'napoje zimne', 'desery', 'ciasta i ciastka', 'koktajle owocowe'];
@@ -13,7 +13,7 @@ export const LESSON_10: Lesson = {
   color: 'yellow',
   activities: [
     {
-      id: 'l10-menu-groups', ...src(2), kind: 'typed', title: 'Grupy dań',
+      id: 'l10-menu-groups', ...src(2), kind: ActivityKind.Typed, title: 'Grupy dań',
       instruction: 'Uzupełnij nazwę grupy dań lub produktów.',
       items: [
         typed('q1', 'pierogi ruskie, risotto, kapusta z grzybami to dania ___', 'wegetariańskie'),
@@ -27,7 +27,7 @@ export const LESSON_10: Lesson = {
       ],
     },
     {
-      id: 'l10-drinks-desserts', ...src(10), kind: 'choice', title: 'Napoje i desery',
+      id: 'l10-drinks-desserts', ...src(10), kind: ActivityKind.Choice, title: 'Napoje i desery',
       instruction: 'Przypisz każdą pozycję z karty do właściwej grupy.',
       items: [
         choice('q1', 'cappuccino', 'napoje gorące', cats),
@@ -44,7 +44,7 @@ export const LESSON_10: Lesson = {
       ],
     },
     {
-      id: 'l10-negation', ...src(6), kind: 'typed', title: 'Nie lubię…',
+      id: 'l10-negation', ...src(6), kind: ActivityKind.Typed, title: 'Nie lubię…',
       instruction: 'Zapisz zdanie przeczące. Pamiętaj o dopełniaczu.',
       items: [
         typed('q2', 'Chcę duże piwo. → Nie chcę ___ .', 'dużego piwa'),
@@ -57,7 +57,7 @@ export const LESSON_10: Lesson = {
       ],
     },
     {
-      id: 'l10-good-form', ...src(7), kind: 'choice', title: 'Dobra forma',
+      id: 'l10-good-form', ...src(7), kind: ActivityKind.Choice, title: 'Dobra forma',
       instruction: 'Wybierz właściwą formę.',
       items: [
         choice('q1', 'Uwe pije ___.', 'sok pomarańczowy', ['soku pomarańczowego', 'sokiem pomarańczowym', 'sok pomarańczowy']),
@@ -71,7 +71,7 @@ export const LESSON_10: Lesson = {
       ],
     },
     {
-      id: 'l10-restaurant-cloze', ...src(11), kind: 'typed', title: 'W kawiarni',
+      id: 'l10-restaurant-cloze', ...src(11), kind: ActivityKind.Typed, title: 'W kawiarni',
       instruction: 'Uzupełnij dialog słowami z ramki: raz, razy, wszystko, polecam, czy jest, podać, dla mnie, jeszcze.',
       items: [
         typed('q1', 'Kelner: Dzień dobry, co ___?', 'podać'),
@@ -85,7 +85,7 @@ export const LESSON_10: Lesson = {
       ],
     },
     {
-      id: 'l10-pronouns-match', ...src(12), kind: 'choice', title: 'Z kim? Dopasuj formy',
+      id: 'l10-pronouns-match', ...src(12), kind: ActivityKind.Choice, title: 'Z kim? Dopasuj formy',
       instruction: 'Dopasuj zaimek do formy z narzędnikiem.',
       items: [
         choice('q1', 'ja', 'ze mną', wz),
@@ -100,7 +100,7 @@ export const LESSON_10: Lesson = {
       ],
     },
     {
-      id: 'l10-with-whom', ...src(13), kind: 'typed', title: 'Z kim? Uzupełnij',
+      id: 'l10-with-whom', ...src(13), kind: ActivityKind.Typed, title: 'Z kim? Uzupełnij',
       instruction: 'Wpisz właściwą formę zaimka po „z”.',
       items: [
         typed('q1', 'Kasia lubi rozmawiać ze ___ (ja).', 'mną'),
@@ -113,5 +113,48 @@ export const LESSON_10: Lesson = {
         typed('q8', 'Oni idą z ___ (my) do kawiarni.', 'nami'),
       ],
     },
+    typedExercise(10, 1, 'Rezerwacja stolika', 'Ułóż dialog z podanych informacji: sobota, godz. 19.00, dwie osoby, Tomasz Ostrowski.', [
+      ['Kelnerka · powitanie i pytanie', 'Dzień dobry, restauracja „Polskie jadło”, słucham?'],
+      ['Tomasz · prośba o rezerwację', 'Chciałbym zarezerwować stolik dla dwóch osób.'],
+      ['Kelnerka · dzień i godzina', 'Na kiedy?'], ['Tomasz · termin', 'Na sobotę, na godzinę 19.00.'],
+      ['Kelnerka · nazwisko', 'Na jakie nazwisko ma być rezerwacja?'], ['Tomasz · nazwisko', 'Tomasz Ostrowski.'],
+      ['Kelnerka · potwierdzenie', 'Rezerwacja jest gotowa. Zapraszamy w sobotę.'],
+    ]),
+    typedExercise(10, 3, 'Ułóż dialog w restauracji', 'Wpisz wypowiedzi w poprawnej kolejności.', [
+      ['Kelner · karta i napoje', 'Proszę, tu jest karta. Czy podać coś do picia?'],
+      ['Marek · napój', 'Dziękujemy. Ja poproszę piwo „Żywiec”.'],
+      ['Paweł · napój', 'A dla mnie woda mineralna z lodem i cytryną.'],
+      ['Kelner · pytanie o wodę', 'Gazowana czy niegazowana?'], ['Paweł', 'Niegazowana.'],
+      ['Kelner · zamówienie', 'Co panowie zamawiają?'],
+      ['Marek · danie', 'Proszę żeberka wieprzowe z pieczonymi ziemniakami i zestaw surówek.'],
+      ['Paweł · danie', 'Dla mnie to samo, tylko z frytkami.'],
+      ['Kelner · po posiłku', 'Czy smakował panom obiad?'], ['Kelner · dodatkowe zamówienie', 'Czy podać panom coś jeszcze?'],
+      ['Marek · rachunek', 'Nie, dziękujemy. Możemy prosić rachunek?'],
+      ['Kelner · rachunek i reszta', 'Proszę bardzo. 92 złote.'],
+    ]),
+    typedExercise(10, 4, 'Kelner czy klient?', 'Przyporządkuj zwroty do osoby, która ich używa.', [
+      ['Czy płacą państwo razem czy osobno?', 'KELNER'], ['Co podać?', 'KELNER'], ['Polecam łososia z grilla.', 'KELNER'],
+      ['Smacznego!', 'KELNER'], ['Czy smakował pani/panu obiad?', 'KELNER'], ['Proszę, karta dla państwa.', 'KELNER'],
+      ['Co dla pana/pani?', 'KELNER'], ['Czy podać coś do picia?', 'KELNER'], ['Mamy bardzo dobre lody z bakaliami.', 'KELNER'],
+      ['Dwa razy kawa ze śmietanką.', 'KLIENT'], ['Chciałabym zarezerwować stolik.', 'KLIENT'],
+      ['Czy mogę prosić rachunek?', 'KLIENT'], ['Dla mnie to samo.', 'KLIENT'], ['Ile płacę?', 'KLIENT'],
+    ]),
+    typedExercise(10, 5, 'Jak smakuje?', 'Uzupełnij krótkie dialogi o jedzeniu.', [
+      ['Piwo jest nie ___, lecz ciepłe.', 'dobre'], ['Naleśniki ze szpinakiem są ___ .', 'przepyszne'],
+      ['Placki ziemniaczane smakują ___ .', 'bardzo dobrze'], ['Pstrąg jest ___ .', 'wyśmienity'],
+      ['Zupa grzybowa jest ___, bo nie lubię grzybów.', 'niedobra'],
+      ['Pączek jest taki sobie, niezbyt ___ .', 'smaczny'],
+    ]),
+    typedExercise(10, 8, 'Potrawy z menu', 'Wpisz nazwę potrawy lub produktu z listy.', [
+      ['1', 'barszcz'], ['2', 'naleśniki'], ['3', 'gołąbki'], ['4', 'żeberka'], ['5', 'makrela'],
+      ['6', 'filet'], ['7', 'surówki'], ['8', 'bigos'], ['9', 'pierogi'],
+    ]),
+    typedExercise(10, 9, 'Co lubią Mateusz, Ela i Piotr?', 'Zapisz, co każda osoba lubi lub czego nie lubi.', [
+      ['Mateusz · zupa ogórkowa', 'uwielbia zupę ogórkową'], ['Mateusz · makaron', 'lubi makaron'],
+      ['Mateusz · gotowany dorsz', 'nie lubi gotowanego dorsza'], ['Mateusz · smażona wątróbka', 'uwielbia smażoną wątróbkę'],
+      ['Ela i Piotr · zupa ogórkowa', 'nie lubią zupy ogórkowej'], ['Ela i Piotr · makaron', 'nie lubią makaronu'],
+      ['Ela i Piotr · gotowany dorsz', 'uwielbiają gotowanego dorsza'],
+      ['Ela i Piotr · smażona wątróbka', 'nie cierpią smażonej wątróbki'],
+    ]),
   ],
 };

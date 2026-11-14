@@ -1,4 +1,4 @@
-import { choice, Lesson, typed } from '../lesson-types';
+import { ActivityKind, choice, Lesson, typed, typedExercise } from '../lesson-types';
 
 export const LESSON_08: Lesson = {
   id: 8,
@@ -10,7 +10,7 @@ export const LESSON_08: Lesson = {
   activities: [
     {
       id: 'l08-food-pictures', sourceExerciseId: 'WB-L08-E01', sourceLabel: 'Zeszyt ćwiczeń · ćwiczenie 1',
-      kind: 'typed', title: 'Co to jest?',
+      kind: ActivityKind.Typed, title: 'Co to jest?',
       instruction: 'Podpisz ilustrację. Wpisz nazwę produktu o podanym numerze.',
       items: [
         typed('q2', 'Numer 2', 'bułka'), typed('q3', 'Numer 3', 'mleko'), typed('q4', 'Numer 4', 'chleb'),
@@ -23,7 +23,7 @@ export const LESSON_08: Lesson = {
     },
     {
       id: 'l08-swedish-table', sourceExerciseId: 'WB-L08-E02', sourceLabel: 'Zeszyt ćwiczeń · ćwiczenie 2',
-      kind: 'choice', title: 'Szwedzki stół',
+      kind: ActivityKind.Choice, title: 'Szwedzki stół',
       instruction: 'Uzupełnij rozmowę Karoliny i Mami. Wybierz brakujące słowo.',
       items: [
         choice('q1', 'Karolina: Proszę Mami, ___ . (zaproszenie do stołu)', 'zapraszam', ['zapraszam', 'możesz', 'smacznego']),
@@ -37,7 +37,7 @@ export const LESSON_08: Lesson = {
     },
     {
       id: 'l08-prefer', sourceExerciseId: 'WB-L08-E03', sourceLabel: 'Zeszyt ćwiczeń · ćwiczenie 3',
-      kind: 'typed', title: 'Wolę … niż …',
+      kind: ActivityKind.Typed, title: 'Wolę … niż …',
       instruction: 'Wpisz właściwą formę słów z nawiasu (biernik).',
       items: [
         typed('q2a', 'Wolę ___ niż ... (ser, wędlina) · pierwsze słowo', 'ser'),
@@ -51,13 +51,15 @@ export const LESSON_08: Lesson = {
         typed('q6b', 'Michał woli sok niż ___ . (woda)', 'wodę'),
         typed('q7a', 'Marta woli ___ niż ogórka. (pomidor)', 'pomidora'),
         typed('q7b', 'Marta woli pomidora niż ___ . (ogórek)', 'ogórka'),
+        typed('q8a', 'Wolicie ___ czy ciemny chleb? (jasny chleb)', 'jasny chleb'),
+        typed('q8b', 'Wolicie jasny chleb czy ___? (ciemny chleb)', 'ciemny chleb'),
         typed('q9a', 'Dzieci wolą ___ ___ niż czarną herbatę. (woda mineralna)', 'wodę mineralną'),
         typed('q9b', 'Dzieci wolą wodę mineralną niż ___ ___ . (czarna herbata)', 'czarną herbatę'),
       ],
     },
     {
       id: 'l08-adjectives', sourceExerciseId: 'WB-L08-E04', sourceLabel: 'Zeszyt ćwiczeń · ćwiczenie 4',
-      kind: 'choice', title: 'Co pasuje?',
+      kind: ActivityKind.Choice, title: 'Co pasuje?',
       instruction: 'Wybierz właściwą formę przymiotnika.',
       items: [
         choice('q2', 'Jogurt ___ .', 'truskawkowy', ['truskawkowy', 'truskawkowa', 'truskawkowe']),
@@ -71,7 +73,7 @@ export const LESSON_08: Lesson = {
     },
     {
       id: 'l08-prefer-verb', sourceExerciseId: 'WB-L08-E05', sourceLabel: 'Zeszyt ćwiczeń · ćwiczenie 5',
-      kind: 'typed', title: 'Odmień czasownik „woleć”',
+      kind: ActivityKind.Typed, title: 'Odmień czasownik „woleć”',
       instruction: 'Wpisz właściwą formę czasownika „woleć”.',
       items: [
         typed('q2', 'Dziewczyny ___ (woleć) wino niż piwo.', 'wolą'),
@@ -84,7 +86,7 @@ export const LESSON_08: Lesson = {
     },
     {
       id: 'l08-with', sourceExerciseId: 'WB-L08-E06', sourceLabel: 'Zeszyt ćwiczeń · ćwiczenie 6',
-      kind: 'typed', title: 'Co jemy i pijemy?',
+      kind: ActivityKind.Typed, title: 'Co jemy i pijemy?',
       instruction: 'Uzupełnij zdania. Użyj właściwych form (biernik i narzędnik).',
       items: [
         typed('q2a', 'Karol pije ___ ___ z cukrem. (mocna kawa)', 'mocną kawę'),
@@ -100,7 +102,7 @@ export const LESSON_08: Lesson = {
     },
     {
       id: 'l08-opposites', sourceExerciseId: 'WB-L08-E08', sourceLabel: 'Zeszyt ćwiczeń · ćwiczenie 8',
-      kind: 'typed', title: 'Przeciwieństwa',
+      kind: ActivityKind.Typed, title: 'Przeciwieństwa',
       instruction: 'Napisz przeciwieństwa.',
       items: [
         typed('q1', 'słaby – ?', 'mocny'), typed('q2', 'bez cukru – ?', 'z cukrem'),
@@ -110,7 +112,7 @@ export const LESSON_08: Lesson = {
     },
     {
       id: 'l08-eat-drink', sourceExerciseId: 'WB-L08-E09', sourceLabel: 'Zeszyt ćwiczeń · ćwiczenie 9',
-      kind: 'typed', title: 'Jeść czy pić?',
+      kind: ActivityKind.Typed, title: 'Jeść czy pić?',
       instruction: 'Odmień czasowniki „jeść” i „pić”.',
       items: [
         typed('q2', 'Łucja i Julia ___ płatki z mlekiem. (jeść)', 'jedzą'),
@@ -130,7 +132,7 @@ export const LESSON_08: Lesson = {
     },
     {
       id: 'l08-instrumental-plural', sourceExerciseId: 'WB-L08-E11', sourceLabel: 'Zeszyt ćwiczeń · ćwiczenie 11',
-      kind: 'typed', title: 'Z czym? Narzędnik liczby mnogiej',
+      kind: ActivityKind.Typed, title: 'Z czym? Narzędnik liczby mnogiej',
       instruction: 'Wpisz słowo z nawiasu w narzędniku liczby mnogiej.',
       items: [
         typed('q2', 'Ryba z ___ ___ . (pieczony ziemniak)', 'pieczonymi ziemniakami'),
@@ -146,16 +148,34 @@ export const LESSON_08: Lesson = {
     },
     {
       id: 'l08-tableware', sourceExerciseId: 'WB-L08-E13', sourceLabel: 'Zeszyt ćwiczeń · ćwiczenie 13',
-      kind: 'typed', title: 'Naczynia i sztućce',
+      kind: ActivityKind.Typed, title: 'Naczynia i sztućce',
       instruction: 'Podpisz ilustrację. Wpisz nazwę przedmiotu o podanym numerze.',
       items: [
-        typed('q1', '1)', 'widelec'), typed('q2', '2)', 'nóż'), typed('q4', '4)', 'miska'),
-        typed('q5', '5)', 'szklanka'), typed('q6', '6)', 'łyżka'), typed('q7', '7)', 'łyżeczka'),
-        typed('q8', '8)', 'kubek'), typed('q9', '9)', 'talerz'), typed('q10', '10)', 'kieliszek'),
-        typed('q11', '11)', 'otwieracz do butelek'), typed('q12', '12)', 'serwetka'),
-        typed('q13', '13)', 'garnek'), typed('q14', '14)', 'filiżanka'), typed('q15', '15)', 'talerzyk'),
-        typed('q16', '16)', 'czajnik'), typed('q17', '17)', 'patelnia'),
+        { ...typed('q1', '1)', 'widelec'), image: 1 }, { ...typed('q2', '2)', 'nóż'), image: 2 }, { ...typed('q4', '4)', 'miska'), image: 4 },
+        { ...typed('q5', '5)', 'szklanka'), image: 5 }, { ...typed('q6', '6)', 'łyżka'), image: 6 }, { ...typed('q7', '7)', 'łyżeczka'), image: 7 },
+        { ...typed('q8', '8)', 'kubek'), image: 8 }, { ...typed('q9', '9)', 'talerz'), image: 9 }, { ...typed('q10', '10)', 'kieliszek'), image: 10 },
+        { ...typed('q11', '11)', 'otwieracz do butelek'), image: 11 }, { ...typed('q12', '12)', 'serwetka'), image: 12 },
+        { ...typed('q13', '13)', 'garnek'), image: 13 }, { ...typed('q14', '14)', 'filiżanka'), image: 14 }, { ...typed('q15', '15)', 'talerzyk'), image: 15 },
+        { ...typed('q16', '16)', 'czajnik'), image: 16 }, { ...typed('q17', '17)', 'patelnia'), image: 17 },
       ],
     },
+    typedExercise(8, 7, 'Co kto je i pije?', 'Wpisz wybrane jedzenie i napoje dla każdej osoby.', [
+      ['Tom', 'G; C'], ['Angela', 'E'], ['Mami', 'H; B'], ['Uwe', 'F; A; D'],
+    ]),
+    typedExercise(8, 10, 'Potrawy', 'Uzupełnij nazwy potraw.', [
+      ['1', 'rosół'], ['2', 'ziemniaki'], ['3', 'pierogi'], ['4', 'ryba'], ['5', 'mięso'],
+      ['6', 'surówka'], ['7', 'pizza'], ['8', 'sałatka'], ['9', 'makaron'], ['10', 'kasza'],
+    ]),
+    typedExercise(8, 12, 'Naczynia i sztućce', 'Podpisz przedmioty.', [
+      ['1', 'łyżka'], ['2', 'nóż'], ['3', 'widelec'], ['4', 'łyżeczka'], ['5', 'serwetka'],
+      ['6', 'talerz'], ['7', 'miska'], ['8', 'talerzyk'], ['9', 'kubek'], ['10', 'filiżanka'],
+      ['11', 'kieliszek'], ['12', 'szklanka'], ['13', 'czajnik'], ['14', 'garnek'],
+      ['15', 'patelnia'], ['16', 'dzbanek'], ['17', 'otwieracz do butelek'],
+    ]),
+    typedExercise(8, 14, 'Co jedzą i piją?', 'Uzupełnij menu każdej osoby.', [
+      ['Kamila · śniadanie', 'ciemny chleb; masło; biały ser; dżem malinowy; biała kawa; cukier'],
+      ['Gosia i Arek · obiad', 'zupa ogórkowa; kurczak; surówka; frytki; pieczone ziemniaki; woda mineralna; cytryna'],
+      ['Ja i Zosia · kolacja', 'jemy; ser; szynka; sałatka; pomidory; ogórki; cebula; zielone oliwki; słaba herbata'],
+    ]),
   ],
 };

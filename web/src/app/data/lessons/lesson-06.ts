@@ -1,4 +1,4 @@
-import { choice, Lesson, typed } from '../lesson-types';
+import { ActivityKind, choice, Lesson, typed, typedExercise } from '../lesson-types';
 
 const grp = ['mój, twój', 'moja, twoja', 'moje, twoje'];
 const g = (id: string, w: string, a: number) => choice(id, w, grp[a], grp);
@@ -13,7 +13,7 @@ export const LESSON_06: Lesson = {
   activities: [
     {
       id: 'l06-group', sourceExerciseId: 'WB-L06-E04', sourceLabel: 'Zeszyt ćwiczeń · ćwiczenie 4',
-      kind: 'choice', title: 'Mój, moja czy moje?',
+      kind: ActivityKind.Choice, title: 'Mój, moja czy moje?',
       instruction: 'Proszę pogrupować rzeczowniki.',
       items: [
         g('q1', 'segregator', 0), g('q2', 'liceum', 2), g('q3', 'nauczycielka', 1), g('q4', 'herbata', 1),
@@ -24,7 +24,7 @@ export const LESSON_06: Lesson = {
     },
     {
       id: 'l06-odd-one', sourceExerciseId: 'WB-L06-E05', sourceLabel: 'Zeszyt ćwiczeń · ćwiczenie 5',
-      kind: 'choice', title: 'Co nie pasuje?',
+      kind: ActivityKind.Choice, title: 'Co nie pasuje?',
       instruction: 'Wybierz formę, która nie pasuje do pozostałych (inna osoba).',
       items: [
         choice('q1', 'chodzę, czytam, piszesz', 'piszesz', ['chodzę', 'czytam', 'piszesz']),
@@ -39,7 +39,7 @@ export const LESSON_06: Lesson = {
     },
     {
       id: 'l06-correct', sourceExerciseId: 'WB-L06-E06', sourceLabel: 'Zeszyt ćwiczeń · ćwiczenie 6',
-      kind: 'typed', title: 'Skoryguj zdania',
+      kind: ActivityKind.Typed, title: 'Skoryguj zdania',
       instruction: 'Zdania zawierają błąd. Napisz je poprawnie.',
       items: [
         typed('q1', 'Lubić czytasz książki?', 'Lubisz czytać książki?'),
@@ -53,7 +53,7 @@ export const LESSON_06: Lesson = {
     },
     {
       id: 'l06-verbs', sourceExerciseId: 'WB-L06-E07', sourceLabel: 'Zeszyt ćwiczeń · ćwiczenie 7',
-      kind: 'typed', title: 'Uzupełnij czasowniki',
+      kind: ActivityKind.Typed, title: 'Uzupełnij czasowniki',
       instruction: 'Wpisz czasownik w odpowiedniej formie.',
       items: [
         typed('q1', 'Co robicie? (my) ___ (słuchać) muzyki.', 'Słuchamy'),
@@ -70,7 +70,7 @@ export const LESSON_06: Lesson = {
     },
     {
       id: 'l06-rollerblades', sourceExerciseId: 'WB-L06-E08', sourceLabel: 'Zeszyt ćwiczeń · ćwiczenie 8',
-      kind: 'typed', title: 'Rozmowa o rolkach',
+      kind: ActivityKind.Typed, title: 'Rozmowa o rolkach',
       instruction: 'Uzupełnij dialog Uwe i Angeli czasownikami we właściwej formie.',
       items: [
         typed('q1', 'Angela: ___ (czekać) na Mami.', 'czekam'),
@@ -81,11 +81,11 @@ export const LESSON_06: Lesson = {
     },
     {
       id: 'l06-javier', sourceExerciseId: 'WB-L06-E09', sourceLabel: 'Zeszyt ćwiczeń · ćwiczenie 9',
-      kind: 'typed', title: 'Kto tak pięknie tańczy?',
+      kind: ActivityKind.Typed, title: 'Kto tak pięknie tańczy?',
       instruction: 'Uzupełnij dialog czasownikami we właściwej formie.',
       items: [
-        typed('q1', 'Tom: To Javier. On ___ (umieć) świetnie tańczyć.', 'umie'),
-        typed('q2', 'Tom: On umie świetnie ___ (tańczyć).', 'tańczyć'),
+        typed('q1', 'Tom: To Javier. On ___ (umieć) świetnie ... (tańczyć).', 'umie'),
+        typed('q2', 'Tom: On ... (umieć) świetnie ___ (tańczyć).', 'tańczyć'),
         typed('q3', 'Mami: ___ (myśleć), że Javier jest bardzo utalentowany.', 'Myślę'),
         typed('q4', 'Mami: ..., że Javier ___ (być) bardzo utalentowany.', 'jest'),
         typed('q5', 'Mami: Tak. Javier ___ (tańczyć), ładnie ...', 'tańczy'),
@@ -97,28 +97,48 @@ export const LESSON_06: Lesson = {
     },
     {
       id: 'l06-activities', sourceExerciseId: 'WB-L06-E10', sourceLabel: 'Zeszyt ćwiczeń · ćwiczenie 10',
-      kind: 'typed', title: 'Podpisz ilustracje',
+      kind: ActivityKind.Typed, title: 'Podpisz ilustracje',
       instruction: 'Podpisz rysunki 2–19 czasownikiem lub zwrotem (np. robić zdjęcia).',
       items: [
-        typed('q1', 'Rysunek 2)', 'jeździć konno'),
-        typed('q2', 'Rysunek 3)', 'robić zakupy'),
-        typed('q3', 'Rysunek 4)', 'śpiewać'),
-        typed('q4', 'Rysunek 5)', 'chodzić na spacery'),
-        typed('q5', 'Rysunek 6)', 'grać w piłkę'),
-        typed('q6', 'Rysunek 7)', 'podróżować'),
-        typed('q7', 'Rysunek 8)', 'gotować'),
-        typed('q8', 'Rysunek 9)', 'pływać'),
-        typed('q9', 'Rysunek 10)', 'uczyć się języków obcych'),
-        typed('q10', 'Rysunek 11)', 'czytać książki'),
-        typed('q11', 'Rysunek 12)', 'słuchać muzyki'),
-        typed('q12', 'Rysunek 13)', 'tańczyć'),
-        typed('q13', 'Rysunek 14)', 'biegać'),
-        typed('q14', 'Rysunek 15)', 'grać na gitarze'),
-        typed('q15', 'Rysunek 16)', 'grać w tenisa'),
-        typed('q16', 'Rysunek 17)', 'jeździć na nartach'),
-        typed('q17', 'Rysunek 18)', 'oglądać telewizję'),
-        typed('q18', 'Rysunek 19)', 'malować'),
+        { ...typed('q1', 'Rysunek 2)', 'jeździć konno'), image: 2 },
+        { ...typed('q2', 'Rysunek 3)', 'robić zakupy'), image: 3 },
+        { ...typed('q3', 'Rysunek 4)', 'śpiewać'), image: 4 },
+        { ...typed('q4', 'Rysunek 5)', 'chodzić na spacery'), image: 5 },
+        { ...typed('q5', 'Rysunek 6)', 'grać w piłkę'), image: 6 },
+        { ...typed('q6', 'Rysunek 7)', 'podróżować'), image: 7 },
+        { ...typed('q7', 'Rysunek 8)', 'gotować'), image: 8 },
+        { ...typed('q8', 'Rysunek 9)', 'pływać'), image: 9 },
+        { ...typed('q9', 'Rysunek 10)', 'uczyć się języków obcych'), image: 10 },
+        { ...typed('q10', 'Rysunek 11)', 'czytać książki'), image: 11 },
+        { ...typed('q11', 'Rysunek 12)', 'słuchać muzyki'), image: 12 },
+        { ...typed('q12', 'Rysunek 13)', 'tańczyć'), image: 13 },
+        { ...typed('q13', 'Rysunek 14)', 'biegać'), image: 14 },
+        { ...typed('q14', 'Rysunek 15)', 'grać na gitarze'), image: 15 },
+        { ...typed('q15', 'Rysunek 16)', 'grać w tenisa'), image: 16 },
+        { ...typed('q16', 'Rysunek 17)', 'jeździć na nartach'), image: 17 },
+        { ...typed('q17', 'Rysunek 18)', 'oglądać telewizję'), image: 18 },
+        { ...typed('q18', 'Rysunek 19)', 'malować'), image: 19 },
       ],
     },
+    typedExercise(6, 1, 'Dopasuj dialogi do ilustracji', 'Wpisz numer ilustracji pasującej do każdego dialogu.', [
+      ['Dialog a', '2'], ['Dialog b', '3'], ['Dialog c', '1'], ['Dialog d', '4'],
+    ]),
+    typedExercise(6, 2, 'Uzupełnij dialogi', 'Uzupełnij cztery krótkie rozmowy słowami z nagrania.', [
+      ['Dialog A · telefon do ambasady; paszport', 'do; mój; nieaktualny; problem'],
+      ['Dialog B · zakupy w galerii; spacer w parku', 'gdzie; zakupy; po; małe; brudne'],
+      ['Dialog C · jestem w parku; nie biegam; gram w koszykówkę', 'w; nie; gram; chcę; oczywiście'],
+      ['Dialog D · film i malowanie pejzażu', 'fajny; jaki; komedia; wesoła; malujesz; zmęczona'],
+    ]),
+    typedExercise(6, 3, 'Co oni robią?', 'Wpisz czynności wykonywane przez każdą osobę.', [
+      ['Pan Maj', 'słucha muzyki; czyta'], ['Karol', 'gra w szachy'],
+      ['Tom', 'robi spaghetti; gotuje makaron'], ['Jonatan', 'biega; pływa; jeździ na rowerze'],
+      ['Marisa', 'jeździ konno'],
+    ]),
+    typedExercise(6, 11, 'Dopasuj wiadomości SMS', 'Uzupełnij każdą rozmowę krótką odpowiedzią.', [
+      ['1. Angela pyta, co robisz.', 'Cześć, czekam teraz na Mami, a potem chcemy jeździć na rolkach.'],
+      ['2. Tom pyta o koszykówkę.', 'Super! Idziemy, spotykamy się w parku?'],
+      ['3. Ktoś pyta, gdzie jesteś.', 'W parku, siedzę i czytam.'],
+      ['4. Ktoś pyta, co dziś robimy.', 'Tak, mamy czas. Co proponujesz?'],
+    ]),
   ],
 };

@@ -1,4 +1,4 @@
-import { choice, Lesson, typed } from '../lesson-types';
+import { ActivityKind, choice, Lesson, typed, typedExercise } from '../lesson-types';
 
 const BANK = ['bratanica', 'rodziną', 'teść', 'bratankiem', 'żonaty', 'narzeczonej', 'dziadek', 'jedynaczką', 'żonę', 'wujek', 'kawalerem', 'cioci'];
 const GENDER = ['Twój', 'Twoja', 'Twoje'];
@@ -15,7 +15,7 @@ export const LESSON_11: Lesson = {
   activities: [
     {
       id: 'l11-family-words', sourceExerciseId: 'WB-L11-E01', sourceLabel: 'Zeszyt ćwiczeń · ćwiczenie 1',
-      kind: 'typed', title: 'Uzupełnij słowa o rodzinie',
+      kind: ActivityKind.Typed, title: 'Uzupełnij słowa o rodzinie',
       instruction: 'Proszę uzupełnić. Wpisz całe słowo.',
       items: [
         typed('q1', 'Kasia i Wojtek to brat i ___ (s…).', 'siostra'),
@@ -32,7 +32,7 @@ export const LESSON_11: Lesson = {
     },
     {
       id: 'l11-lukasz-text', sourceExerciseId: 'WB-L11-E02', sourceLabel: 'Zeszyt ćwiczeń · ćwiczenie 2',
-      kind: 'choice', title: 'Rodzina Łukasza',
+      kind: ActivityKind.Choice, title: 'Rodzina Łukasza',
       instruction: 'Uzupełnij tekst słowami z ramki.',
       items: [
         choice('q1', 'Łukasz nie jest jeszcze ___, ma dziewczynę.', 'żonaty', BANK),
@@ -51,7 +51,7 @@ export const LESSON_11: Lesson = {
     },
     {
       id: 'l11-opposites', sourceExerciseId: 'WB-L11-E04', sourceLabel: 'Zeszyt ćwiczeń · ćwiczenie 4',
-      kind: 'typed', title: 'Podaj przeciwieństwo',
+      kind: ActivityKind.Typed, title: 'Podaj przeciwieństwo',
       instruction: 'Proszę podać przeciwieństwo.',
       items: [
         typed('q1', 'matka – ___', 'ojciec'),
@@ -68,7 +68,7 @@ export const LESSON_11: Lesson = {
     },
     {
       id: 'l11-gender-groups', sourceExerciseId: 'WB-L11-E06', sourceLabel: 'Zeszyt ćwiczeń · ćwiczenie 6',
-      kind: 'choice', title: 'Twój, twoja czy twoje?',
+      kind: ActivityKind.Choice, title: 'Twój, twoja czy twoje?',
       instruction: 'Proszę pogrupować: wybierz właściwy rodzaj.',
       items: [
         choice('q1', 'bratanek', 'Twój', GENDER), choice('q2', 'prababcia', 'Twoja', GENDER),
@@ -81,7 +81,7 @@ export const LESSON_11: Lesson = {
     },
     {
       id: 'l11-czyj', sourceExerciseId: 'WB-L11-E07', sourceLabel: 'Zeszyt ćwiczeń · ćwiczenie 7',
-      kind: 'choice', title: 'Czyj? Czyja? Czyje?',
+      kind: ActivityKind.Choice, title: 'Czyj? Czyja? Czyje?',
       instruction: 'Wybierz właściwą formę.',
       items: [
         choice('q1', '___ to jest ryba?', 'Czyja', CZYJ), choice('q2', '___ to jest sok?', 'Czyj', CZYJ),
@@ -93,7 +93,7 @@ export const LESSON_11: Lesson = {
     },
     {
       id: 'l11-possessives', sourceExerciseId: 'WB-L11-E08', sourceLabel: 'Zeszyt ćwiczeń · ćwiczenie 8',
-      kind: 'typed', title: 'Zaimki dzierżawcze',
+      kind: ActivityKind.Typed, title: 'Zaimki dzierżawcze',
       instruction: 'Wpisz właściwy zaimek: mój, twój, jego, jej, nasz, wasz, ich.',
       items: [
         typed('q1', '(ja) ___ ciocia lubi jeździć na nartach.', 'Moja'),
@@ -110,7 +110,7 @@ export const LESSON_11: Lesson = {
     },
     {
       id: 'l11-frequency-words', sourceExerciseId: 'WB-L11-E09', sourceLabel: 'Zeszyt ćwiczeń · ćwiczenie 9',
-      kind: 'typed', title: 'Jakie to słowo?',
+      kind: ActivityKind.Typed, title: 'Jakie to słowo?',
       instruction: 'Połącz początek z końcówką i wpisz całe słowo.',
       items: [
         typed('q1', 'pół- + (-rem, -dniu, -dnie, -noc, -gdy, -wsze, -dko, -sto)', 'północ'),
@@ -125,7 +125,7 @@ export const LESSON_11: Lesson = {
     },
     {
       id: 'l11-quiz', sourceExerciseId: 'WB-L11-E11', sourceLabel: 'Zeszyt ćwiczeń · ćwiczenie 11',
-      kind: 'choice', title: 'Quiz: czy to prawda?',
+      kind: ActivityKind.Choice, title: 'Quiz: czy to prawda?',
       instruction: 'Quiz. Czy to prawda, że…',
       items: [
         choice('q1', 'w Krakowie pada śnieg tylko raz w roku?', 'Nieprawda', PN),
@@ -135,5 +135,46 @@ export const LESSON_11: Lesson = {
         choice('q5', 'Polacy nigdy nie piją herbaty z mlekiem?', 'Nieprawda', PN),
       ],
     },
+    typedExercise(11, 3, 'Rodzina Łukasza', 'Odpowiedz na pytania o Łukasza i jego rodzinę.', [
+      ['Kim Łukasz jest z zawodu?', 'inżynierem elektronikiem'], ['Czy on ma dziewczynę?', 'tak'],
+      ['Co mówi jego mama?', 'że on woli być kawalerem'], ['Czy brat Łukasza jest kawalerem?', 'nie, jest żonaty'],
+      ['Ile dzieci ma Andrzej?', 'dwoje'], ['Z kim Łukasz gra w tenisa?', 'z bratową Joanną'],
+      ['Jakie filmy ogląda z bratankiem?', 'filmy dla dzieci'], ['Co lubi Zuzia?', 'kiedy Łukasz ogląda z nią książki'],
+      ['Dlaczego Zuzia i Mateusz nie mają cioci?', 'bo ich tata nie ma siostry, a mama jest jedynaczką'],
+      ['Kogo Andrzej zaprasza w niedzielę na obiad?', 'całą rodzinę'],
+      ['O co pyta babcia Łukasza?', 'kiedy pozna jego narzeczoną'],
+      ['Na kogo czekają rodzice Łukasza?', 'na synową'],
+    ]),
+    typedExercise(11, 5, 'Opisz rodzinę', 'Ułóż dwie krótkie prezentacje na podstawie notatek.', [
+      ['Iza · 31 lat · pielęgniarka · Poznań · mąż Grzegorz · córka Ewa 7 lat · dwie siostry', 'Iza ma 31 lat, jest pielęgniarką i mieszka w Poznaniu. Jest mężatką, jej mąż ma na imię Grzegorz. Mają córkę Ewę, która ma siedem lat. Iza ma dwie siostry: starsza jest panną, a młodsza mężatką. Grzegorz jest lekarzem i ma jednego brata, który jest kawalerem.'],
+      ['Julia · 12 lat · uczennica · Kraków · siostra Łucja 9 lat · brat Michał 1 rok · mama nauczycielka', 'Julia ma 12 lat, jest uczennicą i mieszka w Krakowie. Ma siostrę Łucję, która ma 9 lat, i brata Michała, który ma rok. Jej mama jest nauczycielką i pracuje w szkole. Babcia i dziadek są emerytami. Julia ma dwie ciocie i jednego wujka, kocha całą rodzinę.'],
+    ]),
+    typedExercise(11, 10, 'Plan dnia Justyny', 'Ułóż tekst z podanych zdań.', [
+      ['Codzienny plan dnia', 'Justyna wstaje codziennie o siódmej rano. Je śniadanie i idzie do szkoły. Przed południem ma dwie lekcje – gramatykę i słownictwo. Przerwę na obiad ma zawsze w południe. Po południu ma lekcję muzyki i uczy się grać na pianinie. Ona zwykle spotyka się z chłopakiem. Bardzo rzadko uczy się wieczorem. Zwykle już śpi o północy.'],
+    ]),
+    typedExercise(11, 12, 'Codzienna rutyna', 'Uzupełnij tekst określeniami czasu, a potem wpisz P lub N.', [
+      ['1. Magda wstaje ___ o 7.30.', 'codziennie'], ['2. ___ ubiera się i idzie z dziećmi do szkoły.', 'później'],
+      ['3. ___ robi zakupy na targu.', 'przed południem'], ['4. ___ robi zakupy w hipermarkecie.', 'od czasu do czasu'],
+      ['5. ___ spotyka się z koleżanką na kawie.', 'zwykle'], ['6. O 14.00 odbiera dzieci.', 'w południe'],
+      ['7. ___ wraca do domu mąż Magdy.', 'wieczorem'], ['8. Oni ___ wychodzą z domu.', 'rzadko'],
+      ['Zdanie 1: Magda bardzo rzadko wstaje rano.', 'N'], ['Zdanie 2: Mateusz jest bratem Ani.', 'P'],
+      ['Zdanie 3: Dzieci chodzą same do szkoły.', 'N'], ['Zdanie 4: Magda często robi zakupy w hipermarkecie.', 'N'],
+      ['Zdanie 5: Magda często spotyka się z koleżanką po południu.', 'N'], ['Zdanie 6: Magda jest rozwiedziona.', 'N'],
+      ['Zdanie 7: Piotrek ma córkę i syna.', 'P'], ['Zdanie 8: Rodzina Magdy nigdy nie wychodzi z domu.', 'N'],
+    ]),
+    typedExercise(11, 13, 'Popraw zdania o rutynie', 'Wybierz poprawny szyk i formę.', [
+      ['Dziadek nigdy … (chodzić) do dentysty.', 'Mój dziadek nigdy nie chodzi do dentysty.'],
+      ['Mama zwykle … zakupy … (przed południem).', 'Moja mama zwykle robi zakupy przed południem.'],
+      ['Jana teściowa … obiad.', 'Teściowa Jana zawsze gotuje obiad.'],
+      ['Mój teść rzadko …', 'Mój teść rzadko chodzi na mecze.'],
+      ['Zwykle na śniadanie …, tylko w niedzielę …', 'Zwykle na śniadanie piję kawę, tylko w niedzielę piję herbatę.'],
+    ]),
+    typedExercise(11, 14, 'Ułóż zdania o zwyczajach', 'Ułóż zdania z podanych informacji.', [
+      ['Moi rodzice · nigdy · restauracja', 'Moi rodzice nigdy nie chodzą do restauracji.'],
+      ['Mój brat · często · dyskoteka', 'Mój brat często chodzi na dyskotekę.'],
+      ['Teściowa Jana · zawsze · gotować obiad', 'Teściowa Jana zawsze gotuje obiad.'],
+      ['Mój teść · rzadko · mecze', 'Mój teść rzadko chodzi na mecze.'],
+      ['Zwykle · śniadanie · kawa · niedziela · herbata', 'Zwykle na śniadanie piję kawę, tylko w niedzielę piję herbatę.'],
+    ]),
   ],
 };
