@@ -26,3 +26,24 @@
 .theory-section p, .theory-examples p { font-size: 12px; }.theory-section h3, .theory-examples h3 { font-size: 11px; }.theory-examples strong { font-size: 12px; }
 @media (max-width: 600px) { .theory-section p, .theory-examples p { font-size: 11px; }.theory-examples strong { font-size: 11px; } }
 @media (max-width: 600px) { .letter-cloze-line { font-size: 16px; word-spacing: .25em; } }
+
+.top-progress small, .lesson-xp { font-size: 13px; }
+.lesson-breadcrumb, .source-line, .offline-note, .theory-kicker, .theory-workbook,
+.answer-feedback, .answer-explanation, .answer-count, .audio-copy small,
+.result-strip small, .score-orb > span, .completion-stats small { font-size: 12px; }
+.source-id { font-size: 11px; }
+.instruction, .question-prompt, .theory-section p, .theory-examples p, .completion-copy { font-size: 15px; }
+.theory-section h3, .theory-examples h3 { font-size: 13px; }
+.theory-examples strong, .audio-copy strong, .result-strip strong { font-size: 14px; }
+.question-number { font-size: 12px; }
+.answer-input { min-height: 44px; font-size: 16px; }
+.answer-input::placeholder { font-size: 13px; }
+.option-button { min-height: 44px; font-size: 14px; }
+.check-button, .return-button { min-height: 44px; font-size: 14px; }
+.image-strip figcaption { font-size: 12px; }
+.next-unlock { font-size: 14px; }
+
+@media (max-width: 600px) {
+  .question-prompt, .theory-section p, .theory-examples p { font-size: 15px; }
+  .theory-examples strong { font-size: 14px; }
+}

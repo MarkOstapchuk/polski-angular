@@ -75,9 +75,10 @@ export class LessonComponent implements OnInit {
       [this.letterClozeAnswerKey(item.id, gapIndex)]: value,
     }));
     if (value.length === cloze.gaps[gapIndex].length) {
-      input.closest('.letter-cloze-line')
+      const nextGap = input.closest('.letter-cloze-line')
         ?.querySelectorAll<HTMLInputElement>('.letter-cloze-gap')[gapIndex + 1]
-        ?.focus();
+        ?? input.closest('.question-row')?.nextElementSibling?.querySelector<HTMLInputElement>('.letter-cloze-gap');
+      nextGap?.focus();
     }
   }
 
@@ -164,8 +165,9 @@ export class LessonComponent implements OnInit {
       .normalize('NFD')
       .replace(/[\u0300-\u036f]/g, '')
       .trim()
-      .replace(/[.,!?;:]+/g, ' ')
-      .replace(/\s+/g, ' ');
+      .replace(/\p{P}/gu, ' ')
+      .replace(/\s+/g, ' ')
+      .trim();
     return /^\d[\d\s]*$/.test(normalized) ? normalized.replace(/\s/g, '') : normalized;
   }
 }
