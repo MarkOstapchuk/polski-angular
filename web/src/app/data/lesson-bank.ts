@@ -53,10 +53,10 @@ export const LESSONS: Lesson[] = [
         instruction: 'Posłuchaj dialogu, a następnie zapisz cztery wypowiedzi we właściwej kolejności.',
         audioUrl: '/assets/telegram_audio/01_L01_cwiczenie2.mp3', audioLabel: 'Pierwsze spotkanie — dialog',
         items: [
-          typed('q1', 'Wypowiedź 1 · Maria', 'A: Dzień dobry. Jestem Maria Benini.'),
-          typed('q2', 'Wypowiedź 2 · Uwe', 'B: Dzień dobry. Nazywam się Uwe Stein.'),
-          typed('q3', 'Wypowiedź 3 · Maria', 'A: Bardzo mi miło.'),
-          typed('q4', 'Wypowiedź 4 · Uwe', 'B: Mnie również.'),
+          typed('q1', 'Wypowiedź 1 · Maria', 'Dzień dobry. Jestem Maria Benini.'),
+          typed('q2', 'Wypowiedź 2 · Uwe', 'Dzień dobry. Nazywam się Uwe Stein.'),
+          typed('q3', 'Wypowiedź 3 · Maria', 'Bardzo mi miło.'),
+          typed('q4', 'Wypowiedź 4 · Uwe', 'Mnie również.'),
         ],
       },
       {
