@@ -27,7 +27,7 @@ export const LESSON_10: Lesson = {
       ],
     },
     {
-      id: 'l10-drinks-desserts', ...src(10), kind: ActivityKind.Classify, title: 'Napoje i desery',
+      id: 'l10-drinks-desserts', ...src(10), kind: ActivityKind.Choice, title: 'Napoje i desery',
       instruction: 'Przypisz każdą pozycję z karty do właściwej grupy.',
       items: [
         choice('q1', 'cappuccino', 'napoje gorące', cats),

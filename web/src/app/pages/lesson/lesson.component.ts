@@ -27,8 +27,10 @@ export class LessonComponent implements OnInit, OnDestroy {
   private longPressTimer: ReturnType<typeof setTimeout> | null = null;
   private longPressOrigin: { x: number; y: number } | null = null;
   private dictionaryRequest = 0;
-  private ignoreAnswerClick = false;
-  private ignoreAnswerClickTimer: ReturnType<typeof setTimeout> | null = null;
+  private ignoreOptionClick = false;
+  private ignoreOptionClickTimer: ReturnType<typeof setTimeout> | null = null;
+  readonly selectedMatchItem = signal<string | null>(null);
+  readonly selectedMatchOption = signal<string | null>(null);
 
   readonly lesson = signal(getLesson(Number(this.route.snapshot.paramMap.get('lessonId'))));
   readonly theory = computed(() => {
@@ -38,13 +40,11 @@ export class LessonComponent implements OnInit, OnDestroy {
   readonly activityKind = ActivityKind;
   readonly activeIndex = signal(0);
   readonly answers = signal<Record<string, string>>({});
-  readonly selectedClassifyItem = signal<string | null>(null);
-  readonly selectedClassifyOption = signal<string | null>(null);
   readonly checked = signal(false);
   readonly finished = signal(false);
   readonly awardedXp = signal(0);
   readonly activity = computed(() => this.lesson()?.activities[this.activeIndex()]);
-  readonly classifyOptions = computed(() => [...new Set(this.activity()?.items.flatMap((item) => item.options ?? []) ?? [])]);
+  readonly matchOptions = computed(() => [...new Set(this.activity()?.items.flatMap((item) => item.options ?? []) ?? [])]);
   private readonly allImages = computed(() => WORKBOOK_IMAGES[this.activity()?.sourceExerciseId ?? ''] ?? []);
   /** Images not attached to a specific question, shown above the list. */
   readonly images = computed(() => {
@@ -88,17 +88,17 @@ export class LessonComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.cancelWordLookup();
-    if (this.ignoreAnswerClickTimer) clearTimeout(this.ignoreAnswerClickTimer);
+    if (this.ignoreOptionClickTimer) clearTimeout(this.ignoreOptionClickTimer);
     this.dictionaryRequest++;
   }
 
   startWordLookup(event: PointerEvent): void {
     if (event.button !== 0) return;
     const target = event.target instanceof HTMLElement ? event.target : null;
-    if (!target || target.closest('input, textarea, select, audio, button:not(.option-button):not(.classify-word):not(.classify-option), a')) return;
+    if (!target || target.closest('input, textarea, select, audio, button:not(.option-button):not(.match-source):not(.match-target), a')) return;
     this.cancelWordLookup();
-    this.ignoreAnswerClick = false;
-    if (this.ignoreAnswerClickTimer) clearTimeout(this.ignoreAnswerClickTimer);
+    this.ignoreOptionClick = false;
+    if (this.ignoreOptionClickTimer) clearTimeout(this.ignoreOptionClickTimer);
     const x = event.clientX;
     const y = event.clientY;
     this.longPressOrigin = { x, y };
@@ -107,9 +107,9 @@ export class LessonComponent implements OnInit, OnDestroy {
       this.longPressOrigin = null;
       const word = this.wordAtPoint(x, y);
       if (word) {
-        if (target.closest('.option-button, .classify-word, .classify-option')) {
-          this.ignoreAnswerClick = true;
-          this.ignoreAnswerClickTimer = setTimeout(() => this.ignoreAnswerClick = false, 1000);
+        if (target.closest('.option-button, .match-source, .match-target')) {
+          this.ignoreOptionClick = true;
+          this.ignoreOptionClickTimer = setTimeout(() => this.ignoreOptionClick = false, 1000);
         }
         void this.lookupDictionary(word);
       }
@@ -129,7 +129,7 @@ export class LessonComponent implements OnInit, OnDestroy {
 
   suppressWordContextMenu(event: MouseEvent): void {
     const target = event.target instanceof HTMLElement ? event.target : null;
-    if (target && !target.closest('input, textarea, select, audio, button:not(.option-button):not(.classify-word):not(.classify-option), a')) event.preventDefault();
+    if (target && !target.closest('input, textarea, select, audio, button:not(.option-button):not(.match-source):not(.match-target), a')) event.preventDefault();
   }
 
   closeDictionary(): void {
@@ -206,32 +206,50 @@ export class LessonComponent implements OnInit, OnDestroy {
   }
 
   selectOption(itemId: string, value: string): void {
-    if (this.consumeIgnoredAnswerClick()) return;
+    if (this.consumeIgnoredOptionClick()) return;
     if (!this.checked()) this.setAnswer(itemId, value);
   }
 
-  selectClassifyItem(itemId: string): void {
-    if (this.checked() || this.consumeIgnoredAnswerClick()) return;
-    const option = this.selectedClassifyOption();
+  selectMatchItem(itemId: string): void {
+    if (this.checked() || this.consumeIgnoredOptionClick()) return;
+    const option = this.selectedMatchOption();
     if (option) {
-      this.setAnswer(itemId, option);
-      this.selectedClassifyOption.set(null);
-      this.selectedClassifyItem.set(null);
+      this.assignMatch(itemId, option);
+      this.selectedMatchOption.set(null);
+      this.selectedMatchItem.set(null);
     } else {
-      this.selectedClassifyItem.update((selected) => selected === itemId ? null : itemId);
+      this.selectedMatchItem.update((selected) => selected === itemId ? null : itemId);
     }
   }
 
-  selectClassifyOption(option: string): void {
-    if (this.checked() || this.consumeIgnoredAnswerClick()) return;
-    const itemId = this.selectedClassifyItem();
+  selectMatchOption(option: string): void {
+    if (this.checked() || this.consumeIgnoredOptionClick()) return;
+    const itemId = this.selectedMatchItem();
     if (itemId) {
-      this.setAnswer(itemId, option);
-      this.selectedClassifyItem.set(null);
-      this.selectedClassifyOption.set(null);
+      this.assignMatch(itemId, option);
+      this.selectedMatchItem.set(null);
+      this.selectedMatchOption.set(null);
     } else {
-      this.selectedClassifyOption.update((selected) => selected === option ? null : option);
+      this.selectedMatchOption.update((selected) => selected === option ? null : option);
     }
+  }
+
+  matchOptionAssigned(option: string): boolean {
+    return this.activity()?.items.some((item) => this.answerFor(item.id) === option) ?? false;
+  }
+
+  private assignMatch(itemId: string, option: string): void {
+    const activity = this.activity();
+    const otherItem = activity?.items.find((item) => item.id !== itemId && this.answerFor(item.id) === option);
+    if (otherItem) this.setAnswer(otherItem.id, this.answerFor(itemId));
+    this.setAnswer(itemId, option);
+  }
+
+  private consumeIgnoredOptionClick(): boolean {
+    if (!this.ignoreOptionClick) return false;
+    this.ignoreOptionClick = false;
+    if (this.ignoreOptionClickTimer) clearTimeout(this.ignoreOptionClickTimer);
+    return true;
   }
 
   hasAnsweredAll(): boolean {
@@ -286,8 +304,8 @@ export class LessonComponent implements OnInit, OnDestroy {
     if (nextIndex >= 0) {
       this.activeIndex.set(nextIndex);
       this.answers.set({});
-      this.selectedClassifyItem.set(null);
-      this.selectedClassifyOption.set(null);
+      this.selectedMatchItem.set(null);
+      this.selectedMatchOption.set(null);
       this.checked.set(false);
       return;
     }
@@ -311,13 +329,6 @@ export class LessonComponent implements OnInit, OnDestroy {
 
   private answerKey(itemId: string): string {
     return `${this.activity()?.id ?? ''}:${itemId}`;
-  }
-
-  private consumeIgnoredAnswerClick(): boolean {
-    if (!this.ignoreAnswerClick) return false;
-    this.ignoreAnswerClick = false;
-    if (this.ignoreAnswerClickTimer) clearTimeout(this.ignoreAnswerClickTimer);
-    return true;
   }
 
   private letterClozeAnswerKey(itemId: string, gapIndex: number): string {

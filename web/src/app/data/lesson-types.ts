@@ -2,6 +2,7 @@ export enum ActivityKind {
   Choice = 'choice',
   Typed = 'typed',
   Classify = 'classify',
+  Match = 'match',
   LetterCloze = 'letter-cloze',
 }
 

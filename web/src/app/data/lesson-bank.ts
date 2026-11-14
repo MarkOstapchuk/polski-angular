@@ -23,6 +23,8 @@ import { LESSON_26 } from './lessons/lesson-26';
 
 export * from './lesson-types';
 
+const l01PhraseEndings = ['znaczy?', 'pytanie.', 'mówi po polsku…?', 'rozumiem.', 'powtórzyć?'];
+
 export const LESSONS: Lesson[] = [
   {
     id: 1,
@@ -219,11 +221,18 @@ export const LESSONS: Lesson[] = [
         ['1 · n_a _e_o', 'na lewo'], ['2 · __u / __u__aj', ['tu', 'tutaj']],
         ['3 · t___', 'tam'], ['4 · __a __r__o', 'na prawo'],
       ]),
-      typedExercise(1, 10, 'Połącz początki i zakończenia', 'Wpisz całe pasujące wyrażenie.', [
-        ['1. Jak się… · mówi po polsku…?', 'Jak się mówi po polsku?'],
-        ['2. Co to… · znaczy?', 'Co to znaczy?'], ['3. Proszę… · powtórzyć?', 'Proszę powtórzyć.'],
-        ['4. Nie… · rozumiem.', 'Nie rozumiem.'], ['5. Mam… · pytanie.', 'Mam pytanie.'],
-      ]),
+      {
+        id: 'l01-exercise-10-match', sourceExerciseId: 'WB-L01-E10', sourceLabel: 'Zeszyt ćwiczeń · ćwiczenie 10',
+        kind: ActivityKind.Match, title: 'Połącz początki i zakończenia',
+        instruction: 'Kliknij początek frazy, a potem pasujące zakończenie.',
+        items: [
+          choice('q1', 'Jak się…', 'mówi po polsku…?', l01PhraseEndings),
+          choice('q2', 'Co to…', 'znaczy?', l01PhraseEndings),
+          choice('q3', 'Proszę…', 'powtórzyć?', l01PhraseEndings),
+          choice('q4', 'Nie…', 'rozumiem.', l01PhraseEndings),
+          choice('q5', 'Mam…', 'pytanie.', l01PhraseEndings),
+        ],
+      },
       typedExercise(1, 13, 'Popraw zapis liczebników', 'Zapisz poprawnie każde słowo.', [
         ['1. sedem', 'siedem'], ['2. tszy', 'trzy'], ['3. szesc', 'sześć'], ['4. osem', 'osiem'],
         ['5. piec', 'pięć'], ['6. dziewiec', 'dziewięć'], ['7. ctery', 'cztery'], ['8. dziesiec', 'dziesięć'],
