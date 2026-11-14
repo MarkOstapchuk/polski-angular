@@ -132,6 +132,9 @@
               }
             </div>
           </section>
+          @if (syncError(); as syncMessage) {
+            <p class="sync-warning" role="alert">{{ syncMessage }}</p>
+          }
           <p class="offline-note">✦ Treść lekcji działa offline po pierwszym otwarciu aplikacji. Nagrania i obrazy będą dostępne po ich wcześniejszym pobraniu.</p>
         </main>
       }

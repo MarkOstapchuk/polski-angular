@@ -4,6 +4,7 @@ import { supabase } from './supabase.client';
 export interface LearnerProgress {
   completedLessonIds: number[];
   scores: Record<string, number>;
+  activityProgress: Record<string, SavedActivityProgress>;
   totalXp: number;
   dailyXp: number;
   streak: number;
@@ -11,11 +12,18 @@ export interface LearnerProgress {
   lastStudyDate: string | null;
 }
 
+export interface SavedActivityProgress {
+  answers: Record<string, string>;
+  results: Record<string, boolean>;
+  savedAt: string;
+}
+
 const STORAGE_KEY = 'polski-progress-v1';
 const PENDING_STORAGE_KEY = 'polski-progress-pending-v1';
 const EMPTY_PROGRESS: LearnerProgress = {
   completedLessonIds: [],
   scores: {},
+  activityProgress: {},
   totalXp: 0,
   dailyXp: 0,
   streak: 0,
@@ -43,6 +51,10 @@ function mergeProgress(remote: LearnerProgress, local: LearnerProgress): Learner
   for (const [lessonId, score] of Object.entries(local.scores)) {
     scores[lessonId] = Math.max(scores[lessonId] ?? 0, score);
   }
+  const activityProgress = { ...(remote.activityProgress ?? {}) };
+  for (const [key, activity] of Object.entries(local.activityProgress ?? {})) {
+    if (!activityProgress[key] || activity.savedAt >= activityProgress[key].savedAt) activityProgress[key] = activity;
+  }
   const newLocalXp = local.completedLessonIds
     .filter((lessonId) => !remoteIds.has(lessonId))
     .reduce((total, lessonId) => total + 10 + Math.round((local.scores[String(lessonId)] ?? 0) / 10), 0);
@@ -52,6 +64,7 @@ function mergeProgress(remote: LearnerProgress, local: LearnerProgress): Learner
   return {
     completedLessonIds,
     scores,
+    activityProgress,
     totalXp: Math.max(local.totalXp, remote.totalXp + newLocalXp),
     dailyXp: localIsNewer ? local.dailyXp : sameStudyDay ? Math.max(remote.dailyXp, local.dailyXp) : remote.dailyXp,
     streak: localIsNewer ? local.streak : sameStudyDay ? Math.max(remote.streak, local.streak) : remote.streak,
@@ -76,16 +89,11 @@ export class ProgressService {
   }
 
   async loadForUser(userId: string): Promise<void> {
-    if (this.userId === userId) {
-      const pending = this.readStoredProgress(`${PENDING_STORAGE_KEY}:${userId}`);
-      if (pending) this.persist(this.progress(), userId);
-      return;
-    }
-
+    const sameUser = this.userId === userId;
     const localKey = `${STORAGE_KEY}:${userId}`;
     const pending = this.readStoredProgress(`${PENDING_STORAGE_KEY}:${userId}`);
-    const local = this.readStoredProgress(localKey);
-    const legacy = this.readStoredProgress(STORAGE_KEY);
+    const local = this.readStoredProgress(localKey) ?? (sameUser ? this.progress() : null);
+    const legacy = sameUser ? null : this.readStoredProgress(STORAGE_KEY);
     let remote: LearnerProgress | null = null;
     try {
       const { data, error } = await supabase
@@ -94,9 +102,11 @@ export class ProgressService {
         .eq('user_id', userId)
         .maybeSingle();
       if (error) throw error;
-      remote = (data?.progress as LearnerProgress | undefined) ?? null;
+      const saved = data?.progress as Partial<LearnerProgress> | undefined;
+      remote = saved ? { ...EMPTY_PROGRESS, ...saved, activityProgress: saved.activityProgress ?? {} } : null;
     } catch {
-      const progress = pending ?? local ?? legacy ?? { ...EMPTY_PROGRESS };
+      let progress = { ...EMPTY_PROGRESS };
+      for (const saved of [local, legacy, pending]) if (saved) progress = mergeProgress(progress, saved);
       this.userId = userId;
       this.progress.set(progress);
       this.syncError.set('Nie udało się wczytać postępów z chmury. Zapisuję je na tym urządzeniu i zsynchronizuję po powrocie połączenia.');
@@ -105,9 +115,8 @@ export class ProgressService {
       return;
     }
 
-    const progress = pending && remote
-      ? mergeProgress(remote, pending)
-      : pending ?? remote ?? local ?? legacy ?? { ...EMPTY_PROGRESS };
+    let progress = remote ?? { ...EMPTY_PROGRESS };
+    for (const saved of [local, legacy, pending]) if (saved) progress = mergeProgress(progress, saved);
     this.userId = userId;
     this.progress.set(progress);
     this.syncError.set(null);
@@ -136,7 +145,7 @@ export class ProgressService {
     return this.progress().scores[String(lessonId)] ?? null;
   }
 
-  completeLesson(lessonId: number, score: number, xp: number): void {
+  completeLesson(lessonId: number, score: number, xp: number): Promise<void> {
     const current = this.progress();
     const today = localDateKey();
     const alreadyComplete = current.completedLessonIds.includes(lessonId);
@@ -157,7 +166,31 @@ export class ProgressService {
       next.bestStreak = Math.max(current.bestStreak, next.streak);
     }
 
-    this.save(next);
+    return this.save(next);
+  }
+
+  activityFor(lessonId: number, activityId: string): SavedActivityProgress | null {
+    return this.progress().activityProgress?.[`${lessonId}:${activityId}`] ?? null;
+  }
+
+  hasCompletedActivity(lessonId: number, activityId: string): boolean {
+    return this.activityFor(lessonId, activityId) !== null;
+  }
+
+  saveActivityProgress(
+    lessonId: number,
+    activityId: string,
+    answers: Record<string, string>,
+    results: Record<string, boolean>,
+  ): Promise<void> {
+    const current = this.progress();
+    return this.save({
+      ...current,
+      activityProgress: {
+        ...(current.activityProgress ?? {}),
+        [`${lessonId}:${activityId}`]: { answers, results, savedAt: new Date().toISOString() },
+      },
+    });
   }
 
   private readProgress(): LearnerProgress {
@@ -169,17 +202,21 @@ export class ProgressService {
     try {
       const raw = localStorage.getItem(key);
       if (!raw) return null;
-      return { ...EMPTY_PROGRESS, ...JSON.parse(raw) } as LearnerProgress;
+      const progress = { ...EMPTY_PROGRESS, ...JSON.parse(raw) } as LearnerProgress;
+      progress.activityProgress ??= {};
+      return progress;
     } catch {
       return null;
     }
   }
 
-  private save(progress: LearnerProgress): void {
+  private save(progress: LearnerProgress): Promise<void> {
     this.progress.set(progress);
     const userId = this.userId;
     this.storeProgress(userId ? `${STORAGE_KEY}:${userId}` : STORAGE_KEY, progress);
-    if (userId) this.persist(progress, userId);
+    if (!userId) return Promise.resolve();
+    this.persist(progress, userId);
+    return this.flush();
   }
 
   private storeProgress(key: string, progress: LearnerProgress): void {

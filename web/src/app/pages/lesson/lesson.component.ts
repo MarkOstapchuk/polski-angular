@@ -18,6 +18,7 @@ export class LessonComponent implements OnInit {
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
   private readonly progress = inject(ProgressService);
+  readonly syncError = this.progress.syncError;
 
   readonly lesson = signal(getLesson(Number(this.route.snapshot.paramMap.get('lessonId'))));
   readonly theory = computed(() => {
@@ -37,7 +38,12 @@ export class LessonComponent implements OnInit {
     const used = new Set(this.activity()?.items.map((item) => item.image).filter(Boolean));
     return this.allImages().filter((_, index) => !used.has(index + 1));
   });
-  readonly activityProgress = computed(() => this.lesson() ? Math.round((this.activeIndex() / this.lesson()!.activities.length) * 100) : 0);
+  readonly activityProgress = computed(() => {
+    const lesson = this.lesson();
+    if (!lesson) return 0;
+    const completed = lesson.activities.filter((activity) => this.progress.hasCompletedActivity(lesson.id, activity.id)).length;
+    return Math.round((completed / lesson.activities.length) * 100);
+  });
   readonly totalQuestions = computed(() => this.lesson()?.activities.reduce((count, activity) => count + activity.items.length, 0) ?? 0);
   readonly correctAnswers = computed(() => Object.values(this.results()).reduce((count, result) => count + Object.values(result).filter(Boolean).length, 0));
   readonly finalScore = computed(() => this.totalQuestions() ? Math.round((this.correctAnswers() / this.totalQuestions()) * 100) : 0);
@@ -49,6 +55,21 @@ export class LessonComponent implements OnInit {
     if (!lesson) {
       void this.router.navigate(['/']);
       return;
+    }
+    const restoredResults: Record<string, Record<string, boolean>> = {};
+    let firstIncomplete = -1;
+    lesson.activities.forEach((activity, index) => {
+      const saved = this.progress.activityFor(lesson.id, activity.id);
+      if (saved) restoredResults[activity.id] = saved.results;
+      else if (firstIncomplete < 0) firstIncomplete = index;
+    });
+    this.results.set(restoredResults);
+    const index = firstIncomplete < 0 ? lesson.activities.length - 1 : firstIncomplete;
+    this.activeIndex.set(index);
+    const saved = this.progress.activityFor(lesson.id, lesson.activities[index].id);
+    if (saved) {
+      this.answers.set(saved.answers);
+      this.checked.set(true);
     }
   }
 
@@ -115,26 +136,35 @@ export class LessonComponent implements OnInit {
     return Object.values(this.results()[this.activity()?.id ?? ''] ?? {}).filter(Boolean).length;
   }
 
-  checkAnswers(): void {
+  async checkAnswers(): Promise<void> {
     const activity = this.activity();
-    if (!activity || !this.hasAnsweredAll() || this.checked()) return;
+    const lesson = this.lesson();
+    if (!lesson || !activity || !this.hasAnsweredAll() || this.checked()) return;
     const result: Record<string, boolean> = {};
     for (const item of activity.items) result[item.id] = this.isCorrect(item);
     this.results.update((current) => ({ ...current, [activity.id]: result }));
     this.checked.set(true);
+    const prefix = `${activity.id}:`;
+    const answers = Object.fromEntries(Object.entries(this.answers()).filter(([key]) => key.startsWith(prefix)));
+    await this.progress.saveActivityProgress(lesson.id, activity.id, answers, result);
   }
 
-  next(): void {
+  async next(): Promise<void> {
     const lesson = this.lesson();
     if (!lesson || !this.checked()) return;
-    if (this.activeIndex() < lesson.activities.length - 1) {
-      this.activeIndex.update((index) => index + 1);
+    await this.progress.flush();
+    const nextIndex = lesson.activities.findIndex((activity, index) =>
+      index > this.activeIndex() && !this.progress.hasCompletedActivity(lesson.id, activity.id),
+    );
+    if (nextIndex >= 0) {
+      this.activeIndex.set(nextIndex);
+      this.answers.set({});
       this.checked.set(false);
       return;
     }
     const alreadyCompleted = this.progress.hasCompleted(lesson.id);
     this.awardedXp.set(alreadyCompleted ? 0 : this.earnedXp());
-    this.progress.completeLesson(lesson.id, this.finalScore(), this.earnedXp());
+    await this.progress.completeLesson(lesson.id, this.finalScore(), this.earnedXp());
     this.finished.set(true);
   }
 
