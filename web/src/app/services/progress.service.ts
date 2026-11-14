@@ -12,6 +12,7 @@ export interface LearnerProgress {
 }
 
 const STORAGE_KEY = 'polski-progress-v1';
+const PENDING_STORAGE_KEY = 'polski-progress-pending-v1';
 const EMPTY_PROGRESS: LearnerProgress = {
   completedLessonIds: [],
   scores: {},
@@ -35,6 +36,30 @@ function shiftDate(dateKey: string, offset: number): string {
   return localDateKey(date);
 }
 
+function mergeProgress(remote: LearnerProgress, local: LearnerProgress): LearnerProgress {
+  const remoteIds = new Set(remote.completedLessonIds);
+  const completedLessonIds = [...new Set([...remote.completedLessonIds, ...local.completedLessonIds])].sort((a, b) => a - b);
+  const scores = { ...remote.scores };
+  for (const [lessonId, score] of Object.entries(local.scores)) {
+    scores[lessonId] = Math.max(scores[lessonId] ?? 0, score);
+  }
+  const newLocalXp = local.completedLessonIds
+    .filter((lessonId) => !remoteIds.has(lessonId))
+    .reduce((total, lessonId) => total + 10 + Math.round((local.scores[String(lessonId)] ?? 0) / 10), 0);
+  const localIsNewer = (local.lastStudyDate ?? '') > (remote.lastStudyDate ?? '');
+  const sameStudyDay = local.lastStudyDate === remote.lastStudyDate;
+
+  return {
+    completedLessonIds,
+    scores,
+    totalXp: Math.max(local.totalXp, remote.totalXp + newLocalXp),
+    dailyXp: localIsNewer ? local.dailyXp : sameStudyDay ? Math.max(remote.dailyXp, local.dailyXp) : remote.dailyXp,
+    streak: localIsNewer ? local.streak : sameStudyDay ? Math.max(remote.streak, local.streak) : remote.streak,
+    bestStreak: Math.max(remote.bestStreak, local.bestStreak),
+    lastStudyDate: localIsNewer ? local.lastStudyDate : remote.lastStudyDate,
+  };
+}
+
 @Injectable({ providedIn: 'root' })
 export class ProgressService {
   readonly progress = signal<LearnerProgress>(this.readProgress());
@@ -42,32 +67,57 @@ export class ProgressService {
   private userId: string | null = null;
   private syncQueue = Promise.resolve();
 
-  async loadForUser(userId: string): Promise<void> {
-    if (this.userId === userId) return;
+  constructor() {
+    if (typeof window !== 'undefined') {
+      window.addEventListener('online', () => {
+        if (this.userId) this.persist(this.progress(), this.userId);
+      });
+    }
+  }
 
-    const local = this.readStoredProgress(`${STORAGE_KEY}:${userId}`);
-    const legacy = this.readStoredProgress(STORAGE_KEY);
-    const { data, error } = await supabase
-      .from('user_progress')
-      .select('progress')
-      .eq('user_id', userId)
-      .maybeSingle();
-    if (error) {
-      this.syncError.set('Nie udało się wczytać postępów z chmury.');
-      throw error;
+  async loadForUser(userId: string): Promise<void> {
+    if (this.userId === userId) {
+      const pending = this.readStoredProgress(`${PENDING_STORAGE_KEY}:${userId}`);
+      if (pending) this.persist(this.progress(), userId);
+      return;
     }
 
-    const progress = (data?.progress as LearnerProgress | undefined) ?? local ?? legacy ?? { ...EMPTY_PROGRESS };
+    const localKey = `${STORAGE_KEY}:${userId}`;
+    const pending = this.readStoredProgress(`${PENDING_STORAGE_KEY}:${userId}`);
+    const local = this.readStoredProgress(localKey);
+    const legacy = this.readStoredProgress(STORAGE_KEY);
+    let remote: LearnerProgress | null = null;
+    try {
+      const { data, error } = await supabase
+        .from('user_progress')
+        .select('progress')
+        .eq('user_id', userId)
+        .maybeSingle();
+      if (error) throw error;
+      remote = (data?.progress as LearnerProgress | undefined) ?? null;
+    } catch {
+      const progress = pending ?? local ?? legacy ?? { ...EMPTY_PROGRESS };
+      this.userId = userId;
+      this.progress.set(progress);
+      this.syncError.set('Nie udało się wczytać postępów z chmury. Zapisuję je na tym urządzeniu i zsynchronizuję po powrocie połączenia.');
+      this.storeProgress(localKey, progress);
+      if (pending || local || legacy) this.persist(progress, userId);
+      return;
+    }
+
+    const progress = pending && remote
+      ? mergeProgress(remote, pending)
+      : pending ?? remote ?? local ?? legacy ?? { ...EMPTY_PROGRESS };
     this.userId = userId;
     this.progress.set(progress);
     this.syncError.set(null);
-    this.storeProgress(`${STORAGE_KEY}:${userId}`, progress);
+    this.storeProgress(localKey, progress);
     try {
       if (typeof localStorage !== 'undefined') localStorage.removeItem(STORAGE_KEY);
     } catch {
       // The legacy key is only a one-time migration source.
     }
-    if (!data && (local || legacy)) this.persist(progress, userId);
+    if (pending || (!remote && (local || legacy))) this.persist(progress, userId);
   }
 
   async flush(): Promise<void> {
@@ -141,17 +191,40 @@ export class ProgressService {
   }
 
   private persist(progress: LearnerProgress, userId: string): void {
+    const pendingKey = `${PENDING_STORAGE_KEY}:${userId}`;
+    const localKey = `${STORAGE_KEY}:${userId}`;
+    this.storeProgress(pendingKey, progress);
     this.syncQueue = this.syncQueue.then(async () => {
-      const { error } = await supabase.from('user_progress').upsert({
+      const { data, error: readError } = await supabase
+        .from('user_progress')
+        .select('progress')
+        .eq('user_id', userId)
+        .maybeSingle();
+      if (readError) throw readError;
+      const remote = (data?.progress as LearnerProgress | undefined) ?? null;
+      const merged = remote ? mergeProgress(remote, progress) : progress;
+      const { error: writeError } = await supabase.from('user_progress').upsert({
         user_id: userId,
-        progress,
+        progress: merged,
         updated_at: new Date().toISOString(),
       });
+      if (writeError) throw writeError;
       if (this.userId === userId) {
-        this.syncError.set(error ? 'Nie udało się zapisać postępów w chmurze.' : null);
+        this.syncError.set(null);
+        if (JSON.stringify(this.progress()) === JSON.stringify(progress)) {
+          this.progress.set(merged);
+          this.storeProgress(localKey, merged);
+        }
+      } else {
+        this.storeProgress(localKey, merged);
+      }
+      try {
+        if (localStorage.getItem(pendingKey) === JSON.stringify(progress)) localStorage.removeItem(pendingKey);
+      } catch {
+        // Local progress remains available even if browser storage is unavailable.
       }
     }).catch(() => {
-      if (this.userId === userId) this.syncError.set('Nie udało się zapisać postępów w chmurze.');
+      if (this.userId === userId) this.syncError.set('Nie udało się zsynchronizować postępów. Zachowałem je na tym urządzeniu i spróbuję ponownie po powrocie połączenia.');
     });
   }
 }
