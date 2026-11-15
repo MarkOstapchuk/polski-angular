@@ -324,7 +324,6 @@ export const LESSON_44 = lesson(44, 'Królestwo zwierząt', 'Opowiadamy o zwierz
     ['Świadomy ___ jest ważny dla ochrony zwierząt.', 'wybór'],
     ['Jako ___ mogę podejmować lepsze decyzje.', 'konsument'],
   ]),
-  ]),
 ]);
 
 export const LESSON_45 = lesson(45, 'Oszczędzaj!', 'Rozmawiamy o ekologii i codziennych nawykach', 'Środowisko · warunek · tryb przypuszczający', 'Ćwiczenia 1–8 · podręcznik 126–131', 'lime', [
