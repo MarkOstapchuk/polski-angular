@@ -650,10 +650,21 @@ export const LESSON_48 = lesson(48, 'Warto zobaczyć', 'Opisujemy dzieła sztuki
 ]);
 
 export const LESSON_49 = lesson(49, 'Czas na egzamin', 'Powtarzamy materiał i ćwiczymy zadania egzaminacyjne', 'Egzamin · poprawność · słownictwo i gramatyka', 'Ćwiczenia 1–11 · podręcznik 152–157', 'yellow', [
-  exercise(23, 1, 'Rozumienie poleceń', 'Wpisz właściwy czasownik w instrukcji egzaminacyjnej.', [
-    ['___ tekst i odpowiedz na pytania.', 'Przeczytaj'], ['___ nagrania i zaznacz odpowiedzi.', 'Posłuchaj'],
-    ['___ właściwą formę gramatyczną.', 'Wybierz'], ['___ zdania we właściwej kolejności.', 'Ułóż'],
-    ['___ odpowiedź pełnym zdaniem.', 'Zapisz'], ['___ swoją pracę przed oddaniem.', 'Sprawdź'],
+  exercise(23, 1, 'Sytuacje i wypowiedzi', 'Posłuchaj nagrań i zaznacz właściwą odpowiedź.', [
+    ['Nagranie 1: bank / poczta / dworzec', 'a'], ['Nagranie 2: zaproszenie / życzenia / nagłówek listu', 'b'],
+    ['Nagranie 3: kino / filharmonia / teatr', 'a'], ['Nagranie 4: sąd / boisko / podwórko', 'b'],
+    ['Nagranie 5: pochwała / nagana / skarga', 'a'], ['Nagranie 6: student / uczeń / prawnik', 'b'],
+    ['Nagranie 7: wywiad lekarski / zawody / rozmowa kwalifikacyjna', 'c'],
+    ['Nagranie 8: rozkaz / prośba / przeprosiny', 'b'], ['Nagranie 9: samolot / kino / teatr', 'a'],
+    ['Nagranie 10: góry / jezioro / las', 'c'], ['Nagranie 11: telefon / rozmowa osobista / list', 'b'],
+    ['Nagranie 12: restauracja / ulica / góry', 'c'], ['Nagranie 13: zachwyt / oburzenie / zniechęcenie', 'c'],
+    ['Nagranie 14: nagana / pochwała / przeprosiny', 'a'],
+    ['Nagranie 15: Wielkanoc / Boże Narodzenie / Nowy Rok', 'a'],
+    ['Nagranie 16: miejsce (a/b/c)', 'b'], ['Nagranie 17: żal / zadowolenie / niezadowolenie', 'b'],
+    ['Nagranie 18: przeszłość / teraźniejszość / przyszłość', 'c'],
+    ['Nagranie 19: prośba / rada / przypuszczenie', 'c'],
+    ['Nagranie 20: pewność / protest / nakaz', 'a'],
+    ['Nagranie 21: kino / bank / komputer', 'c'], ['Nagranie 22: świetne / beznadziejne / takie sobie', 'c'],
   ]),
   exercise(23, 2, 'Językowy autotest', 'Wpisz właściwe określenie.', [
     ['Zasady i poprawność języka.', 'gramatyka'], ['Szybkość i płynność wypowiedzi.', 'biegłość'],
@@ -672,8 +683,52 @@ export const LESSON_49 = lesson(49, 'Czas na egzamin', 'Powtarzamy materiał i �
     ['Nie ___, że to dobry pomysł.', 'sądzę'], ['Jestem ___, że możemy to zrobić.', 'pewna'],
     ['Z ___ na moje doświadczenie, warto spróbować.', 'uwagi'],
   ]),
-  exercise(23, 10, 'Egzamin ustny', 'Posłuchaj poleceń egzaminatora i uzupełnij.', [
-    ['Najpierw ___ tekst.', 'przeczytaj'], ['Następnie ___ nagrania.', 'posłuchaj'],
-    ['Odpowiedz na wszystkie ___.', 'pytania'], ['Na końcu ___ swoją pracę.', 'sprawdź'],
+  exercise(23, 5, 'Przedstawienie się', 'Uzupełnij tekst właściwą formą wyrazu.', [
+    ['Jestem ___ . (Amerykanin)', 'Amerykaninem'], ['Noszę ___ . (okulary)', 'okulary'],
+    ['Z ___ jestem historykiem. (wykształcenie)', 'wykształcenia'], ['Jestem ___ . (historyk)', 'historykiem'],
+    ['Piszę pracę o ___ komunizmu. (upadek)', 'upadku'], ['Mieszkam w ___ . (Europa Środkowa)', 'Europie Środkowej'],
+    ['Interesuję się ___ . (historia)', 'historią'], ['Interesuje mnie sytuacja polityczna na ___. (świat)', 'świecie'],
+    ['Kocham ___. (natura)', 'naturę'], ['Fotografowanie przyrody to ___ pasja.', 'moja druga'],
+    ['Marzę o ___ domu. (własny)', 'własnym'], ['Nie ___ gotowanej marchewki. (znosić)', 'znoszę'],
+  ]),
+  exercise(23, 6, 'Jaki to przypadek?', 'Rozpoznaj przypadek wyróżnionego rzeczownika lub zaimka.', [
+    ['Tom leciał z USA do Krakowa przez Londyn.', 'dopełniacz'], ['Lot był męczący.', 'mianownik'],
+    ['Obok niego siedziała dziewczyna.', 'dopełniacz'], ['Długopis spadł pod fotel Toma.', 'biernik'],
+    ['Poprosiła, żeby schylił się po ten długopis.', 'biernik'], ['Tom nie zrozumiał jej.', 'dopełniacz'],
+    ['Powtórzyła mu to samo po angielsku.', 'celownik'], ['Tom schylił się po długopis.', 'biernik'],
+    ['Rozmawiali o tym, dlaczego leci do Polski.', 'miejscownik'], ['Chodzić na kurs polskiego.', 'biernik'],
+    ['Chciał jechać nad morze.', 'biernik'], ['Wcale tego nie żałuje.', 'dopełniacz'],
+  ]),
+  exercise(23, 7, 'Formy czasowników', 'Uzupełnij zdania odpowiednią formą czasownika.', [
+    ['Jak on ___ mi to zrobić?! (móc)', 'mógł'], ['Ewa poprosiła Ulę, żeby ___ . (wyjść)', 'wyszła'],
+    ['Będzie ___ również płynność wypowiedzi. (oceniać)', 'oceniana'],
+    ['Puszki zostały ___ do śmieci. (dorzucić)', 'dorzucone'],
+    ['Wczoraj ___ bez pukania. (ty, wejść)', 'weszłaś'], ['___ ode mnie! (odejść)', 'Odejdź'],
+    ['Wystawa została ___ w październiku. (otworzyć)', 'otworzona'],
+    ['Mój tata tydzień temu ___ ze szpitala. (wyjść)', 'wyszedł'],
+    ['Angela ___ ten film rok temu. (ściągnąć)', 'ściągnęła'], ['Iwona mówiła, żebyście ___ . (przyjść)', 'przyszli'],
+    ['Za tydzień oni ___ na urlop. (pojechać)', 'pojadą'], ['Mami ___ na metro. (przesiąść się)', 'przesiadła się'],
+  ]),
+  exercise(23, 8, 'Polskie idiomy', 'Dopasuj idiom do jego znaczenia.', [
+    ['jak u Pana Boga za piecem', 'mieć się bardzo dobrze'], ['zakochać się po same uszy', 'bardzo się zakochać'],
+    ['spaść z nieba', 'pojawić się niespodziewanie'], ['zimny jak lód', 'bardzo zimny'],
+    ['mieć powyżej uszu', 'mieć czegoś dość'], ['kłamstwo ma krótkie nogi', 'kłamstwo szybko wychodzi na jaw'],
+    ['pod gołym niebem', 'na zewnątrz, bez dachu'], ['rosnąć jak grzyby po deszczu', 'szybko się mnożyć'],
+    ['jeździć na gapę', 'podróżować bez biletu'], ['trzymać kciuki', 'życzyć powodzenia'],
+  ]),
+  exercise(23, 9, 'Zaimki osobowe', 'Wpisz właściwą formę zaimka.', [
+    ['Dzięki Karolu, że ___ zaprosiłeś. (ja)', 'mnie'], ['Wpadaj do ___ częściej. (my)', 'nas'],
+    ['A ___ to irytuje? (ona)', 'ją'], ['Czy ___ to nie irytuje? (wy)', 'was'],
+    ['Słyszałyście o ___? (oni)', 'nich'], ['Czy dobrze ___ znasz? (oni)', 'ich'],
+    ['Dla ___ to nie brzmi dobrze. (ona)', 'niej'], ['Scenariusz napisał ___. (on)', 'on'],
+    ['Głos tego aktora ___ przypomina. (ja)', 'mi'], ['Mówiłam ___ już o tym? (wy)', 'wam'],
+    ['Aktor przypomina ___. (ja)', 'mnie'], ['Rozmawiamy o ___. (oni)', 'nich'],
+  ]),
+  exercise(23, 10, 'Oceny w szkole', 'Uzupełnij tekst słowami z obu list.', [
+    ['Rodzice zawsze mi powtarzali, że ___ .', 'nie uczę się dla ocen'], ['Uczę się ___ .', 'dla siebie'],
+    ['W szkole miałem ___ .', 'same piątki'], ['Rodzice ___ i byli bardzo dumni.', 'wzięli mnie na ręce'],
+    ['Czwórki były ___ .', 'komentowane krótko'], ['Patryk był moim najlepszym ___ .', 'szkolnym przyjacielem'],
+    ['Za słabe oceny dostawałem ___ .', 'szlaban na telewizję'], ['Mama ___ .', 'kręciła głową'],
+    ['Na koniec roku dostaliśmy ___ .', 'szkolne świadectwa'], ['Tata obejrzał świadectwo ___ .', 'z góry na dół'],
   ]),
 ]);
