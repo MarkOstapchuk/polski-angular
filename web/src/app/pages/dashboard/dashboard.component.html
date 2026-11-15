@@ -70,7 +70,7 @@
           <div class="lesson-kicker"><span class="kicker-dot"></span> {{ completeCount() === 0 ? 'ZACZNIJ KURS' : 'KONTYNUUJ NAUKĘ' }} · {{ lessonLabel(currentLesson()) }}</div>
           <h2>{{ currentLesson().title }}</h2>
           <p>{{ currentLesson().subtitle }}</p>
-          <div class="continue-meta"><span>◷ 2–4 min / ćwiczenie</span><span>•</span><span>{{ currentLesson().activities.length }} ćwiczeń</span></div>
+          <div class="continue-meta"><span>◷ 2–4 min / ćwiczenie</span><span>•</span><span>{{ currentLesson().activityCount }} ćwiczeń</span></div>
           <button class="primary-button" type="button" (click)="openLesson(currentLesson())">
             {{ completeCount() === 0 ? 'Zacznij lekcję' : 'Kontynuuj' }} <span aria-hidden="true">→</span>
           </button>

@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
-import { LESSONS, Lesson } from '../../data/lesson-bank';
+import { LESSON_CATALOG, LessonSummary } from '../../data/lesson-catalog';
 import { AuthService } from '../../services/auth.service';
 import { ProgressService } from '../../services/progress.service';
 import { PwaInstallService } from '../../services/pwa-install.service';
@@ -18,15 +18,15 @@ export class DashboardComponent {
   readonly auth = inject(AuthService);
   readonly progressService = inject(ProgressService);
   readonly pwa = inject(PwaInstallService);
-  readonly lessons = LESSONS;
+  readonly lessons = LESSON_CATALOG;
   readonly progress = this.progressService.progress;
   readonly userEmail = computed(() => this.auth.user()?.email ?? 'Uczeń');
   readonly userInitial = computed(() => this.auth.user()?.email?.slice(0, 1).toUpperCase() ?? 'U');
   readonly currentLesson = computed(() =>
-    LESSONS.find((lesson) => !this.progressService.hasCompleted(lesson.id)) ?? LESSONS[LESSONS.length - 1],
+    LESSON_CATALOG.find((lesson) => !this.progressService.hasCompleted(lesson.id)) ?? LESSON_CATALOG[LESSON_CATALOG.length - 1],
   );
   readonly completeCount = computed(() => this.progress().completedLessonIds.length);
-  readonly courseProgress = computed(() => Math.round((this.completeCount() / LESSONS.length) * 100));
+  readonly courseProgress = computed(() => Math.round((this.completeCount() / LESSON_CATALOG.length) * 100));
   readonly goalPercent = computed(() => Math.min(100, Math.round((this.progress().dailyXp / 20) * 100)));
   readonly weekDays = computed(() => Array.from({ length: 7 }, (_, index) => {
     const date = new Date();
@@ -39,26 +39,26 @@ export class DashboardComponent {
   }));
   readonly greeting = this.getGreeting();
 
-  openLesson(lesson: Lesson): void {
+  openLesson(lesson: LessonSummary): void {
     if (!this.progressService.isUnlocked(lesson.id)) return;
     void this.router.navigate(['/learn', lesson.id]);
   }
 
-  isComplete(lesson: Lesson): boolean {
+  isComplete(lesson: LessonSummary): boolean {
     return this.progressService.hasCompleted(lesson.id);
   }
 
-  lessonLabel(lesson: Lesson): string {
+  lessonLabel(lesson: LessonSummary): string {
     return lesson.id > 26
       ? `CZĘŚĆ 2 · LEKCJA ${this.lessonNumber(lesson)}`
       : `LEKCJA ${this.lessonNumber(lesson)}`;
   }
 
-  lessonNumber(lesson: Lesson): string {
+  lessonNumber(lesson: LessonSummary): string {
     return String(lesson.id > 26 ? lesson.id - 26 : lesson.id).padStart(2, '0');
   }
 
-  isUnlocked(lesson: Lesson): boolean {
+  isUnlocked(lesson: LessonSummary): boolean {
     return this.progressService.isUnlocked(lesson.id);
   }
 
