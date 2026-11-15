@@ -37,6 +37,16 @@
       }
     },
     {
+      "name": "part-2-audio",
+      "installMode": "lazy",
+      "updateMode": "lazy",
+      "resources": {
+        "files": [
+          "/assets/telegram_audio_2/**"
+        ]
+      }
+    },
+    {
       "name": "workbook-images",
       "installMode": "lazy",
       "updateMode": "prefetch",

@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component, computed, inject, OnDestroy, OnInit
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { AUDIO_TRACKS } from '../../data/audio-tracks';
+import { PART2_AUDIO_TRACKS } from '../../data/part2-audio-tracks';
 import { ActivityItem, ActivityKind, getLesson } from '../../data/lesson-bank';
 import { LESSON_THEORY, LessonTheoryId } from '../../data/lesson-theory';
 import { WORKBOOK_IMAGES, WorkbookImage } from '../../data/workbook-images';
@@ -34,6 +35,11 @@ export class LessonComponent implements OnInit, OnDestroy {
   readonly selectedMatchOption = signal<string | null>(null);
 
   readonly lesson = signal(getLesson(Number(this.route.snapshot.paramMap.get('lessonId'))));
+  lessonLabel(lessonId: number): string {
+    return lessonId > 26
+      ? `CZĘŚĆ 2 · LEKCJA ${String(lessonId - 26).padStart(2, '0')}`
+      : `LEKCJA ${String(lessonId).padStart(2, '0')}`;
+  }
   readonly theory = computed(() => {
     const id = this.lesson()?.id;
     return id ? LESSON_THEORY[id as LessonTheoryId] : undefined;
@@ -49,7 +55,7 @@ export class LessonComponent implements OnInit, OnDestroy {
   readonly activityAudioPlayers = computed(() => {
     const activity = this.activity();
     if (!activity) return [];
-    const tracks = AUDIO_TRACKS.filter((track) => track.exerciseId === activity.sourceExerciseId);
+    const tracks = [...AUDIO_TRACKS, ...PART2_AUDIO_TRACKS].filter((track) => track.exerciseId === activity.sourceExerciseId);
     const players = tracks.map((track) => ({
       file: track.file,
       label: activity.audioUrl === this.audioTrackUrl(track.file) && activity.audioLabel

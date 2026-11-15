@@ -973,5 +973,57 @@ export const WORKBOOK_IMAGES: Record<string, WorkbookImage[]> = {
       "label": "e",
       "alt": "Portrait of a young woman with long, straight, light-colored hair and bangs"
     }
+  ],
+  "WB2-L01-E09": [
+    {
+      "src": "/assets/workbook/part2-lesson01-e09-a.png",
+      "label": "a",
+      "alt": "Mydło w mydelniczce"
+    },
+    {
+      "src": "/assets/workbook/part2-lesson01-e09-b.png",
+      "label": "b",
+      "alt": "Balsam do ciała"
+    },
+    {
+      "src": "/assets/workbook/part2-lesson01-e09-c.png",
+      "label": "c",
+      "alt": "Łyżka i widelec"
+    },
+    {
+      "src": "/assets/workbook/part2-lesson01-e09-d.png",
+      "label": "d",
+      "alt": "Mop do mycia podłogi"
+    },
+    {
+      "src": "/assets/workbook/part2-lesson01-e09-e.png",
+      "label": "e",
+      "alt": "Nożyczki do paznokci"
+    },
+    {
+      "src": "/assets/workbook/part2-lesson01-e09-f.png",
+      "label": "f",
+      "alt": "Szminka do ust"
+    },
+    {
+      "src": "/assets/workbook/part2-lesson01-e09-g.png",
+      "label": "g",
+      "alt": "Krem do rąk"
+    },
+    {
+      "src": "/assets/workbook/part2-lesson01-e09-h.png",
+      "label": "h",
+      "alt": "Maszynka do golenia"
+    },
+    {
+      "src": "/assets/workbook/part2-lesson01-e09-i.png",
+      "label": "i",
+      "alt": "Ręcznik"
+    },
+    {
+      "src": "/assets/workbook/part2-lesson01-e09-j.png",
+      "label": "j",
+      "alt": "Pasta i szczoteczka do zębów"
+    }
   ]
 };

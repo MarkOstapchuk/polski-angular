@@ -20,6 +20,13 @@ import { LESSON_23 } from './lessons/lesson-23';
 import { LESSON_24 } from './lessons/lesson-24';
 import { LESSON_25 } from './lessons/lesson-25';
 import { LESSON_26 } from './lessons/lesson-26';
+import { LESSON_27 } from './lessons/part2-lesson-01';
+import { LESSON_28 } from './lessons/part2-lesson-02';
+import { LESSON_29 } from './lessons/part2-lesson-03';
+import { LESSON_30 } from './lessons/part2-lesson-04';
+import { LESSON_31 } from './lessons/part2-lesson-05';
+import { LESSON_32 } from './lessons/part2-lesson-06';
+import { LESSON_33 } from './lessons/part2-lesson-07';
 
 export * from './lesson-types';
 
@@ -852,6 +859,7 @@ export const LESSONS: Lesson[] = [
   LESSON_06, LESSON_07, LESSON_08, LESSON_09, LESSON_10, LESSON_11, LESSON_12,
   LESSON_13, LESSON_14, LESSON_15, LESSON_16, LESSON_17, LESSON_18,
   LESSON_19, LESSON_20, LESSON_21, LESSON_22, LESSON_23, LESSON_24, LESSON_25, LESSON_26,
+  LESSON_27, LESSON_28, LESSON_29, LESSON_30, LESSON_31, LESSON_32, LESSON_33,
 ];
 
 export function getLesson(id: number): Lesson | undefined {

@@ -15,10 +15,16 @@ images = {}
 for line in MANIFEST.open():
     r = json.loads(line)
     if r.get("file") and isinstance(r.get("exercise_number"), int):
-        ex = f"WB-L{r['lesson_id']:02d}-E{r['exercise_number']:02d}"
+        prefix = "WB2-" if r.get("course_part") == 2 else "WB-"
+        ex = f"{prefix}L{r['lesson_id']:02d}-E{r['exercise_number']:02d}"
         images.setdefault(ex, []).append(r)
+def crop_order(record):
+    suffix = record["file"].rsplit("-", 1)[1].split(".")[0]
+    return (record["pdf_page"], int(suffix) if suffix.isdigit() else suffix)
+
+
 for ex in images:  # page order, then crop order within the page
-    images[ex].sort(key=lambda r: (r["pdf_page"], int(r["file"].rsplit("-", 1)[1].split(".")[0])))
+    images[ex].sort(key=crop_order)
 
 
 def assets(ex):

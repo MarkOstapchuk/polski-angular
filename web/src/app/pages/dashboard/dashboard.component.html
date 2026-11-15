@@ -67,7 +67,7 @@
 
       <section class="continue-card" [class]="'continue-card tone-' + currentLesson().color">
         <div class="continue-content">
-          <div class="lesson-kicker"><span class="kicker-dot"></span> {{ completeCount() === 0 ? 'ZACZNIJ KURS' : 'KONTYNUUJ NAUKĘ' }}</div>
+          <div class="lesson-kicker"><span class="kicker-dot"></span> {{ completeCount() === 0 ? 'ZACZNIJ KURS' : 'KONTYNUUJ NAUKĘ' }} · {{ lessonLabel(currentLesson()) }}</div>
           <h2>{{ currentLesson().title }}</h2>
           <p>{{ currentLesson().subtitle }}</p>
           <div class="continue-meta"><span>◷ 2–4 min / ćwiczenie</span><span>•</span><span>{{ currentLesson().activities.length }} ćwiczeń</span></div>
@@ -81,7 +81,7 @@
           <div class="art-card art-card-front"><span class="art-speech">Dzień dobry</span><span class="art-face">☺</span><span class="art-caption">miło mi</span></div>
           <span class="art-star star-one">✦</span><span class="art-star star-two">✧</span>
         </div>
-        <div class="card-number">0{{ currentLesson().id }}</div>
+      <div class="card-number">{{ lessonNumber(currentLesson()) }}</div>
       </section>
 
       <div class="section-heading" id="lesson-path">
@@ -94,14 +94,14 @@
         @for (lesson of lessons; track lesson.id; let index = $index) {
           <article class="path-row" [class.is-locked]="!isUnlocked(lesson)" [class.is-complete]="isComplete(lesson)">
             <button class="path-node" [class]="'path-node node-' + lesson.color" type="button"
-              [disabled]="!isUnlocked(lesson)" (click)="openLesson(lesson)" [attr.aria-label]="'Otwórz lekcję ' + lesson.id">
+              [disabled]="!isUnlocked(lesson)" (click)="openLesson(lesson)" [attr.aria-label]="'Otwórz ' + lessonLabel(lesson)">
               @if (isComplete(lesson)) { <span>✓</span> }
               @else if (!isUnlocked(lesson)) { <span>⌑</span> }
-              @else { <span>{{ lesson.id }}</span> }
+              @else { <span>{{ lessonNumber(lesson) }}</span> }
             </button>
             <button class="lesson-card" type="button" [disabled]="!isUnlocked(lesson)" (click)="openLesson(lesson)">
               <span class="lesson-card-copy">
-                <span class="lesson-unit">LEKCJA {{ lesson.id }} <span class="unit-dot">·</span> {{ lesson.topic }}</span>
+                <span class="lesson-unit">{{ lessonLabel(lesson) }} <span class="unit-dot">·</span> {{ lesson.topic }}</span>
                 <strong>{{ lesson.title }}</strong>
                 <small>{{ lesson.subtitle }}</small>
               </span>

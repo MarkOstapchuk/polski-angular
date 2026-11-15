@@ -15,7 +15,7 @@
           (pointerup)="cancelWordLookup()" (pointercancel)="cancelWordLookup()" (pointerleave)="cancelWordLookup()"
           (contextmenu)="suppressWordContextMenu($event)">
           <div class="lesson-heading lesson-context">
-            <p class="lesson-breadcrumb">LEKCJA {{ lesson.id }} <span>·</span> {{ lesson.topic }}</p>
+            <p class="lesson-breadcrumb">{{ lessonLabel(lesson.id) }} <span>·</span> {{ lesson.topic }}</p>
             <p class="dictionary-hint">Зажмите польское слово, чтобы увидеть перевод</p>
           </div>
 
@@ -24,7 +24,7 @@
               <section class="lesson-theory" aria-labelledby="lesson-theory-title">
                 <div class="theory-heading">
                   <div>
-                    <p class="theory-kicker">PODRĘCZNIK · LEKCJA {{ lesson.id }} · STRONY {{ theory.coursebookPages }}</p>
+                    <p class="theory-kicker">PODRĘCZNIK · {{ lessonLabel(lesson.id) }} · STRONY {{ theory.coursebookPages }}</p>
                     <h2 id="lesson-theory-title">Теория</h2>
                   </div>
                   <span class="theory-arrow" aria-hidden="true">↓</span>
@@ -180,7 +180,7 @@
     } @else {
       <main class="completion-main">
         <div class="completion-spark">✦</div>
-        <p class="lesson-breadcrumb">LEKCJA {{ lesson.id }} · UKOŃCZONA</p>
+        <p class="lesson-breadcrumb">{{ lessonLabel(lesson.id) }} · UKOŃCZONA</p>
         <h1>Świetna praca!</h1>
         <p class="completion-copy">{{ lesson.title }} — masz już za sobą całą lekcję.</p>
         <div class="score-orb" [class.score-high]="finalScore() >= 80"><strong>{{ finalScore() }}<small>%</small></strong><span>poprawnych odpowiedzi</span></div>

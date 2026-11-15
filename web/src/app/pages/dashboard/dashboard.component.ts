@@ -48,6 +48,16 @@ export class DashboardComponent {
     return this.progressService.hasCompleted(lesson.id);
   }
 
+  lessonLabel(lesson: Lesson): string {
+    return lesson.id > 26
+      ? `CZĘŚĆ 2 · LEKCJA ${this.lessonNumber(lesson)}`
+      : `LEKCJA ${this.lessonNumber(lesson)}`;
+  }
+
+  lessonNumber(lesson: Lesson): string {
+    return String(lesson.id > 26 ? lesson.id - 26 : lesson.id).padStart(2, '0');
+  }
+
   isUnlocked(lesson: Lesson): boolean {
     return this.progressService.isUnlocked(lesson.id);
   }

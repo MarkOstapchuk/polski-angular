@@ -239,3 +239,13 @@
 {"lesson_id": 26, "pdf_page": 99, "file": null, "model": "gemini-4-carbon"}
 {"lesson_id": 26, "pdf_page": 100, "file": null, "model": "gemini-4-carbon"}
 {"lesson_id": 26, "pdf_page": 101, "file": null, "model": "gemini-4-carbon"}
+{"course_part": 2, "lesson_id": 1, "pdf_page": 3, "exercise_number": 9, "label": "a", "description": "Mydło w mydelniczce", "file": "assets/workbook/part2-lesson01-e09-a.png"}
+{"course_part": 2, "lesson_id": 1, "pdf_page": 3, "exercise_number": 9, "label": "b", "description": "Balsam do ciała", "file": "assets/workbook/part2-lesson01-e09-b.png"}
+{"course_part": 2, "lesson_id": 1, "pdf_page": 3, "exercise_number": 9, "label": "c", "description": "Łyżka i widelec", "file": "assets/workbook/part2-lesson01-e09-c.png"}
+{"course_part": 2, "lesson_id": 1, "pdf_page": 3, "exercise_number": 9, "label": "d", "description": "Mop do mycia podłogi", "file": "assets/workbook/part2-lesson01-e09-d.png"}
+{"course_part": 2, "lesson_id": 1, "pdf_page": 3, "exercise_number": 9, "label": "e", "description": "Nożyczki do paznokci", "file": "assets/workbook/part2-lesson01-e09-e.png"}
+{"course_part": 2, "lesson_id": 1, "pdf_page": 3, "exercise_number": 9, "label": "f", "description": "Szminka do ust", "file": "assets/workbook/part2-lesson01-e09-f.png"}
+{"course_part": 2, "lesson_id": 1, "pdf_page": 3, "exercise_number": 9, "label": "g", "description": "Krem do rąk", "file": "assets/workbook/part2-lesson01-e09-g.png"}
+{"course_part": 2, "lesson_id": 1, "pdf_page": 3, "exercise_number": 9, "label": "h", "description": "Maszynka do golenia", "file": "assets/workbook/part2-lesson01-e09-h.png"}
+{"course_part": 2, "lesson_id": 1, "pdf_page": 3, "exercise_number": 9, "label": "i", "description": "Ręcznik", "file": "assets/workbook/part2-lesson01-e09-i.png"}
+{"course_part": 2, "lesson_id": 1, "pdf_page": 3, "exercise_number": 9, "label": "j", "description": "Pasta i szczoteczka do zębów", "file": "assets/workbook/part2-lesson01-e09-j.png"}
