@@ -135,7 +135,7 @@ export const LESSON_42 = lesson(42, 'Przygody, przeżycia, wspomnienia', 'Opowia
   ]),
 ]);
 
-export const LESSON_43 = lesson(43, 'Trochę historii', 'Opowiadamy o stanie wojennym i wydarzeniach z przeszłości', 'Historia Polski · aspekty czasownika · tryb rozkazujący', 'Ćwiczenia 1–14 · podręcznik 112–119', 'coral', [
+export const LESSON_43 = lesson(43, 'Trochę historii', 'Opowiadamy o stanie wojennym i wydarzeniach z przeszłości', 'Historia Polski · aspekty czasownika · tryb rozkazujący', 'Ćwiczenia 1–11 · podręcznik 112–119', 'coral', [
   exercise(17, 1, 'Stan wojenny', 'Wpisz wyraz pasujący do definicji.', [
     ['Oddział wojskowy.', 'oddział wojskowy'], ['Zatrzymać kogoś przez służby.', 'aresztować'],
     ['Funkcjonariusze formacji z czasów PRL.', 'ZOMO'], ['Kartka uprawniająca do zakupu żywności.', 'kartka na żywność'],
@@ -165,16 +165,52 @@ export const LESSON_43 = lesson(43, 'Trochę historii', 'Opowiadamy o stanie woj
     ['Ona ___ list do rodziny. (pisać)', 'pisała'], ['Wczoraj ___ do domu. (pójść, ona)', 'poszła'],
     ['Wróciła i ___ wszystkie dokumenty. (sprawdzać)', 'sprawdzała'],
   ]),
-  exercise(17, 7, 'Polecenia', 'Utwórz tryb rozkazujący.', [
-    ['zobaczyć (wy)', 'Zobaczcie'], ['położyć się (ty)', 'Połóż się'], ['powiedzieć (ty)', 'Powiedz'],
+  exercise(17, 6, 'Życie w stanie wojennym', 'Dokończ zdania zgodnie z wyjaśnieniem.', [
+    ['Marek został aresztowany za odmowę, czyli ___ .', 'nie wykonał rozkazu'],
+    ['Może spokojnie patrzeć ludziom w oczy, czyli ___ .', 'nie musi się wstydzić'],
+    ['Marek opamiętał się podczas pacyfikacji, czyli ___ .', 'nie chciał strzelać do ludzi'],
+    ['Zakaz zgromadzeń oznacza, że ___ .', 'nie można się spotykać w większych grupach'],
+    ['W kościele ludzie ___ .', 'mogli się tam spotykać'],
+    ['Za noszenie znaczka „Solidarności” groziły ___ .', 'poważne konsekwencje'],
+    ['Robotnicy pracowali jak żółw, czyli ___ .', 'mało wydajnie, powoli'],
+    ['Znak V miał oznaczać, że „Solidarność” ___ .', 'zwycięży'],
+    ['Elementy fotografii nabrały ___ .', 'symbolicznego znaczenia'],
+  ]),
+  exercise(17, 7, 'Wspomnienia o stanie wojennym', 'Dopasuj wspomnienie do tytułu.', [
+    ['A', 'Na cenzurowanym'], ['B', 'Światło pamięci'], ['C', 'Drugi obieg'],
+    ['D', 'Państwo strzela do robotników'], ['E', 'Stan wojenny i sanki'],
+  ]),
+  exercise(17, 8, 'Wspomnienia z przeszłości', 'Wpisz formę czasownika w czasie przeszłym.', [
+    ['Javier znów nie ___ pracy domowej. (odrobić)', 'odrobił'],
+    ['Mami ___ plakat i ___ konkurs. (zaprojektować, wygrać)', 'zaprojektowała; wygrała'],
+    ['Karolina pół nocy ___ . (gadać)', 'gadała'], ['Karol wreszcie ___, o co chodziło. (zrozumieć)', 'zrozumiał'],
+    ['Pani Maj raz w miesiącu ___ list. (pisać)', 'pisała'],
+    ['Ania ___ do fryzjera i ___ fryzurę. (pójść, zmienić)', 'poszła; zmieniła'],
+    ['Uwe co tydzień ___ zadowolona. (wracać)', 'wracała'],
+    ['On ___ stan firmowego konta. (sprawdzać)', 'sprawdzał'],
+  ]),
+  exercise(17, 9, 'Aspekt w przeszłości', 'Oceń, czy zdanie jest poprawne; popraw błędną formę.', [
+    ['Jadł śniadanie i jednocześnie przeczytał gazetę.', 'B: czytał'],
+    ['Nagle dziecko zaczynało płakać.', 'B: zaczęło'], ['W weekendy na ogół gotował tata.', 'P'],
+    ['Kiedy babcia zasłabła, natychmiast jej pomagał.', 'B: pomógł'],
+    ['Gdzie kładłaś mój telefon?', 'B: położyłaś'], ['Nigdzie nie mógł go znajdować.', 'B: znaleźć'],
+    ['Najpierw przepisał tekst, a potem sprawdził błędy.', 'P'],
+  ]),
+  exercise(17, 10, 'Polecenia', 'Utwórz tryb rozkazujący.', [
+    ['zobaczyć (wy)', 'Zobaczcie'], ['położyć się (wy)', 'Połóżcie się'], ['powiedzieć (ty)', 'Powiedz'],
     ['opowiedzieć (ty)', 'Opowiedz'], ['znaleźć (ty)', 'Znajdź'], ['odpowiedzieć (wy)', 'Odpowiedzcie'],
     ['brać lekarstwo (ty)', 'Bierz'], ['wziąć (ty)', 'Weź'],
   ]),
-  exercise(17, 8, 'Aspekt czasownika', 'Wybierz aspekt pasujący do znaczenia.', [
-    ['Przeczytaj tekst i ___, co się stało. (opowiadać / opowiedzieć)', 'opowiedz'],
-    ['Kiedy mieszkał w Polsce, często ___ muzea. (odwiedzać / odwiedzić)', 'odwiedzał'],
-    ['Wczoraj ___ do domu o ósmej. (wracać / wrócić)', 'wrócił'],
-    ['Cały wieczór ___ książkę. (czytać / przeczytać)', 'czytał'],
+  exercise(17, 11, 'Polecenia i zakazy', 'Przekształć zdania zgodnie z podanym trybem.', [
+    ['położyć (ty)', 'Połóż'], ['powiedzieć (ty)', 'Powiedz'], ['przeczytać (ty)', 'Przeczytaj'],
+    ['wziąć (ty)', 'Weź'], ['zjeść (ty)', 'Zjedz'], ['obejrzeć (ty)', 'Obejrzyj'],
+    ['wysłać (ty)', 'Wyślij'], ['odwiedzić (ty)', 'Odwiedź'],
+    ['nie czytać (wy)', 'Nie czytajcie tego!'], ['nie pisać (ty)', 'Nie pisz tego listu!'],
+    ['nie powtarzać (my)', 'Nie powtarzajmy tej części!'],
+    ['nie słuchać (wy)', 'Nie słuchajcie tej piosenki!'],
+    ['nie łączyć (my)', 'Nie łączmy tych elementów!'],
+    ['nie uzupełniać (wy)', 'Nie uzupełniajcie tekstu!'],
+    ['nie kończyć (wy)', 'Nie kończcie zadania!'],
   ]),
 ]);
 
