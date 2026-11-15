@@ -109,6 +109,28 @@ export const LESSON_38: Lesson = {
       typed('q6', 'System wspomagający parkowanie i jazdę.', 'Parkuj i jedź'),
       typed('q7', 'Fotel bezpieczeństwa dla małego dziecka.', 'fotelik'),
     ]),
+    activity(11, 'Czasowniki ruchu', 'Uzupełnij zdania właściwą formą czasownika.', [
+      ...[
+        ['Pociąg za chwilę ___ ze stacji.', 'odjedzie'], ['___ na parking przy muzeum.', 'Wjedziemy'],
+        ['Samochód ___ pod sam hotel.', 'podjedzie'], ['O której ___ jutro z domu?', 'wyjedziesz'],
+        ['___ przez miasto i zatrzymam się przy dworcu.', 'Przejadę'],
+        ['Na kolejnym zjeździe ___ z autostrady.', 'Zjedziesz'],
+        ['Czy ___ do centrum przed południem?', 'Dojedziecie'],
+        ['Autobusy ___ objazdem.', 'Objadą'], ['Samochody ___ w przeciwnych kierunkach.', 'Rozjadą się'],
+        ['Kiedy ___ po nas na lotnisko?', 'Przyjedziesz'],
+      ].map(([prompt, answer], i) => typed(`q${i + 1}`, prompt, answer)),
+    ]),
+    activity(12, 'Przyimki z czasownikami ruchu', 'Wstaw czasownik z odpowiednim przedrostkiem.', [
+      ...[
+        ['Zaraz ___ z parkingu. (odjechać)', 'odjadę'], ['Czy ___ do miasta od północy? (wjechać)', 'wjedziesz'],
+        ['Taksówka ___ pod wejście. (podjechać)', 'podjedzie'], ['Kiedy ___ z domu? (wyjechać)', 'wyjedziesz'],
+        ['___ przez tunel. (przejechać)', 'Przejadę'], ['Na rondzie ___ w prawo. (zjechać)', 'Zjedziesz'],
+        ['Czy ___ do celu przed wieczorem? (dojechać)', 'Dojedziecie'],
+        ['Oni ___ centrum, żeby ominąć korek. ( objechać)', 'Objadą'],
+        ['Auta ___ na skrzyżowaniu. (rozjechać się)', 'Rozjadą się'],
+        ['O której ___ do Krakowa? (przyjechać)', 'Przyjedziesz'],
+      ].map(([prompt, answer], i) => typed(`q${i + 1}`, prompt, answer)),
+    ]),
     activity(13, 'Sytuacje w podróży', 'Posłuchaj nagrań i uzupełnij czasowniki ruchu.', [
       ...[
         ['Jutro ___ z miasta wcześnie rano.', 'Wyjedziemy'], ['Na zjeździe ___ z autostrady.', 'Zjedziemy'],
@@ -116,6 +138,14 @@ export const LESSON_38: Lesson = {
         ['Czy ___ na teren parkingu?', 'wjedziesz'], ['Oni ___ całe miasto, żeby ominąć korek.', 'Objadą'],
         ['___ z tej ulicy przy następnym skrzyżowaniu.', 'Zjadę'], ['Autobus ___ pod dworzec.', 'podjedzie'],
         ['Pociągi ___ za pięć minut.', 'Odjadą'], ['O której ___ z domu?', 'wyjedziesz'],
+      ].map(([prompt, answer], i) => typed(`q${i + 1}`, prompt, answer)),
+    ]),
+    activity(14, 'Polecenia na drodze', 'Utwórz tryb rozkazujący.', [
+      ...[
+        ['wsiąść (ty)', 'Wsiądź'], ['skręcić (ty)', 'Skręć'], ['dojechać (ty)', 'Dojedź'],
+        ['wjechać (ty)', 'Wjedź'], ['jechać (ty)', 'Jedź'], ['przejechać (ty)', 'Przejedź'],
+        ['zjechać (ty)', 'Zjedź'], ['obejść (ty)', 'Obejdź'], ['zawrócić (ty)', 'Zawróć'],
+        ['skręcić (wy)', 'Skręćcie'],
       ].map(([prompt, answer], i) => typed(`q${i + 1}`, prompt, answer)),
     ]),
     activity(15, 'Planowanie trasy', 'Posłuchaj nagrań i wpisz właściwą formę czasownika ruchu.', [
