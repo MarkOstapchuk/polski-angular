@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component, computed, inject, OnDestroy, OnInit, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { AUDIO_TRACKS } from '../../data/audio-tracks';
 import { ActivityItem, ActivityKind, getLesson } from '../../data/lesson-bank';
 import { LESSON_THEORY, LessonTheoryId } from '../../data/lesson-theory';
 import { WORKBOOK_IMAGES, WorkbookImage } from '../../data/workbook-images';
@@ -45,6 +46,21 @@ export class LessonComponent implements OnInit, OnDestroy {
   readonly awardedXp = signal(0);
   readonly activity = computed(() => this.lesson()?.activities[this.activeIndex()]);
   readonly matchOptions = computed(() => [...new Set(this.activity()?.items.flatMap((item) => item.options ?? []) ?? [])]);
+  readonly activityAudioPlayers = computed(() => {
+    const activity = this.activity();
+    if (!activity) return [];
+    const tracks = AUDIO_TRACKS.filter((track) => track.exerciseId === activity.sourceExerciseId);
+    const players = tracks.map((track) => ({
+      file: track.file,
+      label: activity.audioUrl === this.audioTrackUrl(track.file) && activity.audioLabel
+        ? activity.audioLabel
+        : track.label,
+    }));
+    if (activity.audioUrl && !players.some((player) => this.audioTrackUrl(player.file) === activity.audioUrl)) {
+      players.push({ file: activity.audioUrl, label: activity.audioLabel || 'Nagranie' });
+    }
+    return players;
+  });
   private readonly allImages = computed(() => WORKBOOK_IMAGES[this.activity()?.sourceExerciseId ?? ''] ?? []);
   /** Images not attached to a specific question, shown above the list. */
   readonly images = computed(() => {
@@ -321,6 +337,10 @@ export class LessonComponent implements OnInit, OnDestroy {
 
   expectedAnswer(item: ActivityItem): string {
     return item.accepted[0];
+  }
+
+  audioTrackUrl(file: string): string {
+    return file.startsWith('/') ? file : `/assets/telegram_audio/${file}`;
   }
 
   isLastActivity(): boolean {

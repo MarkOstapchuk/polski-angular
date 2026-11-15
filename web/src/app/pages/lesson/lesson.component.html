@@ -61,11 +61,11 @@
           </div>
 
           <section class="exercise-card" [class.is-checked]="checked()">
-            @if (activity.audioUrl) {
+            @for (track of activityAudioPlayers(); track track.file) {
               <div class="audio-panel">
                 <div class="audio-icon" aria-hidden="true">♫</div>
-                <div class="audio-copy"><strong>{{ activity.audioLabel || 'Nagranie' }}</strong><small>Możesz odtworzyć nagranie ponownie.</small></div>
-                <audio controls preload="none" [src]="activity.audioUrl">Twoja przeglądarka nie obsługuje audio.</audio>
+                <div class="audio-copy"><strong>{{ track.label }}</strong><small>Możesz odtworzyć nagranie ponownie.</small></div>
+                <audio controls preload="none" [src]="audioTrackUrl(track.file)">Twoja przeglądarka nie obsługuje audio.</audio>
               </div>
             }
 
@@ -142,7 +142,7 @@
                           }
                         </div>
                       } @else {
-                        <input class="answer-input" [id]="activity.id + '-' + item.id" [ngModel]="answerFor(item.id)" (ngModelChange)="setAnswer(item.id, $event)" [disabled]="checked()" [placeholder]="activity.audioUrl ? 'Wpisz to, co słyszysz' : 'Twoja odpowiedź'" [attr.autocomplete]="'off'" [attr.aria-label]="item.prompt" (keydown.enter)="$event.preventDefault()">
+                        <input class="answer-input" [id]="activity.id + '-' + item.id" [ngModel]="answerFor(item.id)" (ngModelChange)="setAnswer(item.id, $event)" [disabled]="checked()" [placeholder]="activityAudioPlayers().length ? 'Wpisz to, co słyszysz' : 'Twoja odpowiedź'" [attr.autocomplete]="'off'" [attr.aria-label]="item.prompt" (keydown.enter)="$event.preventDefault()">
                       }
                     }
                     @if (checked()) {
