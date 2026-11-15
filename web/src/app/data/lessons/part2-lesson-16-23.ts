@@ -576,43 +576,75 @@ export const LESSON_47 = lesson(47, 'Sztuka i piractwo', 'Rozmawiamy o prawach a
 ]);
 
 export const LESSON_48 = lesson(48, 'Warto zobaczyć', 'Opisujemy dzieła sztuki i wyrażamy swoje wrażenia', 'Muzea · wystawy · rzeczowniki na -um', 'Ćwiczenia 1–11 · podręcznik 146–151', 'violet', [
-  exercise(22, 1, 'Kolekcje i dzieła sztuki', 'Wpisz właściwą nazwę dziedziny lub przedmiotu.', [
-    ['Zbieranie monet.', 'numizmatyka'], ['Wyroby z gliny.', 'ceramika'], ['Ręcznie wykonane przedmioty.', 'rękodzieło'],
-    ['Trójwymiarowe dzieło z kamienia lub drewna.', 'rzeźba'], ['Wstępny rysunek.', 'szkic'],
-    ['Przedmioty związane z wojskiem.', 'militaria'], ['Sztuka malowania obrazów.', 'malarstwo'],
-    ['Drukowana praca graficzna.', 'plakat'], ['Przedmioty codziennego użytku o walorach estetycznych.', 'sztuka użytkowa'],
+  exercise(22, 1, 'Rzeczowniki zakończone na -um', 'Uzupełnij zdania właściwą formą.', [
+    ['Jego córka chodzi do ___ w Krakowie.', 'najlepszego gimnazjum'], ['W ___ pracuje jego żona?', 'którym laboratorium'],
+    ['Leki trafią do ___ oraz szpitala dziecięcego.', 'kilku hospicjów'],
+    ['Kolekcja będzie wystawiana w ___ w Polsce.', 'różnych muzeach'],
+    ['Mają w domu trzy ___.', 'ogromne akwaria'], ['Mają w domu dwa ___.', 'terraria'],
+    ['W tych ___ matura wypadła najlepiej.', 'dwóch liceach'],
+    ['W Krakowie zbudowano dwa ___.', 'kolejne centra handlowe'],
+    ['Badania wykona pan w jednym z ___.', 'naszych ambulatoriów'],
   ]),
-  exercise(22, 2, 'Wrażenia z wystawy', 'Uzupełnij opinię właściwym słowem.', [
-    ['Ta kolekcja ___ mnie.', 'fascynuje'], ['Wystawa ___ publiczność.', 'urzekła'],
-    ['To ___ ciekawa ekspozycja.', 'niezwykle'], ['Jakość reprodukcji jest ___.', 'marna'],
-    ['Artystka ma ___ wyobraźnię.', 'niezrównaną'], ['To ___ dzieło.', 'urocze'],
-    ['To przeciętny obraz, nic ___.', 'nadzwyczajnego'], ['Wystawa ___ zwiedzających.', 'zadziwia'],
+  exercise(22, 2, 'Liczba mnoga rzeczowników na -um', 'Zamień zdania na liczbę mnogą.', [
+    ['W tym gimnazjum uczył się znany aktor.', 'W tych gimnazjach uczyli się znani aktorzy.'],
+    ['W twoim laboratorium pracuje wybitny fachowiec.', 'W waszych laboratoriach pracują wybitni fachowcy.'],
+    ['Był problem z wielkim akwarium.', 'Były problemy z wielkimi akwariami.'],
+    ['Jego sklep ma stoisko w centrum handlowym.', 'Ich sklepy mają stoiska w centrach handlowych.'],
+    ['Pacjent może liczyć na pomoc hospicjum.', 'Pacjenci mogą liczyć na pomoc hospicjów.'],
+    ['Dzieło pochodzi ze znanego muzeum.', 'Dzieła pochodzą ze znanych muzeów.'],
   ]),
-  exercise(22, 3, 'Rzeczowniki zakończone na -um', 'Uzupełnij zdanie odpowiednią formą.', [
-    ['W tym ___ oglądamy wystawę.', 'muzeum'], ['Nowe ___ ma wiele sal.', 'muzeum'],
-    ['Spotkaliśmy się w ___.', 'muzeum'], ['Wyszliśmy z ___.', 'muzeum'],
-    ['W akwarium pływają kolorowe ___.', 'ryby'], ['Zobaczyliśmy ogromne ___.', 'akwaria'],
-    ['Słynne ___ znajduje się w centrum miasta.', 'liceum'], ['Pracuje w dwóch ___.', 'liceach'],
+  exercise(22, 3, 'Obrazy i kierunki sztuki', 'Uzupełnij tekst nazwami dzieł i gatunków.', [
+    ['Mami przygotowuje się do egzaminu do ___ Sztuk Pięknych.', 'Akademii'],
+    ['Namalowała kilka ___ pani Maj.', 'portretów'], ['Karolowi namalowała ___.', 'karykaturę'],
+    ['Próbowała namalować swój ___.', 'autoportret'], ['Zamiast niego namalowała barwną ___.', 'abstrakcję'],
+    ['Podobała mu się ___ z misek, dzbanków i owoców.', 'martwa natura'],
+    ['Mami była dumna z jesiennego ___.', 'pejzażu'],
   ]),
-  exercise(22, 4, 'Czyja to praca?', 'Uzupełnij odpowiedzi na pytania do tekstu.', [
-    ['Jaki zawód ma Andrzej?', 'Jest lekarzem i kardiochirurgiem.'],
-    ['Gdzie można oglądać jego prace?', 'W galerii „Nowa Sztuka”.'],
-    ['Czy uczył się malować?', 'Nie, nigdy nie uczył się sztuki malowania.'],
-    ['Dlaczego zaczął malować?', 'Malowanie stało się ucieczką od stresu zawodowego.'],
-    ['Kto doradził mu malowanie na płótnie?', 'Jego pięcioletni syn.'],
-    ['Dlaczego nie był na wernisażu?', 'Miał nieplanowaną operację.'],
+  exercise(22, 4, 'Opisy i opinie', 'Zastąp podkreślone wyrażenia słowami z listy.', [
+    ['przyciąga uwagę', 'fascynuje'], ['zachwyciła wszystkich', 'urzekła'],
+    ['niezwykle ciekawa', 'niesłychanie'], ['słabe reprodukcje', 'marne'],
+    ['wyjątkowa wyobraźnia', 'niezrównana'], ['czarujące dziecko', 'urocze'],
+    ['średni film', 'przeciętny'], ['wciąż zaskakuje', 'zadziwia'],
+  ]),
+  exercise(22, 5, 'Przypadki w opiniach o sztuce', 'Wpisz nazwę przypadka.', [
+    ['w wartościach', 'miejscownik'], ['przyciąga mnie', 'biernik'], ['z rewelacji', 'dopełniacz'],
+    ['według kogoś', 'dopełniacz'], ['z wrażeniem', 'narzędnik'], ['do myślenia', 'dopełniacz'],
+    ['w swoim rodzaju', 'miejscownik'], ['nie mieć końca', 'dopełniacz'], ['podoba mi się', 'celownik'],
+  ]),
+  exercise(22, 6, 'Co do siebie pasuje?', 'Połącz przymiotnik z rzeczownikiem.', [
+    ['porywająca', 'kompozycja'], ['arcydzieło', 'malarstwa'], ['niezrównany', 'artysta'],
+    ['mistrzowska', 'muzyka'], ['wybitne', 'dzieło'], ['niesamowite', 'wrażenie'],
+    ['uważny', 'odbiorca'], ['utalentowany', 'muzyk'],
   ]),
   exercise(22, 7, 'Opinie o wystawie', 'Posłuchaj wypowiedzi i uzupełnij brakujące słowa.', [
     ['Angela: ___ wystawę.', 'Naprawdę'], ['Angela: To ___ praca.', 'rewelacyjna'],
-    ['Mami: To dość ___ .', 'kiepska'], ['Javier: To świetny ___.', 'pomysł'],
-    ['Javier: Wolę ___ sztukę.', 'tradycyjną'],
+    ['Mami: To dość ___ .', 'kiepska'], ['Mami: Wolę oglądać prace ___.', 'artystów'],
+    ['Javier: To świetny ___.', 'pomysł'], ['Javier: Wolę ___ sztukę.', 'tradycyjną'],
+  ]),
+  exercise(22, 8, 'Zaimki i przypadki', 'Wpisz właściwą formę zaimka.', [
+    ['Ta wystawa przyciąga ___ uwagę. (oni)', 'ich'], ['___ podoba się ta rzeźba. (my)', 'nam'],
+    ['Artysta zachwycił ___. (ja)', 'mnie'], ['Według ___ obraz jest niezwykły. (on)', 'niego'],
+    ['Czy widziałeś ___? (on)', 'go'], ['To dzieło zainteresowało ___. (ja)', 'mnie'],
+    ['Wystawa urzekła ___. (ona)', 'ją'], ['Krytyk opowiada o ___. (oni)', 'nich'],
+    ['Prace należą do ___. (oni)', 'nich'], ['To podoba się ___. (ja)', 'mi'],
+    ['Kupiłem bilet dla ___. (ty)', 'ciebie'], ['Muzeum zaprosiło ___. (wy)', 'was'],
   ]),
   exercise(22, 9, 'Muzea i kolekcje', 'Posłuchaj krótkich nagrań i wpisz temat kolekcji.', [
     ...['numizmatyka', 'ceramika', 'rękodzieło', 'rzeźba', 'szkic', 'militaria', 'malarstwo', 'plakat', 'sztuka użytkowa'].map((x, i) => [`Nagranie ${i + 1}`, x] as Entry),
   ]),
+  exercise(22, 10, 'Wystawa i artysta', 'Oceń zdania jako prawdziwe lub nieprawdziwe.', [
+    ['Andrzej jest lekarzem.', 'P'], ['Jego obrazy można oglądać w galerii Nowa Sztuka.', 'N'],
+    ['Andrzej uczył się sztuki malowania.', 'N'], ['Jest kardiochirurgiem.', 'P'],
+    ['Malowanie stało się dla niego ucieczką od stresu.', 'N'],
+    ['Ordynator zirytował się z powodu rysunku na dokumentacji pacjenta.', 'P'],
+    ['Andrzej kupił szkicownik.', 'N'], ['Pięcioletni syn doradził mu malowanie na płótnie.', 'N'],
+  ]),
   exercise(22, 11, 'Rozmowa o artyście', 'Posłuchaj i uzupełnij odpowiedzi.', [
     ['Jaki zawód ma Andrzej?', 'lekarz'], ['Gdzie można oglądać jego prace?', 'w galerii Nowa Sztuka'],
-    ['Co stało się jego ucieczką od stresu?', 'malowanie'], ['Kto poradził mu malować na płótnie?', 'jego syn'],
+    ['Czy Andrzej uczył się malować?', 'nie'], ['Jaką specjalizację ma Andrzej?', 'kardiochirurg'],
+    ['Co stało się jego ucieczką od stresu?', 'malowanie'], ['Dlaczego zirytował się ordynator?', 'Andrzej narysował coś na dokumentacji pacjenta'],
+    ['Co kupił Andrzej?', 'szkicownik'], ['Kto doradził mu malowanie na płótnie?', 'jego pięcioletni syn'],
+    ['Gdzie ustawił sztalugi?', 'w pokoiku na poddaszu'], ['Kto wysłał obraz?', 'żona'],
     ['Dlaczego nie był na wernisażu?', 'Miał nieplanowaną operację.'],
   ]),
 ]);
