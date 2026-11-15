@@ -29,6 +29,15 @@ import { LESSON_32 } from './lessons/part2-lesson-06';
 import { LESSON_33 } from './lessons/part2-lesson-07';
 import { LESSON_34 } from './lessons/part2-lesson-08';
 import { LESSON_35 } from './lessons/part2-lesson-09';
+import { LESSON_36 } from './lessons/part2-lesson-10';
+import { LESSON_37 } from './lessons/part2-lesson-11';
+import { LESSON_38 } from './lessons/part2-lesson-12';
+import { LESSON_39 } from './lessons/part2-lesson-13';
+import { LESSON_40 } from './lessons/part2-lesson-14';
+import { LESSON_41 } from './lessons/part2-lesson-15';
+import {
+  LESSON_42, LESSON_43, LESSON_44, LESSON_45, LESSON_46, LESSON_47, LESSON_48, LESSON_49,
+} from './lessons/part2-lesson-16-23';
 
 export * from './lesson-types';
 
@@ -862,6 +871,8 @@ export const LESSONS: Lesson[] = [
   LESSON_13, LESSON_14, LESSON_15, LESSON_16, LESSON_17, LESSON_18,
   LESSON_19, LESSON_20, LESSON_21, LESSON_22, LESSON_23, LESSON_24, LESSON_25, LESSON_26,
   LESSON_27, LESSON_28, LESSON_29, LESSON_30, LESSON_31, LESSON_32, LESSON_33, LESSON_34, LESSON_35,
+  LESSON_36, LESSON_37, LESSON_38, LESSON_39, LESSON_40, LESSON_41,
+  LESSON_42, LESSON_43, LESSON_44, LESSON_45, LESSON_46, LESSON_47, LESSON_48, LESSON_49,
 ];
 
 export function getLesson(id: number): Lesson | undefined {
