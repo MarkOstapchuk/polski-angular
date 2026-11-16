@@ -4,11 +4,13 @@ import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { ProgressService } from '../../services/progress.service';
+import { LanguageSwitcherComponent } from '../../i18n/language-switcher.component';
+import { LanguageService } from '../../i18n/language.service';
 
 @Component({
   selector: 'app-auth',
   standalone: true,
-  imports: [FormsModule, RouterLink],
+  imports: [FormsModule, RouterLink, LanguageSwitcherComponent],
   templateUrl: './auth.component.html',
   styleUrl: './auth.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -16,6 +18,7 @@ import { ProgressService } from '../../services/progress.service';
 export class AuthComponent {
   private readonly auth = inject(AuthService);
   readonly progress = inject(ProgressService);
+  readonly language = inject(LanguageService);
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
 
@@ -28,7 +31,7 @@ export class AuthComponent {
 
   constructor() {
     this.route.queryParamMap.pipe(takeUntilDestroyed()).subscribe((params) => {
-      this.error.set(params.get('error') === 'session' ? 'Nie udało się sprawdzić sesji. Zaloguj się ponownie.' : null);
+      this.error.set(params.get('error') === 'session' ? this.language.t('auth.sessionError') : null);
     });
   }
 
@@ -48,7 +51,7 @@ export class AuthComponent {
       if (this.mode() === 'sign-up') {
         const signedIn = await this.auth.signUp(this.email.trim(), this.password);
         if (!signedIn) {
-          this.message.set('Sprawdź pocztę i potwierdź adres e-mail, aby dokończyć rejestrację.');
+          this.message.set(this.language.t('auth.confirmEmail'));
           return;
         }
       } else {

@@ -8,11 +8,13 @@ import { LESSON_THEORY, LessonTheoryId } from '../../data/lesson-theory';
 import { WORKBOOK_IMAGES, WorkbookImage } from '../../data/workbook-images';
 import { ProgressService } from '../../services/progress.service';
 import { supabase } from '../../services/supabase.client';
+import { LanguageSwitcherComponent } from '../../i18n/language-switcher.component';
+import { LanguageService } from '../../i18n/language.service';
 
 @Component({
   selector: 'app-lesson',
   standalone: true,
-  imports: [FormsModule, RouterLink],
+  imports: [FormsModule, RouterLink, LanguageSwitcherComponent],
   templateUrl: './lesson.component.html',
   styleUrl: './lesson.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -21,6 +23,7 @@ export class LessonComponent implements OnInit, OnDestroy {
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
   private readonly progress = inject(ProgressService);
+  readonly language = inject(LanguageService);
   readonly syncError = this.progress.syncError;
   readonly dictionaryWord = signal<string | null>(null);
   readonly dictionaryTranslations = signal<string[]>([]);
@@ -37,8 +40,8 @@ export class LessonComponent implements OnInit, OnDestroy {
   readonly lesson = signal(getLesson(Number(this.route.snapshot.paramMap.get('lessonId'))));
   lessonLabel(lessonId: number): string {
     return lessonId > 26
-      ? `CZĘŚĆ 2 · LEKCJA ${String(lessonId - 26).padStart(2, '0')}`
-      : `LEKCJA ${String(lessonId).padStart(2, '0')}`;
+      ? `${this.language.t('lesson.part')} 2 · ${this.language.t('lesson.lesson')} ${String(lessonId - 26).padStart(2, '0')}`
+      : `${this.language.t('lesson.lesson')} ${String(lessonId).padStart(2, '0')}`;
   }
   dashboardUrl(): string {
     return (this.lesson()?.id ?? 1) > 26 ? '/course/part-2' : '/course/part-1';

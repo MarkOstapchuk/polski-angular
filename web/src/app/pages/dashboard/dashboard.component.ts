@@ -6,11 +6,13 @@ import { COURSES, CourseSummary, LESSON_CATALOG, LessonSummary } from '../../dat
 import { AuthService } from '../../services/auth.service';
 import { ProgressService } from '../../services/progress.service';
 import { PwaInstallService } from '../../services/pwa-install.service';
+import { LanguageSwitcherComponent } from '../../i18n/language-switcher.component';
+import { LanguageService } from '../../i18n/language.service';
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [RouterLink],
+  imports: [RouterLink, LanguageSwitcherComponent],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -19,6 +21,7 @@ export class DashboardComponent {
   private readonly router = inject(Router);
   private readonly route = inject(ActivatedRoute);
   readonly auth = inject(AuthService);
+  readonly language = inject(LanguageService);
   readonly progressService = inject(ProgressService);
   readonly pwa = inject(PwaInstallService);
   readonly courses = COURSES;
@@ -41,13 +44,14 @@ export class DashboardComponent {
   readonly weekDays = computed(() => Array.from({ length: 7 }, (_, index) => {
     const date = new Date();
     date.setDate(date.getDate() - 6 + index);
-    const letters = ['N', 'P', 'W', 'Ś', 'C', 'P', 'S'];
+    const letters = this.language.locale() === 'en' ? ['S', 'M', 'T', 'W', 'T', 'F', 'S']
+      : this.language.locale() === 'ru' ? ['В', 'П', 'В', 'С', 'Ч', 'П', 'С'] : ['N', 'P', 'W', 'Ś', 'C', 'P', 'S'];
     const lastStudyDate = this.progress().lastStudyDate;
     const lastDate = lastStudyDate ? new Date(`${lastStudyDate}T12:00:00`) : null;
     const dayGap = lastDate ? Math.round((lastDate.getTime() - new Date(date.getFullYear(), date.getMonth(), date.getDate(), 12).getTime()) / 86_400_000) : -1;
     return { label: letters[date.getDay()], active: dayGap >= 0 && dayGap < this.progress().streak };
   }));
-  readonly greeting = this.getGreeting();
+  readonly greeting = computed(() => this.getGreeting());
 
   openCourse(course: CourseSummary): void {
     void this.router.navigate(['/course', course.id]);
@@ -73,8 +77,8 @@ export class DashboardComponent {
 
   lessonLabel(lesson: LessonSummary): string {
     return lesson.id > 26
-      ? `CZĘŚĆ 2 · LEKCJA ${this.lessonNumber(lesson)}`
-      : `LEKCJA ${this.lessonNumber(lesson)}`;
+      ? `${this.language.t('lesson.part')} 2 · ${this.language.t('lesson.lesson')} ${this.lessonNumber(lesson)}`
+      : `${this.language.t('lesson.lesson')} ${this.lessonNumber(lesson)}`;
   }
 
   lessonNumber(lesson: LessonSummary): string {
@@ -102,8 +106,8 @@ export class DashboardComponent {
 
   private getGreeting(): string {
     const hour = new Date().getHours();
-    if (hour < 11) return 'Dzień dobry';
-    if (hour < 18) return 'Miłego dnia';
-    return 'Dobry wieczór';
+    if (hour < 11) return this.language.t('dashboard.greetingMorning');
+    if (hour < 18) return this.language.t('dashboard.greetingDay');
+    return this.language.t('dashboard.greetingEvening');
   }
 }

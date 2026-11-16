@@ -1,12 +1,13 @@
 @if (lesson(); as lesson) {
   <div class="lesson-shell">
     <header class="lesson-topbar">
-      <a class="close-button" [routerLink]="dashboardUrl()" aria-label="Wróć do ścieżki">×</a>
-      <div class="top-progress" aria-label="Postęp lekcji">
+      <a class="close-button" [routerLink]="dashboardUrl()" [attr.aria-label]="language.t('lesson.back')">×</a>
+      <div class="top-progress" [attr.aria-label]="language.t('lesson.progress')">
         <div class="progress-track"><span [style.width.%]="finished() ? 100 : activityProgress()"></span></div>
         <small>{{ finished() ? lesson.activities.length : activeIndex() + 1 }} / {{ lesson.activities.length }}</small>
       </div>
-      <div class="lesson-xp"><span>✦</span> {{ finished() ? '+' + awardedXp() : 'do 20' }} XP</div>
+      <div class="lesson-xp"><span>✦</span> {{ finished() ? '+' + awardedXp() : language.t('lesson.upTo') + ' 20' }} XP</div>
+      <app-language-switcher />
     </header>
 
     @if (!finished()) {
@@ -14,14 +15,14 @@
         <main class="lesson-main" (pointerdown)="startWordLookup($event)" (pointermove)="moveWordLookup($event)"
           (pointerup)="cancelWordLookup()" (pointercancel)="cancelWordLookup()" (pointerleave)="cancelWordLookup()"
           (contextmenu)="suppressWordContextMenu($event)">
-          <nav class="exercise-picker" aria-label="Выберите упражнение">
-            <p class="exercise-picker-label">Упражнения · можно проходить в любом порядке</p>
+          <nav class="exercise-picker" [attr.aria-label]="language.t('lesson.exercisePicker')">
+            <p class="exercise-picker-label">{{ language.t('lesson.exercisePicker') }}</p>
             <div class="exercise-picker-list">
               @for (exercise of lesson.activities; track exercise.id; let index = $index) {
                 <button class="exercise-picker-button" type="button"
                   [class.is-active]="activeIndex() === index" [class.is-complete]="isActivityComplete(exercise)"
                   [attr.aria-current]="activeIndex() === index ? 'step' : null"
-                  [attr.aria-label]="'Упражнение ' + (index + 1) + ': ' + exercise.title"
+                  [attr.aria-label]="language.t('lesson.exercise') + ' ' + (index + 1) + ': ' + exercise.title"
                   [title]="exercise.title" (click)="selectActivity(index)">
                   <span>{{ index + 1 }}</span>
                   @if (isActivityComplete(exercise)) { <small aria-hidden="true">✓</small> }
@@ -31,7 +32,7 @@
           </nav>
           <div class="lesson-heading lesson-context">
             <p class="lesson-breadcrumb">{{ lessonLabel(lesson.id) }} <span>·</span> {{ lesson.topic }}</p>
-            <p class="dictionary-hint">Зажмите польское слово, чтобы увидеть перевод</p>
+            <p class="dictionary-hint">{{ language.t('lesson.lookup') }}</p>
           </div>
 
           @if (activeIndex() === 0) {
@@ -39,32 +40,32 @@
               <section class="lesson-theory" aria-labelledby="lesson-theory-title">
                 <div class="theory-heading">
                   <div>
-                    <p class="theory-kicker">PODRĘCZNIK · {{ lessonLabel(lesson.id) }} · STRONY {{ theory.coursebookPages }}</p>
-                    <h2 id="lesson-theory-title">Теория</h2>
+                    <p class="theory-kicker">{{ language.t('lesson.textbook') }} · {{ lessonLabel(lesson.id) }} · {{ language.t('lesson.pages') }} {{ theory.coursebookPages }}</p>
+                    <h2 id="lesson-theory-title">{{ language.t('lesson.theory') }}</h2>
                   </div>
                   <span class="theory-arrow" aria-hidden="true">↓</span>
                 </div>
                 <div class="theory-grid">
                   <article class="theory-section">
-                    <h3>Общение</h3>
+                    <h3>{{ language.t('lesson.communication') }}</h3>
                     <p>{{ theory.communication }}</p>
                   </article>
                   <article class="theory-section">
-                    <h3>Слова</h3>
+                    <h3>{{ language.t('lesson.words') }}</h3>
                     <p>{{ theory.vocabulary }}</p>
                   </article>
                   <article class="theory-section theory-grammar">
-                    <h3>Грамматика</h3>
+                    <h3>{{ language.t('lesson.grammar') }}</h3>
                     <p>{{ theory.grammar }}</p>
                   </article>
                 </div>
                 <div class="theory-examples">
-                  <h3>Примеры</h3>
+                  <h3>{{ language.t('lesson.examples') }}</h3>
                   @for (example of theory.examples; track example.polish) {
                     <p><strong lang="pl">{{ example.polish }}</strong><span>{{ example.translation }}</span></p>
                   }
                 </div>
-                <p class="theory-workbook">Дальше — рабочая тетрадь: {{ lesson.pages }}</p>
+                <p class="theory-workbook">{{ language.t('lesson.workbookNext') }} {{ lesson.pages }}</p>
               </section>
             }
           }
@@ -79,8 +80,8 @@
             @for (track of activityAudioPlayers(); track track.file) {
               <div class="audio-panel">
                 <div class="audio-icon" aria-hidden="true">♫</div>
-                <div class="audio-copy"><strong>{{ track.label }}</strong><small>Możesz odtworzyć nagranie ponownie.</small></div>
-                <audio controls preload="none" [src]="audioTrackUrl(track.file)">Twoja przeglądarka nie obsługuje audio.</audio>
+                <div class="audio-copy"><strong>{{ track.label }}</strong><small>{{ language.t('lesson.audioHint') }}</small></div>
+                <audio controls preload="none" [src]="audioTrackUrl(track.file)">{{ language.t('lesson.audioUnsupported') }}</audio>
               </div>
             }
 
@@ -94,10 +95,10 @@
 
             @if (activity.kind === activityKind.Match) {
               <div class="match-activity">
-                <p class="match-hint">Нажмите на начало фразы, затем на подходящее окончание.</p>
+                <p class="match-hint">{{ language.t('lesson.matchHint') }}</p>
                 <div class="match-board">
-                  <section class="match-column" aria-label="Начала фраз">
-                    <h3>Начала</h3>
+                  <section class="match-column" [attr.aria-label]="language.t('lesson.starts')">
+                    <h3>{{ language.t('lesson.starts') }}</h3>
                     @for (item of activity.items; track item.id) {
                       <div class="match-entry">
                         <button class="match-source" type="button" [class.selected]="selectedMatchItem() === item.id"
@@ -108,15 +109,15 @@
                         </button>
                         @if (checked()) {
                           <small class="match-feedback" [class.feedback-right]="isItemCorrect(item)" [class.feedback-wrong]="!isItemCorrect(item)" aria-live="polite">
-                            @if (isItemCorrect(item)) { ✓ Верно }
-                            @else { Правильное окончание: {{ expectedAnswer(item) }} }
+                            @if (isItemCorrect(item)) { ✓ {{ language.t('lesson.correct') }} }
+                            @else { {{ language.t('lesson.correctAnswer') }} {{ expectedAnswer(item) }} }
                           </small>
                         }
                       </div>
                     }
                   </section>
-                  <section class="match-column" aria-label="Окончания фраз">
-                    <h3>Окончания</h3>
+                  <section class="match-column" [attr.aria-label]="language.t('lesson.endings')">
+                    <h3>{{ language.t('lesson.endings') }}</h3>
                     @for (option of matchOptions(); track option) {
                       <button class="match-target" type="button" [class.selected]="selectedMatchOption() === option"
                         [class.assigned]="matchOptionAssigned(option)" [disabled]="checked()"
@@ -142,7 +143,7 @@
                               <input class="letter-cloze-gap" type="text" [value]="letterClozeAnswerFor(item.id, gapIndex)"
                                 (input)="setLetterClozeAnswer(item, gapIndex, $event)" [disabled]="checked()"
                                 [attr.maxlength]="cloze.gaps[gapIndex].length" [style.width.ch]="cloze.gaps[gapIndex].length + 1"
-                                [attr.aria-label]="item.prompt + ', brakująca litera ' + (gapIndex + 1)"
+                                [attr.aria-label]="item.prompt + ', ' + language.t('lesson.missingLetter') + ' ' + (gapIndex + 1)"
                                 autocomplete="off" autocapitalize="off" spellcheck="false">
                             }
                           }
@@ -157,13 +158,13 @@
                           }
                         </div>
                       } @else {
-                        <input class="answer-input" [id]="activity.id + '-' + item.id" [ngModel]="answerFor(item.id)" (ngModelChange)="setAnswer(item.id, $event)" [disabled]="checked()" [placeholder]="activityAudioPlayers().length ? 'Wpisz to, co słyszysz' : 'Twoja odpowiedź'" [attr.autocomplete]="'off'" [attr.aria-label]="item.prompt" (keydown.enter)="$event.preventDefault()">
+                        <input class="answer-input" [id]="activity.id + '-' + item.id" [ngModel]="answerFor(item.id)" (ngModelChange)="setAnswer(item.id, $event)" [disabled]="checked()" [placeholder]="activityAudioPlayers().length ? language.t('lesson.typeWhatYouHear') : language.t('lesson.yourAnswer')" [attr.autocomplete]="'off'" [attr.aria-label]="item.prompt" (keydown.enter)="$event.preventDefault()">
                       }
                     }
                     @if (checked()) {
                       <div class="answer-feedback" [class.feedback-right]="isItemCorrect(item)" [class.feedback-wrong]="!isItemCorrect(item)" aria-live="polite">
-                        @if (isItemCorrect(item)) { <span>✓ Dobrze</span> }
-                        @else { <span>Poprawna odpowiedź: <strong>{{ expectedAnswer(item) }}</strong></span> }
+                        @if (isItemCorrect(item)) { <span>✓ {{ language.t('lesson.correct') }}</span> }
+                        @else { <span>{{ language.t('lesson.correctAnswer') }} <strong>{{ expectedAnswer(item) }}</strong></span> }
                       </div>
                       @if (item.explanation) { <small class="answer-explanation">{{ item.explanation }}</small> }
                     }
@@ -175,45 +176,45 @@
 
             <div class="exercise-footer">
               @if (!checked()) {
-                <div class="answer-count">Odpowiedz na wszystkie pytania, aby sprawdzić.</div>
-                <button class="check-button" type="button" [disabled]="!hasAnsweredAll()" (click)="checkAnswers()">Sprawdź odpowiedzi <span>→</span></button>
+                <div class="answer-count">{{ language.t('lesson.answerAll') }}</div>
+                <button class="check-button" type="button" [disabled]="!hasAnsweredAll()" (click)="checkAnswers()">{{ language.t('lesson.check') }} <span>→</span></button>
               } @else {
                 <div class="result-strip" [class.result-perfect]="currentCorrectCount() === activity.items.length">
                   <span class="result-icon">{{ currentCorrectCount() === activity.items.length ? '✦' : '↗' }}</span>
-                  <span><strong>{{ currentCorrectCount() }} z {{ activity.items.length }} poprawnie</strong><small>{{ currentCorrectCount() === activity.items.length ? 'Świetna robota!' : 'Zapamiętaj poprawne formy i idź dalej.' }}</small></span>
+                    <span><strong>{{ currentCorrectCount() }} {{ language.t('lesson.of') }} {{ activity.items.length }} {{ language.t('lesson.correctly') }}</strong><small>{{ currentCorrectCount() === activity.items.length ? language.t('lesson.greatWork') : language.t('lesson.rememberForms') }}</small></span>
                 </div>
-                <button class="check-button next-button" type="button" (click)="next()">{{ isLastActivity() ? 'Zobacz wynik' : 'Dalej' }} <span>→</span></button>
+                <button class="check-button next-button" type="button" (click)="next()">{{ isLastActivity() ? language.t('lesson.seeResults') : language.t('lesson.next') }} <span>→</span></button>
               }
             </div>
           </section>
           @if (syncError(); as syncMessage) {
             <p class="sync-warning" role="alert">{{ syncMessage }}</p>
           }
-          <p class="offline-note">✦ Treść lekcji działa offline po pierwszym otwarciu aplikacji. Nagrania i obrazy będą dostępne po ich wcześniejszym pobraniu.</p>
+          <p class="offline-note">✦ {{ language.t('lesson.offlineNote') }}</p>
         </main>
       }
     } @else {
       <main class="completion-main">
         <div class="completion-spark">✦</div>
-        <p class="lesson-breadcrumb">{{ lessonLabel(lesson.id) }} · UKOŃCZONA</p>
-        <h1>Świetna praca!</h1>
-        <p class="completion-copy">{{ lesson.title }} — masz już za sobą całą lekcję.</p>
-        <div class="score-orb" [class.score-high]="finalScore() >= 80"><strong>{{ finalScore() }}<small>%</small></strong><span>poprawnych odpowiedzi</span></div>
+        <p class="lesson-breadcrumb">{{ lessonLabel(lesson.id) }} · {{ language.t('lesson.completed') }}</p>
+        <h1>{{ language.t('lesson.greatWork') }}</h1>
+        <p class="completion-copy">{{ lesson.title }} — {{ language.t('lesson.completionCopy') }}</p>
+        <div class="score-orb" [class.score-high]="finalScore() >= 80"><strong>{{ finalScore() }}<small>%</small></strong><span>{{ language.t('lesson.correctAnswers') }}</span></div>
         <div class="completion-stats">
-          <div><strong>{{ correctAnswers() }} / {{ totalQuestions() }}</strong><small>poprawne odpowiedzi</small></div>
-          <div><strong>+{{ awardedXp() }} XP</strong><small>{{ awardedXp() ? 'dodano do postępów' : 'najlepszy wynik zapisany' }}</small></div>
+          <div><strong>{{ correctAnswers() }} / {{ totalQuestions() }}</strong><small>{{ language.t('lesson.correctAnswers') }}</small></div>
+          <div><strong>+{{ awardedXp() }} XP</strong><small>{{ awardedXp() ? language.t('lesson.xpAdded') : language.t('lesson.bestScoreSaved') }}</small></div>
         </div>
-        <p class="next-unlock">{{ finalScore() === 100 ? 'Perfekcyjnie. Każdy poprawny zwrot zostaje z Tobą.' : 'Błędy są częścią nauki. Poprawne odpowiedzi zobaczysz w podsumowaniu ćwiczeń.' }}</p>
-        <a class="return-button" [routerLink]="dashboardUrl()">Wróć do ścieżki <span>→</span></a>
+        <p class="next-unlock">{{ finalScore() === 100 ? language.t('lesson.perfect') : language.t('lesson.mistakesLearn') }}</p>
+        <a class="return-button" [routerLink]="dashboardUrl()">{{ language.t('lesson.back') }} <span>→</span></a>
       </main>
     }
     @if (dictionaryWord(); as word) {
       <div class="dictionary-backdrop" (click)="closeDictionary()">
         <section class="dictionary-sheet" role="dialog" aria-modal="true" aria-labelledby="dictionary-title" (click)="$event.stopPropagation()">
-          <button class="dictionary-close" type="button" aria-label="Закрыть перевод" (click)="closeDictionary()">×</button>
-          <p class="dictionary-kicker">ПЕРЕВОД С ПОЛЬСКОГО</p>
+          <button class="dictionary-close" type="button" [attr.aria-label]="language.t('lesson.closeTranslation')" (click)="closeDictionary()">×</button>
+          <p class="dictionary-kicker">{{ language.t('lesson.translationFromPolish') }}</p>
           <h2 id="dictionary-title" lang="pl">{{ word }}</h2>
-          @if (dictionaryLoading()) { <p class="dictionary-state" aria-live="polite">Ищу перевод…</p> }
+          @if (dictionaryLoading()) { <p class="dictionary-state" aria-live="polite">{{ language.t('lesson.searchingTranslation') }}</p> }
           @if (dictionaryError(); as error) { <p class="dictionary-state dictionary-error" role="alert">{{ error }}</p> }
           @if (dictionaryTranslations().length) {
             <ul class="dictionary-translations" aria-live="polite">
@@ -221,9 +222,9 @@
             </ul>
           }
           @if (!dictionaryLoading() && !dictionaryError() && !dictionaryTranslations().length) {
-            <p class="dictionary-state">Перевод не найден.</p>
+            <p class="dictionary-state">{{ language.t('lesson.translationNotFound') }}</p>
           }
-          <a class="dictionary-source" href="https://de.pons.com/" target="_blank" rel="noopener noreferrer">Dictionary powered by PONS ↗</a>
+          <a class="dictionary-source" href="https://de.pons.com/" target="_blank" rel="noopener noreferrer">{{ language.t('lesson.dictionaryPoweredBy') }}</a>
         </section>
       </div>
     }

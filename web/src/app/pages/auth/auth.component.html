@@ -1,13 +1,14 @@
 <main class="auth-shell">
-  <a class="brand" routerLink="/" aria-label="Polski, strona główna">
+  <app-language-switcher />
+  <a class="brand" routerLink="/" [attr.aria-label]="language.t('auth.brand')">
     <span class="brand-mark">p</span>
     <span>polski<span class="brand-dot">.</span></span>
   </a>
 
   <section class="auth-card" aria-labelledby="auth-title">
-    <p class="eyebrow">TWOJA NAUKA PO POLSKU</p>
-    <h1 id="auth-title">{{ mode() === 'sign-in' ? 'Witaj ponownie' : 'Utwórz konto' }}</h1>
-    <p class="intro">{{ mode() === 'sign-in' ? 'Zaloguj się, aby zapisać swoje postępy na każdym urządzeniu.' : 'Utwórz konto, aby zachować swoje postępy.' }}</p>
+    <p class="eyebrow">{{ language.t('auth.eyebrow') }}</p>
+    <h1 id="auth-title">{{ mode() === 'sign-in' ? language.t('auth.welcome') : language.t('auth.create') }}</h1>
+    <p class="intro">{{ mode() === 'sign-in' ? language.t('auth.signInIntro') : language.t('auth.signUpIntro') }}</p>
 
     @if (error()) {
       <p class="form-message error-message" role="alert">{{ error() }}</p>
@@ -21,23 +22,23 @@
 
     <form #authForm="ngForm" (ngSubmit)="submit()">
       <label>
-        <span>E-mail</span>
+        <span>{{ language.t('auth.email') }}</span>
         <input type="email" name="email" [(ngModel)]="email" autocomplete="email" required email>
       </label>
       <label>
-        <span>Hasło</span>
+        <span>{{ language.t('auth.password') }}</span>
         <input type="password" name="password" [(ngModel)]="password"
           [attr.autocomplete]="mode() === 'sign-up' ? 'new-password' : 'current-password'" required minlength="6">
       </label>
       <button class="submit-button" type="submit" [disabled]="authForm.invalid || busy()">
-        {{ busy() ? 'Chwileczkę…' : mode() === 'sign-in' ? 'Zaloguj się' : 'Zarejestruj się' }}
+        {{ busy() ? language.t('auth.wait') : mode() === 'sign-in' ? language.t('auth.signIn') : language.t('auth.signUp') }}
       </button>
     </form>
 
     <p class="mode-switch">
-      {{ mode() === 'sign-in' ? 'Nie masz jeszcze konta?' : 'Masz już konto?' }}
+      {{ mode() === 'sign-in' ? language.t('auth.noAccount') : language.t('auth.hasAccount') }}
       <button type="button" (click)="toggleMode()" [disabled]="busy()">
-        {{ mode() === 'sign-in' ? 'Zarejestruj się' : 'Zaloguj się' }}
+        {{ mode() === 'sign-in' ? language.t('auth.signUp') : language.t('auth.signIn') }}
       </button>
     </p>
   </section>

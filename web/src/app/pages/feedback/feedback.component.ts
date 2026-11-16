@@ -4,11 +4,13 @@ import { RouterLink } from '@angular/router';
 import { COURSES } from '../../data/lesson-catalog';
 import { AuthService } from '../../services/auth.service';
 import { supabase } from '../../services/supabase.client';
+import { LanguageSwitcherComponent } from '../../i18n/language-switcher.component';
+import { LanguageService } from '../../i18n/language.service';
 
 @Component({
   selector: 'app-feedback',
   standalone: true,
-  imports: [FormsModule, RouterLink],
+  imports: [FormsModule, RouterLink, LanguageSwitcherComponent],
   templateUrl: './feedback.component.html',
   styleUrl: './feedback.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -16,6 +18,7 @@ import { supabase } from '../../services/supabase.client';
 export class FeedbackComponent {
   readonly courses = COURSES;
   private readonly auth = inject(AuthService);
+  readonly language = inject(LanguageService);
   category: 'app' | 'course' = 'app';
   courseId: string = COURSES[0].id;
   message = '';
@@ -42,7 +45,7 @@ export class FeedbackComponent {
       this.message = '';
       this.sent = true;
     } catch {
-      this.error = 'Не удалось отправить отзыв. Проверьте подключение и попробуйте ещё раз.';
+      this.error = this.language.t('feedback.error');
     } finally {
       this.sending = false;
     }

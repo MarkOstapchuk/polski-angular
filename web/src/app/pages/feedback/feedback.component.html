@@ -1,25 +1,26 @@
 <main class="feedback-page">
-  <a class="brand" routerLink="/" aria-label="Polski, strona główna"><span class="brand-mark">p</span><span>polski<span class="brand-dot">.</span></span></a>
-  <a class="back-link" routerLink="/course/part-1">← Wróć do nauki</a>
+  <app-language-switcher />
+  <a class="brand" routerLink="/" [attr.aria-label]="language.t('auth.brand')"><span class="brand-mark">p</span><span>polski<span class="brand-dot">.</span></span></a>
+  <a class="back-link" routerLink="/course/part-1">← {{ language.t('feedback.back') }}</a>
 
   <section class="feedback-card">
-    <p class="eyebrow">TWOJA OPINIA MA ZNACZENIE</p>
-    <h1>Обратная связь</h1>
-    <p class="intro">Расскажите, что можно улучшить в приложении или курсе.</p>
+    <p class="eyebrow">{{ language.t('feedback.eyebrow') }}</p>
+    <h1>{{ language.t('feedback.title') }}</h1>
+    <p class="intro">{{ language.t('feedback.intro') }}</p>
 
-    @if (sent) { <p class="form-message success-message" role="status">Спасибо! Ваш отзыв отправлен.</p> }
+    @if (sent) { <p class="form-message success-message" role="status">{{ language.t('feedback.sent') }}</p> }
     @if (error) { <p class="form-message error-message" role="alert">{{ error }}</p> }
 
     <form (ngSubmit)="submit()">
-      <label>О чём отзыв?
+      <label>{{ language.t('feedback.topic') }}
         <select name="category" [(ngModel)]="category">
-          <option value="app">О приложении</option>
-          <option value="course">О курсе</option>
+          <option value="app">{{ language.t('feedback.app') }}</option>
+          <option value="course">{{ language.t('feedback.course') }}</option>
         </select>
       </label>
 
       @if (category === 'course') {
-        <label>Курс
+        <label>{{ language.t('feedback.chooseCourse') }}
           <select name="course" [(ngModel)]="courseId">
             @for (course of courses; track course.id) {
               <option [value]="course.id">{{ course.name }} · {{ course.level }}</option>
@@ -28,10 +29,10 @@
         </label>
       }
 
-      <label>Ваш отзыв
-        <textarea name="message" [(ngModel)]="message" required minlength="1" maxlength="2000" rows="6" placeholder="Что понравилось или что стоит исправить?"></textarea>
+      <label>{{ language.t('feedback.yourFeedback') }}
+        <textarea name="message" [(ngModel)]="message" required minlength="1" maxlength="2000" rows="6" [placeholder]="language.t('feedback.placeholder')"></textarea>
       </label>
-      <button class="submit-button" type="submit" [disabled]="sending || !message.trim()">{{ sending ? 'Отправка…' : 'Отправить отзыв' }}</button>
+      <button class="submit-button" type="submit" [disabled]="sending || !message.trim()">{{ sending ? language.t('feedback.sending') : language.t('feedback.send') }}</button>
     </form>
   </section>
 </main>
