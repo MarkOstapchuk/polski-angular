@@ -14,6 +14,21 @@
         <main class="lesson-main" (pointerdown)="startWordLookup($event)" (pointermove)="moveWordLookup($event)"
           (pointerup)="cancelWordLookup()" (pointercancel)="cancelWordLookup()" (pointerleave)="cancelWordLookup()"
           (contextmenu)="suppressWordContextMenu($event)">
+          <nav class="exercise-picker" aria-label="Выберите упражнение">
+            <p class="exercise-picker-label">Упражнения · можно проходить в любом порядке</p>
+            <div class="exercise-picker-list">
+              @for (exercise of lesson.activities; track exercise.id; let index = $index) {
+                <button class="exercise-picker-button" type="button"
+                  [class.is-active]="activeIndex() === index" [class.is-complete]="isActivityComplete(exercise)"
+                  [attr.aria-current]="activeIndex() === index ? 'step' : null"
+                  [attr.aria-label]="'Упражнение ' + (index + 1) + ': ' + exercise.title"
+                  [title]="exercise.title" (click)="selectActivity(index)">
+                  <span>{{ index + 1 }}</span>
+                  @if (isActivityComplete(exercise)) { <small aria-hidden="true">✓</small> }
+                </button>
+              }
+            </div>
+          </nav>
           <div class="lesson-heading lesson-context">
             <p class="lesson-breadcrumb">{{ lessonLabel(lesson.id) }} <span>·</span> {{ lesson.topic }}</p>
             <p class="dictionary-hint">Зажмите польское слово, чтобы увидеть перевод</p>

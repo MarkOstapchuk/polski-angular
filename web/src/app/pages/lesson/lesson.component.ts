@@ -3,7 +3,7 @@ import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { AUDIO_TRACKS } from '../../data/audio-tracks';
 import { PART2_AUDIO_TRACKS } from '../../data/part2-audio-tracks';
-import { ActivityItem, ActivityKind, getLesson } from '../../data/lesson-bank';
+import { Activity, ActivityItem, ActivityKind, getLesson } from '../../data/lesson-bank';
 import { LESSON_THEORY, LessonTheoryId } from '../../data/lesson-theory';
 import { WORKBOOK_IMAGES, WorkbookImage } from '../../data/workbook-images';
 import { ProgressService } from '../../services/progress.service';
@@ -95,20 +95,22 @@ export class LessonComponent implements OnInit, OnDestroy {
       return;
     }
     const restoredResults: Record<string, Record<string, boolean>> = {};
+    const restoredAnswers: Record<string, string> = {};
     let firstIncomplete = -1;
     lesson.activities.forEach((activity, index) => {
       const saved = this.progress.activityFor(lesson.id, activity.id);
-      if (saved) restoredResults[activity.id] = saved.results;
+      if (saved) {
+        restoredResults[activity.id] = saved.results;
+        Object.assign(restoredAnswers, saved.answers);
+      }
       else if (firstIncomplete < 0) firstIncomplete = index;
     });
     this.results.set(restoredResults);
-    const index = firstIncomplete < 0 ? lesson.activities.length - 1 : firstIncomplete;
+    this.answers.set(restoredAnswers);
+    const index = firstIncomplete < 0 ? 0 : firstIncomplete;
     this.activeIndex.set(index);
     const saved = this.progress.activityFor(lesson.id, lesson.activities[index].id);
-    if (saved) {
-      this.answers.set(saved.answers);
-      this.checked.set(true);
-    }
+    this.checked.set(!!saved);
   }
 
   ngOnDestroy(): void {
@@ -306,6 +308,26 @@ export class LessonComponent implements OnInit, OnDestroy {
     return Object.values(this.results()[this.activity()?.id ?? ''] ?? {}).filter(Boolean).length;
   }
 
+  isActivityComplete(activity: Activity): boolean {
+    const lessonId = this.lesson()?.id;
+    return !!lessonId && this.progress.hasCompletedActivity(lessonId, activity.id);
+  }
+
+  selectActivity(index: number): void {
+    const lesson = this.lesson();
+    if (!lesson || index < 0 || index >= lesson.activities.length) return;
+    const activity = lesson.activities[index];
+    const saved = this.progress.activityFor(lesson.id, activity.id);
+    if (saved) {
+      this.answers.update((answers) => ({ ...answers, ...saved.answers }));
+      this.results.update((results) => ({ ...results, [activity.id]: saved.results }));
+    }
+    this.activeIndex.set(index);
+    this.checked.set(!!saved);
+    this.selectedMatchItem.set(null);
+    this.selectedMatchOption.set(null);
+  }
+
   async checkAnswers(): Promise<void> {
     const activity = this.activity();
     const lesson = this.lesson();
@@ -323,15 +345,9 @@ export class LessonComponent implements OnInit, OnDestroy {
     const lesson = this.lesson();
     if (!lesson || !this.checked()) return;
     await this.progress.flush();
-    const nextIndex = lesson.activities.findIndex((activity, index) =>
-      index > this.activeIndex() && !this.progress.hasCompletedActivity(lesson.id, activity.id),
-    );
+    const nextIndex = lesson.activities.findIndex((activity) => !this.progress.hasCompletedActivity(lesson.id, activity.id));
     if (nextIndex >= 0) {
-      this.activeIndex.set(nextIndex);
-      this.answers.set({});
-      this.selectedMatchItem.set(null);
-      this.selectedMatchOption.set(null);
-      this.checked.set(false);
+      this.selectActivity(nextIndex);
       return;
     }
     const alreadyCompleted = this.progress.hasCompleted(lesson.id);
@@ -353,7 +369,11 @@ export class LessonComponent implements OnInit, OnDestroy {
   }
 
   isLastActivity(): boolean {
-    return this.activeIndex() === (this.lesson()?.activities.length ?? 0) - 1;
+    const lesson = this.lesson();
+    const activityId = this.activity()?.id;
+    return !!lesson && !!activityId && lesson.activities.every((activity) =>
+      activity.id === activityId || this.progress.hasCompletedActivity(lesson.id, activity.id),
+    );
   }
 
   private answerKey(itemId: string): string {
