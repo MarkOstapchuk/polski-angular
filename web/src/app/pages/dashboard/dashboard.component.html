@@ -21,6 +21,9 @@
       <a class="nav-link" href="#progress-card">
         <span class="nav-icon stats-icon">▥</span><span>Postępy</span>
       </a>
+      <a class="nav-link" routerLink="/feedback">
+        <span class="nav-icon">✎</span><span>Обратная связь</span>
+      </a>
     </nav>
 
     <div class="sidebar-bottom">
@@ -184,6 +187,7 @@
     <a class="mobile-nav-item selected" routerLink="/"><span>⌂</span><small>Ścieżka</small></a>
     <a class="mobile-nav-item" [href]="selectedCourse() ? '#lesson-path' : '#course-options'"><span>▤</span><small>Kurs</small></a>
     <a class="mobile-nav-item" href="#progress-card"><span>▥</span><small>Postępy</small></a>
+    <a class="mobile-nav-item" routerLink="/feedback"><span>✎</span><small>Opinie</small></a>
     <button class="mobile-nav-item" type="button" (click)="signOut()" aria-label="Wyloguj się"><span>↗</span><small>Wyloguj</small></button>
   </nav>
 

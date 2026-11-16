@@ -7,6 +7,7 @@ export const routes: Routes = [
   { path: 'auth', component: AuthComponent, title: 'Konto · Polski' },
   { path: '', component: DashboardComponent, canActivate: [authGuard], title: 'Polski · Kursy' },
   { path: 'course/:courseId', component: DashboardComponent, canActivate: [authGuard], title: 'Kurs · Polski' },
+  { path: 'feedback', loadComponent: () => import('./pages/feedback/feedback.component').then((m) => m.FeedbackComponent), canActivate: [authGuard], title: 'Opinie · Polski' },
   { path: 'learn/:lessonId', loadComponent: () => import('./pages/lesson/lesson.component').then((m) => m.LessonComponent), canActivate: [authGuard], title: 'Lekcja · Polski' },
   { path: '**', redirectTo: '' },
 ];
