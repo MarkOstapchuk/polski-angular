@@ -2,5 +2,14 @@
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "buildCommand": "npm run build",
   "outputDirectory": "dist/polski-platform/browser",
-  "rewrites": [{ "source": "/(.*)", "destination": "/index.html" }]
+  "rewrites": [
+    { "source": "/", "destination": "/seo/index.html" },
+    { "source": "/nauka/polskie-znaki", "destination": "/nauka/polskie-znaki/index.html" },
+    { "source": "/gramatyka/przypadki", "destination": "/gramatyka/przypadki/index.html" },
+    { "source": "/slownictwo/podstawowe-zwroty", "destination": "/slownictwo/podstawowe-zwroty/index.html" },
+    { "source": "/auth", "destination": "/index.html" },
+    { "source": "/course/:path*", "destination": "/index.html" },
+    { "source": "/learn/:path*", "destination": "/index.html" },
+    { "source": "/feedback", "destination": "/index.html" }
+  ]
 }

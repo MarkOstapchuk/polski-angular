@@ -4,7 +4,7 @@
   "short_name": "polski.",
   "description": "Interaktywny kurs języka polskiego.",
   "lang": "pl",
-  "start_url": "/",
+  "start_url": "/course/part-1",
   "scope": "/",
   "display": "standalone",
   "orientation": "portrait-primary",
