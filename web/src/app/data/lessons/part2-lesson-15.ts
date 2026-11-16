@@ -30,12 +30,14 @@ export const LESSON_41: Lesson = {
     ]),
     activity(2, 'Święta religijne i narodowe', 'Wpisz wyraz, który nie ma charakteru religijnego.', [
       ...[
-        ['Betlejem, Wszystkich Świętych, Jezus Chrystus', 'pochód pierwszomajowy'],
-        ['zmartwychwstanie, Wielkanoc, Boże Narodzenie', 'urodziny'],
-        ['procesja, modlitwa, Duch Święty', 'konstytucja'],
-        ['wniebowzięcie, Maryja Panna, Matka Boska', 'pełnia księżyca'],
-        ['pielgrzymować, Wigilia, sanktuarium', 'niepodległość'],
-        ['cmentarz, ołtarz, modlitwa', 'PRL'],
+        ['Betlejem · Wszystkich Świętych · Jezus Chrystus · szampan', 'szampan'],
+        ['Wielkanoc · Boże Narodzenie · pochód pierwszomajowy', 'pochód pierwszomajowy'],
+        ['procesja · modlitwa · urodziny', 'urodziny'],
+        ['święta religijne · Międzynarodowy Dzień Solidarności Ludzi Pracy', 'Międzynarodowy Dzień Solidarności Ludzi Pracy'],
+        ['Duch Święty · Maryja Panna · konstytucja', 'konstytucja'],
+        ['Wniebowzięcie · Matka Boska · pełnia księżyca', 'pełnia księżyca'],
+        ['pielgrzymować · Wigilia · niepodległość', 'niepodległość'],
+        ['cmentarz · ołtarz · PRL', 'PRL'],
       ].map(([prompt, answer], i) => typed(`q${i + 1}`, prompt, answer)),
     ]),
     activity(3, 'Boże Narodzenie', 'Wpisz nazwę zwyczaju lub świątecznego przedmiotu.', [
@@ -50,7 +52,7 @@ export const LESSON_41: Lesson = {
     ]),
     activity(4, 'Co nie pasuje?', 'Wybierz wyraz z innej grupy.', [
       choice('q1', 'dar / prezent / kolęda', 'kolęda', ['dar', 'prezent', 'kolęda']),
-      choice('q2', 'gwiazda / księżyc / słońce', 'gwiazda', ['gwiazda', 'księżyc', 'słońce']),
+      choice('q2', 'gwiazda / księżyc / słońce', 'słońce', ['gwiazda', 'księżyc', 'słońce']),
       choice('q3', 'barszcz / grzybowa / gołąbki', 'gołąbki', ['barszcz', 'grzybowa', 'gołąbki']),
       choice('q4', 'opłatek / post / życzenia', 'post', ['opłatek', 'post', 'życzenia']),
       choice('q5', 'msza / pasterka / drzewko', 'drzewko', ['msza', 'pasterka', 'drzewko']),
@@ -72,15 +74,7 @@ export const LESSON_41: Lesson = {
       typed('q7', 'Na końcu ___ do smaku.', 'doprawić'),
       typed('q8', 'Podawać z ___.', 'chlebem'),
     ]),
-    activity(6, 'Jak obchodzimy święta?', 'Uzupełnij zdania o zwyczajach bezosobową formą.', [
-      ...[
-        ['Boże Narodzenie ___ rodzinnie.', 'obchodzi się'], ['Wigilię ___ z bliskimi.', 'spędza się'],
-        ['Do kościoła ___ na pasterkę.', 'chodzi się'], ['Prezenty ___ pod choinką.', 'dostaje się'],
-        ['Dom ___ i ozdabia.', 'sprząta się'], ['Kolędy ___ wspólnie.', 'śpiewa się'],
-        ['Groby bliskich ___ pierwszego listopada.', 'odwiedza się'],
-      ].map(([prompt, answer], i) => typed(`q${i + 1}`, prompt, answer)),
-    ]),
-    activity(7, 'Wigilia w Stanach i w Polsce', 'Posłuchaj nagrania i uzupełnij opowieść Steve’a.', [
+    activity(6, 'Wigilia w Stanach i w Polsce', 'Posłuchaj nagrania i uzupełnij opowieść Steve’a.', [
       typed('q1', 'Od pięciu lat spędzam ___ Bożego Narodzenia w Polsce.', 'święta'),
       typed('q2', 'Największa różnica między Polską a Stanami to ___.', 'Wigilia'),
       typed('q3', 'Na stole powinno być dwanaście ___.', 'potraw'),
@@ -96,13 +90,24 @@ export const LESSON_41: Lesson = {
       typed('q13', 'W kościele był koncert ___.', 'kolęd'),
       typed('q14', 'W Montanie jest więcej ___.', 'śniegu'),
     ]),
-    activity(8, 'Zwyczaje świąteczne', 'Utwórz formę bezosobową z „się”.', [
+    activity(7, 'Święto Gwiazd w Japonii', 'Uzupełnij tekst odpowiednimi formami czasowników z „się”.', [
       ...[
-        ['wywodzić się', 'wywodzi się'], ['dekorować dom', 'dekoruje się'], ['przywiązywać życzenia do gałązek', 'przywiązuje się'],
-        ['mówić życzenia', 'mówi się'], ['zawieszać ozdoby', 'zawiesza się'], ['puszczać lampiony', 'puszcza się'],
-        ['obchodzić święto', 'obchodzi się'], ['przebierać się', 'przebiera się'],
-        ['organizować spotkania', 'organizuje się'], ['chodzić na pasterkę', 'chodzi się'], ['odwiedzać rodzinę', 'odwiedza się'],
-        ['dostawać prezenty', 'dostaje się'], ['robić tradycyjne potrawy', 'robi się'],
+        ['Uroczystość ta ___ z legendy o parze zakochanych gwiazd.', 'wywodzi się'],
+        ['W ten dzień ___ domy bambusowymi gałązkami.', 'dekoruje się'],
+        ['Do gałązek ___ paski kolorowego papieru z życzeniami.', 'przywiązuje się'],
+        ['Życzenia ___ na gałązkach w pierwszych dniach lipca.', 'zawiesza się'],
+        ['___, że życzenia powinny mieć formę poematu.', 'Mówi się'],
+        ['W dniu święta ___ je z nurtem rzeki.', 'puszcza się'],
+      ].map(([prompt, answer], i) => typed(`q${i + 1}`, prompt, answer)),
+    ]),
+    activity(8, 'Halloween', 'Uzupełnij tekst bezosobowymi formami czasowników.', [
+      ...[
+        ['Halloween ___ nocą 31 października.', 'obchodzi się'],
+        ['W Halloween ___ za czarownice i różne postacie telewizyjne.', 'przebiera się'],
+        ['Pochody przez ulice miast ___.', 'organizuje się'],
+        ['W zabawie „cukierek albo psikus” ___ po okolicy.', 'chodzi się'],
+        ['___ sąsiadów.', 'odwiedza się'],
+        ['Gdy nie ___ cukierka, ___ „psikusa”.', 'dostaje się; robi się'],
       ].map(([prompt, answer], i) => typed(`q${i + 1}`, prompt, answer)),
     ]),
     activity(9, 'Wielkanoc w Polsce i w Stanach', 'Posłuchaj nagrania i uzupełnij opowieść Steve’a.', [
