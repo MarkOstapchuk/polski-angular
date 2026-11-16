@@ -17,16 +17,16 @@ export const LESSON_31: Lesson = {
   pages: 'Ćwiczenia 1–14 · podręcznik 32–39',
   color: 'yellow',
   activities: [
-    activity(1, 'Cechy charakteru', 'Dopasuj przymiotnik do definicji.', [
-      choice('q1', 'ktoś, kto nie lubi dużo mówić', 'małomówny', ['małomówny', 'pogodny', 'wścibski', 'uczynny', 'arogancki', 'egoista', 'zdolny', 'towarzyski']),
-      choice('q2', 'ktoś, kto się uśmiecha i ma radosne usposobienie', 'pogodny', ['małomówny', 'pogodny', 'wścibski', 'uczynny', 'arogancki', 'egoista', 'zdolny', 'towarzyski']),
-      choice('q3', 'ktoś, kto za bardzo interesuje się życiem innych', 'wścibski', ['małomówny', 'pogodny', 'wścibski', 'uczynny', 'arogancki', 'egoista', 'zdolny', 'towarzyski']),
-      choice('q4', 'ktoś, kto chętnie pomaga innym', 'uczynny', ['małomówny', 'pogodny', 'wścibski', 'uczynny', 'arogancki', 'egoista', 'zdolny', 'towarzyski']),
-      choice('q5', 'ktoś, kto zachowuje się bezczelnie', 'arogancki', ['małomówny', 'pogodny', 'wścibski', 'uczynny', 'arogancki', 'egoista', 'zdolny', 'towarzyski']),
-      choice('q6', 'ktoś, kto myśli tylko o sobie', 'egoista', ['małomówny', 'pogodny', 'wścibski', 'uczynny', 'arogancki', 'egoista', 'zdolny', 'towarzyski']),
-      choice('q7', 'ktoś utalentowany', 'zdolny', ['małomówny', 'pogodny', 'wścibski', 'uczynny', 'arogancki', 'egoista', 'zdolny', 'towarzyski']),
-      choice('q8', 'ktoś, kto chętnie spędza czas z ludźmi', 'towarzyski', ['małomówny', 'pogodny', 'wścibski', 'uczynny', 'arogancki', 'egoista', 'zdolny', 'towarzyski']),
-    ], ActivityKind.Choice),
+    activity(1, 'Ułóż definicje', 'Uporządkuj wyrazy, aby utworzyć zdania.', [
+      typed('q1', 'małomówny · to · osoba · która · nie lubi za wiele mówić', 'Małomówny to osoba, która nie lubi za wiele mówić.'),
+      typed('q2', 'pogodny · to ktoś · kto · się uśmiecha · i ma zwykle radosne usposobienie', 'Pogodny to ktoś, kto się uśmiecha i ma zwykle radosne usposobienie.'),
+      typed('q3', 'wścibski · to osoba · która · za bardzo interesuje się życiem innych ludzi', 'Wścibski to osoba, która za bardzo interesuje się życiem innych ludzi.'),
+      typed('q4', 'uczynny · to ktoś · kto · chętnie pomaga innym', 'Uczynny to ktoś, kto chętnie pomaga innym.'),
+      typed('q5', 'arogancki · to osoba · która · zachowuje się bezczelnie', 'Arogancki to osoba, która zachowuje się bezczelnie.'),
+      typed('q6', 'egoista · to ktoś · kto · myśli tylko o sobie', 'Egoista to ktoś, kto myśli tylko o sobie.'),
+      typed('q7', 'zdolny · to znaczy utalentowany · czyli ktoś · kto ma talent', 'Zdolny to znaczy utalentowany, czyli ktoś, kto ma talent.'),
+      typed('q8', 'towarzyski · to osoba · która · chętnie spędza czas z innymi ludźmi', 'Towarzyski to osoba, która chętnie spędza czas z innymi ludźmi.'),
+    ]),
     activity(2, 'Kto czy który?', 'Uzupełnij zdania odpowiednim zaimkiem względnym.', [
       typed('q1', 'Osoba, ___ łatwo zdenerwować.', 'którą'),
       typed('q2', 'Ktoś, ___ zawsze robi to, co powinien.', 'kto'),
@@ -39,21 +39,26 @@ export const LESSON_31: Lesson = {
       typed('q9', 'Kogoś, ___ bardzo lubię.', 'kogo'),
       typed('q10', 'Ktoś, ___ jest wesoły.', 'kto'),
     ]),
-    activity(3, 'Ktoś, kto… / coś, co…', 'Uzupełnij zaimek względny.', [
-      typed('q1', 'Ktoś, ___ zna polski.', 'kto'),
-      typed('q2', 'Ktoś, ___ nie znam.', 'kogo'),
-      typed('q3', 'Ktoś, ___ bardzo lubię.', 'kogo'),
-      typed('q4', 'Ktoś, o ___ myślę.', 'kim'),
-      typed('q5', 'Ktoś, z ___ mieszkam.', 'kim'),
-      typed('q6', 'Ktoś, ___ ufam.', 'komu'),
-      typed('q7', 'Coś, ___ lubię.', 'co'),
-      typed('q8', 'Coś, ___ się interesuję.', 'czym'),
-      typed('q9', 'Coś, ___ kupiłam dla ciebie.', 'co'),
-      typed('q10', 'Coś, ___ się przyglądam.', 'czemu'),
-      typed('q11', 'Coś, o ___ marzę.', 'czym'),
-      typed('q12', 'Coś, ___ szukam.', 'czego'),
+    activity(3, 'Opis dziecka', 'Posłuchaj i uzupełnij określenia.', [
+      typed('q1', 'To dziecko jest bardzo ___.', 'wesołe'),
+      typed('q2', 'Jest delikatne i bardzo ___.', 'ufne'),
+      typed('q3', 'Jest albo będzie ___.', 'gadatliwe'),
     ]),
-    activity(4, 'Ułóż definicje', 'Zapisz całe zdanie z użyciem „kto”, „który” lub „co”.', [
+    activity(4, 'Popraw zdania', 'Skoryguj zaimki względne w zdaniach A i B.', [
+      typed('q1', 'A. Ktoś, kege zna polski.', 'Ktoś, kto zna polski.'),
+      typed('q2', 'A. Ktoś, kto nie znam.', 'Ktoś, kogo nie znam.'),
+      typed('q3', 'A. Ktoś, komu bardzo lubię.', 'Ktoś, kogo bardzo lubię.'),
+      typed('q4', 'A. Ktoś, kogo myślę.', 'Ktoś, o kim myślę.'),
+      typed('q5', 'A. Ktoś, z kto mieszkam.', 'Ktoś, z kim mieszkam.'),
+      typed('q6', 'A. Ktoś, kogo ufam.', 'Ktoś, komu ufam.'),
+      typed('q7', 'B. Coś, czego lubię.', 'Coś, co lubię.'),
+      typed('q8', 'B. Coś, co się bardzo interesuję.', 'Coś, czym się bardzo interesuję.'),
+      typed('q9', 'B. Coś, czemu kupiłam dla ciebie.', 'Coś, co kupiłam dla ciebie.'),
+      typed('q10', 'B. Coś, czego się przyglądam.', 'Coś, czemu się przyglądam.'),
+      typed('q11', 'B. Coś, o czego marzę.', 'Coś, o czym marzę.'),
+      typed('q12', 'B. Coś, co szukam.', 'Coś, czego szukam.'),
+    ]),
+    activity(5, 'Ułóż definicje', 'Zapisz całe zdanie z użyciem „kto”, „który” lub „co”.', [
       typed('q1', 'można na nim polegać', 'To człowiek, na którym można polegać.'),
       typed('q2', 'chętnie to dla tej osoby zrobię', 'To jest osoba, dla której chętnie to zrobię.'),
       typed('q3', 'opowiadałem ci o tej studentce', 'To studentka, o której ci opowiadałem.'),
@@ -64,7 +69,7 @@ export const LESSON_31: Lesson = {
       typed('q8', 'boję się tego człowieka', 'To jest człowiek, którego się boję.'),
     ]),
     {
-      id: 'p2-l05-e05', ...source(5), kind: ActivityKind.Choice,
+      id: 'p2-l05-e06', ...source(6), kind: ActivityKind.Choice,
       title: 'Sąsiedzi pani Maj', instruction: 'Uzupełnij notatki o osobach pasującymi określeniami.',
       items: [
         choice('q1', 'Pani Ela jest pogodna, ciepła, serdeczna i…', 'gościnna', ['gościnna', 'wścibska', 'arogancka']),
@@ -75,9 +80,15 @@ export const LESSON_31: Lesson = {
         choice('q6', 'Pani Jola jest wścibska i…', 'gadatliwa', ['gadatliwa', 'cierpliwa', 'skromna']),
         choice('q7', 'Pan Piotr często gubi rzeczy — jest…', 'roztrzepany', ['roztrzepany', 'punktualny', 'oszczędny']),
         choice('q8', 'Pan Piotr doskonale zna się na…', 'komputerach', ['komputerach', 'sporcie', 'gotowaniu']),
+        choice('q9', 'Pani Ela jest starszą osobą i ciepłą, serdeczną…', 'kobietą', ['kobietą', 'dziewczyną', 'uczennicą']),
+        choice('q10', 'Pani Ela pomagała, kiedy Karolinka…', 'była chora', ['była chora', 'wyjechała', 'zgubiła książkę']),
+        choice('q11', 'Pan Robert pomógł wnieść…', 'ciężkie zakupy', ['ciężkie zakupy', 'walizkę', 'rower']),
+        choice('q12', 'Pani Jola uważa, że wszystko…', 'wie najlepiej', ['wie najlepiej', 'robi źle', 'zapomina']),
+        choice('q13', 'Pani Jola jest zarozumiała i…', 'antypatyczna', ['antypatyczna', 'serdeczna', 'nieśmiała']),
+        choice('q14', 'Pan Piotr jest jeszcze…', 'studentem', ['studentem', 'nauczycielem', 'lekarzem']),
       ],
     },
-    activity(6, 'Przymiotniki w liczbie mnogiej', 'Zamień zdania na liczbę mnogą rodzaju męskoosobowego.', [
+    activity(7, 'Przymiotniki w liczbie mnogiej', 'Zamień zdania na liczbę mnogą rodzaju męskoosobowego.', [
       typed('q1', 'Jaki jest twój brat?', 'Jacy są twoi bracia?'),
       typed('q2', 'Dobry nauczyciel jest cierpliwy.', 'Dobrzy nauczyciele są cierpliwi.'),
       typed('q3', 'Ten fachowiec jest bardzo stary.', 'Ci fachowcy są bardzo starzy.'),
@@ -92,14 +103,14 @@ export const LESSON_31: Lesson = {
       typed('q12', 'Nasz lekarz jest sympatyczny.', 'Nasi lekarze są sympatyczni.'),
       typed('q13', 'Wasz wujek jest skąpy.', 'Wasi wujkowie są skąpi.'),
     ]),
-    activity(7, 'Końcówki przymiotników', 'Wpisz formę męskoosobową w liczbie mnogiej.', [
+    activity(8, 'Końcówki przymiotników', 'Wpisz formę męskoosobową w liczbie mnogiej.', [
       typed('q1', 'chudy', 'chudzi'), typed('q2', 'szczupły', 'szczupli'), typed('q3', 'otwarty', 'otwarci'),
       typed('q4', 'zamknięty', 'zamknięci'), typed('q5', 'młody', 'młodzi'), typed('q6', 'stary', 'starzy'),
       typed('q7', 'towarzyski', 'towarzyscy'), typed('q8', 'arogancki', 'aroganccy'),
       typed('q9', 'miły', 'mili'), typed('q10', 'pracowity', 'pracowici'),
       typed('q11', 'początkujący', 'początkujący'), typed('q12', 'bogaty', 'bogaci'),
     ]),
-    activity(8, 'Zamień na rodzaj męskoosobowy', 'Przepisz zdania, używając form męskoosobowych.', [
+    activity(9, 'Zamień na rodzaj męskoosobowy', 'Przepisz zdania, używając form męskoosobowych.', [
       typed('q1', 'Studentki były dobrze zorganizowane.', 'Studenci byli dobrze zorganizowani.'),
       typed('q2', 'Sąsiadki były mokre od deszczu i złe.', 'Sąsiedzi byli mokrzy od deszczu i źli.'),
       typed('q3', 'Siostry były bogate i szanowane.', 'Bracia byli bogaci i szanowani.'),
@@ -109,7 +120,7 @@ export const LESSON_31: Lesson = {
       typed('q7', 'Jakie kobiety były nagrodzone?', 'Jacy mężczyźni byli nagrodzeni?'),
       typed('q8', 'Córki były małe, chude i piegowate.', 'Synowie byli mali, chudzi i piegowaci.'),
     ]),
-    activity(9, 'Jacy oni są?', 'Uzupełnij zdania przymiotnikami w liczbie mnogiej.', [
+    activity(10, 'Jacy oni są?', 'Uzupełnij zdania przymiotnikami w liczbie mnogiej.', [
       typed('q1', 'Muzycy są… (utalentowany, kreatywny, roztargniony)', 'utalentowani, kreatywni, roztargnieni'),
       typed('q2', 'Rodzice są… (cierpliwy, kochający, serdeczny)', 'cierpliwi, kochający, serdeczni'),
       typed('q3', 'Policjanci są… (szybki, wysportowany, zdyscyplinowany)', 'szybcy, wysportowani, zdyscyplinowani'),
@@ -119,7 +130,7 @@ export const LESSON_31: Lesson = {
       typed('q7', 'Karierowicze są… (ambitny, sprytny, rozrzutny)', 'ambitni, sprytni, rozrzutni'),
       typed('q8', 'Sędziowie są… (obiektywny, wiarygodny, uczciwy)', 'obiektywni, wiarygodni, uczciwi'),
     ]),
-    activity(10, 'Popraw formy', 'Popraw błędne zaimki i końcówki.', [
+    activity(11, 'Popraw formy', 'Popraw błędne zaimki i końcówki.', [
       typed('q1', 'Które mężczyźni zakwalifikowali się do finału?', 'Którzy mężczyźni zakwalifikowali się do finału?'),
       typed('q2', 'Czyj córki uczysz grać na pianinie?', 'Czyje córki uczysz grać na pianinie?'),
       typed('q3', 'Tamci studentki są bardzo pilne.', 'Tamte studentki są bardzo pilne.'),
@@ -129,14 +140,14 @@ export const LESSON_31: Lesson = {
       typed('q7', 'Jaki są dziennikarze?', 'Jacy są dziennikarze?'),
       typed('q8', 'Sąsiedzi, które zaprosiłaś, nie przyjdą.', 'Sąsiedzi, których zaprosiłaś, nie przyjdą.'),
     ]),
-    activity(11, 'Co to za słowo?', 'Wpisz przymiotnik pasujący do definicji.', [
+    activity(12, 'Co to za słowo?', 'Wpisz przymiotnik pasujący do definicji.', [
       typed('q1', 'Ktoś, kogo znam.', 'znajomy'), typed('q2', 'Człowiek, który choruje.', 'chory'),
       typed('q3', 'Człowiek, który nie jest stąd.', 'obcy'), typed('q4', 'Człowiek, który nie ma włosów.', 'łysy'),
       typed('q5', 'Człowiek, który nie choruje.', 'zdrowy'), typed('q6', 'Człowiek, który nie ma pieniędzy.', 'biedny'),
       typed('q7', 'Człowiek, który nie ma domu.', 'bezdomny'), typed('q8', 'Człowiek, który ma dużo pieniędzy.', 'bogaty'),
       typed('q9', 'Człowiek, który nie ma dzieci.', 'bezdzietny'), typed('q10', 'Człowiek, który dużo pracuje.', 'pracowity'),
     ]),
-    activity(12, 'Kto?', 'Zapisz rzeczowniki w liczbie mnogiej i ułóż pytanie.', [
+    activity(13, 'Kto?', 'Zapisz rzeczowniki w liczbie mnogiej i ułóż pytanie.', [
       typed('q1', 'Bezdomny spał w parku.', 'Bezdomni ludzie spali w parku. Jacy ludzie spali w parku?'),
       typed('q2', 'Chory leży w szpitalu.', 'Chorzy leżą w szpitalu. Kto leży w szpitalu?'),
       typed('q3', 'Bezdomny czekał na pomoc.', 'Bezdomni czekali na pomoc. Kto czekał na pomoc?'),
@@ -144,7 +155,7 @@ export const LESSON_31: Lesson = {
       typed('q5', 'Sąsiad jest już zdrowy.', 'Sąsiedzi są już zdrowi. Kto jest już zdrowy?'),
       typed('q6', 'Znajomy będzie na kolacji.', 'Znajomi będą na kolacji. Kto będzie na kolacji?'),
     ]),
-    activity(13, 'Wyrażanie opinii', 'Uzupełnij wyrażenie.', [
+    activity(14, 'Wyrażanie opinii', 'Uzupełnij wyrażenie.', [
       typed('q1', 'Czy państwo ___ się ze mną w tej kwestii?', 'zgadzają'),
       typed('q2', 'Jak ci ___, czy on zdąży na pociąg?', 'się wydaje'),
       typed('q3', 'Trzeba ___, że ona wygląda bardzo młodo.', 'przyznać'),

@@ -14,7 +14,7 @@ export const LESSON_29: Lesson = {
   title: 'Teatr żywych fotografii',
   subtitle: 'Rozmawiamy o kinie, filmach i spektaklach',
   topic: 'Kino · filmy · przyimki · zdania celowe',
-  pages: 'Ćwiczenia 1–8 · podręcznik 20–25',
+  pages: 'Ćwiczenia 1–10 · podręcznik 20–25',
   color: 'coral',
   activities: [
     activity(1, 'Wyjazd do Berlina', 'Uzupełnij przyimki w opowiadaniu.', [
