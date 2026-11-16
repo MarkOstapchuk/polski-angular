@@ -25,17 +25,22 @@ export const LESSON_42 = lesson(42, 'Przygody, przeżycia, wspomnienia', 'Opowia
     ['Oferowano mi transport osiołkiem.', 'narzędnik'], ['Zaufałam miejscowej znachorce.', 'celownik'],
   ]),
   exercise(16, 2, 'Czasownik i rzeczownik', 'Utwórz rzeczownik lub czasownik od podanego wyrazu.', [
-    ['wynająć', 'wynajęcie'], ['otaczać', 'otoczenie'], ['żeglować', 'żegluga'], ['zmagać się', 'zmaganie'],
-    ['zachwalać', 'pochwała'], ['zwiedzać', 'zwiedzanie'], ['ratować', 'ratunek'], ['ostrzegać', 'ostrzeżenie'],
+    ['wynajęcie', 'wynająć'], ['otoczenie', 'otaczać; otoczyć'], ['żeglować', 'żegluga; żeglowanie'], ['zmagać się', 'zmaganie'],
+    ['zachwalać', 'zachwalanie'], ['zwiedzać', 'zwiedzanie'], ['ratować', 'ratunek'], ['ostrzegać', 'ostrzeżenie'],
   ]),
   exercise(16, 3, 'Na żaglówce', 'Wpisz nazwę elementu łodzi.', [
     ['Przód łodzi.', 'dziób'], ['Tył łodzi.', 'rufa'], ['Pionowy element trzymający żagiel.', 'maszt'],
     ['Płachta, którą napędza wiatr.', 'żagiel'], ['Element do kierowania łodzią.', 'ster'],
     ['Pomieszczenie do spania na łodzi.', 'kajuta'], ['Boczna część łodzi.', 'burta'],
     ['Flaga na łodzi.', 'bandera'], ['Sznur na łodzi.', 'lina'], ['Osoba prowadząca łódź.', 'żeglarz'],
+    ['Mewa siedzi na rufie: siedzi na ___.', 'rufie'], ['Mewa siedzi na sterze: siedzi na ___.', 'sterze'],
+    ['Mewa siedzi na maszcie: siedzi na ___.', 'maszcie'], ['Mewa siedzi na żaglu: siedzi na ___.', 'żaglu'],
+    ['Mewa siedzi na dziobie: siedzi na ___.', 'dziobie'], ['Mewa siedzi na burcie: siedzi na ___.', 'burcie'],
+    ['Mewa siedzi na banderze: siedzi na ___.', 'banderze'], ['Mewa siedzi na żeglarzu: siedzi na ___.', 'żeglarzu'],
+    ['Mewa siedzi na linie: siedzi na ___.', 'linie'], ['Mewa siedzi w kajucie: siedzi w ___.', 'kajucie'],
   ]),
   exercise(16, 4, 'Wypadek w górach', 'Uzupełnij opowiadanie.', [
-    ['W końcu ___ do schroniska.', 'dotarliśmy'], ['Wieczorem Ania ___ wcześniej.', 'wyruszyła'],
+    ['W końcu ___ do schroniska.', 'dotarliśmy'], ['Zaraz po eksplozji ekipa ratowników ___ na miejsce wypadku.', 'wyruszyła'],
     ['Nagle ___ coś nieoczekiwanego.', 'zdarzyło się'], ['Wezwaliśmy ___ .', 'ratunek'],
     ['Zaskoczył nas ___ wiatr.', 'gwałtowny'], ['To było ___ przeżycie.', 'niesamowite'],
     ['Co wtedy ___ zrobić?', 'postanowiliście'],
@@ -57,8 +62,12 @@ export const LESSON_42 = lesson(42, 'Przygody, przeżycia, wspomnienia', 'Opowia
     ['usiąść (ja, mężczyzna)', 'usiadłem'], ['usiąść (ja, kobieta)', 'usiadłam'],
     ['usiąść (my, mężczyźni)', 'usiedliśmy'], ['usiąść (my, kobiety)', 'usiadłyśmy'],
     ['upaść (ja, mężczyzna)', 'upadłem'], ['upaść (ja, kobieta)', 'upadłam'],
+    ['upaść (my, mężczyźni)', 'upadliśmy'], ['upaść (my, kobiety)', 'upadłyśmy'],
+    ['wpaść (ja, mężczyzna)', 'wpadłem'], ['wpaść (ja, kobieta)', 'wpadłam'],
     ['wpaść (my, mężczyźni)', 'wpadliśmy'], ['wpaść (my, kobiety)', 'wpadłyśmy'],
-    ['spaść (ja, mężczyzna)', 'spadłem'], ['spaść (my, kobiety)', 'spadłyśmy'],
+    ['spaść (ja, mężczyzna)', 'spadłem'], ['spaść (ja, kobieta)', 'spadłam'],
+    ['spaść (my, mężczyźni)', 'spadliśmy'], ['spaść (my, kobiety)', 'spadłyśmy'],
+    ['trząść się (ja, mężczyzna)', 'trząsłem się'], ['trząść się (ja, kobieta)', 'trzęsłam się'],
     ['trząść się (my, mężczyźni)', 'trzęśliśmy się'], ['trząść się (my, kobiety)', 'trzęsłyśmy się'],
   ]),
   exercise(16, 8, 'Bezpiecznie w górach', 'Utwórz polecenia dla osób wybierających się na górską wycieczkę.', [
@@ -215,12 +224,13 @@ export const LESSON_43 = lesson(43, 'Trochę historii', 'Opowiadamy o stanie woj
 ]);
 
 export const LESSON_44 = lesson(44, 'Królestwo zwierząt', 'Opowiadamy o zwierzętach i ich potrzebach', 'Zwierzęta · odmiana rzeczownika zwierzę · zaimki', 'Ćwiczenia 1–13 · podręcznik 120–125', 'lime', [
-  exercise(18, 1, 'Zgadnij, jakie to zwierzę', 'Wpisz zwierzę pasujące do opisu.', [
-    ['Kopie korytarze pod ziemią.', 'kret'], ['Pilnuje domu i szczeka.', 'pies'], ['Ma długie uszy i skacze.', 'królik'],
-    ['Znosi jajka i mieszka w kurniku.', 'kura'], ['Ciągną wóz lub mieszkają w stajni.', 'konie'],
-    ['Młoda owca.', 'baranek'], ['Ptak, który pływa i gęga.', 'gęś'], ['Różowa, hodowana w chlewie.', 'świnia'],
-    ['Mruczy i łapie myszy.', 'kot'], ['Ruda, mieszka na drzewie.', 'wiewiórka'],
-    ['Ma długi ogon i lubi ser.', 'mysz'], ['Samiec krowy.', 'byk'],
+  exercise(18, 1, 'Co pasuje?', 'Wpisz znaczenie wyrażenia ze zwierzęciem.', [
+    ['„Czarna owca” to osoba…', 'źle widziana w grupie'], ['„Czarny koń” nieoczekiwanie…', 'wygrywa'],
+    ['„Kura znosząca złote jajka” to inaczej…', 'źródło zysków'], ['„Chodzić spać z kurami” znaczy…', 'wcześnie'],
+    ['„Raz kozie śmierć!” znaczy…', 'zaryzykować'], ['„Kaczka dziennikarska” to…', 'nieprawdziwa informacja'],
+    ['„Kurze łapki” to inaczej…', 'zmarszczki przy oczach'], ['„Psi obowiązek” to…', 'praca ponad siły'],
+    ['Mamy „gęsią skórkę”…', 'ze strachu'], ['„Za psie pieniądze” znaczy…', 'tanio'],
+    ['„Kocia muzyka” jest…', 'nie do zniesienia'], ['„Koński ogon” to…', 'rodzaj fryzury'],
   ]),
   exercise(18, 2, 'Odmiana słowa „zwierzę”', 'Uzupełnij zdanie właściwą formą.', [
     ['Wszystkie ___ potrzebują opieki.', 'zwierzęta'], ['Ludzie opiekują się ___ .', 'zwierzętami'],
@@ -230,12 +240,15 @@ export const LESSON_44 = lesson(44, 'Królestwo zwierząt', 'Opowiadamy o zwierz
     ['Dzieci uczą się o ___ .', 'zwierzętach'], ['Wolontariusze opiekują się ___ .', 'zwierzętami'],
     ['Dajemy jedzenie ___ .', 'zwierzętom'], ['Wspieramy ochronę ___ .', 'zwierząt'],
   ]),
-  exercise(18, 3, 'Prawda czy nieprawda?', 'Zaznacz P lub N na podstawie tekstu.', [
-    ['Wszyscy studenci lubią piwo.', 'N'], ['Wszystkie kobiety chcą mieć dzieci.', 'N'],
-    ['Wszyscy mężczyźni mają prawo jazdy.', 'N'], ['Wszyscy politycy są nieuczciwi.', 'N'],
-    ['Wszystkie zwierzęta są użyteczne dla człowieka.', 'N'], ['Wszyscy komuniści byli źli.', 'N'],
-    ['Wszystkie nauczycielki są cierpliwe.', 'N'], ['Wszystkie niemowlęta mają niebieskie oczy.', 'N'],
-    ['Wszyscy bezdomni są alkoholikami.', 'N'], ['Wszyscy Włosi są spontaniczni.', 'N'],
+  exercise(18, 3, 'Zwierzęta w filmach', 'Uzupełnij recenzję właściwą formą wyrazu w nawiasie.', [
+    ['W filmie „Uciekające kurczaki” głównym motywem jest wykorzystywanie ___ . (kura)', 'kur'],
+    ['Ferma przypomina obóz, w którym ___ są hodowane dla ___ i na rosół. (kura; jajka)', 'kury; jajek'],
+    ['Czasami ___ próbują uciekać, ale zawsze łapią je ___ właściciela. (kura; pies)', 'kury; psy'],
+    ['Przywódczynią ___ jest Ginger. Sytuację w ___ zmienia pojawienie się koguta. (kura; kurnik)', 'kur; kurniku'],
+    ['A prawdziwą perełką są dwa ___ zajmujące się handlem ze zbuntowanymi ___. (szczur; kura)', 'szczury; kurami'],
+    ['Babe marzy, by zostać ___ pasterskim. (pies)', 'psem'],
+    ['Miejsce świnki jest w ___, ale Babe wychowała się wśród ___ i tęskni za zielonymi ___. (chlew; pies; łąka)', 'chlewie; psów; łąkami'],
+    ['Czy poradzi sobie z ___ w czasie konkursu? (owca)', 'owcami'],
   ]),
   exercise(18, 4, 'Każdy, wszyscy, wszystko', 'Uzupełnij odpowiednim zaimkiem.', [
     ['___ człowiek ma swoje przyzwyczajenia.', 'Każdy'], ['Pomogli ___ potrzebującym.', 'wszystkim'],

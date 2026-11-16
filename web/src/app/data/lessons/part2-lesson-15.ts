@@ -28,18 +28,16 @@ export const LESSON_41: Lesson = {
       typed('q8', 'Do kiedy Polska była w niewoli?', 'Do 11 listopada 1918 roku.'),
       typed('q9', 'Który dzień Bożego Narodzenia lubisz najbardziej?', 'Wigilię.'),
     ]),
-    activity(2, 'Święta religijne i narodowe', 'Wpisz wyraz, który nie ma charakteru religijnego.', [
-      ...[
-        ['Betlejem · Wszystkich Świętych · Jezus Chrystus · szampan', 'szampan'],
-        ['Wielkanoc · Boże Narodzenie · pochód pierwszomajowy', 'pochód pierwszomajowy'],
-        ['procesja · modlitwa · urodziny', 'urodziny'],
-        ['święta religijne · Międzynarodowy Dzień Solidarności Ludzi Pracy', 'Międzynarodowy Dzień Solidarności Ludzi Pracy'],
-        ['Duch Święty · Maryja Panna · konstytucja', 'konstytucja'],
-        ['Wniebowzięcie · Matka Boska · pełnia księżyca', 'pełnia księżyca'],
-        ['pielgrzymować · Wigilia · niepodległość', 'niepodległość'],
-        ['cmentarz · ołtarz · PRL', 'PRL'],
-      ].map(([prompt, answer], i) => typed(`q${i + 1}`, prompt, answer)),
-    ]),
+    activity(2, 'Święta religijne i narodowe', 'W każdej grupie wybierz wyraz niezwiązany z religią.', [
+      choice('q1', 'Betlejem · Wszystkich Świętych · Jezus Chrystus · szampan', 'szampan', ['Betlejem', 'Wszystkich Świętych', 'Jezus Chrystus', 'szampan']),
+      choice('q2', 'Wielkanoc · Boże Narodzenie · pochód pierwszomajowy', 'pochód pierwszomajowy', ['Wielkanoc', 'Boże Narodzenie', 'pochód pierwszomajowy']),
+      choice('q3', 'procesja · modlitwa · urodziny', 'urodziny', ['procesja', 'modlitwa', 'urodziny']),
+      choice('q4', 'święto religijne · Międzynarodowy Dzień Solidarności Ludzi Pracy', 'Międzynarodowy Dzień Solidarności Ludzi Pracy', ['święto religijne', 'Międzynarodowy Dzień Solidarności Ludzi Pracy']),
+      choice('q5', 'Duch Święty · Maryja Panna · konstytucja', 'konstytucja', ['Duch Święty', 'Maryja Panna', 'konstytucja']),
+      choice('q6', 'Wniebowzięcie · Matka Boska · pełnia księżyca', 'pełnia księżyca', ['Wniebowzięcie', 'Matka Boska', 'pełnia księżyca']),
+      choice('q7', 'pielgrzymować · Wigilia · niepodległość', 'niepodległość', ['pielgrzymować', 'Wigilia', 'niepodległość']),
+      choice('q8', 'cmentarz · ołtarz · PRL', 'PRL', ['cmentarz', 'ołtarz', 'PRL']),
+    ], ActivityKind.Choice),
     activity(3, 'Boże Narodzenie', 'Wpisz nazwę zwyczaju lub świątecznego przedmiotu.', [
       ...[
         ['Wieczór 24 grudnia.', 'Wigilia'], ['Nocna msza bożonarodzeniowa.', 'pasterka'],
