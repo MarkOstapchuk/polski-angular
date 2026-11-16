@@ -56,7 +56,7 @@ export class AuthComponent {
       }
 
       const next = this.route.snapshot.queryParamMap.get('next');
-      const destination = next?.startsWith('/') && !next.startsWith('//') ? next : '/';
+      const destination = next?.startsWith('/') && !next.startsWith('//') ? next : '/course/part-1';
       await this.router.navigateByUrl(destination);
     } catch (error) {
       this.error.set(error instanceof Error ? error.message : 'Nie udało się połączyć z kontem.');

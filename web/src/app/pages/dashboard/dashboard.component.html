@@ -1,18 +1,18 @@
 <div class="dashboard-shell">
   <aside class="sidebar">
-    <a class="brand" routerLink="/" aria-label="Polski, strona główna">
+    <a class="brand" [routerLink]="dashboardUrl()" aria-label="Polski, moja ścieżka">
       <span class="brand-mark">p</span>
       <span>polski<span class="brand-dot">.</span></span>
     </a>
 
-    <a class="course-switcher" routerLink="/" aria-label="Wybierz kurs">
+    <a class="course-switcher" [routerLink]="dashboardUrl()" aria-label="Otwórz wybrany kurs">
       <span class="course-flag">PL</span>
       <span class="course-switcher-copy"><strong>{{ selectedCourse()?.name ?? 'Kursy' }}</strong><small>{{ selectedCourse()?.level ?? 'Wybierz kurs' }}</small></span>
       <span class="switcher-chevron">⌄</span>
     </a>
 
     <nav class="side-nav" aria-label="Nawigacja główna">
-      <a class="nav-link active" routerLink="/">
+      <a class="nav-link active" [routerLink]="dashboardUrl()">
         <span class="nav-icon home-icon">⌂</span><span>Moja ścieżka</span>
       </a>
       <a class="nav-link" [href]="selectedCourse() ? '#lesson-path' : '#course-options'">
@@ -41,7 +41,7 @@
 
   <main class="main-column">
     <header class="topbar">
-      <a class="mobile-brand" routerLink="/"><span class="brand-mark">p</span> polski<span class="brand-dot">.</span></a>
+      <a class="mobile-brand" [routerLink]="dashboardUrl()"><span class="brand-mark">p</span> polski<span class="brand-dot">.</span></a>
       <div class="topbar-spacer"></div>
       <div class="top-stat streak-stat" aria-label="Dni nauki z rzędu">
         <span class="stat-emoji">🔥</span><strong>{{ progress().streak }}</strong><small>dni</small>
@@ -148,6 +148,16 @@
           }
         </section>
       }
+
+      <section class="learning-guides" aria-labelledby="learning-guides-title">
+        <p class="eyebrow">BEZPŁATNE MATERIAŁY</p>
+        <h2 id="learning-guides-title">Czytaj i ćwicz polski</h2>
+        <div class="learning-guides-grid">
+          <a href="/nauka/polskie-znaki"><strong>Polskie znaki i wymowa</strong><span>ą, ć, ę, ł i pozostałe litery</span></a>
+          <a href="/gramatyka/przypadki"><strong>Przypadki</strong><span>Przewodnik dla początkujących</span></a>
+          <a href="/slownictwo/podstawowe-zwroty"><strong>Podstawowe zwroty</strong><span>Powitania i pierwsza rozmowa</span></a>
+        </div>
+      </section>
     </div>
   </main>
 
@@ -184,7 +194,7 @@
   </aside>
 
   <nav class="mobile-nav" aria-label="Nawigacja mobilna">
-    <a class="mobile-nav-item selected" routerLink="/"><span>⌂</span><small>Ścieżka</small></a>
+    <a class="mobile-nav-item selected" [routerLink]="dashboardUrl()"><span>⌂</span><small>Ścieżka</small></a>
     <a class="mobile-nav-item" [href]="selectedCourse() ? '#lesson-path' : '#course-options'"><span>▤</span><small>Kurs</small></a>
     <a class="mobile-nav-item" href="#progress-card"><span>▥</span><small>Postępy</small></a>
     <a class="mobile-nav-item" routerLink="/feedback"><span>✎</span><small>Opinie</small></a>

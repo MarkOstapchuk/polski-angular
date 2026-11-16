@@ -91,7 +91,7 @@ export class LessonComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     const lesson = this.lesson();
     if (!lesson) {
-      void this.router.navigate(['/']);
+      void this.router.navigateByUrl(this.dashboardUrl());
       return;
     }
     const restoredResults: Record<string, Record<string, boolean>> = {};

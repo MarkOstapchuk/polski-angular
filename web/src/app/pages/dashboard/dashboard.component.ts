@@ -26,6 +26,7 @@ export class DashboardComponent {
     initialValue: this.route.snapshot.paramMap.get('courseId'),
   });
   readonly selectedCourse = computed(() => COURSES.find((course) => course.id === this.routeCourseId()) ?? null);
+  readonly dashboardUrl = computed(() => `/course/${this.selectedCourse()?.id ?? 'part-1'}`);
   readonly lessons = computed(() => this.selectedCourse()?.lessons ?? []);
   readonly progress = this.progressService.progress;
   readonly userEmail = computed(() => this.auth.user()?.email ?? 'Uczeń');
