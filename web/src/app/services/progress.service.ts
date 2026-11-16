@@ -137,8 +137,8 @@ export class ProgressService {
     return this.progress().completedLessonIds.includes(lessonId);
   }
 
-  isUnlocked(lessonId: number): boolean {
-    return lessonId === 1 || this.hasCompleted(lessonId - 1);
+  isUnlocked(lessonId: number, firstLessonId = 1): boolean {
+    return lessonId === firstLessonId || this.hasCompleted(lessonId - 1);
   }
 
   scoreFor(lessonId: number): number | null {

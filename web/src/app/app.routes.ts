@@ -5,7 +5,8 @@ import { authGuard } from './services/auth.service';
 
 export const routes: Routes = [
   { path: 'auth', component: AuthComponent, title: 'Konto · Polski' },
-  { path: '', component: DashboardComponent, canActivate: [authGuard], title: 'Polski · Twoja ścieżka' },
+  { path: '', component: DashboardComponent, canActivate: [authGuard], title: 'Polski · Kursy' },
+  { path: 'course/:courseId', component: DashboardComponent, canActivate: [authGuard], title: 'Kurs · Polski' },
   { path: 'learn/:lessonId', loadComponent: () => import('./pages/lesson/lesson.component').then((m) => m.LessonComponent), canActivate: [authGuard], title: 'Lekcja · Polski' },
   { path: '**', redirectTo: '' },
 ];

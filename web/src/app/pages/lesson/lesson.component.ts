@@ -40,6 +40,9 @@ export class LessonComponent implements OnInit, OnDestroy {
       ? `CZĘŚĆ 2 · LEKCJA ${String(lessonId - 26).padStart(2, '0')}`
       : `LEKCJA ${String(lessonId).padStart(2, '0')}`;
   }
+  dashboardUrl(): string {
+    return (this.lesson()?.id ?? 1) > 26 ? '/course/part-2' : '/course/part-1';
+  }
   readonly theory = computed(() => {
     const id = this.lesson()?.id;
     return id ? LESSON_THEORY[id as LessonTheoryId] : undefined;

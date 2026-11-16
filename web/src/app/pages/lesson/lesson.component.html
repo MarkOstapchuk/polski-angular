@@ -1,7 +1,7 @@
 @if (lesson(); as lesson) {
   <div class="lesson-shell">
     <header class="lesson-topbar">
-      <a class="close-button" routerLink="/" aria-label="Wróć do ścieżki">×</a>
+      <a class="close-button" [routerLink]="dashboardUrl()" aria-label="Wróć do ścieżki">×</a>
       <div class="top-progress" aria-label="Postęp lekcji">
         <div class="progress-track"><span [style.width.%]="finished() ? 100 : activityProgress()"></span></div>
         <small>{{ finished() ? lesson.activities.length : activeIndex() + 1 }} / {{ lesson.activities.length }}</small>
@@ -189,7 +189,7 @@
           <div><strong>+{{ awardedXp() }} XP</strong><small>{{ awardedXp() ? 'dodano do postępów' : 'najlepszy wynik zapisany' }}</small></div>
         </div>
         <p class="next-unlock">{{ finalScore() === 100 ? 'Perfekcyjnie. Każdy poprawny zwrot zostaje z Tobą.' : 'Błędy są częścią nauki. Poprawne odpowiedzi zobaczysz w podsumowaniu ćwiczeń.' }}</p>
-        <a class="return-button" routerLink="/">Wróć do ścieżki <span>→</span></a>
+        <a class="return-button" [routerLink]="dashboardUrl()">Wróć do ścieżki <span>→</span></a>
       </main>
     }
     @if (dictionaryWord(); as word) {

@@ -5,17 +5,17 @@
       <span>polski<span class="brand-dot">.</span></span>
     </a>
 
-    <div class="course-switcher">
+    <a class="course-switcher" routerLink="/" aria-label="Wybierz kurs">
       <span class="course-flag">PL</span>
-      <span class="course-switcher-copy"><strong>Polski</strong><small>Kurs podstawowy</small></span>
+      <span class="course-switcher-copy"><strong>{{ selectedCourse()?.name ?? 'Kursy' }}</strong><small>{{ selectedCourse()?.level ?? 'Wybierz kurs' }}</small></span>
       <span class="switcher-chevron">⌄</span>
-    </div>
+    </a>
 
     <nav class="side-nav" aria-label="Nawigacja główna">
       <a class="nav-link active" routerLink="/">
         <span class="nav-icon home-icon">⌂</span><span>Moja ścieżka</span>
       </a>
-      <a class="nav-link" href="#lesson-path">
+      <a class="nav-link" [href]="selectedCourse() ? '#lesson-path' : '#course-options'">
         <span class="nav-icon book-icon">▤</span><span>Kurs</span>
       </a>
       <a class="nav-link" href="#progress-card">
@@ -56,42 +56,43 @@
       @if (progressService.syncError(); as syncMessage) {
         <p class="sync-message" role="alert">{{ syncMessage }}</p>
       }
-      <section class="welcome-row">
-        <div>
+      @if (selectedCourse(); as course) {
+        <section class="welcome-row">
+          <div>
             <p class="eyebrow">{{ greeting }} <span class="wave">✦</span></p>
-          <h1>Jeszcze chwila i<br class="mobile-break"> mówisz po polsku.</h1>
-          <p class="welcome-copy">Wróć do swojej ścieżki. Dziś wystarczy jedna dobra lekcja.</p>
-        </div>
-        <div class="daily-pill"><span>☀</span> Twój spokojny rytm</div>
-      </section>
+            <h1>{{ course.name }} · {{ course.level }}</h1>
+            <p class="welcome-copy">{{ course.description }}. Wróć do swojej ścieżki i ucz się we własnym tempie.</p>
+          </div>
+          <div class="daily-pill"><span>☀</span> Twój spokojny rytm</div>
+        </section>
 
-      <section class="continue-card" [class]="'continue-card tone-' + currentLesson().color">
-        <div class="continue-content">
-          <div class="lesson-kicker"><span class="kicker-dot"></span> {{ completeCount() === 0 ? 'ZACZNIJ KURS' : 'KONTYNUUJ NAUKĘ' }} · {{ lessonLabel(currentLesson()) }}</div>
-          <h2>{{ currentLesson().title }}</h2>
-          <p>{{ currentLesson().subtitle }}</p>
-          <div class="continue-meta"><span>◷ 2–4 min / ćwiczenie</span><span>•</span><span>{{ currentLesson().activityCount }} ćwiczeń</span></div>
-          <button class="primary-button" type="button" (click)="openLesson(currentLesson())">
-            {{ completeCount() === 0 ? 'Zacznij lekcję' : 'Kontynuuj' }} <span aria-hidden="true">→</span>
-          </button>
-        </div>
-        <div class="continue-art" aria-hidden="true">
-          <div class="art-sun"></div>
-          <div class="art-card art-card-back"><span>cześć!</span></div>
-          <div class="art-card art-card-front"><span class="art-speech">Dzień dobry</span><span class="art-face">☺</span><span class="art-caption">miło mi</span></div>
-          <span class="art-star star-one">✦</span><span class="art-star star-two">✧</span>
-        </div>
-      <div class="card-number">{{ lessonNumber(currentLesson()) }}</div>
-      </section>
+        <section class="continue-card" [class]="'continue-card tone-' + currentLesson().color">
+          <div class="continue-content">
+            <div class="lesson-kicker"><span class="kicker-dot"></span> {{ completeCount() === 0 ? 'ZACZNIJ KURS' : 'KONTYNUUJ NAUKĘ' }} · {{ lessonLabel(currentLesson()) }}</div>
+            <h2>{{ currentLesson().title }}</h2>
+            <p>{{ currentLesson().subtitle }}</p>
+            <div class="continue-meta"><span>◷ 2–4 min / ćwiczenie</span><span>•</span><span>{{ currentLesson().activityCount }} ćwiczeń</span></div>
+            <button class="primary-button" type="button" (click)="openLesson(currentLesson())">
+              {{ completeCount() === 0 ? 'Zacznij lekcję' : 'Kontynuuj' }} <span aria-hidden="true">→</span>
+            </button>
+          </div>
+          <div class="continue-art" aria-hidden="true">
+            <div class="art-sun"></div>
+            <div class="art-card art-card-back"><span>cześć!</span></div>
+            <div class="art-card art-card-front"><span class="art-speech">Dzień dobry</span><span class="art-face">☺</span><span class="art-caption">miło mi</span></div>
+            <span class="art-star star-one">✦</span><span class="art-star star-two">✧</span>
+          </div>
+          <div class="card-number">{{ lessonNumber(currentLesson()) }}</div>
+        </section>
 
-      <div class="section-heading" id="lesson-path">
-        <div><p class="eyebrow">TWOJA DROGA</p><h2>Podstawy języka</h2></div>
-        <span class="section-progress">{{ completeCount() }} z {{ lessons.length }} lekcji</span>
-      </div>
+        <div class="section-heading" id="lesson-path">
+          <div><p class="eyebrow">TWOJA DROGA</p><h2>{{ course.name }} · lekcje</h2></div>
+          <span class="section-progress">{{ completeCount() }} z {{ lessons().length }} lekcji</span>
+        </div>
 
-      <section class="lesson-path" aria-label="Lista lekcji">
-        <div class="path-rail"><span class="rail-fill" [style.height.%]="courseProgress()"></span></div>
-        @for (lesson of lessons; track lesson.id; let index = $index) {
+        <section class="lesson-path" aria-label="Lista lekcji">
+          <div class="path-rail"><span class="rail-fill" [style.height.%]="courseProgress()"></span></div>
+          @for (lesson of lessons(); track lesson.id) {
           <article class="path-row" [class.is-locked]="!isUnlocked(lesson)" [class.is-complete]="isComplete(lesson)">
             <button class="path-node" [class]="'path-node node-' + lesson.color" type="button"
               [disabled]="!isUnlocked(lesson)" (click)="openLesson(lesson)" [attr.aria-label]="'Otwórz ' + lessonLabel(lesson)">
@@ -117,9 +118,33 @@
             </button>
           </article>
         }
-      </section>
+        </section>
 
-      <div class="course-end-note"><span>✦</span><div><strong>To dopiero początek</strong><small>Kolejne lekcje dołączą do ścieżki po przygotowaniu materiałów.</small></div></div>
+        <div class="course-end-note"><span>✦</span><div>
+          <strong>{{ completeCount() === lessons().length ? 'Część ukończona' : 'Ucz się we własnym tempie' }}</strong>
+          <small>{{ completeCount() === lessons().length ? 'Możesz wrócić do lekcji lub wybrać drugą część kursu.' : 'Postęp w tej części zapisuje się osobno.' }}</small>
+        </div></div>
+      } @else {
+        <section class="welcome-row">
+          <div>
+            <p class="eyebrow">{{ greeting }} <span class="wave">✦</span></p>
+            <h1>Wybierz kurs</h1>
+            <p class="welcome-copy">Każda część ma własną ścieżkę i zapisany postęp.</p>
+          </div>
+          <div class="daily-pill"><span>☀</span> Twój spokojny rytm</div>
+        </section>
+        <section class="course-options" id="course-options" aria-label="Dostępne kursy">
+          @for (course of courses; track course.id) {
+            <button class="course-option" [class]="'course-option tone-' + course.color" type="button" (click)="openCourse(course)">
+              <span class="course-option-heading"><span>{{ course.name }}</span><strong>{{ course.level }}</strong></span>
+              <h2>Polski · {{ course.name }}</h2>
+              <p>{{ course.description }}</p>
+              <span class="course-option-progress">{{ courseCompleteCount(course) }} z {{ course.lessons.length }} lekcji · {{ courseCompletion(course) }}%</span>
+              <span class="course-option-arrow" aria-hidden="true">→</span>
+            </button>
+          }
+        </section>
+      }
     </div>
   </main>
 
@@ -157,7 +182,7 @@
 
   <nav class="mobile-nav" aria-label="Nawigacja mobilna">
     <a class="mobile-nav-item selected" routerLink="/"><span>⌂</span><small>Ścieżka</small></a>
-    <a class="mobile-nav-item" href="#lesson-path"><span>▤</span><small>Kurs</small></a>
+    <a class="mobile-nav-item" [href]="selectedCourse() ? '#lesson-path' : '#course-options'"><span>▤</span><small>Kurs</small></a>
     <a class="mobile-nav-item" href="#progress-card"><span>▥</span><small>Postępy</small></a>
     <button class="mobile-nav-item" type="button" (click)="signOut()" aria-label="Wyloguj się"><span>↗</span><small>Wyloguj</small></button>
   </nav>

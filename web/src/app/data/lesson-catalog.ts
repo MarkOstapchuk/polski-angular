@@ -9,6 +9,16 @@ export interface LessonSummary {
   activityCount: number;
 }
 
+export interface CourseSummary {
+  id: 'part-1' | 'part-2';
+  name: string;
+  level: string;
+  description: string;
+  color: LessonColor;
+  firstLessonId: number;
+  lessons: LessonSummary[];
+}
+
 export const LESSON_CATALOG: LessonSummary[] = [
   { id: 1, title: 'Pierwszy dzień w szkole', subtitle: 'Poznajemy się i zaczynamy rozmawiać', topic: 'Powitania · imiona · pierwsze pytania', color: 'coral', activityCount: 12 },
   { id: 2, title: 'Cześć, skąd jesteś?', subtitle: 'Pytamy o pochodzenie i ćwiczymy czasowniki', topic: 'Kraje · zaimki · czas teraźniejszy', color: 'blue', activityCount: 7 },
@@ -59,4 +69,15 @@ export const LESSON_CATALOG: LessonSummary[] = [
   { id: 47, title: 'Sztuka i piractwo', subtitle: 'Rozmawiamy o prawach autorskich i pobieraniu plików', topic: 'Prawa autorskie · strona bierna · opinie', color: 'violet', activityCount: 7 },
   { id: 48, title: 'Warto zobaczyć', subtitle: 'Opisujemy dzieła sztuki i wyrażamy swoje wrażenia', topic: 'Muzea · wystawy · rzeczowniki na -um', color: 'violet', activityCount: 11 },
   { id: 49, title: 'Czas na egzamin', subtitle: 'Powtarzamy materiał i ćwiczymy zadania egzaminacyjne', topic: 'Egzamin · poprawność · słownictwo i gramatyka', color: 'yellow', activityCount: 10 },
+];
+
+export const COURSES: CourseSummary[] = [
+  {
+    id: 'part-1', name: 'Część 1', level: 'A1–A2', description: 'Podstawy polskiego · 26 lekcji',
+    color: 'coral', firstLessonId: 1, lessons: LESSON_CATALOG.filter((lesson) => lesson.id <= 26),
+  },
+  {
+    id: 'part-2', name: 'Część 2', level: 'A2–B1', description: 'Kontynuacja nauki · 23 lekcje',
+    color: 'violet', firstLessonId: 27, lessons: LESSON_CATALOG.filter((lesson) => lesson.id >= 27),
+  },
 ];
