@@ -42,6 +42,7 @@ import {
 export * from './lesson-types';
 
 const l01PhraseEndings = ['znaczy?', 'pytanie.', 'mówi po polsku…?', 'rozumiem.', 'powtórzyć?'];
+const l02QuestionEndings = ['a. pani', 'b. u ciebie', 'c. w porządku', 'd. słychać', 'e. staremu', 'f. nowego'];
 
 export const LESSONS: Lesson[] = [
   {
@@ -358,9 +359,19 @@ export const LESSONS: Lesson[] = [
         ['Studentka: ___ dobry.', 'Dzień'], ['Jak się pani ___?', 'nazywa'], ['Proszę ___.', 'powtórzyć'],
         ['___ pani jest?', 'Skąd'], ['Jestem ___ Hiszpanii.', 'z'], ['___ bardzo.', 'dziękuję'],
       ]),
-      typedExercise(2, 3, 'Co pasuje?', 'Połącz początki pytań z zakończeniami, wpisując literę odpowiedzi.', [
-        ['1. co', '1d'], ['2. po', '2e'], ['3. co', '3b'], ['4. nic', '4f'], ['5. co u', '5a'], ['6. wszystko', '6c'],
-      ]),
+      {
+        id: 'l02-question-match', sourceExerciseId: 'WB-L02-E03', sourceLabel: 'Zeszyt ćwiczeń · ćwiczenie 3',
+        kind: ActivityKind.Match, title: 'Co pasuje?',
+        instruction: 'Wybierz początek pytania, a następnie pasujące zakończenie.',
+        items: [
+          choice('q1', '1. co', 'd. słychać', l02QuestionEndings),
+          choice('q2', '2. po', 'e. staremu', l02QuestionEndings),
+          choice('q3', '3. co', 'b. u ciebie', l02QuestionEndings),
+          choice('q4', '4. nic', 'f. nowego', l02QuestionEndings),
+          choice('q5', '5. co u', 'a. pani', l02QuestionEndings),
+          choice('q6', '6. wszystko', 'c. w porządku', l02QuestionEndings),
+        ],
+      },
       typedExercise(2, 5, 'Podziel wyrazy i zapisz zdania', 'Wstaw wielkie litery, spacje i znaki przestankowe.', [
         ['cześćcostychaćdziękujedobrzeacouciebięwszystkowporządkudziękuję', 'Cześć, co słychać? Dziękuję, dobrze, a co u ciebie? Wszystko w porządku, dziękuję.'],
       ]),
