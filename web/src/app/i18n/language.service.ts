@@ -5,6 +5,7 @@ export type Language = 'pl' | 'ru' | 'en';
 const messages: Record<Language, Record<string, string>> = {
   pl: {
     language: 'Język',
+    'pwa.updateAvailable': 'Dostępna jest nowa wersja aplikacji.', 'pwa.updateNow': 'Odśwież teraz',
     'auth.brand': 'Strona główna', 'auth.eyebrow': 'TWOJA NAUKA POLSKIEGO', 'auth.welcome': 'Witaj ponownie', 'auth.create': 'Utwórz konto',
     'auth.signInIntro': 'Zaloguj się, aby zapisać postępy na każdym urządzeniu.', 'auth.signUpIntro': 'Utwórz konto, aby zachować swoje postępy.',
     'auth.email': 'E-mail', 'auth.password': 'Hasło', 'auth.wait': 'Chwileczkę…', 'auth.signIn': 'Zaloguj się', 'auth.signUp': 'Zarejestruj się',
@@ -61,6 +62,7 @@ const messages: Record<Language, Record<string, string>> = {
   },
   ru: {
     language: 'Язык',
+    'pwa.updateAvailable': 'Доступна новая версия приложения.', 'pwa.updateNow': 'Обновить',
     'auth.brand': 'Главная', 'auth.eyebrow': 'ИЗУЧАЙТЕ ПОЛЬСКИЙ', 'auth.welcome': 'С возвращением', 'auth.create': 'Создать аккаунт',
     'auth.signInIntro': 'Войдите, чтобы сохранять прогресс на всех устройствах.', 'auth.signUpIntro': 'Создайте аккаунт, чтобы сохранить прогресс.',
     'auth.email': 'Электронная почта', 'auth.password': 'Пароль', 'auth.wait': 'Подождите…', 'auth.signIn': 'Войти', 'auth.signUp': 'Зарегистрироваться',
@@ -117,6 +119,7 @@ const messages: Record<Language, Record<string, string>> = {
   },
   en: {
     language: 'Language',
+    'pwa.updateAvailable': 'A new version of the app is available.', 'pwa.updateNow': 'Update now',
     'auth.brand': 'Home', 'auth.eyebrow': 'LEARN POLISH', 'auth.welcome': 'Welcome back', 'auth.create': 'Create an account',
     'auth.signInIntro': 'Sign in to save your progress across devices.', 'auth.signUpIntro': 'Create an account to keep your progress.',
     'auth.email': 'Email', 'auth.password': 'Password', 'auth.wait': 'Please wait…', 'auth.signIn': 'Sign in', 'auth.signUp': 'Sign up',
