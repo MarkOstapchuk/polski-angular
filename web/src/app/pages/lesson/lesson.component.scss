@@ -41,7 +41,8 @@
 .answer-feedback, .answer-explanation, .answer-count, .audio-copy small,
 .result-strip small, .score-orb > span, .completion-stats small { font-size: 12px; }
 .source-id { font-size: 11px; }
-.instruction, .question-prompt, .theory-section p, .theory-examples p, .completion-copy { font-size: 15px; }
+.instruction { font-size: 18px; }
+.question-prompt, .theory-section p, .theory-examples p, .completion-copy { font-size: 15px; }
 .theory-section h3, .theory-examples h3 { font-size: 13px; }
 .theory-examples strong, .audio-copy strong, .result-strip strong { font-size: 14px; }
 .question-number { font-size: 12px; }
@@ -53,6 +54,7 @@
 .next-unlock { font-size: 14px; }
 
 @media (max-width: 600px) {
+  .instruction { font-size: 17px; }
   .question-prompt, .theory-section p, .theory-examples p { font-size: 15px; }
   .theory-examples strong { font-size: 14px; }
 }
