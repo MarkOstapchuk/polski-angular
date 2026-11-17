@@ -4,10 +4,10 @@ const source = (exercise: number) => ({
   sourceExerciseId: `WB2-L11-E${String(exercise).padStart(2, '0')}`,
   sourceLabel: `Zeszyt ćwiczeń · część 2 · lekcja 11 · ćwiczenie ${exercise}`,
 });
-const activity = (exercise: number, title: string, instruction: string, items: ReturnType<typeof typed>[], kind = ActivityKind.Typed, idSuffix = kind === ActivityKind.Match ? '-match' : '') => ({
+const activity = (exercise: number, title: string, instruction: string, items: ReturnType<typeof typed>[], kind = ActivityKind.Typed, idSuffix = '') => ({
   id: `p2-l11-e${String(exercise).padStart(2, '0')}${idSuffix}`,
   ...source(exercise), kind, title, instruction,
-  items: kind === ActivityKind.Match ? items.map((item) => choice(item.id, item.prompt, item.accepted, [...new Set(items.flatMap(({ accepted }) => accepted))])) : items,
+  items: kind === ActivityKind.Match ? items.map((item) => item.options ? item : choice(item.id, item.prompt, item.accepted, [...new Set(items.flatMap(({ accepted }) => accepted))])) : items,
 });
 const travelDefinitions = [
   'wyolbrzymić coś lub zrobić coś nieodpowiedniego', 'ciekawe przeżycie, interesujące zdarzenie',

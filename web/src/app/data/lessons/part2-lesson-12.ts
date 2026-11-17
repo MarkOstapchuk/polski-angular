@@ -4,7 +4,7 @@ const source = (exercise: number) => ({
   sourceExerciseId: `WB2-L12-E${String(exercise).padStart(2, '0')}`,
   sourceLabel: `Zeszyt ćwiczeń · część 2 · lekcja 12 · ćwiczenie ${exercise}`,
 });
-const activity = (exercise: number, title: string, instruction: string, items: ReturnType<typeof typed>[], kind = ActivityKind.Typed, idSuffix = kind === ActivityKind.Match ? '-match' : '') => ({
+const activity = (exercise: number, title: string, instruction: string, items: ReturnType<typeof typed>[], kind = ActivityKind.Typed, idSuffix = '') => ({
   id: `p2-l12-e${String(exercise).padStart(2, '0')}${idSuffix}`,
   ...source(exercise), kind, title, instruction,
   items: kind === ActivityKind.Match || (kind === ActivityKind.Choice && items.some((item) => !item.options))
@@ -107,7 +107,7 @@ export const LESSON_38: Lesson = {
         ['pozostawiać coś', 'bez komentarza'], ['domagam się', 'rekompensaty'],
         ['wyrazić', 'niezadowolenie'], ['być oburzonym', 'czyimś postępowaniem'],
       ].map(([prompt, answer], i) => typed(`q${i + 1}`, prompt, answer)),
-    ], ActivityKind.Match),
+    ], ActivityKind.Match, '-match'),
     activity(9, 'List reklamacyjny', 'Ułóż zdania z podanych wyrazów.', [
       typed('q1', 'państwa · swoje · chciałem · usług · wyrazić · w związku z · nierzetelnością · niezadowolenie', 'Chciałem wyrazić swoje niezadowolenie w związku z nierzetelnością Państwa usług.'),
       typed('q2', 'państwa · z · tygodniu · w · skorzystałem · oferty · ubiegłym', 'W ubiegłym tygodniu skorzystałem z Państwa oferty.'),
@@ -166,7 +166,7 @@ export const LESSON_38: Lesson = {
         ['Ktoś parkuje przed twoją bramą.', 'Jeżeli natychmiast pan nie odjedzie, zadzwonię po straż miejską.'],
         ['Samochód za tobą chce was wyprzedzić.', 'Zjedź na prawy pas!'],
       ].map(([prompt, answer], i) => typed(`q${i + 1}`, prompt, answer)),
-    ], ActivityKind.Match),
+    ], ActivityKind.Match, '-match'),
     activity(15, 'Słownictwo drogowe', 'Dopasuj definicje do nazw i zdefiniuj pozostałe wyrazy.', [
       ...[
         ['Parking poza centrum, skąd można kontynuować podróż transportem publicznym.', 'Parkuj i jedź'],

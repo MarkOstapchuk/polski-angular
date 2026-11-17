@@ -4,10 +4,10 @@ const source = (exercise: number) => ({
   sourceExerciseId: `WB2-L15-E${String(exercise).padStart(2, '0')}`,
   sourceLabel: `Zeszyt ćwiczeń · część 2 · lekcja 15 · ćwiczenie ${exercise}`,
 });
-const activity = (exercise: number, title: string, instruction: string, items: ReturnType<typeof typed>[], kind = ActivityKind.Typed) => ({
-  id: `p2-l15-e${String(exercise).padStart(2, '0')}${kind === ActivityKind.Match ? '-match' : ''}`,
+const activity = (exercise: number, title: string, instruction: string, items: ReturnType<typeof typed>[], kind = ActivityKind.Typed, idSuffix = '') => ({
+  id: `p2-l15-e${String(exercise).padStart(2, '0')}${idSuffix}`,
   ...source(exercise), kind, title, instruction,
-  items: kind === ActivityKind.Match ? items.map((item) => choice(item.id, item.prompt, item.accepted, [...new Set(items.flatMap(({ accepted }) => accepted))])) : items,
+  items: kind === ActivityKind.Match ? items.map((item) => item.options ? item : choice(item.id, item.prompt, item.accepted, [...new Set(items.flatMap(({ accepted }) => accepted))])) : items,
 });
 
 export const LESSON_41: Lesson = {
@@ -28,7 +28,7 @@ export const LESSON_41: Lesson = {
       typed('q7', 'Co robisz 1 listopada?', 'Odwiedzam groby bliskich i zapalam znicze.'),
       typed('q8', 'Do kiedy Polska była w niewoli?', 'Do 11 listopada 1918 roku.'),
       typed('q9', 'Który dzień Bożego Narodzenia lubisz najbardziej?', 'Wigilię.'),
-    ], ActivityKind.Match),
+    ], ActivityKind.Match, '-match'),
     activity(2, 'Święta religijne i narodowe', 'W każdej grupie wybierz wyraz niezwiązany z religią.', [
       choice('q1', 'Betlejem · Wszystkich Świętych · Jezus Chrystus · szampan', 'szampan', ['Betlejem', 'Wszystkich Świętych', 'Jezus Chrystus', 'szampan']),
       choice('q2', 'Wielkanoc · Boże Narodzenie · pochód pierwszomajowy', 'pochód pierwszomajowy', ['Wielkanoc', 'Boże Narodzenie', 'pochód pierwszomajowy']),
@@ -136,7 +136,7 @@ export const LESSON_41: Lesson = {
       typed('q7', 'podopieczny', 'osoba, którą ktoś się opiekuje'),
       typed('q8', 'stoisko', 'miejsce, gdzie sprzedaje się różne rzeczy'),
       typed('q9', 'zbieg okoliczności', 'przypadek'),
-    ], ActivityKind.Match),
+    ], ActivityKind.Match, '-match'),
     activity(11, 'Tragedia na Broad Peak', 'Uzupełnij tekst właściwymi formami czasowników.', [
       typed('q1', 'Właśnie ___ rok od tragedii na Broad Peak.', 'minął'),
       typed('q2', 'Czterej polscy himalaiści ___ na jego szczycie.', 'stanęli'),

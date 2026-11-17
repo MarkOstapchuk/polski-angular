@@ -4,7 +4,7 @@ const source = (exercise: number) => ({
   sourceExerciseId: `WB2-L14-E${String(exercise).padStart(2, '0')}`,
   sourceLabel: `Zeszyt ćwiczeń · część 2 · lekcja 14 · ćwiczenie ${exercise}`,
 });
-const activity = (exercise: number, title: string, instruction: string, items: ReturnType<typeof typed>[], kind = ActivityKind.Typed, idSuffix = kind === ActivityKind.Match ? '-match' : '') => ({
+const activity = (exercise: number, title: string, instruction: string, items: ReturnType<typeof typed>[], kind = ActivityKind.Typed, idSuffix = '') => ({
   id: `p2-l14-e${String(exercise).padStart(2, '0')}${idSuffix}`,
   ...source(exercise), kind, title, instruction,
   items: kind === ActivityKind.Match || kind === ActivityKind.Choice
@@ -155,7 +155,7 @@ export const LESSON_40: Lesson = {
       typed('q7', 'wyłącznie', 'jedynie, tylko'),
       typed('q8', 'dochodzi coś do mnie', 'zaczynam to rozumieć'),
       typed('q9', 'być skoncentrowanym na sobie', 'myśleć głównie o sobie'),
-    ], ActivityKind.Match),
+    ], ActivityKind.Match, '-match'),
     activity(16, 'Wypowiedź o wyjeździe', 'Posłuchaj nagrania i uzupełnij brakujące zaimki.', [
       ...['im', 'nimi', 'tobą', 'sobie', 'nami', 'siebie', 'ciebie', 'nas', 'mi', 'mnie', 'ciebie', 'mnie', 'ja', 'ciebie', 'mnie'].map((x, i) => typed(`q${i + 1}`, `Fragment nagrania ${i + 1}`, x)),
     ]),
