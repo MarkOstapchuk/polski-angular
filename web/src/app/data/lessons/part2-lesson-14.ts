@@ -4,9 +4,12 @@ const source = (exercise: number) => ({
   sourceExerciseId: `WB2-L14-E${String(exercise).padStart(2, '0')}`,
   sourceLabel: `Zeszyt ćwiczeń · część 2 · lekcja 14 · ćwiczenie ${exercise}`,
 });
-const activity = (exercise: number, title: string, instruction: string, items: ReturnType<typeof typed>[], kind = ActivityKind.Typed) => ({
-  id: `p2-l14-e${String(exercise).padStart(2, '0')}`,
-  ...source(exercise), kind, title, instruction, items,
+const activity = (exercise: number, title: string, instruction: string, items: ReturnType<typeof typed>[], kind = ActivityKind.Typed, idSuffix = kind === ActivityKind.Match ? '-match' : '') => ({
+  id: `p2-l14-e${String(exercise).padStart(2, '0')}${idSuffix}`,
+  ...source(exercise), kind, title, instruction,
+  items: kind === ActivityKind.Match || kind === ActivityKind.Choice
+    ? items.map((item) => choice(item.id, item.prompt, item.accepted, [...new Set(items.flatMap(({ accepted }) => accepted))]))
+    : items,
 });
 
 export const LESSON_40: Lesson = {
@@ -20,7 +23,7 @@ export const LESSON_40: Lesson = {
     activity(1, 'Na cmentarzu', 'Wpisz nazwę miejsca, przedmiotu lub elementu pomnika.', [
       ...['cmentarz', 'znicz', 'wieniec', 'grób', 'krzyż', 'chryzantemy', 'pomnik', 'kaplica', 'anioł', 'rzeźba'].map((x, i) => typed(`q${i + 1}`, `Hasło ${i + 1}`, x)),
     ]),
-    activity(2, 'Pamiętamy o zmarłych', 'Połącz czasownik lub rzeczownik z właściwym wyrażeniem.', [
+    activity(2, 'Pamiętamy o zmarłych', 'Wybierz wyrażenie pasujące do czasownika lub rzeczownika.', [
       typed('q1', 'obchodzić', 'święto'), typed('q2', 'zapalać', 'znicze'),
       typed('q3', 'wstawiać kwiaty', 'do wazonu'), typed('q4', 'zamiatać', 'groby'),
       typed('q5', 'modlić się', 'za zmarłych'), typed('q6', 'pamiętać', 'o zmarłych'),
@@ -28,7 +31,7 @@ export const LESSON_40: Lesson = {
       typed('q9', 'kultywować', 'tradycje'), typed('q10', 'uroczystość', 'religijna'),
       typed('q11', 'święto', 'Wszystkich Świętych'), typed('q12', 'miejsce', 'pamięci narodowej'),
       typed('q13', 'grób', 'rodzinny'), typed('q14', 'składać kwiaty', 'pod pomnikiem'),
-    ]),
+    ], ActivityKind.Choice, '-choice'),
     activity(3, 'Cmentarz Salwatorski', 'Ułóż fragmenty w kolejności i zapisz tekst.', [
       typed('q1', 'Początek opisu', 'Cmentarz Salwatorski to niewielka, ale ważna nekropolia Krakowa.'),
       typed('q2', 'Położenie', 'Położona jest w malowniczym zakątku, niemal u stóp Kopca Kościuszki.'),
@@ -152,7 +155,7 @@ export const LESSON_40: Lesson = {
       typed('q7', 'wyłącznie', 'jedynie, tylko'),
       typed('q8', 'dochodzi coś do mnie', 'zaczynam to rozumieć'),
       typed('q9', 'być skoncentrowanym na sobie', 'myśleć głównie o sobie'),
-    ]),
+    ], ActivityKind.Match),
     activity(16, 'Wypowiedź o wyjeździe', 'Posłuchaj nagrania i uzupełnij brakujące zaimki.', [
       ...['im', 'nimi', 'tobą', 'sobie', 'nami', 'siebie', 'ciebie', 'nas', 'mi', 'mnie', 'ciebie', 'mnie', 'ja', 'ciebie', 'mnie'].map((x, i) => typed(`q${i + 1}`, `Fragment nagrania ${i + 1}`, x)),
     ]),

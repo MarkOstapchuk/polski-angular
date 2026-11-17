@@ -43,6 +43,11 @@ export * from './lesson-types';
 
 const l01PhraseEndings = ['znaczy?', 'pytanie.', 'mówi po polsku…?', 'rozumiem.', 'powtórzyć?'];
 const l02QuestionEndings = ['a. pani', 'b. u ciebie', 'c. w porządku', 'd. słychać', 'e. staremu', 'f. nowego'];
+const l02PronounVerbs = ['a. śpiewa', 'b. pytają', 'c. znacie', 'd. grają', 'e. kocham', 'f. mieszka', 'g. czytasz', 'h. nazywamy się', 'i. ogląda'];
+const l03AdjectiveOptions = ['a. biały', 'b. białe', 'c. żółta', 'd. zielona', 'e. czarna', 'f. czerwone'];
+const l03QuestionAnswers = ['a. Nie, to jest sekretarka.', 'b. To jest kubek.', 'c. To dziecko jest małe.', 'd. Tak, to jest nauczyciel.', 'e. To jest dziecko.', 'f. Tak, to jest kawa.', 'g. Ten nauczyciel jest miły.', 'h. Ta kawa jest czarna.'];
+const l04QuestionAnswers = ['a. Tak, bardzo.', 'b. Tak, bardzo dobrze, jestem z Hiszpanii.', 'c. Bo chcę studiować w Krakowie.', 'd. Nic nowego.', 'e. Z Madrytu.', 'f. Nie wiem, ale myślę, że tak.'];
+const l05QuestionAnswers = ['a. Prawie 18.', 'b. Bo mam egzamin.', 'c. Bardzo sympatyczna.', 'd. Gram w tenisa.', 'e. Grać w tenisa.', 'f. W Gdańsku.', 'g. Policjantem.', 'h. Bardzo profesjonalną.', 'i. Z Gdańska.', 'j. Pracowitym.'];
 
 export const LESSONS: Lesson[] = [
   {
@@ -400,11 +405,17 @@ export const LESSONS: Lesson[] = [
         ['Jak wy ___ (nazywać się)?', ['nazywacie się', 'się nazywacie']],
         ['Czy ty ___ (grać) na gitarze?', 'grasz'], ['Oni ___ (mieć) intensywny kurs polskiego.', 'mają'],
       ]),
-      typedExercise(2, 12, 'Zaimki i czasowniki', 'Dopasuj zaimek do właściwej formy czasownika.', [
-        ['1. ja', '1e'], ['2. ty', '2g'], ['3. on', ['3f', '3i']], ['4. ona', '4a'],
-        ['5. ono', ['5i', '5f']], ['6. my', '6h'], ['7. wy', '7c'],
-        ['8. oni', ['8b', '8d']], ['9. one', ['9d', '9b']],
-      ]),
+      {
+        id: 'l02-pronoun-verb-match', sourceExerciseId: 'WB-L02-E12', sourceLabel: 'Zeszyt ćwiczeń · ćwiczenie 12',
+        kind: ActivityKind.Match, title: 'Zaimki i czasowniki', instruction: 'Połącz zaimek z pasującą formą czasownika.',
+        items: [
+          choice('q1', '1. ja', 'e. kocham', l02PronounVerbs), choice('q2', '2. ty', 'g. czytasz', l02PronounVerbs),
+          choice('q3', '3. on', ['f. mieszka', 'i. ogląda'], l02PronounVerbs), choice('q4', '4. ona', 'a. śpiewa', l02PronounVerbs),
+          choice('q5', '5. ono', ['i. ogląda', 'f. mieszka'], l02PronounVerbs), choice('q6', '6. my', 'h. nazywamy się', l02PronounVerbs),
+          choice('q7', '7. wy', 'c. znacie', l02PronounVerbs), choice('q8', '8. oni', ['b. pytają', 'd. grają'], l02PronounVerbs),
+          choice('q9', '9. one', ['d. grają', 'b. pytają'], l02PronounVerbs),
+        ],
+      },
       typedExercise(2, 15, '„Żeby” czy „bo”?', 'Wpisz właściwy spójnik.', [
         ['Angela jest w Krakowie, ___ uczyć się polskiego.', 'żeby'],
         ['Ona uczy się polskiego, ___ jej mama jest z Polski.', 'bo'],
@@ -549,16 +560,29 @@ export const LESSONS: Lesson[] = [
         ['___ auto (stary)', 'stare auto'], ['___ torba (modny)', 'modna torba'],
         ['___ stół (duży)', 'duży stół'], ['___ słowo (skomplikowany)', 'skomplikowane słowo'],
       ]),
-      typedExercise(3, 11, 'Połącz rzeczowniki z przymiotnikami', 'Wpisz numer i literę pasującej pary.', [
-        ['1. kawa', '1e'], ['2. herbata', '2d'], ['3. mleko', '3b'],
-        ['4. cukier', '4a'], ['5. wino', '5f'], ['6. papryka', '6c'],
-      ]),
-      typedExercise(3, 14, 'Połącz pytania z odpowiedziami', 'Wpisz literę pasującej odpowiedzi.', [
-        ['1. Kto to jest?', '1e'], ['2. Czy to jest nauczycielka?', '2a'],
-        ['3. Jaka jest ta kawa?', '3h'], ['4. Jakie jest to dziecko?', '4c'],
-        ['5. Czy to jest kawa?', '5f'], ['6. Jaki jest ten nauczyciel?', '6g'],
-        ['7. Czy to jest nauczyciel?', '7d'], ['8. Co to jest?', '8b'],
-      ]),
+      {
+        id: 'l03-noun-adjective-match', sourceExerciseId: 'WB-L03-E11', sourceLabel: 'Zeszyt ćwiczeń · ćwiczenie 11',
+        kind: ActivityKind.Match, title: 'Połącz rzeczowniki z przymiotnikami', instruction: 'Połącz każdy rzeczownik z pasującym przymiotnikiem.',
+        items: [
+          choice('q1', '1. kawa', 'e. czarna', l03AdjectiveOptions), choice('q2', '2. herbata', 'd. zielona', l03AdjectiveOptions),
+          choice('q3', '3. mleko', 'b. białe', l03AdjectiveOptions), choice('q4', '4. cukier', 'a. biały', l03AdjectiveOptions),
+          choice('q5', '5. wino', 'f. czerwone', l03AdjectiveOptions), choice('q6', '6. papryka', 'c. żółta', l03AdjectiveOptions),
+        ],
+      },
+      {
+        id: 'l03-question-answer-match', sourceExerciseId: 'WB-L03-E14', sourceLabel: 'Zeszyt ćwiczeń · ćwiczenie 14',
+        kind: ActivityKind.Match, title: 'Połącz pytania z odpowiedziami', instruction: 'Połącz każde pytanie z pasującą odpowiedzią.',
+        items: [
+          choice('q1', '1. Kto to jest?', 'e. To jest dziecko.', l03QuestionAnswers),
+          choice('q2', '2. Czy to jest nauczycielka?', 'a. Nie, to jest sekretarka.', l03QuestionAnswers),
+          choice('q3', '3. Jaka jest ta kawa?', 'h. Ta kawa jest czarna.', l03QuestionAnswers),
+          choice('q4', '4. Jakie jest to dziecko?', 'c. To dziecko jest małe.', l03QuestionAnswers),
+          choice('q5', '5. Czy to jest kawa?', 'f. Tak, to jest kawa.', l03QuestionAnswers),
+          choice('q6', '6. Jaki jest ten nauczyciel?', 'g. Ten nauczyciel jest miły.', l03QuestionAnswers),
+          choice('q7', '7. Czy to jest nauczyciel?', 'd. Tak, to jest nauczyciel.', l03QuestionAnswers),
+          choice('q8', '8. Co to jest?', 'b. To jest kubek.', l03QuestionAnswers),
+        ],
+      },
     ],
   },
   {
@@ -683,10 +707,18 @@ export const LESSONS: Lesson[] = [
         ['francuski · znać', 'francuski'], ['francuski · uczyć się', 'francuskiego'], ['francuski · mówić po', 'francusku'],
         ['rosyjski · znać', 'rosyjski'], ['rosyjski · uczyć się', 'rosyjskiego'], ['rosyjski · mówić po', 'rosyjsku'],
       ]),
-      typedExercise(4, 9, 'Co pasuje?', 'Połącz pytania z odpowiedziami, wpisując literę.', [
-        ['1. Co u ciebie?', '1d'], ['2. Czy lubisz pizzę?', '2a'], ['3. Czy to jest nowy student?', '3f'],
-        ['4. Czy mówisz po hiszpańsku?', '4b'], ['5. Skąd jesteś?', '5e'], ['6. Dlaczego uczysz się polskiego?', '6c'],
-      ]),
+      {
+        id: 'l04-question-answer-match', sourceExerciseId: 'WB-L04-E09', sourceLabel: 'Zeszyt ćwiczeń · ćwiczenie 9',
+        kind: ActivityKind.Match, title: 'Co pasuje?', instruction: 'Połącz każde pytanie z pasującą odpowiedzią.',
+        items: [
+          choice('q1', '1. Co u ciebie?', 'd. Nic nowego.', l04QuestionAnswers),
+          choice('q2', '2. Czy lubisz pizzę?', 'a. Tak, bardzo.', l04QuestionAnswers),
+          choice('q3', '3. Czy to jest nowy student?', 'f. Nie wiem, ale myślę, że tak.', l04QuestionAnswers),
+          choice('q4', '4. Czy mówisz po hiszpańsku?', 'b. Tak, bardzo dobrze, jestem z Hiszpanii.', l04QuestionAnswers),
+          choice('q5', '5. Skąd jesteś?', 'e. Z Madrytu.', l04QuestionAnswers),
+          choice('q6', '6. Dlaczego uczysz się polskiego?', 'c. Bo chcę studiować w Krakowie.', l04QuestionAnswers),
+        ],
+      },
       typedExercise(4, 10, 'Jaki? Jaka? Jakie?', 'Uzupełnij zdania właściwym przymiotnikiem.', [
         ['Ona ma wysoką temperaturę, jest bardzo ___.', 'chora'], ['On lubi pracować, jest ___.', 'pracowity'],
         ['Nie jest ani niski, ani średniego wzrostu — jest ___.', 'wysoki'], ['To dziecko jest czyste, a tamto jest ___.', 'brudne'],
@@ -824,10 +856,19 @@ export const LESSONS: Lesson[] = [
         ['(uczyć się)', 'uczę się'], ['żeby (studiować)', 'studiować'], ['(mieć)', 'mam'], ['(być)', 'jestem'],
         ['(lubić)', 'lubię'], ['(grać)', 'gram'], ['(biegać)', 'biegam'],
       ]),
-      typedExercise(5, 6, 'Liczebniki', 'Połącz początki liczebników z końcówkami.', [
-        ['1. pięć-', '1c'], ['2. pięt-', '2a'], ['3. sześć-', '3c'], ['4. szes-', '4a'],
-        ['5. czter-', ['5a', '5b']], ['6. dziewięt-', '6a'], ['7. dziewięć-', '7c'],
-      ]),
+      {
+        id: 'l05-numeral-endings', sourceExerciseId: 'WB-L05-E06', sourceLabel: 'Zeszyt ćwiczeń · ćwiczenie 6',
+        kind: ActivityKind.Choice, title: 'Liczebniki', instruction: 'Wybierz pasującą końcówkę liczebnika.',
+        items: [
+          choice('q1', '1. pięć-', 'c. -dziesiąt', ['a. -naście', 'b. -dzieści', 'c. -dziesiąt']),
+          choice('q2', '2. pięt-', 'a. -naście', ['a. -naście', 'b. -dzieści', 'c. -dziesiąt']),
+          choice('q3', '3. sześć-', 'c. -dziesiąt', ['a. -naście', 'b. -dzieści', 'c. -dziesiąt']),
+          choice('q4', '4. szes-', 'a. -naście', ['a. -naście', 'b. -dzieści', 'c. -dziesiąt']),
+          choice('q5', '5. czter-', ['a. -naście', 'b. -dzieści'], ['a. -naście', 'b. -dzieści', 'c. -dziesiąt']),
+          choice('q6', '6. dziewięt-', 'a. -naście', ['a. -naście', 'b. -dzieści', 'c. -dziesiąt']),
+          choice('q7', '7. dziewięć-', 'c. -dziesiąt', ['a. -naście', 'b. -dzieści', 'c. -dziesiąt']),
+        ],
+      },
       typedExercise(5, 7, 'Lat czy lata?', 'Wpisz, czy liczba łączy się z „rok”, „lata” czy „lat”.', [
         ['1', 'rok'], ['7', 'lat'], ['8', 'lat'], ['13', 'lat'], ['42', 'lata'], ['51', 'lat'], ['64', 'lata'],
         ['22', 'lata'], ['40', 'lat'], ['14', 'lat'], ['104', 'lata'], ['101', 'lat'], ['17', 'lat'], ['12', 'lat'],
@@ -860,12 +901,22 @@ export const LESSONS: Lesson[] = [
         ['Trochę po ___.', 'hiszpańsku'], ['Julia ___ śpiewać.', 'lubi'], ['Lubi ___ książki.', 'czytać'],
         ['Interesuje się ___ (muzyka).', 'muzyką'], ['Interesuje się ___ (sport).', 'sportem'],
       ]),
-      typedExercise(5, 16, 'Połącz pytania z odpowiedziami', 'Wpisz literę pasującej odpowiedzi.', [
-        ['1. Co lubisz robić?', '1e'], ['2. Gdzie mieszkasz?', '2f'], ['3. Ile masz lat?', '3a'],
-        ['4. Kim on jest?', '4g'], ['5. Dlaczego jesteś zdenerwowany?', '5b'],
-        ['6. Jaką sekretarką jest Agnieszka?', '6h'], ['7. Skąd jest Ewa?', '7i'],
-        ['8. Co robisz?', '8d'], ['9. Jakim studentem jest Jonatan?', '9j'], ['10. Jaka jest Dorota?', '10c'],
-      ]),
+      {
+        id: 'l05-question-answer-match', sourceExerciseId: 'WB-L05-E16', sourceLabel: 'Zeszyt ćwiczeń · ćwiczenie 16',
+        kind: ActivityKind.Match, title: 'Połącz pytania z odpowiedziami', instruction: 'Połącz każde pytanie z pasującą odpowiedzią.',
+        items: [
+          choice('q1', '1. Co lubisz robić?', 'e. Grać w tenisa.', l05QuestionAnswers),
+          choice('q2', '2. Gdzie mieszkasz?', 'f. W Gdańsku.', l05QuestionAnswers),
+          choice('q3', '3. Ile masz lat?', 'a. Prawie 18.', l05QuestionAnswers),
+          choice('q4', '4. Kim on jest?', 'g. Policjantem.', l05QuestionAnswers),
+          choice('q5', '5. Dlaczego jesteś zdenerwowany?', 'b. Bo mam egzamin.', l05QuestionAnswers),
+          choice('q6', '6. Jaką sekretarką jest Agnieszka?', 'h. Bardzo profesjonalną.', l05QuestionAnswers),
+          choice('q7', '7. Skąd jest Ewa?', 'i. Z Gdańska.', l05QuestionAnswers),
+          choice('q8', '8. Co robisz?', 'd. Gram w tenisa.', l05QuestionAnswers),
+          choice('q9', '9. Jakim studentem jest Jonatan?', 'j. Pracowitym.', l05QuestionAnswers),
+          choice('q10', '10. Jaka jest Dorota?', 'c. Bardzo sympatyczna.', l05QuestionAnswers),
+        ],
+      },
       typedExercise(5, 17, 'Narodowości i języki', 'Dla każdej osoby wpisz formy: ona jest, ona jest (narzędnik), on jest, on jest (narzędnik), mówią po, znają.', [
         ['1. Anglia · Angela i Jonatan', 'Angielka; Angielką; Anglik; Anglikiem; po angielsku; angielski'],
         ['2. Niemcy · Petra i Uwe', 'Niemka; Niemką; Niemiec; Niemcem; po niemiecku; niemiecki'],

@@ -4,9 +4,12 @@ const source = (exercise: number) => ({
   sourceExerciseId: `WB2-L12-E${String(exercise).padStart(2, '0')}`,
   sourceLabel: `Zeszyt ćwiczeń · część 2 · lekcja 12 · ćwiczenie ${exercise}`,
 });
-const activity = (exercise: number, title: string, instruction: string, items: ReturnType<typeof typed>[], kind = ActivityKind.Typed) => ({
-  id: `p2-l12-e${String(exercise).padStart(2, '0')}`,
-  ...source(exercise), kind, title, instruction, items,
+const activity = (exercise: number, title: string, instruction: string, items: ReturnType<typeof typed>[], kind = ActivityKind.Typed, idSuffix = kind === ActivityKind.Match ? '-match' : '') => ({
+  id: `p2-l12-e${String(exercise).padStart(2, '0')}${idSuffix}`,
+  ...source(exercise), kind, title, instruction,
+  items: kind === ActivityKind.Match || (kind === ActivityKind.Choice && items.some((item) => !item.options))
+    ? items.map((item) => item.options ? item : choice(item.id, item.prompt, item.accepted, [...new Set(items.flatMap(({ accepted }) => accepted))]))
+    : items,
 });
 
 export const LESSON_38: Lesson = {
@@ -104,7 +107,7 @@ export const LESSON_38: Lesson = {
         ['pozostawiać coś', 'bez komentarza'], ['domagam się', 'rekompensaty'],
         ['wyrazić', 'niezadowolenie'], ['być oburzonym', 'czyimś postępowaniem'],
       ].map(([prompt, answer], i) => typed(`q${i + 1}`, prompt, answer)),
-    ]),
+    ], ActivityKind.Match),
     activity(9, 'List reklamacyjny', 'Ułóż zdania z podanych wyrazów.', [
       typed('q1', 'państwa · swoje · chciałem · usług · wyrazić · w związku z · nierzetelnością · niezadowolenie', 'Chciałem wyrazić swoje niezadowolenie w związku z nierzetelnością Państwa usług.'),
       typed('q2', 'państwa · z · tygodniu · w · skorzystałem · oferty · ubiegłym', 'W ubiegłym tygodniu skorzystałem z Państwa oferty.'),
@@ -143,14 +146,14 @@ export const LESSON_38: Lesson = {
         ['W dużych miastach szybko dojedziemy ___.', 'metrem'], ['Marzę o jeździe ___.', 'motocyklem'],
       ].map(([prompt, answer], i) => typed(`q${i + 1}`, prompt, answer)),
     ]),
-    activity(13, 'Podróż samochodem', 'Posłuchaj nagrań i dopasuj teksty do fotografii.', [
+    activity(13, 'Podróż samochodem', 'Posłuchaj nagrań i wybierz pasującą fotografię.', [
       ...[
         ['Nagranie 1 — opony', '1'], ['Nagranie 2 — dystrybutory paliwa', '2'],
         ['Nagranie 3 — stacja benzynowa', '3'], ['Nagranie 4 — myjnia', '4'],
         ['Nagranie 5 — produkty samochodowe', '5'], ['Nagranie 6 — płyn do samochodu', '6'],
         ['Nagranie 7 — samochód', '7'],
       ].map(([prompt, answer], i) => typed(`q${i + 1}`, prompt, answer)),
-    ]),
+    ], ActivityKind.Choice, '-choice'),
     activity(14, 'Co pasuje?', 'Dopasuj właściwą reakcję do sytuacji.', [
       ...[
         ['Jedziesz niewłaściwą drogą według GPS.', 'Zawróć, jeśli to możliwe!'],
@@ -163,7 +166,7 @@ export const LESSON_38: Lesson = {
         ['Ktoś parkuje przed twoją bramą.', 'Jeżeli natychmiast pan nie odjedzie, zadzwonię po straż miejską.'],
         ['Samochód za tobą chce was wyprzedzić.', 'Zjedź na prawy pas!'],
       ].map(([prompt, answer], i) => typed(`q${i + 1}`, prompt, answer)),
-    ]),
+    ], ActivityKind.Match),
     activity(15, 'Słownictwo drogowe', 'Dopasuj definicje do nazw i zdefiniuj pozostałe wyrazy.', [
       ...[
         ['Parking poza centrum, skąd można kontynuować podróż transportem publicznym.', 'Parkuj i jedź'],

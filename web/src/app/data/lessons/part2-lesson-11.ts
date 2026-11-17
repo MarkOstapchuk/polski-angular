@@ -4,9 +4,10 @@ const source = (exercise: number) => ({
   sourceExerciseId: `WB2-L11-E${String(exercise).padStart(2, '0')}`,
   sourceLabel: `Zeszyt ćwiczeń · część 2 · lekcja 11 · ćwiczenie ${exercise}`,
 });
-const activity = (exercise: number, title: string, instruction: string, items: ReturnType<typeof typed>[], kind = ActivityKind.Typed) => ({
-  id: `p2-l11-e${String(exercise).padStart(2, '0')}`,
-  ...source(exercise), kind, title, instruction, items,
+const activity = (exercise: number, title: string, instruction: string, items: ReturnType<typeof typed>[], kind = ActivityKind.Typed, idSuffix = kind === ActivityKind.Match ? '-match' : '') => ({
+  id: `p2-l11-e${String(exercise).padStart(2, '0')}${idSuffix}`,
+  ...source(exercise), kind, title, instruction,
+  items: kind === ActivityKind.Match ? items.map((item) => choice(item.id, item.prompt, item.accepted, [...new Set(items.flatMap(({ accepted }) => accepted))])) : items,
 });
 const travelDefinitions = [
   'wyolbrzymić coś lub zrobić coś nieodpowiedniego', 'ciekawe przeżycie, interesujące zdarzenie',
@@ -30,15 +31,15 @@ export const LESSON_37: Lesson = {
         ['ob-', 'obchodzić'], ['od-', 'odchodzić'], ['nad-', 'nadchodzić'],
       ].map(([prefix, answer], i) => typed(`q${i + 1}`, `${prefix} + chodzić`, answer)),
     ]),
-    activity(2, 'Jaki to czasownik?', 'Dopasuj znaczenie do czasownika z „chodzić”.', [
+    activity(2, 'Jaki to czasownik?', 'Wybierz czasownik pasujący do znaczenia.', [
       ...[
         ['do celu', 'dochodzić'], ['do środka, do domu', 'wchodzić'], ['z domu', 'wychodzić'],
         ['przez plac, przez ulicę', 'przechodzić'], ['ze spotkania do domów', 'rozchodzić się'],
         ['ze schodów', 'schodzić'], ['do stolika, do klienta', 'podchodzić'],
         ['na drugie piętro, pod górę', 'wchodzić'], ['do koleżanki, do babci', 'przychodzić'],
         ['wokół przeszkody lub drzewa', 'obchodzić'], ['od kogoś, od czegoś', 'odchodzić'], ['burza, wiosna', 'nadchodzić'],
-      ].map(([prompt, answer], i) => typed(`q${i + 1}`, prompt, answer)),
-    ]),
+      ].map(([prompt, answer], i) => choice(`q${i + 1}`, prompt, answer, ['dochodzić', 'wchodzić', 'wychodzić', 'przechodzić', 'rozchodzić się', 'schodzić', 'podchodzić', 'przychodzić', 'obchodzić', 'odchodzić', 'nadchodzić'])),
+    ], ActivityKind.Choice, '-choice'),
     activity(3, 'Który czasownik pasuje?', 'Wybierz aspekt zgodny z kontekstem.', [
       typed('q1', 'On stoi w drzwiach i nie ___ .', 'wchodzi'),
       typed('q2', 'Powiedz mu, że może ___ .', 'wejść'),

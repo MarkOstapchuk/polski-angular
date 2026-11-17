@@ -1,14 +1,16 @@
-import { Activity, ActivityKind, Lesson, typed } from '../lesson-types';
+import { Activity, ActivityKind, choice, Lesson, typed } from '../lesson-types';
 
 type Entry = [string, string | string[]];
-const exercise = (lesson: number, number: number, title: string, instruction: string, entries: Entry[]): Activity => ({
-  id: `p2-l${String(lesson).padStart(2, '0')}-e${String(number).padStart(2, '0')}`,
+const exercise = (lesson: number, number: number, title: string, instruction: string, entries: Entry[], kind = ActivityKind.Typed): Activity => ({
+  id: `p2-l${String(lesson).padStart(2, '0')}-e${String(number).padStart(2, '0')}${kind === ActivityKind.Match ? '-match' : kind === ActivityKind.Choice ? '-choice' : ''}`,
   sourceExerciseId: `WB2-L${String(lesson).padStart(2, '0')}-E${String(number).padStart(2, '0')}`,
   sourceLabel: `Zeszyt ćwiczeń · część 2 · lekcja ${lesson} · ćwiczenie ${number}`,
-  kind: ActivityKind.Typed,
+  kind,
   title,
   instruction,
-  items: entries.map(([prompt, answer], i) => typed(`q${i + 1}`, prompt, answer)),
+  items: kind === ActivityKind.Match || kind === ActivityKind.Choice
+    ? entries.map(([prompt, answer], i) => choice(`q${i + 1}`, prompt, answer, [...new Set(entries.flatMap(([, option]) => Array.isArray(option) ? option : [option]))]))
+    : entries.map(([prompt, answer], i) => typed(`q${i + 1}`, prompt, answer)),
 });
 const lesson = (id: number, title: string, subtitle: string, topic: string, pages: string, color: Lesson['color'], activities: Activity[]): Lesson => ({
   id, title, subtitle, topic, pages, color, activities,
@@ -155,7 +157,7 @@ export const LESSON_43 = lesson(43, 'Trochę historii', 'Opowiadamy o stanie woj
     ['nakazać', 'rozkazać'], ['wojenny', 'związany z wojną'], ['zawieszony', 'czasowo wstrzymany'],
     ['zniesiono', 'przestało obowiązywać'], ['ograniczenia', 'zakazy i limity'],
     ['obowiązują', 'są w mocy'], ['zakaz', 'brak pozwolenia'],
-  ]),
+  ], ActivityKind.Match),
   exercise(17, 3, 'Synonim czy antonim?', 'Wpisz synonim (=) lub antonim (#).', [
     ['rozpocząć #', 'zakończyć'], ['nakaz =', 'rozkaz'], ['obrona #', 'atak'], ['uzbrojony #', 'bezbronny'],
     ['wkroczyć =', 'wejść'], ['żołnierze =', 'wojsko'], ['nakaz aresztowania #', 'zakaz aresztowania'],
@@ -192,7 +194,7 @@ export const LESSON_43 = lesson(43, 'Trochę historii', 'Opowiadamy o stanie woj
   exercise(17, 7, 'Wspomnienia o stanie wojennym', 'Dopasuj wspomnienie do tytułu.', [
     ['A', 'Na cenzurowanym'], ['B', 'Światło pamięci'], ['C', 'Drugi obieg'],
     ['D', 'Państwo strzela do robotników'], ['E', 'Stan wojenny i sanki'],
-  ]),
+  ], ActivityKind.Match),
   exercise(17, 8, 'Wspomnienia z przeszłości', 'Wpisz formę czasownika w czasie przeszłym.', [
     ['Javier znów nie ___ pracy domowej. (odrobić)', 'odrobił'],
     ['Mami ___ plakat i ___ konkurs. (zaprojektować, wygrać)', 'zaprojektowała; wygrała'],
@@ -366,7 +368,7 @@ export const LESSON_45 = lesson(45, 'Oszczędzaj!', 'Rozmawiamy o ekologii i cod
     ['Wysokie zużycie paliwa w mieście.', 'ekojazda'], ['Duże zużycie prądu przez oświetlenie.', 'żarówki energooszczędne'],
     ['Brak wody do podlewania ogrodu.', 'zbiorniki na deszczówkę'], ['Szkodliwe środki używane w gospodarstwie.', 'nawozy i środki ochrony roślin'],
     ['Sól na chodnikach i ulicach zimą.', 'posypywanie ulic solą'],
-  ]),
+  ], ActivityKind.Match),
   exercise(19, 2, 'Dlaczego warto oszczędzać?', 'Uzupełnij zdania wyrazami z ramki.', [
     ['Ekojazda pozwala obniżyć ___ paliwa.', 'zużycie'], ['Ekojazda ___ też środowisko.', 'zyskuje'],
     ['Zmniejsza się ilość ___ w powietrzu.', 'dwutlenku węgla'],
@@ -467,7 +469,7 @@ export const LESSON_46 = lesson(46, 'Konsument na rynku', 'Porównujemy zakupy i
     ['Zmywarkę uważa za', 'zbędny luksus'], ['Kupując jedzenie, szuka', 'wyrobów krajowych'],
     ['Mrożonki odrzuca', 'mimo ich wartości odżywczych'], ['O odkładaniu pieniędzy', 'nie ma mowy'],
     ['Zdaje sobie sprawę,', 'że ma wady'], ['Preferuje niezbyt', 'drogie rozrywki'],
-  ]),
+  ], ActivityKind.Match),
   exercise(20, 3, 'Synonimy w tekście', 'Zastąp podkreślone słowa wyrażeniami z tekstu.', [
     ['zaoszczędzone pieniądze', 'odłożone'], ['jedynie', 'wyłącznie'], ['odwiedza targ', 'zagląda'],
     ['pieniądze szybko znikają', 'rozchodzą się'], ['uważa za stratę czasu', 'uznaje za'],
@@ -485,10 +487,10 @@ export const LESSON_46 = lesson(46, 'Konsument na rynku', 'Porównujemy zakupy i
     ['wpadać w pułapkę', 'znaleźć się w sytuacji bez wyjścia'], ['posilić się', 'zjeść coś'],
     ['na znak protestu', 'żeby okazać sprzeciw wobec czegoś'], ['zbędny', 'niepotrzebny'],
     ['sprawunki', 'zakupy'],
-  ]),
-  exercise(20, 6, 'Problemy konsumentów', 'Posłuchaj tekstów i dopasuj je do haseł na ilustracjach.', [
+  ], ActivityKind.Match),
+  exercise(20, 6, 'Problemy konsumentów', 'Posłuchaj tekstów i wybierz pasujące hasła na ilustracjach.', [
     ['Tekst 1', 'E'], ['Tekst 2', 'B'], ['Tekst 3', 'A, C'], ['Tekst 4', 'D'],
-  ]),
+  ], ActivityKind.Choice),
   exercise(20, 7, 'Położenie sklepów', 'Opisz położenie sklepów na planie.', [
     ['Drogeria jest obok ___ .', 'galanterii skórzanej'],
     ['Galanteria skórzana jest między ___ a ___ .', 'drogerią; apteką'],
@@ -713,7 +715,7 @@ export const LESSON_48 = lesson(48, 'Warto zobaczyć', 'Opisujemy dzieła sztuki
     ['porywająca', 'kompozycja'], ['arcydzieło', 'malarstwa'], ['niezrównany', 'artysta'],
     ['mistrzowska', 'muzyka'], ['wybitne', 'dzieło'], ['niesamowite', 'wrażenie'],
     ['uważny', 'odbiorca'], ['utalentowany', 'muzyk'],
-  ]),
+  ], ActivityKind.Match),
   exercise(22, 7, 'Opinie o wystawie', 'Posłuchaj wypowiedzi i uzupełnij brakujące słowa.', [
     ['Angela: ___ się cieszę.', 'Naprawdę'], ['Namówiłaś mnie na tę ___.', 'wystawę'],
     ['Angela: Ta ostatnia praca jest ___ .', 'rewelacyjna'], ['Angela: To wspaniała ___ .', 'praca'],
@@ -730,7 +732,7 @@ export const LESSON_48 = lesson(48, 'Warto zobaczyć', 'Opisujemy dzieła sztuki
     ['Proszę zwrócić uwagę', 'na doskonały rysunek postaci.'],
     ['Oto praca wybitnego artysty,', 'którą możemy dziś państwu zaprezentować.'],
     ['Jestem dumny z kolekcji, którą', 'możemy dziś państwu zaprezentować.'],
-  ]),
+  ], ActivityKind.Choice),
   exercise(22, 9, 'Aukcja charytatywna', 'Posłuchaj i zaznacz prawdę (P) lub fałsz (N).', [
     ['To już trzecia edycja aukcji charytatywnej.', 'P'],
     ['Licytowane będą prace uznanych artystów.', 'N'],
@@ -751,7 +753,7 @@ export const LESSON_48 = lesson(48, 'Warto zobaczyć', 'Opisujemy dzieła sztuki
     ['Dziedzina sztuki związana z malowaniem obrazów.', 'malarstwo'],
     ['Przedstawienie filmu, wystawy lub koncertu w formie drukowanej.', 'plakat'],
     ['Dziedzina sztuki zajmująca się przedmiotami codziennego użytku.', 'sztuka użytkowa'],
-  ]),
+  ], ActivityKind.Match),
   exercise(22, 11, 'Rozmowa o artyście', 'Posłuchaj i uzupełnij odpowiedzi.', [
     ['Jaki zawód ma Andrzej?', 'lekarz'], ['Gdzie można oglądać jego prace?', 'w galerii Nowa Sztuka'],
     ['Czy Andrzej uczył się malować?', 'nie'], ['Jaką specjalizację ma Andrzej?', 'kardiochirurg'],
@@ -855,7 +857,7 @@ export const LESSON_49 = lesson(49, 'Czas na egzamin', 'Powtarzamy materiał i �
     ['mieć powyżej uszu', 'mieć czegoś dość'], ['kłamstwo ma krótkie nogi', 'kłamstwo szybko wychodzi na jaw'],
     ['pod gołym niebem', 'na zewnątrz, bez dachu'], ['rosnąć jak grzyby po deszczu', 'szybko się mnożyć'],
     ['jeździć na gapę', 'podróżować bez biletu'], ['trzymać kciuki', 'życzyć powodzenia'],
-  ]),
+  ], ActivityKind.Match),
   exercise(23, 9, 'Zaimki osobowe', 'Wpisz właściwą formę zaimka.', [
     ['Dzięki Karolu, że ___ zaprosiłeś. (ja)', 'mnie'], ['Wpadaj do ___ częściej. (my)', 'nas'],
     ['A ___ to irytuje? (ja)', 'mnie'], ['Czy ___ to nie irytuje? (wy)', 'was'],
