@@ -13,7 +13,7 @@
           "builder": "@angular/build:application",
           "options": {
             "outputPath": "dist/polski-platform",
-            "index": "src/index.html",
+          "index": { "input": "src/index.html", "output": "app.html" },
             "browser": "src/main.ts",
             "polyfills": ["zone.js"],
             "tsConfig": "tsconfig.app.json",

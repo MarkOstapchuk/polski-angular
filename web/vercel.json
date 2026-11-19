@@ -3,7 +3,7 @@
   "buildCommand": "npm run build",
   "outputDirectory": "dist/polski-platform/browser",
   "headers": [
-    { "source": "/index.html", "headers": [{ "key": "Cache-Control", "value": "no-cache, no-store, must-revalidate" }] },
+    { "source": "/app.html", "headers": [{ "key": "Cache-Control", "value": "no-cache, no-store, must-revalidate" }] },
     { "source": "/ngsw.json", "headers": [{ "key": "Cache-Control", "value": "no-cache, no-store, must-revalidate" }] },
     { "source": "/ngsw-worker.js", "headers": [{ "key": "Cache-Control", "value": "no-cache, must-revalidate" }] }
   ],
@@ -12,9 +12,9 @@
     { "source": "/nauka/polskie-znaki", "destination": "/nauka/polskie-znaki/index.html" },
     { "source": "/gramatyka/przypadki", "destination": "/gramatyka/przypadki/index.html" },
     { "source": "/slownictwo/podstawowe-zwroty", "destination": "/slownictwo/podstawowe-zwroty/index.html" },
-    { "source": "/auth", "destination": "/index.html" },
-    { "source": "/course/:path*", "destination": "/index.html" },
-    { "source": "/learn/:path*", "destination": "/index.html" },
-    { "source": "/feedback", "destination": "/index.html" }
+    { "source": "/auth", "destination": "/app.html" },
+    { "source": "/course/:path*", "destination": "/app.html" },
+    { "source": "/learn/:path*", "destination": "/app.html" },
+    { "source": "/feedback", "destination": "/app.html" }
   ]
 }
