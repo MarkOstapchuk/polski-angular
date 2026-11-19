@@ -424,4 +424,57 @@ export const TIER3_TESTS = [
       }
     },
   },
+  {
+    id: 'T3-06',
+    tier: 3,
+    title: 'Lesson Theory Localization (PL / EN have no Russian prose; RU unchanged)',
+    viewports: [VIEWPORTS.mobile, VIEWPORTS.desktop],
+    async run({ chrome, baseUrl, viewport }) {
+      const start = Date.now();
+      const rec = createCheckRecorder();
+      try {
+        for (const lang of ['pl', 'en', 'ru']) {
+          const page = await chrome.createIsolatedPage({
+            baseUrl,
+            viewport,
+            authenticated: true,
+            language: lang,
+            initialProgress: {
+              completedLessonIds: Array.from({ length: 48 }, (_, i) => i + 1),
+              scores: {},
+              activityProgress: {},
+              totalXp: 400,
+              dailyXp: 0,
+              streak: 1,
+              bestStreak: 1,
+              lastStudyDate: '2026-11-18',
+            },
+          });
+          try {
+            for (const lesson of [1, 24, 42]) {
+              await page.goto(`/learn/${lesson}`, { waitSelector: 'nav.exercise-picker' });
+              const theoryBtnSel = '.theory-toggle-btn, .theory-toggle, button[aria-controls*="theory"]';
+              const opened = await page.evaluate(() => Boolean(document.querySelector('section.lesson-theory .theory-grid')));
+              if (!opened) {
+                await page.domClick(theoryBtnSel);
+                await sleep(120);
+              }
+              const info = await page.evaluate(() => {
+                const el = document.querySelector('section.lesson-theory');
+                const text = el?.textContent || '';
+                return { has: Boolean(el), len: text.length, cyr: (text.match(/[А-Яа-яЁё]/g) || []).length };
+              });
+              const ok = info.has && info.len > 200 && (lang === 'ru' ? info.cyr > 20 : info.cyr === 0);
+              rec.soft(`theory-i18n:${lang}:L${lesson}`, ok, JSON.stringify(info));
+            }
+          } finally {
+            await page.close();
+          }
+        }
+        return makeResult(this, viewport, rec, start);
+      } catch (err) {
+        return makeResult(this, viewport, rec, start, err.message);
+      }
+    },
+  },
 ];

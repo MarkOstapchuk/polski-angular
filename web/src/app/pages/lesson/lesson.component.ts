@@ -7,6 +7,8 @@ import { AUDIO_TRACKS } from '../../data/audio-tracks';
 import { PART2_AUDIO_TRACKS } from '../../data/part2-audio-tracks';
 import { Activity, ActivityItem, AdaptedActivity, AdaptedItem, getLesson, Lesson } from '../../data/lesson-bank';
 import { LESSON_THEORY, LessonTheoryId } from '../../data/lesson-theory';
+import { LESSON_THEORY_EN } from '../../data/lesson-theory.en';
+import { LESSON_THEORY_PL } from '../../data/lesson-theory.pl';
 import { WORKBOOK_IMAGES, WorkbookImage } from '../../data/workbook-images';
 import { LanguageSwitcherComponent } from '../../i18n/language-switcher.component';
 import { LanguageService } from '../../i18n/language.service';
@@ -99,7 +101,10 @@ export class LessonComponent implements OnDestroy {
 
   readonly theory = computed(() => {
     const id = this.lesson()?.id;
-    return id ? LESSON_THEORY[id as LessonTheoryId] : undefined;
+    if (!id) return undefined;
+    const locale = this.language.locale();
+    const table = locale === 'en' ? LESSON_THEORY_EN : locale === 'pl' ? LESSON_THEORY_PL : LESSON_THEORY;
+    return (table[id as LessonTheoryId] ?? LESSON_THEORY[id as LessonTheoryId]);
   });
 
   readonly activeIndex = signal(0);

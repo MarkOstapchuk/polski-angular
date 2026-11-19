@@ -45,7 +45,7 @@ export class LessonDictionaryModalComponent {
     this.error.set(null);
     this.loading.set(true);
     try {
-      const { data, error } = await supabase.functions.invoke<{ translations: string[] }>('pons-dictionary', { body: { word } });
+      const { data, error } = await supabase.functions.invoke<{ translations: string[] }>('pons-dictionary', { body: { word, lang: this.language.locale() } });
       if (request !== this.requestCounter) return;
       if (error) throw error;
       this.translations.set(data?.translations ?? []);

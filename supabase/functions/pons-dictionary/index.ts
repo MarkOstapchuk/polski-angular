@@ -46,8 +46,10 @@ Deno.serve(async (request) => {
       return json({ error: 'INVALID_WORD' }, 400);
     }
 
+    // UI language -> PONS dictionary pair. Polish UI users keep the Russian pair (the course audience).
+    const uiLang = body?.lang === 'en' ? 'en' : 'ru';
     const url = new URL('https://api.pons.com/v1/dictionary');
-    url.search = new URLSearchParams({ q: word, l: 'plru', in: 'pl', fm: '1', language: 'ru' }).toString();
+    url.search = new URLSearchParams({ q: word, l: `pl${uiLang}`, in: 'pl', fm: '1', language: uiLang }).toString();
     const response = await fetch(url, { headers: { 'X-Secret': secret, Accept: 'application/json' } });
     if (response.status === 204) return json({ word, translations: [] });
     if (!response.ok) return json({ error: 'DICTIONARY_LOOKUP_FAILED' }, 502);
