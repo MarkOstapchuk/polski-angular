@@ -1,21 +1,27 @@
 :host { display: block; min-height: 100vh; color: #292a23; }
-.auth-shell { display: grid; min-height: 100vh; place-items: center; padding: 28px 20px; background: #fbfaf7; }
-.brand { position: absolute; top: 28px; left: max(24px, calc((100vw - 1060px) / 2)); display: inline-flex; align-items: center; gap: 9px; color: #2e332a; text-decoration: none; font-size: 24px; font-weight: 850; letter-spacing: -1.5px; }
+.auth-shell { display: flex; flex-direction: column; min-height: 100vh; padding: 20px clamp(16px, 4vw, 32px) 32px; background: #fbfaf7; }
+.auth-topbar { display: flex; align-items: center; justify-content: space-between; width: min(100%, 1060px); margin: 0 auto; gap: 16px; }
+.auth-center { flex: 1; display: grid; place-items: center; padding: 20px 0; }
+.brand { display: inline-flex; align-items: center; min-height: 44px; gap: 9px; color: #2e332a; text-decoration: none; font-size: 24px; font-weight: 850; letter-spacing: -1.5px; }
 .brand-mark { display: grid; width: 33px; height: 33px; place-items: center; border-radius: 11px 11px 11px 4px; background: #e77955; color: #fff; font-size: 23px; line-height: 1; }
 .brand-dot { color: #e77955; }
 .auth-card { width: min(100%, 420px); padding: 36px; border: 1px solid #eeece5; border-radius: 20px; background: #fff; box-shadow: 0 18px 60px #443a240a; }
-.eyebrow { margin: 0 0 10px; color: #99968d; font-size: 11px; font-weight: 800; letter-spacing: 1.25px; }
+.eyebrow { margin: 0 0 10px; color: #99968d; font-size: 12px; font-weight: 800; letter-spacing: 1.25px; }
 h1 { margin: 0; font-size: 30px; letter-spacing: -1px; }
 .intro { margin: 10px 0 24px; color: #85847a; font-size: 15px; line-height: 1.55; }
 form { display: grid; gap: 16px; }
 label { display: grid; gap: 7px; color: #514f47; font-size: 14px; font-weight: 650; }
-input { width: 100%; min-height: 48px; padding: 0 13px; border: 1px solid #e5e2da; border-radius: 10px; outline: none; color: #292a23; background: #fff; font-size: 16px; }
+input { width: 100%; min-height: 48px; padding: 0 13px; border: 1px solid #e5e2da; border-radius: 10px; color: #292a23; background: #fff; font-size: 16px; }
 input:focus { border-color: #d88060; box-shadow: 0 0 0 3px #d880601c; }
+.password-field { position: relative; display: flex; align-items: center; }
+.password-field input { padding-right: 88px; }
+.password-toggle { position: absolute; right: 4px; min-width: 44px; min-height: 44px; padding: 0 10px; border: 0; border-radius: 8px; background: transparent; color: #6e675e; font: inherit; font-size: 13px; font-weight: 700; cursor: pointer; }
+.password-toggle:hover { background: #f5f2ec; color: #2e332a; }
 .submit-button { min-height: 48px; margin-top: 4px; border: 0; border-radius: 10px; background: #d76f4c; color: #fff; font-size: 15px; font-weight: 750; cursor: pointer; }
 .submit-button:disabled { opacity: .55; cursor: default; }
 .form-message { margin: 0 0 17px; padding: 11px 12px; border-radius: 9px; font-size: 14px; line-height: 1.45; }
 .error-message { background: #fff0ed; color: #9f392d; }
 .success-message { background: #eef5ed; color: #426b44; }
-.mode-switch { margin: 21px 0 0; color: #85847a; text-align: center; font-size: 14px; }
-.mode-switch button { padding: 0; border: 0; background: none; color: #b84f31; font: inherit; font-weight: 750; cursor: pointer; }
-@media (max-width: 480px) { .auth-card { padding: 28px 22px; } .brand { top: 20px; left: 20px; } }
+.mode-switch { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 4px; margin: 14px 0 0; color: #85847a; text-align: center; font-size: 14px; }
+.mode-switch button { display: inline-flex; align-items: center; min-height: 44px; padding: 8px 10px; border: 0; border-radius: 8px; background: none; color: #b84f31; font: inherit; font-weight: 750; cursor: pointer; }
+@media (max-width: 480px) { .auth-card { padding: 28px 22px; } }

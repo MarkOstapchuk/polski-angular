@@ -1,0 +1,27 @@
+.lesson-theory { padding: 18px 20px 14px; border: 1px solid #e8e3d8; border-radius: 17px; background: linear-gradient(145deg, #fff 0%, #faf8f1 100%); box-shadow: 0 8px 24px #483d2808; }
+.theory-heading { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding-bottom: 13px; border-bottom: 1px solid #eeeae0; }
+.theory-kicker { margin: 0 0 6px; color: #9c7253; font-size: 12px; font-weight: 850; letter-spacing: .8px; }
+.theory-heading h2 { margin: 0; color: #34352e; font-size: 20px; letter-spacing: -.4px; }
+.theory-close { display: grid; flex: none; width: 44px; height: 44px; place-items: center; border: 0; border-radius: 12px; background: #f4eadc; color: #8c5c39; font-size: 22px; line-height: 1; cursor: pointer; }
+.theory-close:hover { background: #eadac4; }
+.theory-grid { display: grid; grid-template-columns: 1fr; gap: 0 18px; }
+.theory-section { padding: 13px 0 10px; }
+.theory-section h3, .theory-examples h3 { margin: 0 0 6px; color: #77644e; font-size: 13px; font-weight: 800; }
+.theory-section p { margin: 0; color: #59584f; font-size: 14px; line-height: 1.6; }
+.theory-grammar { padding-top: 12px; border-top: 1px solid #eeeae0; }
+.theory-examples { padding-top: 12px; border-top: 1px solid #eeeae0; }
+.theory-examples p { display: grid; gap: 3px; margin: 8px 0; color: #6c695f; font-size: 14px; line-height: 1.5; }
+.theory-examples strong { color: #3d3e36; font-size: 14px; }
+.theory-workbook { margin: 12px 0 0; padding-top: 10px; border-top: 1px solid #eeeae0; color: #877862; font-size: 12px; font-weight: 700; }
+
+@media (max-width: 1159px) {
+  .lesson-theory { margin: 0 0 16px; }
+  .theory-grid { grid-template-columns: 1fr 1fr; }
+  .theory-grammar { grid-column: 1 / -1; }
+}
+
+@media (max-width: 600px) {
+  .lesson-theory { padding: 16px 14px 12px; }
+  .theory-grid { grid-template-columns: 1fr; }
+  .theory-grammar { grid-column: auto; }
+}

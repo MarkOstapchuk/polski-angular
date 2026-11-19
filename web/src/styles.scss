@@ -4,3 +4,10 @@ body { min-width: 320px; min-height: 100vh; margin: 0; font-family: Inter, ui-sa
 button, input, audio { font: inherit; }
 button { -webkit-tap-highlight-color: transparent; }
 ::selection { background: #f4d6c8; color: #44342d; }
+:is(a, button, input, select, textarea, summary, [tabindex]):focus-visible {
+  outline: 2.5px solid #c65f3d;
+  outline-offset: 2px;
+}
+input:focus-visible, select:focus-visible, textarea:focus-visible {
+  outline-offset: 1px;
+}

@@ -1,0 +1,59 @@
+@if (activeTrack(); as track) {
+  <section class="audio-bar" [attr.aria-label]="track.label">
+    <audio #audioEl preload="metadata" [src]="track.url"
+      (loadedmetadata)="onMetadata()"
+      (timeupdate)="onTimeUpdate()"
+      (play)="playing.set(true)"
+      (pause)="playing.set(false)"
+      (ended)="playing.set(false)"
+      (error)="audioError.set(true)">
+      {{ language.t('lesson.audioUnsupported') }}
+    </audio>
+
+    <div class="audio-row">
+      <button class="audio-btn audio-play" type="button" (click)="togglePlayPause()"
+        [attr.aria-label]="playing() ? language.t('lesson.audioPause') : language.t('lesson.audioPlay')"
+        [attr.aria-pressed]="playing()">
+        {{ playing() ? '❚❚' : '▶' }}
+      </button>
+
+      <button class="audio-btn audio-rewind" type="button" (click)="rewind5s()"
+        [attr.aria-label]="language.t('lesson.audioRewind')">
+        -5s
+      </button>
+
+      <div class="audio-track-meta">
+        <div class="audio-header-line">
+          <strong class="audio-title">{{ track.label }}</strong>
+          <span class="audio-time">{{ formatTime(currentTime()) }} / {{ formatTime(duration()) }}</span>
+        </div>
+        <input class="audio-range" type="range" min="0" [max]="duration() || 100" step="0.1"
+          [value]="currentTime()" (input)="seek($event)"
+          [attr.aria-label]="track.label">
+      </div>
+
+      <button class="audio-btn audio-speed" type="button" (click)="toggleSpeed()"
+        [attr.aria-label]="language.t('lesson.audioSpeed')"
+        [attr.aria-pressed]="speed() === 0.75">
+        {{ speed() === 0.75 ? '0.75×' : '1×' }}
+      </button>
+    </div>
+
+    @if (tracks().length > 1) {
+      <div class="track-pills" role="tablist">
+        @for (item of tracks(); track item.file; let i = $index) {
+          <button class="track-pill" type="button" role="tab"
+            [class.is-active]="selectedTrackIndex() === i"
+            [attr.aria-selected]="selectedTrackIndex() === i"
+            (click)="selectTrack(i)">
+            {{ item.label }}
+          </button>
+        }
+      </div>
+    }
+
+    @if (audioError()) {
+      <p class="audio-error" role="status">{{ language.t('lesson.audioHint') }}</p>
+    }
+  </section>
+}

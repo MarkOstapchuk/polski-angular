@@ -39,3 +39,11 @@ footer { padding-block: 24px; border-top: 1px solid var(--line); color: var(--mu
 footer p { margin: 0; }
 @media (max-width: 560px) { .wrap { width: min(100% - 28px, 1080px); } .nav { padding-block: 16px; } main { padding-block: 45px; } }
 @media (prefers-reduced-motion: reduce) { *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; } }
+/* Touch targets: nav, language switcher, breadcrumbs and footer links >= 44px */
+.nav a, .language-links a, .crumbs a, footer a { display: inline-flex; align-items: center; min-height: 44px; min-width: 44px; }
+.brand { padding-inline: 4px; }
+.language-links { display: inline-flex; align-items: center; gap: 2px; }
+.language-links a { justify-content: center; padding-inline: 8px; }
+.nav a:last-child { padding-inline: 4px; }
+.crumbs { display: flex; flex-wrap: wrap; align-items: center; gap: 0 6px; }
+footer p { display: flex; flex-wrap: wrap; align-items: center; gap: 0 8px; }

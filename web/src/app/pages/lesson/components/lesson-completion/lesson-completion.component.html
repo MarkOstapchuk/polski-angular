@@ -1,0 +1,43 @@
+<main class="completion-main">
+  <div class="completion-spark">✦</div>
+  <p class="lesson-breadcrumb">{{ lessonLabel() }} · {{ language.t('lesson.completed') }}</p>
+  <h1>{{ language.t('lesson.greatWork') }}</h1>
+  <p class="completion-copy">{{ lessonTitle() }} — {{ language.t('lesson.completionCopy') }}</p>
+  <div class="score-orb" [class.score-high]="finalScore() >= 80">
+    <strong>{{ finalScore() }}<small>%</small></strong>
+    <span>{{ language.t('lesson.correctAnswers') }}</span>
+  </div>
+  <div class="completion-stats">
+    <div>
+      <strong>{{ correctAnswers() }} / {{ totalQuestions() }}</strong>
+      <small>{{ language.t('lesson.correctAnswers') }}</small>
+    </div>
+    <div>
+      <strong>+{{ awardedXp() }} XP</strong>
+      <small>{{ awardedXp() ? language.t('lesson.xpAdded') : language.t('lesson.bestScoreSaved') }}</small>
+    </div>
+  </div>
+  <p class="next-unlock">{{ finalScore() === 100 ? language.t('lesson.perfect') : language.t('lesson.mistakesLearn') }}</p>
+
+  <div class="completion-actions">
+    @if (nextLesson(); as next) {
+      <a class="return-button" [routerLink]="['/learn', next.id]">
+        {{ language.t('lesson.nextLesson') }} <span aria-hidden="true">→</span>
+      </a>
+      <a class="secondary-button" [routerLink]="dashboardUrl()">{{ language.t('lesson.back') }}</a>
+    } @else {
+      <a class="return-button" [routerLink]="dashboardUrl()">
+        {{ language.t('lesson.back') }} <span aria-hidden="true">→</span>
+      </a>
+    }
+
+    @if (finalScore() < 100) {
+      <button class="secondary-button" type="button" (click)="retryWrong.emit()">
+        {{ language.t('lesson.fixMistakes') }}
+      </button>
+    }
+    <button class="secondary-button" type="button" (click)="retryLesson.emit()">
+      {{ language.t('lesson.retryLesson') }}
+    </button>
+  </div>
+</main>

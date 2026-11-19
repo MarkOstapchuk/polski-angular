@@ -1,0 +1,24 @@
+@if (multiline()) {
+  <textarea #textareaEl class="answer-input answer-textarea"
+    rows="1"
+    [id]="inputId()"
+    [value]="value()"
+    (input)="onValueInput($event)"
+    [disabled]="disabled()"
+    [placeholder]="placeholder()"
+    [attr.enterkeyhint]="enterKeyHint()"
+    [attr.autocomplete]="'off'"
+    [attr.aria-label]="prompt()"
+    (keydown.enter)="onTextareaEnter($event)"></textarea>
+} @else {
+  <input class="answer-input"
+    [id]="inputId()"
+    [value]="value()"
+    (input)="onValueInput($event)"
+    [disabled]="disabled()"
+    [placeholder]="placeholder()"
+    [attr.enterkeyhint]="enterKeyHint()"
+    [attr.autocomplete]="'off'"
+    [attr.aria-label]="prompt()"
+    (keydown.enter)="enterPressed.emit($event)">
+}

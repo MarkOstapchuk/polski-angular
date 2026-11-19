@@ -1,0 +1,30 @@
+<section [class]="'continue-card tone-' + lesson().color">
+  <div class="continue-content">
+    <div class="lesson-kicker">
+      <span class="kicker-dot"></span>
+      {{ completeCount() === 0 ? language.t('dashboard.startCourse') : language.t('dashboard.continueLearning') }} · {{ lessonLabel() }}
+    </div>
+    <h2>{{ lesson().title }}</h2>
+    <p>{{ lesson().subtitle }}</p>
+    <div class="continue-meta">
+      <span>◷ 2–4 min</span>
+      <span>•</span>
+      <span>{{ lesson().activityCount }} {{ language.t('dashboard.exercise') }}</span>
+    </div>
+    <button class="primary-button" type="button" (click)="open.emit()">
+      {{ completeCount() === 0 ? language.t('dashboard.startLesson') : language.t('dashboard.continue') }} <span aria-hidden="true">→</span>
+    </button>
+  </div>
+  <div class="continue-art" aria-hidden="true">
+    <div class="art-sun"></div>
+    <div class="art-card art-card-back"><span>cześć!</span></div>
+    <div class="art-card art-card-front">
+      <span class="art-speech">Dzień dobry</span>
+      <span class="art-face">☺</span>
+      <span class="art-caption">miło mi</span>
+    </div>
+    <span class="art-star star-one">✦</span>
+    <span class="art-star star-two">✧</span>
+  </div>
+  <div class="card-number">{{ lessonNumber() }}</div>
+</section>

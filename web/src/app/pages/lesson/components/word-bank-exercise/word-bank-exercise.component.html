@@ -1,0 +1,128 @@
+<div class="word-bank-section">
+  <div class="word-bank-sticky">
+    <div class="word-bank-head">
+      <div class="word-bank-meta">
+        <strong>{{ language.t('lesson.wordBankLabel') }}</strong>
+        <span>{{ isDialogueOrder() ? language.t('lesson.dialogueOrderHint') : language.t('lesson.wordBankHint') }}</span>
+      </div>
+      @if (!isDialogueOrder() && !checked()) {
+        <button type="button" class="mode-toggle-btn" (click)="toggleTypeMode()">
+          {{ typeMode() ? language.t('lesson.modeChips') : language.t('lesson.modeType') }}
+        </button>
+      }
+    </div>
+
+    <div class="word-bank-pool" data-word-bank [attr.aria-label]="language.t('lesson.wordBankLabel')">
+      @for (entry of wordBank(); track entry.value) {
+        <button type="button" class="word-bank-chip"
+          [class.is-used]="isExhausted(entry)"
+          [disabled]="checked()"
+          (click)="onChipClick(entry)">{{ entry.label }}</button>
+      }
+    </div>
+  </div>
+
+  <div class="question-list">
+    @for (item of adapted().items; track item.id; let index = $index) {
+      <div class="question-row" [attr.data-item-id]="item.id"
+        [class.answer-correct]="checked() && isItemCorrect(item.id)"
+        [class.answer-wrong]="checked() && !isItemCorrect(item.id)">
+        <div class="question-number">{{ index + 1 }}</div>
+        <div class="question-body">
+          @if (itemImage(item); as image) {
+            <button type="button" class="image-zoom-button inline-zoom" (click)="openLightbox.emit(image)"
+              [attr.aria-label]="language.t('lesson.zoomImage') + ': ' + image.alt"
+              [title]="language.t('lesson.zoomHint')">
+              <img class="question-image" [src]="image.src" [alt]="image.alt" loading="lazy">
+              <span class="zoom-badge" aria-hidden="true">⤢</span>
+            </button>
+          }
+
+          <label class="question-prompt" [for]="activity().id + '-' + item.id">{{ item.raw.prompt }}</label>
+
+          @if (isDialogueOrder()) {
+            <textarea #dialogueTa class="answer-input word-bank-slot dialogue-slot"
+              rows="1"
+              [id]="activity().id + '-' + item.id"
+              [value]="answerFor(item.id)"
+              [disabled]="checked()"
+              [placeholder]="language.t('lesson.dialogueOrderHint')"
+              [attr.enterkeyhint]="enterKeyHintFor(index)"
+              [attr.aria-label]="item.raw.prompt"
+              (focus)="setActiveSlot(item.id, 0)"
+              (click)="setActiveSlot(item.id, 0)"
+              (input)="onDialogueInput(item.id, $event)"
+              (keydown.enter)="onDialogueEnter($event)"></textarea>
+          } @else if (typeMode()) {
+            @if (item.multiGap; as mg) {
+              <app-multi-gap-exercise
+                [baseId]="activity().id + '-' + item.id"
+                [prompt]="item.raw.prompt"
+                [gapCount]="mg.gapCount"
+                [inlineParts]="mg.inlineParts"
+                [gapLabels]="mg.labels"
+                [value]="answerFor(item.id)"
+                [disabled]="checked()"
+                [enterKeyHint]="enterKeyHintFor(index)"
+                (valueChange)="answerChange.emit({ itemId: item.id, value: $event })"
+                (enterPressed)="enterPressed.emit($event)" />
+            } @else {
+              <app-typed-exercise
+                [inputId]="activity().id + '-' + item.id"
+                [prompt]="item.raw.prompt"
+                [value]="answerFor(item.id)"
+                [disabled]="checked()"
+                [placeholder]="hasAudio() ? language.t('lesson.typeWhatYouHear') : language.t('lesson.yourAnswer')"
+                [enterKeyHint]="enterKeyHintFor(index)"
+                [multiline]="isMultiline(item)"
+                (valueChange)="answerChange.emit({ itemId: item.id, value: $event })"
+                (enterPressed)="enterPressed.emit($event)" />
+            }
+          } @else {
+            <div class="word-slot-group">
+              @for (part of slotParts(item); track $index; let gapIdx = $index) {
+                <div class="word-slot-wrap">
+                  <button type="button" class="word-slot"
+                    [id]="gapIdx === 0 ? activity().id + '-' + item.id : activity().id + '-' + item.id + '-slot-' + gapIdx"
+                    [class.is-active]="isSlotActive(item.id, gapIdx)"
+                    [class.has-value]="!!part.trim()"
+                    [disabled]="checked()"
+                    (click)="setActiveSlot(item.id, gapIdx)">
+                    {{ part.trim() || language.t('lesson.wordBankSelectSlot') }}
+                  </button>
+                  @if (part.trim() && !checked()) {
+                    <button type="button" class="slot-clear"
+                      [attr.aria-label]="language.t('lesson.wordBankClearSlot')"
+                      (click)="clearSlot(item.id, gapIdx)">×</button>
+                  }
+                </div>
+              }
+            </div>
+          }
+
+          @if (item.raw.hint) {
+            <div class="item-hint-wrap">
+              <button class="hint-toggle" type="button"
+                [attr.aria-expanded]="isHintShown(item.id)"
+                (click)="toggleHint.emit(item.id)">
+                <span aria-hidden="true">💡</span>
+                {{ isHintShown(item.id) ? language.t('lesson.hideHint') : language.t('lesson.showHint') }}
+              </button>
+              @if (isHintShown(item.id)) {
+                <p class="item-hint">{{ item.raw.hint }}</p>
+              }
+            </div>
+          }
+
+          @if (checked()) {
+            <div class="answer-feedback" [class.feedback-right]="isItemCorrect(item.id)" [class.feedback-wrong]="!isItemCorrect(item.id)" aria-live="polite">
+              @if (isItemCorrect(item.id)) { <span>✓ {{ language.t('lesson.correct') }}</span> }
+              @else { <span>{{ language.t('lesson.correctAnswer') }} <strong>{{ item.raw.accepted[0] }}</strong></span> }
+            </div>
+            @if (item.raw.explanation) { <small class="answer-explanation">{{ item.raw.explanation }}</small> }
+          }
+        </div>
+      </div>
+    }
+  </div>
+</div>

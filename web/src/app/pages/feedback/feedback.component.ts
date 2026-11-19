@@ -1,6 +1,6 @@
-import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { RouterLink } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { COURSES } from '../../data/lesson-catalog';
 import { AuthService } from '../../services/auth.service';
 import { supabase } from '../../services/supabase.client';
@@ -18,36 +18,54 @@ import { LanguageService } from '../../i18n/language.service';
 export class FeedbackComponent {
   readonly courses = COURSES;
   private readonly auth = inject(AuthService);
+  private readonly route = inject(ActivatedRoute);
   readonly language = inject(LanguageService);
-  category: 'app' | 'course' = 'app';
-  courseId: string = COURSES[0].id;
-  message = '';
-  sending = false;
-  error = '';
-  sent = false;
+
+  private readonly returnCourseId = signal<'part-1' | 'part-2'>(this.resolveInitialCourseId());
+  readonly backUrl = computed(() => `/course/${this.returnCourseId()}`);
+  readonly category = signal<'app' | 'course'>('app');
+  readonly courseId = signal<string>(this.returnCourseId());
+  readonly message = signal('');
+  readonly sending = signal(false);
+  readonly error = signal('');
+  readonly sent = signal(false);
 
   async submit(): Promise<void> {
     const user = this.auth.user();
-    const message = this.message.trim();
-    if (!user || !message || message.length > 2000 || this.sending) return;
+    const message = this.message().trim();
+    if (!user || !message || message.length > 2000 || this.sending()) return;
 
-    this.sending = true;
-    this.error = '';
-    this.sent = false;
+    this.sending.set(true);
+    this.error.set('');
+    this.sent.set(false);
     try {
       const { error } = await supabase.from('app_feedback').insert({
         user_id: user.id,
-        category: this.category,
-        course_id: this.category === 'course' ? this.courseId : null,
+        category: this.category(),
+        course_id: this.category() === 'course' ? this.courseId() : null,
         message,
       });
       if (error) throw error;
-      this.message = '';
-      this.sent = true;
+      this.message.set('');
+      this.sent.set(true);
     } catch {
-      this.error = this.language.t('feedback.error');
+      this.error.set(this.language.t('feedback.error'));
     } finally {
-      this.sending = false;
+      this.sending.set(false);
     }
+  }
+
+  private resolveInitialCourseId(): 'part-1' | 'part-2' {
+    const fromQuery = this.route.snapshot.queryParamMap.get('course');
+    if (fromQuery === 'part-1' || fromQuery === 'part-2') return fromQuery;
+    try {
+      if (typeof localStorage !== 'undefined') {
+        const stored = localStorage.getItem('polski-active-course');
+        if (stored === 'part-1' || stored === 'part-2') return stored;
+      }
+    } catch {
+      // Ignore storage access errors.
+    }
+    return 'part-1';
   }
 }

@@ -1,0 +1,52 @@
+@if (!typeMode()) {
+  <div class="word-order-builder">
+    <div class="word-order-answer" [attr.aria-label]="language.t('lesson.wordOrderAnswerArea')">
+      @if (assembledTokens().length === 0) {
+        <span class="word-order-placeholder">{{ language.t('lesson.wordOrderHint') }}</span>
+      } @else {
+        @for (placed of assembledTokens(); track placed.idx; let pos = $index) {
+          <button type="button" class="word-chip placed-chip"
+            [disabled]="disabled()"
+            [attr.aria-label]="language.t('lesson.wordOrderRemove') + ': ' + placed.text"
+            (click)="removeTokenAt(pos)">{{ placed.text }} <span aria-hidden="true">×</span></button>
+        }
+      }
+    </div>
+
+    <div class="word-order-pool" data-word-order-pool [attr.aria-label]="language.t('lesson.wordOrderPool')">
+      @for (token of tokens(); track $index; let idx = $index) {
+        <button type="button" class="word-chip pool-chip"
+          [class.is-used]="isTokenUsed(idx)"
+          [disabled]="disabled() || isTokenUsed(idx)"
+          (click)="addToken(idx)">{{ token }}</button>
+      }
+    </div>
+
+    @if (!disabled()) {
+      <div class="word-order-controls">
+        @if (assembledTokens().length > 0) {
+          <button type="button" class="control-pill" (click)="clearAll()">{{ language.t('lesson.wordOrderClear') }}</button>
+        }
+        <button type="button" class="control-pill" (click)="toggleMode()">{{ language.t('lesson.modeType') }}</button>
+      </div>
+    }
+  </div>
+} @else {
+  <div class="word-order-type-wrap">
+    <app-typed-exercise
+      [inputId]="inputId()"
+      [prompt]="prompt()"
+      [value]="value()"
+      [disabled]="disabled()"
+      [placeholder]="placeholder()"
+      [enterKeyHint]="enterKeyHint()"
+      [multiline]="multiline() || isSentenceOrder()"
+      (valueChange)="valueChange.emit($event)"
+      (enterPressed)="enterPressed.emit($event)" />
+    @if (!disabled()) {
+      <div class="word-order-controls">
+        <button type="button" class="control-pill" (click)="toggleMode()">{{ language.t('lesson.modeChips') }}</button>
+      </div>
+    }
+  </div>
+}

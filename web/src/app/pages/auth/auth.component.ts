@@ -24,6 +24,7 @@ export class AuthComponent {
 
   readonly mode = signal<'sign-in' | 'sign-up'>('sign-in');
   readonly busy = signal(false);
+  readonly showPassword = signal(false);
   readonly error = signal<string | null>(null);
   readonly message = signal<string | null>(null);
   email = '';
@@ -31,14 +32,29 @@ export class AuthComponent {
 
   constructor() {
     this.route.queryParamMap.pipe(takeUntilDestroyed()).subscribe((params) => {
-      this.error.set(params.get('error') === 'session' ? this.language.t('auth.sessionError') : null);
+      const err = params.get('error');
+      this.error.set(
+        err === 'session' ? this.language.t('auth.sessionError')
+          : err === 'progress' ? this.language.t('auth.progressError')
+          : null,
+      );
     });
+
+    if (!this.route.snapshot.queryParamMap.has('error')) {
+      void this.auth.currentUser().then((user) => {
+        if (user) void this.router.navigateByUrl(this.safeNextUrl());
+      }).catch(() => undefined);
+    }
   }
 
   toggleMode(): void {
     this.mode.update((mode) => mode === 'sign-in' ? 'sign-up' : 'sign-in');
     this.error.set(null);
     this.message.set(null);
+  }
+
+  togglePassword(): void {
+    this.showPassword.update((visible) => !visible);
   }
 
   async submit(): Promise<void> {
@@ -58,13 +74,16 @@ export class AuthComponent {
         await this.auth.signIn(this.email.trim(), this.password);
       }
 
-      const next = this.route.snapshot.queryParamMap.get('next');
-      const destination = next?.startsWith('/') && !next.startsWith('//') ? next : '/course/part-1';
-      await this.router.navigateByUrl(destination);
+      await this.router.navigateByUrl(this.safeNextUrl());
     } catch (error) {
-      this.error.set(error instanceof Error ? error.message : 'Nie udało się połączyć z kontem.');
+      this.error.set(error instanceof Error ? error.message : this.language.t('auth.genericError'));
     } finally {
       this.busy.set(false);
     }
+  }
+
+  private safeNextUrl(): string {
+    const next = this.route.snapshot.queryParamMap.get('next');
+    return next?.startsWith('/') && !next.startsWith('//') ? next : '/course/part-1';
   }
 }

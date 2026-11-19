@@ -1,0 +1,13 @@
+.option-list { display: flex; flex-wrap: wrap; gap: 7px; }
+.option-button { position: relative; display: inline-flex; align-items: center; justify-content: center; gap: 6px; min-width: 44px; min-height: 44px; padding: 8px 12px; border: 1px solid #e9e6de; border-radius: 8px; background: #fff; color: #5b5950; font: inherit; font-size: 14px; font-weight: 650; cursor: pointer; transition: .15s; text-align: center; overflow-wrap: anywhere; }
+.option-button[data-hotkey]::before { content: attr(data-hotkey); display: inline-grid; min-width: 18px; height: 18px; padding: 0 4px; place-items: center; border-radius: 5px; background: #f4f1ea; color: #787368; font-size: 12px; font-weight: 750; line-height: 1; }
+.option-button.selected[data-hotkey]::before { background: #f5d8cc; color: #963f24; }
+.option-button:hover:not(:disabled) { border-color: #d6a58d; color: #9e5439; }
+.option-button.selected { border-color: #d77a58; background: #fff2ec; color: #a54d31; }
+.option-button.option-right { border-color: #91af87; background: #edf5ea; color: #4a6642; }
+.option-button.option-error { border-color: #d58a7b; background: #fff0ed; color: #a94e40; }
+.option-button:disabled { cursor: default; }
+
+@media (hover: none) and (pointer: coarse) {
+  .option-button[data-hotkey]::before { display: none; }
+}

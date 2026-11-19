@@ -1,27 +1,33 @@
 <div class="dashboard-shell">
   <aside class="sidebar">
-    <a class="brand" [routerLink]="dashboardUrl()" [attr.aria-label]="language.t('nav.home')">
+    <a class="brand" [routerLink]="dashboardUrl()" (click)="navigateSection($event, 'home')" [attr.aria-label]="language.t('nav.home')">
       <span class="brand-mark">p</span>
       <span>polski<span class="brand-dot">.</span></span>
     </a>
 
-    <a class="course-switcher" [routerLink]="dashboardUrl()" [attr.aria-label]="language.t('nav.openCourse')">
+    <a class="course-switcher" routerLink="/course/choose" [attr.aria-label]="language.t('nav.chooseCourse')">
       <span class="course-flag">PL</span>
-      <span class="course-switcher-copy"><strong>{{ selectedCourse()?.name ?? language.t('nav.chooseCourse') }}</strong><small>{{ selectedCourse()?.level ?? language.t('nav.chooseCourse') }}</small></span>
-      <span class="switcher-chevron">⌄</span>
+      <span class="course-switcher-copy">
+        <strong>{{ selectedCourse()?.name ?? language.t('nav.chooseCourse') }}</strong>
+        <small>{{ selectedCourse() ? selectedCourse()!.level + ' · ' + language.t('dashboard.switchCourse') : language.t('nav.chooseCourse') }}</small>
+      </span>
+      <span class="switcher-chevron" aria-hidden="true">⌄</span>
     </a>
 
     <nav class="side-nav" [attr.aria-label]="language.t('home.nav')">
-      <a class="nav-link active" [routerLink]="dashboardUrl()">
+      <a class="nav-link" [class.active]="activeNavSection() === 'home'" [routerLink]="dashboardUrl()" (click)="navigateSection($event, 'home')">
         <span class="nav-icon home-icon">⌂</span><span>{{ language.t('nav.home') }}</span>
       </a>
-      <a class="nav-link" [href]="selectedCourse() ? '#lesson-path' : '#course-options'">
+      <a class="nav-link" [class.active]="activeNavSection() === 'course'"
+        [href]="selectedCourse() ? '#lesson-path' : '#course-options'"
+        (click)="navigateSection($event, 'course', selectedCourse() ? 'lesson-path' : 'course-options')">
         <span class="nav-icon book-icon">▤</span><span>{{ language.t('nav.course') }}</span>
       </a>
-      <a class="nav-link" href="#progress-card">
+      <a class="nav-link" [class.active]="activeNavSection() === 'progress'" href="#progress-card"
+        (click)="navigateSection($event, 'progress', 'progress-card')">
         <span class="nav-icon stats-icon">▥</span><span>{{ language.t('nav.progress') }}</span>
       </a>
-      <a class="nav-link" routerLink="/feedback">
+      <a class="nav-link" routerLink="/feedback" [queryParams]="{ course: selectedCourse()?.id ?? readActiveCourseId() }">
         <span class="nav-icon">✎</span><span>{{ language.t('nav.feedback') }}</span>
       </a>
     </nav>
@@ -31,7 +37,7 @@
         <span class="note-spark">✦</span>
         <p>{{ language.t('dashboard.shortLesson') }}<br><strong>{{ language.t('dashboard.makesDifference') }}</strong></p>
       </div>
-      <button class="profile-button" type="button" (click)="signOut()" [attr.aria-label]="language.t('nav.logout')">
+      <button class="profile-button" type="button" (click)="openSignOutConfirm()" [attr.aria-label]="language.t('nav.logout')">
         <span class="profile-avatar">{{ userInitial() }}</span>
         <span class="profile-copy"><strong>{{ userEmail() }}</strong><small>{{ language.t('nav.logout') }}</small></span>
         <span class="profile-menu">↗</span>
@@ -41,7 +47,7 @@
 
   <main class="main-column">
     <header class="topbar">
-      <a class="mobile-brand" [routerLink]="dashboardUrl()"><span class="brand-mark">p</span> polski<span class="brand-dot">.</span></a>
+      <a class="mobile-brand" [routerLink]="dashboardUrl()" (click)="navigateSection($event, 'home')"><span class="brand-mark">p</span> polski<span class="brand-dot">.</span></a>
       <div class="topbar-spacer"></div>
       <app-language-switcher />
       <div class="top-stat streak-stat" [attr.aria-label]="language.t('dashboard.daysInRow')">
@@ -53,7 +59,7 @@
       @if (pwa.installAvailable() || pwa.needsIOSInstructions()) {
         <button class="install-button" type="button" (click)="installApp()">{{ pwa.installAvailable() ? language.t('dashboard.installAppAction') : language.t('dashboard.installHelp') }}</button>
       }
-      <button class="top-avatar" type="button" (click)="signOut()" [attr.aria-label]="language.t('nav.logoutAccount') + ' ' + userEmail()" [title]="language.t('nav.logout')">{{ userInitial() }}</button>
+      <button class="top-avatar" type="button" (click)="openSignOutConfirm()" [attr.aria-label]="language.t('nav.logoutAccount') + ' ' + userEmail()" [title]="language.t('nav.logout')">{{ userInitial() }}</button>
     </header>
 
     <div class="content-wrap">
@@ -67,27 +73,20 @@
             <h1>{{ course.name }} · {{ course.level }}</h1>
             <p class="welcome-copy">{{ course.description }}. {{ language.t('dashboard.welcome') }}</p>
           </div>
+          <a class="mobile-course-switcher" routerLink="/course/choose" [attr.aria-label]="language.t('nav.chooseCourse')">
+            <span class="course-flag">PL</span>
+            <span>{{ course.name }} · {{ course.level }}</span>
+            <span class="switcher-chevron" aria-hidden="true">⌄</span>
+          </a>
           <div class="daily-pill"><span>☀</span> {{ language.t('dashboard.dailyRhythm') }}</div>
         </section>
 
-        <section class="continue-card" [class]="'continue-card tone-' + currentLesson().color">
-          <div class="continue-content">
-            <div class="lesson-kicker"><span class="kicker-dot"></span> {{ completeCount() === 0 ? language.t('dashboard.startCourse') : language.t('dashboard.continueLearning') }} · {{ lessonLabel(currentLesson()) }}</div>
-            <h2>{{ currentLesson().title }}</h2>
-            <p>{{ currentLesson().subtitle }}</p>
-            <div class="continue-meta"><span>◷ 2–4 min</span><span>•</span><span>{{ currentLesson().activityCount }} {{ language.t('dashboard.exercise') }}</span></div>
-            <button class="primary-button" type="button" (click)="openLesson(currentLesson())">
-              {{ completeCount() === 0 ? language.t('dashboard.startLesson') : language.t('dashboard.continue') }} <span aria-hidden="true">→</span>
-            </button>
-          </div>
-          <div class="continue-art" aria-hidden="true">
-            <div class="art-sun"></div>
-            <div class="art-card art-card-back"><span>cześć!</span></div>
-            <div class="art-card art-card-front"><span class="art-speech">Dzień dobry</span><span class="art-face">☺</span><span class="art-caption">miło mi</span></div>
-            <span class="art-star star-one">✦</span><span class="art-star star-two">✧</span>
-          </div>
-          <div class="card-number">{{ lessonNumber(currentLesson()) }}</div>
-        </section>
+        <app-dashboard-continue-card
+          [lesson]="currentLesson()"
+          [completeCount]="completeCount()"
+          [lessonLabel]="lessonLabel(currentLesson())"
+          [lessonNumber]="lessonNumber(currentLesson())"
+          (open)="openLesson(currentLesson())" />
 
         <div class="section-heading" id="lesson-path">
           <div><p class="eyebrow">{{ language.t('dashboard.path') }}</p><h2>{{ course.name }} · {{ language.t('dashboard.lessons') }}</h2></div>
@@ -97,31 +96,31 @@
         <section class="lesson-path" [attr.aria-label]="language.t('dashboard.lessons')">
           <div class="path-rail"><span class="rail-fill" [style.height.%]="courseProgress()"></span></div>
           @for (lesson of lessons(); track lesson.id) {
-          <article class="path-row" [class.is-locked]="!isUnlocked(lesson)" [class.is-complete]="isComplete(lesson)">
-            <button class="path-node" [class]="'path-node node-' + lesson.color" type="button"
-              [disabled]="!isUnlocked(lesson)" (click)="openLesson(lesson)" [attr.aria-label]="language.t('dashboard.open') + ' ' + lessonLabel(lesson)">
-              @if (isComplete(lesson)) { <span>✓</span> }
-              @else if (!isUnlocked(lesson)) { <span>⌑</span> }
-              @else { <span>{{ lessonNumber(lesson) }}</span> }
-            </button>
-            <button class="lesson-card" type="button" [disabled]="!isUnlocked(lesson)" (click)="openLesson(lesson)">
-              <span class="lesson-card-copy">
-                <span class="lesson-unit">{{ lessonLabel(lesson) }} <span class="unit-dot">·</span> {{ lesson.topic }}</span>
-                <strong>{{ lesson.title }}</strong>
-                <small>{{ lesson.subtitle }}</small>
-              </span>
-              <span class="lesson-card-end">
-                @if (isComplete(lesson)) {
-                  <span class="done-chip">{{ language.t('dashboard.completed') }} <b>✓</b></span>
-                } @else if (!isUnlocked(lesson)) {
-                  <span class="lock-chip">{{ language.t('dashboard.locked') }}</span>
-                } @else {
-                  <span class="play-chip">→</span>
-                }
-              </span>
-            </button>
-          </article>
-        }
+            <article class="path-row" [class.is-locked]="!isUnlocked(lesson)" [class.is-complete]="isComplete(lesson)">
+              <button class="path-node" [class]="'path-node node-' + lesson.color" type="button"
+                [disabled]="!isUnlocked(lesson)" (click)="openLesson(lesson)" [attr.aria-label]="language.t('dashboard.open') + ' ' + lessonLabel(lesson)">
+                @if (isComplete(lesson)) { <span>✓</span> }
+                @else if (!isUnlocked(lesson)) { <span>⌑</span> }
+                @else { <span>{{ lessonNumber(lesson) }}</span> }
+              </button>
+              <button class="lesson-card" type="button" [disabled]="!isUnlocked(lesson)" (click)="openLesson(lesson)">
+                <span class="lesson-card-copy">
+                  <span class="lesson-unit">{{ lessonLabel(lesson) }} <span class="unit-dot">·</span> {{ lesson.topic }}</span>
+                  <strong>{{ lesson.title }}</strong>
+                  <small>{{ lesson.subtitle }}</small>
+                </span>
+                <span class="lesson-card-end">
+                  @if (isComplete(lesson)) {
+                    <span class="done-chip">{{ language.t('dashboard.completed') }} <b>✓</b></span>
+                  } @else if (!isUnlocked(lesson)) {
+                    <span class="lock-chip">{{ language.t('dashboard.locked') }}</span>
+                  } @else {
+                    <span class="play-chip">→</span>
+                  }
+                </span>
+              </button>
+            </article>
+          }
         </section>
 
         <div class="course-end-note"><span>✦</span><div>
@@ -162,55 +161,31 @@
     </div>
   </main>
 
-  <aside class="right-rail">
-    <section class="side-card streak-card">
-      <div class="side-card-title"><div><p class="eyebrow">{{ language.t('dashboard.goodHabit') }}</p><h2>{{ language.t('dashboard.yourStreak') }}</h2></div><span class="flame-badge">🔥</span></div>
-      <div class="streak-number"><strong>{{ progress().streak }}</strong><span>{{ language.t('dashboard.daysInRow') }}</span></div>
-      <div class="week-strip" [attr.aria-label]="language.t('dashboard.weekActivity')">
-        @for (day of weekDays(); track $index) {
-          <div class="week-day"><span>{{ day.label }}</span><b [class.day-active]="day.active">{{ day.active ? '✓' : '·' }}</b></div>
-        }
-      </div>
-      <p class="side-caption">{{ language.t('dashboard.smallStep') }}</p>
-    </section>
-
-    <section class="side-card goal-card" id="progress-card">
-      <div class="side-card-title"><div><p class="eyebrow">{{ language.t('dashboard.dailyGoal') }}</p><h2>20 XP</h2></div><span class="goal-icon">◷</span></div>
-      <p class="goal-copy">{{ language.t('dashboard.doOneLesson') }}</p>
-      <div class="goal-progress"><span [style.width.%]="goalPercent()"></span></div>
-      <div class="goal-label"><strong>{{ progress().dailyXp >= 20 ? language.t('dashboard.goalReached') : progress().dailyXp + ' / 20 XP' }}</strong><span>{{ goalPercent() }}%</span></div>
-    </section>
-
-    <section class="side-card method-card">
-      <div class="method-illustration" aria-hidden="true"><span class="method-bubble">A?</span><span class="method-book">▱</span><span class="method-spark">✦</span></div>
-      <p class="eyebrow">{{ language.t('dashboard.howWeLearn') }}</p>
-      <h2>{{ language.t('dashboard.moreThanWords') }}</h2>
-      <p>{{ language.t('dashboard.practiceWholeSentence') }}</p>
-    </section>
-
-    @if (pwa.installAvailable() || pwa.needsIOSInstructions()) {
-      <button class="side-install" type="button" (click)="installApp()">{{ language.t('dashboard.installApp') }} <span>↗</span></button>
-    }
-    <p class="source-note">{{ language.t('dashboard.sourceNote') }}</p>
-  </aside>
+  <app-dashboard-progress-rail
+    [progress]="progress()"
+    [goalPercent]="goalPercent()"
+    [weekDays]="weekDays()"
+    [installAvailable]="pwa.installAvailable()"
+    [needsIOSInstructions]="pwa.needsIOSInstructions()"
+    (installClick)="installApp()" />
 
   <nav class="mobile-nav" [attr.aria-label]="language.t('home.nav')">
-    <a class="mobile-nav-item selected" [routerLink]="dashboardUrl()"><span>⌂</span><small>{{ language.t('nav.home') }}</small></a>
-    <a class="mobile-nav-item" [href]="selectedCourse() ? '#lesson-path' : '#course-options'"><span>▤</span><small>{{ language.t('nav.course') }}</small></a>
-    <a class="mobile-nav-item" href="#progress-card"><span>▥</span><small>{{ language.t('nav.progress') }}</small></a>
-    <a class="mobile-nav-item" routerLink="/feedback"><span>✎</span><small>{{ language.t('nav.feedback') }}</small></a>
-    <button class="mobile-nav-item" type="button" (click)="signOut()" [attr.aria-label]="language.t('nav.logout')"><span>↗</span><small>{{ language.t('nav.logout') }}</small></button>
+    <a class="mobile-nav-item" [class.selected]="activeNavSection() === 'home'" [routerLink]="dashboardUrl()" (click)="navigateSection($event, 'home')"><span>⌂</span><small>{{ language.t('nav.home') }}</small></a>
+    <a class="mobile-nav-item" [class.selected]="activeNavSection() === 'course'"
+      [href]="selectedCourse() ? '#lesson-path' : '#course-options'"
+      (click)="navigateSection($event, 'course', selectedCourse() ? 'lesson-path' : 'course-options')"><span>▤</span><small>{{ language.t('nav.course') }}</small></a>
+    <a class="mobile-nav-item" [class.selected]="activeNavSection() === 'progress'" href="#progress-card"
+      (click)="navigateSection($event, 'progress', 'progress-card')"><span>▥</span><small>{{ language.t('nav.progress') }}</small></a>
+    <a class="mobile-nav-item" routerLink="/feedback" [queryParams]="{ course: selectedCourse()?.id ?? readActiveCourseId() }"><span>✎</span><small>{{ language.t('nav.feedback') }}</small></a>
+    <button class="mobile-nav-item" type="button" (click)="openSignOutConfirm()" [attr.aria-label]="language.t('nav.logout')"><span>↗</span><small>{{ language.t('nav.logout') }}</small></button>
   </nav>
 
-  @if (pwa.instructionsVisible()) {
-    <div class="install-dialog-backdrop" role="presentation" (click)="pwa.closeInstructions()">
-      <section class="install-dialog" role="dialog" aria-modal="true" aria-labelledby="install-dialog-title" (click)="$event.stopPropagation()">
-        <button class="dialog-close" type="button" (click)="pwa.closeInstructions()" [attr.aria-label]="language.t('dashboard.close')">×</button>
-        <span class="dialog-icon">＋</span>
-        <p class="eyebrow">{{ language.t('dashboard.offlineApp') }}</p>
-        <h2 id="install-dialog-title">{{ language.t('dashboard.addPolski') }}</h2>
-        <ol><li>{{ language.t('dashboard.openSafari') }}</li><li>{{ language.t('dashboard.share') }}</li><li>{{ language.t('dashboard.addHome') }}</li></ol>
-      </section>
-    </div>
-  }
+  <app-dashboard-dialogs
+    [installVisible]="pwa.instructionsVisible()"
+    [signOutVisible]="signOutConfirmOpen()"
+    [userEmail]="userEmail()"
+    [busy]="signingOut()"
+    (closeInstall)="pwa.closeInstructions()"
+    (cancelSignOut)="cancelSignOut()"
+    (confirmSignOut)="confirmSignOut()" />
 </div>

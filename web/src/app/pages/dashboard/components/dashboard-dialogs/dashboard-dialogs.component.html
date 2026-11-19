@@ -1,0 +1,35 @@
+@if (installVisible()) {
+  <div class="dialog-backdrop" role="presentation" (click)="closeInstall.emit()">
+    <section class="dialog-card" role="dialog" aria-modal="true" aria-labelledby="install-dialog-title" (click)="$event.stopPropagation()">
+      <button class="dialog-close" type="button" (click)="closeInstall.emit()" [attr.aria-label]="language.t('dashboard.close')">×</button>
+      <span class="dialog-icon">＋</span>
+      <p class="eyebrow">{{ language.t('dashboard.offlineApp') }}</p>
+      <h2 id="install-dialog-title">{{ language.t('dashboard.addPolski') }}</h2>
+      <ol>
+        <li>{{ language.t('dashboard.openSafari') }}</li>
+        <li>{{ language.t('dashboard.share') }}</li>
+        <li>{{ language.t('dashboard.addHome') }}</li>
+      </ol>
+    </section>
+  </div>
+}
+
+@if (signOutVisible()) {
+  <div class="dialog-backdrop" role="presentation" (click)="!busy() && cancelSignOut.emit()">
+    <section class="dialog-card" role="dialog" aria-modal="true" aria-labelledby="signout-dialog-title" (click)="$event.stopPropagation()">
+      <button class="dialog-close" type="button" [disabled]="busy()" (click)="cancelSignOut.emit()" [attr.aria-label]="language.t('dashboard.close')">×</button>
+      <span class="dialog-icon">↗</span>
+      <p class="eyebrow">{{ userEmail() }}</p>
+      <h2 id="signout-dialog-title">{{ language.t('nav.logoutConfirmTitle') }}</h2>
+      <p class="dialog-body">{{ language.t('nav.logoutConfirmBody') }}</p>
+      <div class="dialog-actions">
+        <button class="dialog-btn dialog-btn-secondary" type="button" [disabled]="busy()" (click)="cancelSignOut.emit()">
+          {{ language.t('nav.logoutCancel') }}
+        </button>
+        <button class="dialog-btn dialog-btn-primary" type="button" [disabled]="busy()" (click)="confirmSignOut.emit()">
+          {{ busy() ? language.t('auth.wait') : language.t('nav.logoutConfirmAction') }}
+        </button>
+      </div>
+    </section>
+  </div>
+}

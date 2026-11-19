@@ -1,0 +1,26 @@
+:host { display: block; min-width: 0; }
+
+.answer-input {
+  width: 100%;
+  min-height: 44px;
+  box-sizing: border-box;
+  padding: 8px 12px;
+  border: 1px solid #e4e1d8;
+  border-radius: 9px;
+  background: #fff;
+  color: #31332c;
+  font: inherit;
+  font-size: 16px;
+  line-height: 1.45;
+  transition: border .15s, box-shadow .15s;
+}
+
+.answer-input::placeholder { color: #9c9990; font-size: 14px; }
+.answer-input:focus { border-color: #d69675; box-shadow: 0 0 0 3px #f7e7dd; }
+.answer-input:disabled { background: #fbfaf7; color: #6e6c64; }
+
+.answer-textarea {
+  resize: none;
+  overflow-y: hidden;
+  min-height: 44px;
+}

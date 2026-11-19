@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, effect, inject, signal } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { map } from 'rxjs';
@@ -8,11 +8,22 @@ import { ProgressService } from '../../services/progress.service';
 import { PwaInstallService } from '../../services/pwa-install.service';
 import { LanguageSwitcherComponent } from '../../i18n/language-switcher.component';
 import { LanguageService } from '../../i18n/language.service';
+import { DashboardContinueCardComponent } from './components/dashboard-continue-card/dashboard-continue-card.component';
+import { DashboardDialogsComponent } from './components/dashboard-dialogs/dashboard-dialogs.component';
+import { DashboardProgressRailComponent } from './components/dashboard-progress-rail/dashboard-progress-rail.component';
+
+const ACTIVE_COURSE_KEY = 'polski-active-course';
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [RouterLink, LanguageSwitcherComponent],
+  imports: [
+    RouterLink,
+    LanguageSwitcherComponent,
+    DashboardContinueCardComponent,
+    DashboardProgressRailComponent,
+    DashboardDialogsComponent,
+  ],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -29,11 +40,14 @@ export class DashboardComponent {
     initialValue: this.route.snapshot.paramMap.get('courseId'),
   });
   readonly selectedCourse = computed(() => COURSES.find((course) => course.id === this.routeCourseId()) ?? null);
-  readonly dashboardUrl = computed(() => `/course/${this.selectedCourse()?.id ?? 'part-1'}`);
+  readonly dashboardUrl = computed(() => `/course/${this.selectedCourse()?.id ?? this.readActiveCourseId()}`);
   readonly lessons = computed(() => this.selectedCourse()?.lessons ?? []);
   readonly progress = this.progressService.progress;
-  readonly userEmail = computed(() => this.auth.user()?.email ?? 'Uczeń');
+  readonly userEmail = computed(() => this.auth.user()?.email ?? this.language.t('dashboard.learnerFallback'));
   readonly userInitial = computed(() => this.auth.user()?.email?.slice(0, 1).toUpperCase() ?? 'U');
+  readonly signOutConfirmOpen = signal(false);
+  readonly signingOut = signal(false);
+  readonly activeNavSection = signal<'home' | 'course' | 'progress'>('home');
   readonly currentLesson = computed(() => {
     const lessons = this.lessons();
     return lessons.find((lesson) => !this.progressService.hasCompleted(lesson.id)) ?? lessons.at(-1) ?? LESSON_CATALOG[0];
@@ -52,6 +66,18 @@ export class DashboardComponent {
     return { label: letters[date.getDay()], active: dayGap >= 0 && dayGap < this.progress().streak };
   }));
   readonly greeting = computed(() => this.getGreeting());
+
+  constructor() {
+    effect(() => {
+      const course = this.selectedCourse();
+      if (!course) return;
+      try {
+        if (typeof localStorage !== 'undefined') localStorage.setItem(ACTIVE_COURSE_KEY, course.id);
+      } catch {
+        // Storage is optional.
+      }
+    });
+  }
 
   openCourse(course: CourseSummary): void {
     void this.router.navigate(['/course', course.id]);
@@ -94,14 +120,51 @@ export class DashboardComponent {
     void this.pwa.install();
   }
 
-  async signOut(): Promise<void> {
+  openSignOutConfirm(): void {
+    this.signOutConfirmOpen.set(true);
+  }
+
+  cancelSignOut(): void {
+    if (!this.signingOut()) this.signOutConfirmOpen.set(false);
+  }
+
+  async confirmSignOut(): Promise<void> {
+    if (this.signingOut()) return;
+    this.signingOut.set(true);
     try {
       await this.progressService.flush();
       await this.auth.signOut();
+      this.signOutConfirmOpen.set(false);
       await this.router.navigateByUrl('/auth');
     } catch {
-      this.progressService.syncError.set('Nie udało się wylogować. Spróbuj ponownie.');
+      this.progressService.syncError.set(this.language.t('nav.logoutError'));
+    } finally {
+      this.signingOut.set(false);
     }
+  }
+
+  navigateSection(event: Event, section: 'home' | 'course' | 'progress', elementId?: string): void {
+    this.activeNavSection.set(section);
+    const reduced = typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const behavior: ScrollBehavior = reduced ? 'auto' : 'smooth';
+    if (elementId && typeof document !== 'undefined') {
+      event.preventDefault();
+      document.getElementById(elementId)?.scrollIntoView({ behavior, block: 'start' });
+      return;
+    }
+    if (typeof window !== 'undefined') window.scrollTo({ top: 0, behavior });
+  }
+
+  readActiveCourseId(): 'part-1' | 'part-2' {
+    try {
+      if (typeof localStorage !== 'undefined') {
+        const stored = localStorage.getItem(ACTIVE_COURSE_KEY);
+        if (stored === 'part-1' || stored === 'part-2') return stored;
+      }
+    } catch {
+      // Ignore storage access errors.
+    }
+    return 'part-1';
   }
 
   private getGreeting(): string {

@@ -1,0 +1,12 @@
+@if (image(); as img) {
+  <div class="lightbox-backdrop" role="presentation" (click)="closed.emit()">
+    <section class="lightbox-dialog" role="dialog" aria-modal="true" [attr.aria-label]="img.alt" (click)="$event.stopPropagation()">
+      <button #closeBtn class="lightbox-close" type="button" (click)="closed.emit()" [attr.aria-label]="language.t('lesson.closeImage')">×</button>
+      <img class="lightbox-img" [src]="img.src" [alt]="img.alt">
+      <div class="lightbox-footer">
+        <p class="lightbox-caption">{{ img.label || img.alt }}</p>
+        <small class="lightbox-hint">{{ language.t('lesson.escToClose') }}</small>
+      </div>
+    </section>
+  </div>
+}

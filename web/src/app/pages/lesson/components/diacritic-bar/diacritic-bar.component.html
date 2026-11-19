@@ -1,0 +1,22 @@
+<div class="diacritic-bar" role="toolbar"
+  [class.is-keyboard-docked]="isKeyboardDocked()"
+  [style.bottom.px]="isKeyboardDocked() ? keyboardInset() : null"
+  [attr.aria-label]="language.t('lesson.diacriticBarLabel')">
+  <div class="diacritic-keys">
+    @for (char of chars(); track char) {
+      <button class="diacritic-key" type="button"
+        (mousedown)="$event.preventDefault()"
+        (click)="insertChar(char)"
+        [attr.aria-label]="language.t('lesson.diacriticInsert') + ' ' + char">
+        {{ char }}
+      </button>
+    }
+    <button class="diacritic-shift" type="button"
+      [attr.aria-pressed]="uppercase()"
+      [attr.aria-label]="language.t('lesson.diacriticUppercase')"
+      (mousedown)="$event.preventDefault()"
+      (click)="toggleUppercase()">
+      {{ uppercase() ? 'Aa' : '⇧' }}
+    </button>
+  </div>
+</div>

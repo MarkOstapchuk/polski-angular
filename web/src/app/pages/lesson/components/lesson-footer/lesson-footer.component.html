@@ -1,0 +1,40 @@
+<div class="exercise-footer">
+  @if (!checked()) {
+    <div class="footer-status">
+      <div class="answer-count">
+        <strong>{{ answeredCount() }} / {{ totalCount() }}</strong>
+        <span>{{ hasAnsweredAll() ? language.t('lesson.readyToCheck') : language.t('lesson.answered') }}</span>
+      </div>
+      @if (!hasAnsweredAll()) {
+        <button class="secondary-action" type="button" (click)="jumpToUnanswered.emit()">
+          {{ language.t('lesson.jumpUnanswered') }} <span aria-hidden="true">↓</span>
+        </button>
+      }
+    </div>
+    <button class="check-button" type="button" [disabled]="!hasAnsweredAll()" (click)="check.emit()">
+      {{ language.t('lesson.check') }} <span aria-hidden="true">→</span>
+    </button>
+  } @else {
+    <div class="result-strip" [class.result-perfect]="correctCount() === totalCount()">
+      <span class="result-icon">{{ correctCount() === totalCount() ? '✦' : '↗' }}</span>
+      <span>
+        <strong>{{ correctCount() }} {{ language.t('lesson.of') }} {{ totalCount() }} {{ language.t('lesson.correctly') }}</strong>
+        <small>{{ correctCount() === totalCount() ? language.t('lesson.greatWork') : language.t('lesson.rememberForms') }}</small>
+      </span>
+    </div>
+    <div class="footer-actions">
+      @if (correctCount() < totalCount()) {
+        <button class="secondary-action retry-button" type="button" (click)="retryWrong.emit()">
+          {{ language.t('lesson.fixMistakes') }}
+        </button>
+      } @else {
+        <button class="secondary-action retry-button" type="button" (click)="retryAll.emit()">
+          {{ language.t('lesson.retryActivity') }}
+        </button>
+      }
+      <button class="check-button next-button" type="button" (click)="next.emit()">
+        {{ isLastActivity() ? language.t('lesson.seeResults') : language.t('lesson.next') }} <span aria-hidden="true">→</span>
+      </button>
+    </div>
+  }
+</div>

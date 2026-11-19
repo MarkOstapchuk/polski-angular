@@ -1,0 +1,94 @@
+<div class="match-activity">
+  <p class="match-hint">{{ language.t('lesson.matchHint') }}</p>
+
+  @if (chunked()) {
+    <div class="match-chunks" role="tablist" [attr.aria-label]="language.t('lesson.matchChunk')">
+      @for (chunk of chunks(); track chunk.label; let idx = $index) {
+        <button type="button" class="match-chunk-tab"
+          role="tab"
+          [attr.aria-selected]="activeChunkIndex() === idx"
+          [class.is-active]="activeChunkIndex() === idx"
+          (click)="selectChunk(idx)">{{ language.t('lesson.matchChunk') }} {{ chunk.label }}</button>
+      }
+    </div>
+  }
+
+  @if (matchedChunkItems().length > 0 && !checked()) {
+    <div class="match-collapsed">
+      <div class="match-collapsed-title">{{ language.t('lesson.matchMatched') }} ({{ matchedChunkItems().length }})</div>
+      <div class="match-collapsed-list">
+        @for (item of matchedChunkItems(); track item.id) {
+          <div class="match-entry is-matched" [attr.data-item-id]="item.id">
+            <button class="match-source has-answer" type="button"
+              [class]="pairColorClass(item.id)"
+              [class.selected]="selectedItemId() === item.id"
+              [disabled]="checked()"
+              [attr.aria-pressed]="selectedItemId() === item.id"
+              (click)="selectSource(item.id)">
+              <span class="match-pair-index" data-pair-badge>{{ pairNumberFor(item.id) }}</span>
+              <span class="match-prompt">{{ item.prompt }}</span>
+              <small>→ {{ answerFor(item.id) }}</small>
+            </button>
+            <button type="button" class="match-unassign"
+              [attr.aria-label]="language.t('lesson.matchUnassign') + ': ' + item.prompt"
+              (click)="unassign(item.id)">×</button>
+          </div>
+        }
+      </div>
+    </div>
+  }
+
+  <div class="match-board">
+    <section class="match-column" [attr.aria-label]="language.t('lesson.starts')">
+      <h3>{{ language.t('lesson.starts') }}</h3>
+      @for (item of unmatchedChunkItems(); track item.id) {
+        <div class="match-entry" [attr.data-item-id]="item.id" [class.is-matched]="!!answerFor(item.id)">
+          <div class="match-entry-row">
+            <button class="match-source" type="button"
+              [class]="pairColorClass(item.id)"
+              [class.selected]="selectedItemId() === item.id"
+              [class.has-answer]="!!answerFor(item.id)"
+              [disabled]="checked()"
+              [attr.aria-pressed]="selectedItemId() === item.id"
+              (click)="selectSource(item.id)">
+              @if (pairNumberFor(item.id); as num) {
+                <span class="match-pair-index" data-pair-badge>{{ num }}</span>
+              }
+              <span class="match-prompt">{{ item.prompt }}</span>
+              @if (answerFor(item.id)) { <small>→ {{ answerFor(item.id) }}</small> }
+            </button>
+            @if (answerFor(item.id) && !checked()) {
+              <button type="button" class="match-unassign"
+                [attr.aria-label]="language.t('lesson.matchUnassign') + ': ' + item.prompt"
+                (click)="unassign(item.id)">×</button>
+            }
+          </div>
+          @if (checked()) {
+            <small class="match-feedback" [class.feedback-right]="isItemCorrect(item.id)" [class.feedback-wrong]="!isItemCorrect(item.id)" aria-live="polite">
+              @if (isItemCorrect(item.id)) { ✓ {{ language.t('lesson.correct') }} }
+              @else { {{ language.t('lesson.correctAnswer') }} {{ item.accepted[0] }} }
+            </small>
+          }
+        </div>
+      }
+    </section>
+
+    <section class="match-column" [attr.aria-label]="language.t('lesson.endings')">
+      <h3>{{ language.t('lesson.endings') }}</h3>
+      @for (option of currentChunk().options; track option) {
+        <button class="match-target" type="button"
+          [class]="targetColorClass(option)"
+          [class.selected]="selectedOption() === option"
+          [class.assigned]="isOptionAssigned(option)"
+          [disabled]="checked()"
+          [attr.aria-pressed]="selectedOption() === option"
+          (click)="selectTarget(option)">
+          @if (targetPairNumbers(option).length) {
+            <span class="match-pair-index" data-pair-badge>{{ targetPairNumbers(option).join(', ') }}</span>
+          }
+          <span class="match-target-label">{{ option }}</span>
+        </button>
+      }
+    </section>
+  </div>
+</div>

@@ -1,0 +1,74 @@
+:host { display: block; min-width: 0; }
+
+.word-order-builder, .word-order-type-wrap { display: grid; gap: 10px; min-width: 0; }
+
+.word-order-answer {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  min-height: 52px;
+  padding: 8px 10px;
+  border: 1px dashed #d8cfc0;
+  border-radius: 10px;
+  background: #fbfaf7;
+}
+
+.word-order-placeholder { color: #7e796e; font-size: 13px; }
+
+.word-order-pool {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+}
+
+.word-chip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-width: 44px;
+  min-height: 44px;
+  padding: 8px 12px;
+  border: 1px solid #e4dfd5;
+  border-radius: 9px;
+  background: #fff;
+  color: #3d3d35;
+  font: inherit;
+  font-size: 14px;
+  font-weight: 650;
+  cursor: pointer;
+  overflow-wrap: anywhere;
+  text-align: left;
+  transition: .15s;
+}
+
+.word-chip:hover:not(:disabled) { border-color: #d6a58d; background: #fff8f3; color: #9e5439; }
+.word-chip.placed-chip { border-color: #d77a58; background: #fff2ec; color: #a54d31; }
+.word-chip.is-used { opacity: .35; cursor: default; }
+.word-chip:disabled { cursor: default; }
+
+.word-order-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.control-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 44px;
+  min-height: 44px;
+  padding: 8px 13px;
+  border: 1px solid #e6e0d5;
+  border-radius: 999px;
+  background: #fff;
+  color: #5b5950;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.control-pill:hover { border-color: #d6a58d; background: #fff8f3; color: #9e5439; }

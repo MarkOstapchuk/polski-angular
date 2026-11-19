@@ -1,0 +1,60 @@
+<aside class="right-rail">
+  <div class="progress-summary" id="progress-card">
+    <section class="side-card streak-card">
+      <div class="side-card-title">
+        <div>
+          <p class="eyebrow">{{ language.t('dashboard.goodHabit') }}</p>
+          <h2>{{ language.t('dashboard.yourStreak') }}</h2>
+        </div>
+        <span class="flame-badge">🔥</span>
+      </div>
+      <div class="streak-number">
+        <strong>{{ progress().streak }}</strong>
+        <span>{{ language.t('dashboard.daysInRow') }}</span>
+      </div>
+      <div class="week-strip" [attr.aria-label]="language.t('dashboard.weekActivity')">
+        @for (day of weekDays(); track $index) {
+          <div class="week-day">
+            <span>{{ day.label }}</span>
+            <b [class.day-active]="day.active">{{ day.active ? '✓' : '·' }}</b>
+          </div>
+        }
+      </div>
+      <p class="side-caption">{{ language.t('dashboard.smallStep') }}</p>
+    </section>
+
+    <section class="side-card goal-card">
+      <div class="side-card-title">
+        <div>
+          <p class="eyebrow">{{ language.t('dashboard.dailyGoal') }}</p>
+          <h2>20 XP</h2>
+        </div>
+        <span class="goal-icon">◷</span>
+      </div>
+      <p class="goal-copy">{{ language.t('dashboard.doOneLesson') }}</p>
+      <div class="goal-progress"><span [style.width.%]="goalPercent()"></span></div>
+      <div class="goal-label">
+        <strong>{{ progress().dailyXp >= 20 ? language.t('dashboard.goalReached') : progress().dailyXp + ' / 20 XP' }}</strong>
+        <span>{{ goalPercent() }}%</span>
+      </div>
+    </section>
+  </div>
+
+  <section class="side-card method-card">
+    <div class="method-illustration" aria-hidden="true">
+      <span class="method-bubble">A?</span>
+      <span class="method-book">▱</span>
+      <span class="method-spark">✦</span>
+    </div>
+    <p class="eyebrow">{{ language.t('dashboard.howWeLearn') }}</p>
+    <h2>{{ language.t('dashboard.moreThanWords') }}</h2>
+    <p>{{ language.t('dashboard.practiceWholeSentence') }}</p>
+  </section>
+
+  @if (installAvailable() || needsIOSInstructions()) {
+    <button class="side-install" type="button" (click)="installClick.emit()">
+      {{ language.t('dashboard.installApp') }} <span>↗</span>
+    </button>
+  }
+  <p class="source-note">{{ language.t('dashboard.sourceNote') }}</p>
+</aside>

@@ -1,0 +1,29 @@
+@if (word(); as currentWord) {
+  <div class="dictionary-backdrop" role="presentation" (click)="close()">
+    <section class="dictionary-sheet" role="dialog" aria-modal="true" aria-labelledby="dictionary-title" (click)="$event.stopPropagation()">
+      <button #closeBtn class="dictionary-close" type="button" [attr.aria-label]="language.t('lesson.closeTranslation')" (click)="close()">×</button>
+      <p class="dictionary-kicker">{{ language.t('lesson.translationFromPolish') }}</p>
+      <h2 id="dictionary-title" lang="pl">{{ currentWord }}</h2>
+      @if (loading()) {
+        <p class="dictionary-state" aria-live="polite">{{ language.t('lesson.searchingTranslation') }}</p>
+      }
+      @if (error(); as err) {
+        <p class="dictionary-state dictionary-error" role="alert">{{ err }}</p>
+      }
+      @if (translations().length) {
+        <ul class="dictionary-translations" aria-live="polite">
+          @for (translation of translations(); track translation) {
+            <li>{{ translation }}</li>
+          }
+        </ul>
+      }
+      @if (!loading() && !error() && !translations().length) {
+        <p class="dictionary-state">{{ language.t('lesson.translationNotFound') }}</p>
+      }
+      <div class="dictionary-footer">
+        <a class="dictionary-source" href="https://de.pons.com/" target="_blank" rel="noopener noreferrer">{{ language.t('lesson.dictionaryPoweredBy') }}</a>
+        <small class="dictionary-esc">{{ language.t('lesson.escToClose') }}</small>
+      </div>
+    </section>
+  </div>
+}

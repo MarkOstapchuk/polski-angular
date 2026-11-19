@@ -6,6 +6,48 @@ export enum ActivityKind {
   LetterCloze = 'letter-cloze',
 }
 
+export type ActivityUxMode =
+  | 'choice'
+  | 'word-bank'
+  | 'word-order'
+  | 'dialogue-order'
+  | 'multi-gap'
+  | 'classify'
+  | 'match'
+  | 'letter-cloze'
+  | 'prompt-gap'
+  | 'typed';
+
+export type ItemUxMode = ActivityUxMode | 'long-text';
+
+export interface ChoiceOption {
+  value: string;
+  label: string;
+}
+
+export interface MultiGapMeta {
+  gapCount: number;
+  inlineParts: string[];
+  labels: string[];
+}
+
+export interface WordOrderMeta {
+  tokens: string[];
+  separator: ' ';
+  isSentenceOrder: boolean;
+}
+
+export interface PromptGapMeta {
+  segments: Array<{ text: string; isGap: boolean }>;
+  letterAssist: string[];
+}
+
+export interface WordBankEntry {
+  value: string;
+  label: string;
+  expectedCount: number;
+}
+
 export interface LetterCloze {
   parts: string[];
   gaps: string[];
@@ -21,6 +63,9 @@ export interface ActivityItem {
   letterCloze?: LetterCloze;
   /** 1-based index into the exercise's WORKBOOK_IMAGES list; shown inline next to the question. */
   image?: number;
+  uxMode?: ItemUxMode;
+  multiGapLabels?: string[];
+  wordOrderTokens?: string[];
 }
 
 export interface Activity {
@@ -33,6 +78,28 @@ export interface Activity {
   audioUrl?: string;
   audioLabel?: string;
   items: ActivityItem[];
+  uxMode?: ActivityUxMode;
+  wordBank?: string[];
+}
+
+export interface AdaptedItem {
+  raw: ActivityItem;
+  id: string;
+  uxMode: ItemUxMode;
+  choiceOptions?: ChoiceOption[];
+  multiGap?: MultiGapMeta;
+  wordOrder?: WordOrderMeta;
+  promptGap?: PromptGapMeta;
+}
+
+export interface AdaptedActivity {
+  raw: Activity;
+  id: string;
+  uxMode: ActivityUxMode;
+  items: AdaptedItem[];
+  wordBank?: WordBankEntry[];
+  chunkedMatch?: boolean;
+  categories?: string[];
 }
 
 export interface Lesson {

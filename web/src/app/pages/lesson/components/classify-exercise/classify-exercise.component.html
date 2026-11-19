@@ -1,0 +1,89 @@
+@if (activeItem(); as item) {
+  <div class="classify-deck">
+    <div class="classify-deck-head">
+      <span class="classify-progress">{{ activeCardIndex() + 1 }} / {{ items().length }}</span>
+      <div class="classify-nav">
+        <button type="button" class="classify-nav-btn" (click)="prevCard()" [attr.aria-label]="language.t('lesson.classifyPrev')">‹</button>
+        <button type="button" class="classify-nav-btn" (click)="nextCard()" [attr.aria-label]="language.t('lesson.classifyNext')">›</button>
+      </div>
+    </div>
+
+    <div class="classify-active-card">
+      @if (itemImage(item); as image) {
+        <button type="button" class="image-zoom-button" (click)="openLightbox.emit(image)"
+          [attr.aria-label]="language.t('lesson.zoomImage') + ': ' + image.alt">
+          <img class="question-image" [src]="image.src" [alt]="image.alt" loading="lazy">
+        </button>
+      }
+
+      <div class="classify-card-prompt" data-classify-prompt>{{ item.prompt }}</div>
+
+      @if (item.hint) {
+        <div class="item-hint-wrap">
+          <button class="hint-toggle" type="button" [attr.aria-expanded]="isHintShown(item.id)" (click)="toggleHint.emit(item.id)">
+            <span aria-hidden="true">💡</span>
+            {{ isHintShown(item.id) ? language.t('lesson.hideHint') : language.t('lesson.showHint') }}
+          </button>
+          @if (isHintShown(item.id)) { <p class="item-hint">{{ item.hint }}</p> }
+        </div>
+      }
+
+      @if (checked()) {
+        <div class="answer-feedback" [class.feedback-right]="isItemCorrect(item.id)" [class.feedback-wrong]="!isItemCorrect(item.id)" aria-live="polite">
+          @if (isItemCorrect(item.id)) { <span>✓ {{ language.t('lesson.correct') }}</span> }
+          @else { <span>{{ language.t('lesson.correctAnswer') }} <span>{{ item.accepted[0] }}</span></span> }
+        </div>
+      }
+    </div>
+
+    <div class="classify-buckets" role="group" [attr.aria-label]="language.t('lesson.classifyBuckets')">
+      @for (cat of categories(); track cat; let idx = $index) {
+        <button type="button" class="option-button classify-bucket-btn"
+          [class.selected]="answerFor(item.id) === cat"
+          [class.option-right]="checked() && isCategoryAccepted(item, cat)"
+          [class.option-error]="checked() && answerFor(item.id) === cat && !isItemCorrect(item.id)"
+          [disabled]="checked()"
+          (click)="assignCategory(cat)">
+          @if (idx < 9) { <kbd class="shortcut-badge">{{ idx + 1 }}</kbd> }
+          <span class="bucket-label">{{ cat }}</span>
+          <span class="bucket-count">{{ bucketCount(cat) }}</span>
+        </button>
+      }
+    </div>
+
+    @if (allSorted() && !checked()) {
+      <p class="classify-done-note">{{ language.t('lesson.classifyAllDone') }}</p>
+    }
+  </div>
+
+  @if (sortedCount() > 0) {
+    <details class="classify-summary-details" [open]="checked()">
+      <summary class="classify-summary-toggle">
+        <span>{{ language.t('lesson.classifySorted') }} ({{ sortedCount() }} / {{ items().length }})</span>
+      </summary>
+      <div class="classify-summary-groups">
+        @for (group of groupedItems(); track group.category) {
+          @if (group.entries.length > 0) {
+            <div class="classify-summary-group">
+              <div class="classify-summary-cat">{{ group.category }} ({{ group.entries.length }})</div>
+              <div class="classify-summary-chips">
+                @for (entry of group.entries; track entry.item.id) {
+                  <button type="button" class="classify-summary-chip"
+                    [class.is-current]="entry.idx === activeCardIndex()"
+                    [class.chip-right]="checked() && isItemCorrect(entry.item.id)"
+                    [class.chip-wrong]="checked() && !isItemCorrect(entry.item.id)"
+                    (click)="jumpToItem(entry.idx)">
+                    <span>{{ entry.item.prompt }}</span>
+                    @if (checked() && !isItemCorrect(entry.item.id)) {
+                      <small>→ {{ entry.item.accepted[0] }}</small>
+                    }
+                  </button>
+                }
+              </div>
+            </div>
+          }
+        }
+      </div>
+    </details>
+  }
+}

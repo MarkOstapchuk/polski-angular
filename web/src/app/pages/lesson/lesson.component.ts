@@ -1,131 +1,393 @@
-import { ChangeDetectionStrategy, Component, computed, inject, OnDestroy, OnInit, signal } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { ChangeDetectionStrategy, Component, computed, DestroyRef, effect, ElementRef, HostListener, inject, OnDestroy, signal, viewChild } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { map } from 'rxjs';
+import { adaptActivity, normalizeAnswer } from '../../data/activity-adapter';
 import { AUDIO_TRACKS } from '../../data/audio-tracks';
 import { PART2_AUDIO_TRACKS } from '../../data/part2-audio-tracks';
-import { Activity, ActivityItem, ActivityKind, getLesson } from '../../data/lesson-bank';
+import { Activity, ActivityItem, AdaptedActivity, AdaptedItem, getLesson, Lesson } from '../../data/lesson-bank';
 import { LESSON_THEORY, LessonTheoryId } from '../../data/lesson-theory';
 import { WORKBOOK_IMAGES, WorkbookImage } from '../../data/workbook-images';
-import { ProgressService } from '../../services/progress.service';
-import { supabase } from '../../services/supabase.client';
 import { LanguageSwitcherComponent } from '../../i18n/language-switcher.component';
 import { LanguageService } from '../../i18n/language.service';
+import { ProgressService } from '../../services/progress.service';
+import { ChoiceExerciseComponent } from './components/choice-exercise/choice-exercise.component';
+import { ClassifyExerciseComponent } from './components/classify-exercise/classify-exercise.component';
+import { DiacriticBarComponent } from './components/diacritic-bar/diacritic-bar.component';
+import { AudioPlayerTrack, LessonAudioBarComponent } from './components/lesson-audio-bar/lesson-audio-bar.component';
+import { LessonCompletionComponent } from './components/lesson-completion/lesson-completion.component';
+import { LessonDictionaryModalComponent } from './components/lesson-dictionary-modal/lesson-dictionary-modal.component';
+import { LessonFooterComponent } from './components/lesson-footer/lesson-footer.component';
+import { LessonImageLightboxComponent } from './components/lesson-image-lightbox/lesson-image-lightbox.component';
+import { LessonTheoryDrawerComponent } from './components/lesson-theory-drawer/lesson-theory-drawer.component';
+import { LetterClozeExerciseComponent } from './components/letter-cloze-exercise/letter-cloze-exercise.component';
+import { MatchExerciseComponent } from './components/match-exercise/match-exercise.component';
+import { MultiGapExerciseComponent } from './components/multi-gap-exercise/multi-gap-exercise.component';
+import { TypedExerciseComponent } from './components/typed-exercise/typed-exercise.component';
+import { WordBankExerciseComponent } from './components/word-bank-exercise/word-bank-exercise.component';
+import { WordOrderExerciseComponent } from './components/word-order-exercise/word-order-exercise.component';
+
+const PONS_BLOCKED_SELECTOR =
+  'input, textarea, select, audio, button:not(.option-button):not(.match-source):not(.match-target):not(.word-bank-chip):not(.word-chip):not(.classify-bucket-btn):not(.classify-summary-chip), a';
 
 @Component({
   selector: 'app-lesson',
   standalone: true,
-  imports: [FormsModule, RouterLink, LanguageSwitcherComponent],
+  imports: [
+    RouterLink,
+    LanguageSwitcherComponent,
+    LessonTheoryDrawerComponent,
+    LessonAudioBarComponent,
+    LessonImageLightboxComponent,
+    LessonDictionaryModalComponent,
+    LessonFooterComponent,
+    LessonCompletionComponent,
+    DiacriticBarComponent,
+    ChoiceExerciseComponent,
+    TypedExerciseComponent,
+    MultiGapExerciseComponent,
+    WordOrderExerciseComponent,
+    WordBankExerciseComponent,
+    ClassifyExerciseComponent,
+    MatchExerciseComponent,
+    LetterClozeExerciseComponent,
+  ],
   templateUrl: './lesson.component.html',
   styleUrl: './lesson.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class LessonComponent implements OnInit, OnDestroy {
+export class LessonComponent implements OnDestroy {
+  private readonly destroyRef = inject(DestroyRef);
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
   private readonly progress = inject(ProgressService);
   readonly language = inject(LanguageService);
   readonly syncError = this.progress.syncError;
+
+  private readonly audioBar = viewChild(LessonAudioBarComponent);
+  private readonly dictionaryModal = viewChild(LessonDictionaryModalComponent);
+  private readonly matchExercise = viewChild(MatchExerciseComponent);
+  private readonly classifyExercise = viewChild(ClassifyExerciseComponent);
+  private readonly wordBankExercise = viewChild(WordBankExerciseComponent);
+  readonly exerciseCardRef = viewChild<ElementRef<HTMLElement>>('exerciseCard');
+  private readonly pickerListRef = viewChild<ElementRef<HTMLElement>>('pickerList');
+
   readonly dictionaryWord = signal<string | null>(null);
-  readonly dictionaryTranslations = signal<string[]>([]);
-  readonly dictionaryLoading = signal(false);
-  readonly dictionaryError = signal<string | null>(null);
+  readonly dictionaryMode = signal(false);
+  readonly lightboxImage = signal<WorkbookImage | null>(null);
+  readonly theoryOpen = signal(false);
+  readonly revealedHints = signal<Record<string, boolean>>({});
+  readonly lastFocusedInput = signal<HTMLInputElement | HTMLTextAreaElement | null>(null);
+
   private longPressTimer: ReturnType<typeof setTimeout> | null = null;
   private longPressOrigin: { x: number; y: number } | null = null;
-  private dictionaryRequest = 0;
   private ignoreOptionClick = false;
   private ignoreOptionClickTimer: ReturnType<typeof setTimeout> | null = null;
-  readonly selectedMatchItem = signal<string | null>(null);
-  readonly selectedMatchOption = signal<string | null>(null);
+  private lastOverlayTrigger: HTMLElement | null = null;
+  private pickerScrollRafId: number | null = null;
+  private readonly pickerScrollRequest = signal(0);
 
-  readonly lesson = signal(getLesson(Number(this.route.snapshot.paramMap.get('lessonId'))));
-  lessonLabel(lessonId: number): string {
-    return lessonId > 26
-      ? `${this.language.t('lesson.part')} 2 · ${this.language.t('lesson.lesson')} ${String(lessonId - 26).padStart(2, '0')}`
-      : `${this.language.t('lesson.lesson')} ${String(lessonId).padStart(2, '0')}`;
-  }
-  dashboardUrl(): string {
-    return (this.lesson()?.id ?? 1) > 26 ? '/course/part-2' : '/course/part-1';
-  }
+  private readonly retriedActivityIds = signal<Set<string>>(new Set());
+  private readonly wordBankTypeMode = signal(false);
+  private readonly wordOrderTypeItems = signal<Record<string, boolean>>({});
+
+  readonly lesson = signal<Lesson | undefined>(undefined);
+  readonly nextLesson = computed(() => {
+    const id = this.lesson()?.id;
+    return id ? getLesson(id + 1) : undefined;
+  });
+
   readonly theory = computed(() => {
     const id = this.lesson()?.id;
     return id ? LESSON_THEORY[id as LessonTheoryId] : undefined;
   });
-  readonly activityKind = ActivityKind;
+
   readonly activeIndex = signal(0);
+  readonly canScrollPickerLeft = signal(false);
+  readonly canScrollPickerRight = signal(false);
   readonly answers = signal<Record<string, string>>({});
   readonly checked = signal(false);
   readonly finished = signal(false);
   readonly awardedXp = signal(0);
+  private readonly results = signal<Record<string, Record<string, boolean>>>({});
+
   readonly activity = computed(() => this.lesson()?.activities[this.activeIndex()]);
+  readonly adaptedActivity = computed<AdaptedActivity | undefined>(() => {
+    const activity = this.activity();
+    return activity ? adaptActivity(activity) : undefined;
+  });
+  readonly activityResults = computed<Record<string, boolean>>(() => this.results()[this.activity()?.id ?? ''] ?? {});
   readonly matchOptions = computed(() => [...new Set(this.activity()?.items.flatMap((item) => item.options ?? []) ?? [])]);
-  readonly activityAudioPlayers = computed(() => {
+  readonly activityAudioTracks = computed<AudioPlayerTrack[]>(() => {
     const activity = this.activity();
     if (!activity) return [];
     const tracks = [...AUDIO_TRACKS, ...PART2_AUDIO_TRACKS].filter((track) => track.exerciseId === activity.sourceExerciseId);
-    const players = tracks.map((track) => ({
+    const players: AudioPlayerTrack[] = tracks.map((track) => ({
       file: track.file,
+      url: this.audioTrackUrl(track.file),
       label: activity.audioUrl === this.audioTrackUrl(track.file) && activity.audioLabel
         ? activity.audioLabel
         : track.label,
     }));
-    if (activity.audioUrl && !players.some((player) => this.audioTrackUrl(player.file) === activity.audioUrl)) {
-      players.push({ file: activity.audioUrl, label: activity.audioLabel || 'Nagranie' });
+    if (activity.audioUrl && !players.some((player) => player.url === activity.audioUrl)) {
+      players.push({
+        file: activity.audioUrl,
+        url: this.audioTrackUrl(activity.audioUrl),
+        label: activity.audioLabel || this.language.t('lesson.audioFallbackLabel'),
+      });
     }
     return players;
   });
-  private readonly allImages = computed(() => WORKBOOK_IMAGES[this.activity()?.sourceExerciseId ?? ''] ?? []);
-  /** Images not attached to a specific question, shown above the list. */
+
+  readonly allImages = computed(() => WORKBOOK_IMAGES[this.activity()?.sourceExerciseId ?? ''] ?? []);
   readonly images = computed(() => {
     const used = new Set(this.activity()?.items.map((item) => item.image).filter(Boolean));
     return this.allImages().filter((_, index) => !used.has(index + 1));
   });
+
   readonly activityProgress = computed(() => {
     const lesson = this.lesson();
     if (!lesson) return 0;
     const completed = lesson.activities.filter((activity) => this.progress.hasCompletedActivity(lesson.id, activity.id)).length;
     return Math.round((completed / lesson.activities.length) * 100);
   });
+
+  readonly answeredCount = computed(() => {
+    const activity = this.activity();
+    if (!activity) return 0;
+    return activity.items.filter((item) => this.isItemAnswered(item)).length;
+  });
+
+  readonly hasTextInputs = computed(() => {
+    const adapted = this.adaptedActivity();
+    if (!adapted) return false;
+    if (adapted.uxMode === 'dialogue-order') return true;
+    if (adapted.uxMode === 'word-bank') return this.wordBankTypeMode();
+    return adapted.items.some((item) => {
+      if (item.uxMode === 'letter-cloze' || item.uxMode === 'prompt-gap' || item.uxMode === 'multi-gap' || item.uxMode === 'typed') {
+        return true;
+      }
+      if (item.uxMode === 'long-text') {
+        return item.wordOrder?.isSentenceOrder ? this.wordOrderTypeItems()[item.id] !== false : true;
+      }
+      return item.uxMode === 'word-order' && !!this.wordOrderTypeItems()[item.id];
+    });
+  });
+
   readonly totalQuestions = computed(() => this.lesson()?.activities.reduce((count, activity) => count + activity.items.length, 0) ?? 0);
   readonly correctAnswers = computed(() => Object.values(this.results()).reduce((count, result) => count + Object.values(result).filter(Boolean).length, 0));
   readonly finalScore = computed(() => this.totalQuestions() ? Math.round((this.correctAnswers() / this.totalQuestions()) * 100) : 0);
   readonly earnedXp = computed(() => 10 + Math.round(this.finalScore() / 10));
-  private readonly results = signal<Record<string, Record<string, boolean>>>({});
 
-  ngOnInit(): void {
-    const lesson = this.lesson();
-    if (!lesson) {
-      void this.router.navigateByUrl(this.dashboardUrl());
-      return;
-    }
-    const restoredResults: Record<string, Record<string, boolean>> = {};
-    const restoredAnswers: Record<string, string> = {};
-    let firstIncomplete = -1;
-    lesson.activities.forEach((activity, index) => {
-      const saved = this.progress.activityFor(lesson.id, activity.id);
-      if (saved) {
-        restoredResults[activity.id] = saved.results;
-        Object.assign(restoredAnswers, saved.answers);
+  constructor() {
+    this.destroyRef.onDestroy(() => this.cancelPickerScrollRaf());
+
+    this.route.paramMap
+      .pipe(
+        map((params) => Number(params.get('lessonId'))),
+        takeUntilDestroyed(),
+      )
+      .subscribe((lessonId) => this.loadLesson(lessonId));
+
+    effect((onCleanup) => {
+      this.lesson();
+      this.finished();
+      const list = this.pickerListRef()?.nativeElement;
+      if (!list) {
+        this.canScrollPickerLeft.set(false);
+        this.canScrollPickerRight.set(false);
+        return;
       }
-      else if (firstIncomplete < 0) firstIncomplete = index;
+      const update = () => this.updatePickerScrollState();
+      queueMicrotask(update);
+      const rafId = typeof requestAnimationFrame !== 'undefined' ? requestAnimationFrame(update) : null;
+      if (typeof ResizeObserver !== 'undefined') {
+        const observer = new ResizeObserver(update);
+        observer.observe(list);
+        onCleanup(() => {
+          if (rafId !== null) cancelAnimationFrame(rafId);
+          observer.disconnect();
+        });
+      } else if (rafId !== null) {
+        onCleanup(() => cancelAnimationFrame(rafId));
+      }
     });
-    this.results.set(restoredResults);
-    this.answers.set(restoredAnswers);
-    const index = firstIncomplete < 0 ? 0 : firstIncomplete;
-    this.activeIndex.set(index);
-    const saved = this.progress.activityFor(lesson.id, lesson.activities[index].id);
-    this.checked.set(!!saved);
+
+    effect((onCleanup) => {
+      const request = this.pickerScrollRequest();
+      this.lesson();
+      this.finished();
+      const list = this.pickerListRef()?.nativeElement;
+      if (!request || !list || this.finished()) return;
+      this.schedulePickerScrollIntoView();
+      onCleanup(() => this.cancelPickerScrollRaf());
+    });
   }
 
   ngOnDestroy(): void {
     this.cancelWordLookup();
     if (this.ignoreOptionClickTimer) clearTimeout(this.ignoreOptionClickTimer);
-    this.dictionaryRequest++;
+  }
+
+  @HostListener('document:keydown', ['$event'])
+  onDocumentKeydown(event: KeyboardEvent): void {
+    if (event.key === 'Escape') {
+      if (this.lightboxImage()) {
+        event.preventDefault();
+        this.closeLightbox();
+        return;
+      }
+      if (this.dictionaryWord()) {
+        event.preventDefault();
+        this.dictionaryModal()?.close();
+        return;
+      }
+      if (this.theoryOpen() && typeof window !== 'undefined' && window.innerWidth < 1160) {
+        event.preventDefault();
+        this.theoryOpen.set(false);
+        return;
+      }
+      this.matchExercise()?.clearSelection();
+      this.wordBankExercise()?.clearSelection();
+      return;
+    }
+
+    const activity = this.activity();
+    const adapted = this.adaptedActivity();
+    const lesson = this.lesson();
+    if (this.lightboxImage() || this.dictionaryWord() || this.finished() || !activity || !adapted || !lesson) return;
+    if (event.ctrlKey || event.metaKey || event.altKey) return;
+
+    const target = event.target instanceof HTMLElement ? event.target : null;
+    const isEditable = !!target?.closest('input:not([type="range"]), textarea, select, [contenteditable="true"]');
+    const isInteractive = !!target?.closest('input, textarea, select, button, a, audio, summary, [role="button"], [contenteditable="true"]');
+
+    if (event.key === 'Enter' && !isInteractive) {
+      if (this.checked()) {
+        event.preventDefault();
+        void this.next();
+      } else if (this.hasAnsweredAll()) {
+        event.preventDefault();
+        void this.checkAnswers();
+      }
+      return;
+    }
+
+    if ((event.code === 'Space' || event.key === ' ') && !isInteractive && !event.repeat) {
+      if (this.activityAudioTracks().length > 0) {
+        event.preventDefault();
+        this.audioBar()?.togglePlayPause();
+      }
+      return;
+    }
+
+    if (/^[1-9]$/.test(event.key) && !isEditable && !this.checked() && !event.repeat) {
+      if (adapted.uxMode === 'classify') {
+        event.preventDefault();
+        this.classifyExercise()?.selectCategoryByShortcut(Number(event.key) - 1);
+        return;
+      }
+
+      const supportsChoiceKeys = adapted.uxMode === 'choice'
+        || adapted.items.some((item) => (item.choiceOptions?.length ?? 0) > 0);
+      if (!supportsChoiceKeys) return;
+
+      const focusedRow = (document.activeElement instanceof HTMLElement ? document.activeElement : target)
+        ?.closest<HTMLElement>('.question-row[data-item-id]');
+      const focusedId = focusedRow?.dataset['itemId'];
+      const targetItem = (focusedId ? adapted.items.find((item) => item.id === focusedId && item.choiceOptions?.length) : undefined)
+        ?? adapted.items.find((item) => (item.choiceOptions?.length ?? 0) > 0 && !this.answerFor(item.id).trim());
+      const optionIndex = Number(event.key) - 1;
+      if (targetItem?.choiceOptions && optionIndex < targetItem.choiceOptions.length) {
+        event.preventDefault();
+        this.selectOption(targetItem.id, targetItem.choiceOptions[optionIndex].value);
+      }
+      return;
+    }
+
+    if ((event.key === 'ArrowLeft' || event.key === 'ArrowRight')
+      && !isEditable
+      && !event.shiftKey
+      && !target?.closest('audio, input[type="range"], [role="slider"]')) {
+      if (event.key === 'ArrowLeft' && this.activeIndex() > 0) {
+        event.preventDefault();
+        this.previousActivity();
+      } else if (event.key === 'ArrowRight' && this.activeIndex() < lesson.activities.length - 1) {
+        event.preventDefault();
+        this.nextActivity();
+      }
+    }
+  }
+
+  onInputEnter(event: Event): void {
+    event.preventDefault();
+    if (this.checked()) {
+      void this.next();
+      return;
+    }
+    if (this.hasAnsweredAll()) {
+      void this.checkAnswers();
+      return;
+    }
+    const card = this.exerciseCardRef()?.nativeElement;
+    if (!card) return;
+    const inputs = Array.from(
+      card.querySelectorAll<HTMLInputElement | HTMLTextAreaElement>(
+        '.answer-input:not(:disabled):not([readonly]), .letter-cloze-gap:not(:disabled):not([readonly])',
+      ),
+    );
+    const active = event.target as HTMLInputElement | HTMLTextAreaElement;
+    const currentIdx = inputs.indexOf(active);
+    const nextUnanswered = inputs.slice(currentIdx + 1).find((el) => !el.value.trim())
+      ?? inputs.slice(0, Math.max(0, currentIdx)).find((el) => !el.value.trim())
+      ?? inputs[currentIdx + 1];
+    nextUnanswered?.focus();
+  }
+
+  onExerciseFocusIn(event: FocusEvent): void {
+    const target = event.target;
+    if (
+      (target instanceof HTMLInputElement || target instanceof HTMLTextAreaElement)
+      && !target.disabled
+      && !target.readOnly
+      && (target.classList.contains('answer-input') || target.classList.contains('letter-cloze-gap'))
+    ) {
+      this.lastFocusedInput.set(target);
+    }
+  }
+
+  lessonLabel(lessonId: number): string {
+    return lessonId > 26
+      ? `${this.language.t('lesson.part')} 2 · ${this.language.t('lesson.lesson')} ${String(lessonId - 26).padStart(2, '0')}`
+      : `${this.language.t('lesson.lesson')} ${String(lessonId).padStart(2, '0')}`;
+  }
+
+  dashboardUrl(): string {
+    return (this.lesson()?.id ?? 1) > 26 ? '/course/part-2' : '/course/part-1';
+  }
+
+  toggleTheory(): void {
+    this.theoryOpen.update((open) => !open);
+  }
+
+  toggleDictionaryMode(): void {
+    this.dictionaryMode.update((mode) => !mode);
+  }
+
+  openLightbox(image: WorkbookImage): void {
+    this.lastOverlayTrigger = document.activeElement instanceof HTMLElement ? document.activeElement : null;
+    this.lightboxImage.set(image);
+  }
+
+  closeLightbox(): void {
+    this.lightboxImage.set(null);
+    this.restoreTriggerFocus();
   }
 
   startWordLookup(event: PointerEvent): void {
     if (event.button !== 0) return;
     const target = event.target instanceof HTMLElement ? event.target : null;
-    if (!target || target.closest('input, textarea, select, audio, button:not(.option-button):not(.match-source):not(.match-target), a')) return;
+    if (!target || target.closest(PONS_BLOCKED_SELECTOR)) return;
     this.cancelWordLookup();
     this.ignoreOptionClick = false;
     if (this.ignoreOptionClickTimer) clearTimeout(this.ignoreOptionClickTimer);
@@ -137,11 +399,11 @@ export class LessonComponent implements OnInit, OnDestroy {
       this.longPressOrigin = null;
       const word = this.wordAtPoint(x, y);
       if (word) {
-        if (target.closest('.option-button, .match-source, .match-target')) {
+        if (target.closest('.option-button, .match-source, .match-target, .word-bank-chip, .word-chip, .classify-bucket-btn, .classify-summary-chip')) {
           this.ignoreOptionClick = true;
-          this.ignoreOptionClickTimer = setTimeout(() => this.ignoreOptionClick = false, 1000);
+          this.ignoreOptionClickTimer = setTimeout(() => (this.ignoreOptionClick = false), 1000);
         }
-        void this.lookupDictionary(word);
+        this.openDictionary(word);
       }
     }, 450);
   }
@@ -159,14 +421,493 @@ export class LessonComponent implements OnInit, OnDestroy {
 
   suppressWordContextMenu(event: MouseEvent): void {
     const target = event.target instanceof HTMLElement ? event.target : null;
-    if (target && !target.closest('input, textarea, select, audio, button:not(.option-button):not(.match-source):not(.match-target), a')) event.preventDefault();
+    if (target && !target.closest(PONS_BLOCKED_SELECTOR)) event.preventDefault();
+  }
+
+  onMainClick(event: MouseEvent): void {
+    if (!this.dictionaryMode()) return;
+    const target = event.target instanceof HTMLElement ? event.target : null;
+    if (!target || target.closest(PONS_BLOCKED_SELECTOR)) return;
+    const word = this.wordAtPoint(event.clientX, event.clientY);
+    if (word) {
+      event.preventDefault();
+      event.stopPropagation();
+      this.openDictionary(word);
+    }
+  }
+
+  onWordDoubleClick(event: MouseEvent): void {
+    const target = event.target instanceof HTMLElement ? event.target : null;
+    if (!target || target.closest('input, textarea, select, audio, button, a')) return;
+    const word = this.wordAtPoint(event.clientX, event.clientY);
+    if (word) this.openDictionary(word);
   }
 
   closeDictionary(): void {
-    this.dictionaryRequest++;
     this.dictionaryWord.set(null);
-    this.dictionaryTranslations.set([]);
-    this.dictionaryError.set(null);
+    this.restoreTriggerFocus();
+  }
+
+  setAnswer(itemId: string, value: string): void {
+    this.answers.update((current) => ({ ...current, [this.answerKey(itemId)]: value }));
+  }
+
+  answerFor(itemId: string): string {
+    return this.answers()[this.answerKey(itemId)] ?? '';
+  }
+
+  letterClozeAnswerFor(itemId: string, gapIndex: number): string {
+    return this.answers()[this.letterClozeAnswerKey(itemId, gapIndex)] ?? '';
+  }
+
+  setLetterClozeGap(itemId: string, gapIndex: number, value: string): void {
+    this.answers.update((current) => ({
+      ...current,
+      [this.letterClozeAnswerKey(itemId, gapIndex)]: value,
+    }));
+  }
+
+  onSubAnswerChange(event: { itemId: string; value: string }): void {
+    if (this.dictionaryMode() || this.consumeIgnoredOptionClick()) return;
+    if (!this.checked()) this.setAnswer(event.itemId, event.value);
+  }
+
+  onWordBankTypeModeChange(isTypeMode: boolean): void {
+    this.wordBankTypeMode.set(isTypeMode);
+  }
+
+  onWordOrderModeChange(itemId: string, mode: 'chips' | 'type'): void {
+    this.wordOrderTypeItems.update((cur) => ({ ...cur, [itemId]: mode === 'type' }));
+  }
+
+  selectOption(itemId: string, value: string): void {
+    if (this.dictionaryMode() || this.consumeIgnoredOptionClick()) return;
+    if (!this.checked()) this.setAnswer(itemId, value);
+  }
+
+  isItemAnswered(item: ActivityItem): boolean {
+    if (item.letterCloze) {
+      return item.letterCloze.gaps.every((_, index) => this.letterClozeAnswerFor(item.id, index).length > 0);
+    }
+    const adaptedItem = this.adaptedItemById(item.id);
+    if (adaptedItem?.multiGap && adaptedItem.multiGap.gapCount > 1) {
+      const parts = this.answerFor(item.id).split('; ');
+      return parts.length >= adaptedItem.multiGap.gapCount
+        && parts.slice(0, adaptedItem.multiGap.gapCount).every((part) => part.trim().length > 0);
+    }
+    return this.answerFor(item.id).trim().length > 0;
+  }
+
+  hasAnsweredAll(): boolean {
+    const activity = this.activity();
+    return !!activity && activity.items.every((item) => this.isItemAnswered(item));
+  }
+
+  enterKeyHint(itemIndex: number): 'done' | 'next' {
+    const items = this.activity()?.items ?? [];
+    if (itemIndex >= items.length - 1) return 'done';
+    const othersAnswered = items.every((item, idx) => idx === itemIndex || this.isItemAnswered(item));
+    return othersAnswered ? 'done' : 'next';
+  }
+
+  toggleHint(itemId: string): void {
+    const key = this.answerKey(itemId);
+    this.revealedHints.update((current) => ({ ...current, [key]: !current[key] }));
+  }
+
+  isHintShown(itemId: string): boolean {
+    return !!this.revealedHints()[this.answerKey(itemId)];
+  }
+
+  isCorrect(item: ActivityItem): boolean {
+    if (item.letterCloze) {
+      const { parts, gaps } = item.letterCloze;
+      const answer = parts.map((part, index) => part + (gaps[index] === undefined ? '' : this.letterClozeAnswerFor(item.id, index))).join('');
+      return item.accepted.some((expected) => normalizeAnswer(expected) === normalizeAnswer(answer));
+    }
+    const adaptedItem = this.adaptedItemById(item.id);
+    const rawAnswer = this.answerFor(item.id);
+    if (adaptedItem?.multiGap && adaptedItem.multiGap.gapCount > 1) {
+      const gapCount = adaptedItem.multiGap.gapCount;
+      const userParts = rawAnswer.split('; ').map((part) => normalizeAnswer(part));
+      return item.accepted.some((expected) => {
+        const expParts = expected.split(/\s*;\s*/).map((part) => normalizeAnswer(part));
+        if (expParts.length === gapCount && userParts.length >= gapCount) {
+          return expParts.every((exp, idx) => exp === userParts[idx]);
+        }
+        return normalizeAnswer(expected) === normalizeAnswer(rawAnswer);
+      });
+    }
+    const answer = normalizeAnswer(rawAnswer);
+    return item.accepted.some((expected) => normalizeAnswer(expected) === answer);
+  }
+
+  isItemCorrect(item: ActivityItem): boolean {
+    return this.results()[this.activity()?.id ?? '']?.[item.id] ?? false;
+  }
+
+  /** T6 tap-assist: short single-answer typed items can reveal one more correct letter per tap. */
+  canAssistNextLetter(item: ActivityItem, uxMode?: string): boolean {
+    if (this.checked() || uxMode === 'long-text' || item.letterCloze) return false;
+    const adapted = this.adaptedItemById(item.id);
+    if (adapted?.multiGap && adapted.multiGap.gapCount > 1) return false;
+    const expected = item.accepted[0] ?? '';
+    if (!expected || expected.length > 40 || expected.includes(';')) return false;
+    return this.answerFor(item.id).length < expected.length;
+  }
+
+  assistNextLetter(item: ActivityItem): void {
+    const expected = item.accepted[0] ?? '';
+    if (!expected) return;
+    const fold = (c: string) => c.toLocaleLowerCase('pl-PL').replace(/ł/g, 'l').normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+    const typed = this.answerFor(item.id);
+    let k = 0;
+    while (k < typed.length && k < expected.length && fold(typed[k]) === fold(expected[k])) k++;
+    this.setAnswer(item.id, expected.slice(0, Math.min(expected.length, k + 1)));
+  }
+
+  /** Answer counted as correct, but Polish diacritics differ from the canonical spelling. */
+  accentHintFor(item: ActivityItem): string | null {
+    if (!this.isItemCorrect(item) || item.letterCloze) return null;
+    const adapted = this.adaptedItemById(item.id);
+    if (adapted?.multiGap && adapted.multiGap.gapCount > 1) return null;
+    const raw = this.answerFor(item.id).trim().toLocaleLowerCase('pl-PL').replace(/\s+/g, ' ');
+    if (!raw) return null;
+    const canon = (v: string) => v.trim().toLocaleLowerCase('pl-PL').replace(/\s+/g, ' ');
+    if (item.accepted.some((a) => canon(a) === raw)) return null;
+    const match = item.accepted.find((a) => normalizeAnswer(a) === normalizeAnswer(raw) && /[ąćęłńóśźż]/i.test(a));
+    return match ?? null;
+  }
+
+  itemMaxAcceptedLength(item: ActivityItem): number {
+    return Math.max(0, ...item.accepted.map((a) => a.length));
+  }
+
+  currentCorrectCount(): number {
+    return Object.values(this.results()[this.activity()?.id ?? ''] ?? {}).filter(Boolean).length;
+  }
+
+  isActivityComplete(activity: Activity): boolean {
+    const lessonId = this.lesson()?.id;
+    return !!lessonId && this.progress.hasCompletedActivity(lessonId, activity.id);
+  }
+
+  previousActivity(): void {
+    const idx = this.activeIndex();
+    if (idx > 0) this.selectActivity(idx - 1);
+  }
+
+  nextActivity(): void {
+    const lesson = this.lesson();
+    const idx = this.activeIndex();
+    if (lesson && idx < lesson.activities.length - 1) this.selectActivity(idx + 1);
+  }
+
+  scrollPicker(direction: -1 | 1): void {
+    const list = this.pickerListRef()?.nativeElement;
+    if (!list) return;
+    const reduced = typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    list.scrollBy({ left: direction * 220, behavior: reduced ? 'auto' : 'smooth' });
+  }
+
+  updatePickerScrollState(): void {
+    const list = this.pickerListRef()?.nativeElement;
+    if (!list) {
+      this.canScrollPickerLeft.set(false);
+      this.canScrollPickerRight.set(false);
+      return;
+    }
+    const maxScroll = Math.max(0, list.scrollWidth - list.clientWidth);
+    this.canScrollPickerLeft.set(list.scrollLeft > 2);
+    this.canScrollPickerRight.set(list.scrollLeft < maxScroll - 2);
+  }
+
+  selectActivity(index: number): void {
+    const lesson = this.lesson();
+    if (!lesson || index < 0 || index >= lesson.activities.length) return;
+    const activity = lesson.activities[index];
+    const isRetried = this.retriedActivityIds().has(activity.id);
+    const saved = !isRetried ? this.progress.activityFor(lesson.id, activity.id) : null;
+    if (saved) {
+      this.answers.update((answers) => ({ ...answers, ...saved.answers }));
+      this.results.update((results) => ({ ...results, [activity.id]: saved.results }));
+    }
+    this.activeIndex.set(index);
+    this.checked.set(!!saved);
+    this.wordBankTypeMode.set(false);
+    this.wordOrderTypeItems.set({});
+    this.lastFocusedInput.set(null);
+    this.scrollToTop();
+    this.scrollActivePickerIntoView();
+  }
+
+  jumpToUnanswered(): void {
+    const activity = this.activity();
+    const adapted = this.adaptedActivity();
+    const card = this.exerciseCardRef()?.nativeElement;
+    if (!activity || !adapted || !card) return;
+
+    const firstUnansweredIndex = activity.items.findIndex((item) => !this.isItemAnswered(item));
+    if (firstUnansweredIndex < 0) return;
+    const firstUnanswered = activity.items[firstUnansweredIndex];
+
+    if (adapted.uxMode === 'classify') {
+      this.classifyExercise()?.jumpToItem(firstUnansweredIndex);
+      card.querySelector<HTMLElement>('.classify-bucket-btn:not(:disabled)')?.focus({ preventScroll: true });
+      return;
+    }
+
+    if (adapted.uxMode === 'match') {
+      this.matchExercise()?.focusItem(firstUnanswered.id);
+      return;
+    }
+
+    const row = card.querySelector<HTMLElement>(`[data-item-id="${firstUnanswered.id}"]`);
+    if (!row) return;
+    row.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    const emptyInput = Array.from(
+      row.querySelectorAll<HTMLInputElement | HTMLTextAreaElement>(
+        '.letter-cloze-gap:not(:disabled):not([readonly]), .answer-input:not(:disabled):not([readonly])',
+      ),
+    ).find((el) => !el.value.trim());
+    const target = emptyInput
+      ?? row.querySelector<HTMLElement>(
+        '.letter-cloze-gap:not(:disabled):not([readonly]), .answer-input:not(:disabled):not([readonly]), .option-button:not(:disabled), .word-slot:not(:disabled), .word-chip:not(:disabled)',
+      );
+    target?.focus({ preventScroll: true });
+  }
+
+  async checkAnswers(): Promise<void> {
+    const activity = this.activity();
+    const lesson = this.lesson();
+    if (!lesson || !activity || !this.hasAnsweredAll() || this.checked()) return;
+    const result: Record<string, boolean> = {};
+    for (const item of activity.items) result[item.id] = this.isCorrect(item);
+    this.results.update((current) => ({ ...current, [activity.id]: result }));
+    this.checked.set(true);
+    this.lastFocusedInput.set(null);
+    this.retriedActivityIds.update((set) => {
+      if (!set.has(activity.id)) return set;
+      const next = new Set(set);
+      next.delete(activity.id);
+      return next;
+    });
+    const prefix = `${activity.id}:`;
+    const answers = Object.fromEntries(Object.entries(this.answers()).filter(([key]) => key.startsWith(prefix)));
+    await this.progress.saveActivityProgress(lesson.id, activity.id, answers, result);
+  }
+
+  retryWrongAnswers(): void {
+    const activity = this.activity();
+    if (!activity) return;
+    this.clearActivityAnswers(activity, true);
+    this.checked.set(false);
+    this.matchExercise()?.clearSelection();
+    this.wordBankExercise()?.clearSelection();
+    this.lastFocusedInput.set(null);
+    this.scrollToTop();
+  }
+
+  retryActivity(): void {
+    const activity = this.activity();
+    if (!activity) return;
+    this.clearActivityAnswers(activity, false);
+    this.checked.set(false);
+    this.matchExercise()?.clearSelection();
+    this.wordBankExercise()?.clearSelection();
+    this.lastFocusedInput.set(null);
+    this.scrollToTop();
+  }
+
+  retryWrongFromCompletion(): void {
+    const lesson = this.lesson();
+    if (!lesson) return;
+    const currentResults = this.results();
+    let firstWrongIndex = -1;
+    lesson.activities.forEach((activity, idx) => {
+      const activityResult = currentResults[activity.id];
+      const hasWrong = activityResult ? Object.values(activityResult).some((ok) => !ok) : true;
+      if (hasWrong) {
+        if (firstWrongIndex < 0) firstWrongIndex = idx;
+        this.clearActivityAnswers(activity, true);
+      }
+    });
+    this.finished.set(false);
+    this.selectActivity(firstWrongIndex >= 0 ? firstWrongIndex : 0);
+  }
+
+  retryLessonFromCompletion(): void {
+    const lesson = this.lesson();
+    if (!lesson) return;
+    for (const activity of lesson.activities) {
+      this.clearActivityAnswers(activity, false);
+    }
+    this.finished.set(false);
+    this.selectActivity(0);
+  }
+
+  async next(): Promise<void> {
+    const lesson = this.lesson();
+    if (!lesson || !this.checked()) return;
+    await this.progress.flush();
+    const nextIndex = lesson.activities.findIndex((activity) =>
+      this.retriedActivityIds().has(activity.id) || !this.progress.hasCompletedActivity(lesson.id, activity.id),
+    );
+    if (nextIndex >= 0) {
+      this.selectActivity(nextIndex);
+      return;
+    }
+    const alreadyCompleted = this.progress.hasCompleted(lesson.id);
+    this.awardedXp.set(alreadyCompleted ? 0 : this.earnedXp());
+    await this.progress.completeLesson(lesson.id, this.finalScore(), this.earnedXp());
+    this.finished.set(true);
+    this.scrollToTop();
+  }
+
+  itemImage(item: ActivityItem): WorkbookImage | undefined {
+    return item.image ? this.allImages()[item.image - 1] : undefined;
+  }
+
+  expectedAnswer(item: ActivityItem): string {
+    return item.accepted[0];
+  }
+
+  audioTrackUrl(file: string): string {
+    return file.startsWith('/') ? file : `/assets/telegram_audio/${file}`;
+  }
+
+  isLastActivity(): boolean {
+    const lesson = this.lesson();
+    const activityId = this.activity()?.id;
+    return !!lesson && !!activityId && lesson.activities.every((activity) =>
+      activity.id === activityId
+      || (!this.retriedActivityIds().has(activity.id) && this.progress.hasCompletedActivity(lesson.id, activity.id)),
+    );
+  }
+
+  private loadLesson(lessonId: number): void {
+    const lesson = getLesson(lessonId);
+    this.lesson.set(lesson);
+    if (!lesson) {
+      void this.router.navigateByUrl(this.dashboardUrl());
+      return;
+    }
+
+    this.finished.set(false);
+    this.awardedXp.set(0);
+    this.wordBankTypeMode.set(false);
+    this.wordOrderTypeItems.set({});
+    this.retriedActivityIds.set(new Set());
+    this.revealedHints.set({});
+    this.dictionaryWord.set(null);
+    this.dictionaryMode.set(false);
+    this.lightboxImage.set(null);
+    this.theoryOpen.set(false);
+    this.lastFocusedInput.set(null);
+
+    const restoredResults: Record<string, Record<string, boolean>> = {};
+    const restoredAnswers: Record<string, string> = {};
+    let firstIncomplete = -1;
+    lesson.activities.forEach((activity, index) => {
+      const saved = this.progress.activityFor(lesson.id, activity.id);
+      if (saved) {
+        restoredResults[activity.id] = saved.results;
+        Object.assign(restoredAnswers, saved.answers);
+      } else if (firstIncomplete < 0) {
+        firstIncomplete = index;
+      }
+    });
+    this.results.set(restoredResults);
+    this.answers.set(restoredAnswers);
+    const index = firstIncomplete < 0 ? 0 : firstIncomplete;
+    this.activeIndex.set(index);
+    const saved = this.progress.activityFor(lesson.id, lesson.activities[index].id);
+    this.checked.set(!!saved);
+    this.scrollToTop();
+    this.scrollActivePickerIntoView();
+  }
+
+  private clearActivityAnswers(activity: Activity, wrongOnly: boolean): void {
+    const activityResult = this.results()[activity.id] ?? {};
+    const prefix = `${activity.id}:`;
+
+    this.answers.update((current) => {
+      const next = { ...current };
+      for (const item of activity.items) {
+        if (wrongOnly && activityResult[item.id] === true) continue;
+        delete next[`${prefix}${item.id}`];
+        const gapPrefix = `${prefix}${item.id}:gap:`;
+        for (const key of Object.keys(next)) {
+          if (key.startsWith(gapPrefix)) delete next[key];
+        }
+      }
+      return next;
+    });
+
+    this.results.update((current) => {
+      const next = { ...current };
+      delete next[activity.id];
+      return next;
+    });
+
+    this.retriedActivityIds.update((current) => {
+      const next = new Set(current);
+      next.add(activity.id);
+      return next;
+    });
+  }
+
+  private openDictionary(word: string): void {
+    this.lastOverlayTrigger = document.activeElement instanceof HTMLElement ? document.activeElement : null;
+    this.dictionaryWord.set(word);
+  }
+
+  private restoreTriggerFocus(): void {
+    const el = this.lastOverlayTrigger;
+    this.lastOverlayTrigger = null;
+    if (el?.isConnected) {
+      queueMicrotask(() => el.focus({ preventScroll: true }));
+    }
+  }
+
+  private scrollToTop(): void {
+    if (typeof window === 'undefined') return;
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    window.scrollTo({ top: 0, behavior: reduced ? 'auto' : 'smooth' });
+  }
+
+  private cancelPickerScrollRaf(): void {
+    if (this.pickerScrollRafId !== null && typeof cancelAnimationFrame !== 'undefined') {
+      cancelAnimationFrame(this.pickerScrollRafId);
+    }
+    this.pickerScrollRafId = null;
+  }
+
+  private scrollActivePickerIntoView(): void {
+    this.pickerScrollRequest.update((count) => count + 1);
+  }
+
+  private schedulePickerScrollIntoView(): void {
+    if (typeof requestAnimationFrame === 'undefined') return;
+    this.cancelPickerScrollRaf();
+    this.pickerScrollRafId = requestAnimationFrame(() => {
+      this.pickerScrollRafId = null;
+      const list = this.pickerListRef()?.nativeElement;
+      const button = list?.querySelectorAll<HTMLElement>('.exercise-picker-button')[this.activeIndex()];
+      if (!list || !button) return;
+      const listRect = list.getBoundingClientRect();
+      const buttonRect = button.getBoundingClientRect();
+      const rawLeft = list.scrollLeft + (buttonRect.left - listRect.left) - (list.clientWidth - buttonRect.width) / 2;
+      const maxScroll = Math.max(0, list.scrollWidth - list.clientWidth);
+      const targetLeft = Math.max(0, Math.min(maxScroll, rawLeft));
+      const reduced = typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      list.scrollTo({ left: targetLeft, behavior: reduced ? 'auto' : 'smooth' });
+      this.updatePickerScrollState();
+    });
+  }
+
+  private adaptedItemById(itemId: string): AdaptedItem | undefined {
+    return this.adaptedActivity()?.items.find((i) => i.id === itemId);
   }
 
   private wordAtPoint(x: number, y: number): string | null {
@@ -187,196 +928,11 @@ export class LessonComponent implements OnInit, OnDestroy {
     return null;
   }
 
-  private async lookupDictionary(word: string): Promise<void> {
-    const request = ++this.dictionaryRequest;
-    this.dictionaryWord.set(word);
-    this.dictionaryTranslations.set([]);
-    this.dictionaryError.set(null);
-    this.dictionaryLoading.set(true);
-    try {
-      const { data, error } = await supabase.functions.invoke<{ translations: string[] }>('pons-dictionary', { body: { word } });
-      if (request !== this.dictionaryRequest) return;
-      if (error) throw error;
-      this.dictionaryTranslations.set(data?.translations ?? []);
-    } catch {
-      if (request === this.dictionaryRequest) this.dictionaryError.set('Nie udało się pobrać tłumaczenia. Spróbuj ponownie.');
-    } finally {
-      if (request === this.dictionaryRequest) this.dictionaryLoading.set(false);
-    }
-  }
-
-  setAnswer(itemId: string, value: string): void {
-    this.answers.update((current) => ({ ...current, [this.answerKey(itemId)]: value }));
-  }
-
-  answerFor(itemId: string): string {
-    return this.answers()[this.answerKey(itemId)] ?? '';
-  }
-
-  letterClozeAnswerFor(itemId: string, gapIndex: number): string {
-    return this.answers()[this.letterClozeAnswerKey(itemId, gapIndex)] ?? '';
-  }
-
-  setLetterClozeAnswer(item: ActivityItem, gapIndex: number, event: Event): void {
-    const cloze = item.letterCloze;
-    if (!cloze) return;
-    const input = event.target as HTMLInputElement;
-    const value = input.value.slice(0, cloze.gaps[gapIndex].length);
-    if (input.value !== value) input.value = value;
-    this.answers.update((current) => ({
-      ...current,
-      [this.letterClozeAnswerKey(item.id, gapIndex)]: value,
-    }));
-    if (value.length === cloze.gaps[gapIndex].length) {
-      const nextGap = input.closest('.letter-cloze-line')
-        ?.querySelectorAll<HTMLInputElement>('.letter-cloze-gap')[gapIndex + 1]
-        ?? input.closest('.question-row')?.nextElementSibling?.querySelector<HTMLInputElement>('.letter-cloze-gap');
-      nextGap?.focus();
-    }
-  }
-
-  selectOption(itemId: string, value: string): void {
-    if (this.consumeIgnoredOptionClick()) return;
-    if (!this.checked()) this.setAnswer(itemId, value);
-  }
-
-  selectMatchItem(itemId: string): void {
-    if (this.checked() || this.consumeIgnoredOptionClick()) return;
-    const option = this.selectedMatchOption();
-    if (option) {
-      this.assignMatch(itemId, option);
-      this.selectedMatchOption.set(null);
-      this.selectedMatchItem.set(null);
-    } else {
-      this.selectedMatchItem.update((selected) => selected === itemId ? null : itemId);
-    }
-  }
-
-  selectMatchOption(option: string): void {
-    if (this.checked() || this.consumeIgnoredOptionClick()) return;
-    const itemId = this.selectedMatchItem();
-    if (itemId) {
-      this.assignMatch(itemId, option);
-      this.selectedMatchItem.set(null);
-      this.selectedMatchOption.set(null);
-    } else {
-      this.selectedMatchOption.update((selected) => selected === option ? null : option);
-    }
-  }
-
-  matchOptionAssigned(option: string): boolean {
-    return this.activity()?.items.some((item) => this.answerFor(item.id) === option) ?? false;
-  }
-
-  private assignMatch(itemId: string, option: string): void {
-    const activity = this.activity();
-    const otherItem = activity?.items.find((item) => item.id !== itemId && this.answerFor(item.id) === option);
-    if (otherItem) this.setAnswer(otherItem.id, this.answerFor(itemId));
-    this.setAnswer(itemId, option);
-  }
-
   private consumeIgnoredOptionClick(): boolean {
     if (!this.ignoreOptionClick) return false;
     this.ignoreOptionClick = false;
     if (this.ignoreOptionClickTimer) clearTimeout(this.ignoreOptionClickTimer);
     return true;
-  }
-
-  hasAnsweredAll(): boolean {
-    const activity = this.activity();
-    return !!activity && activity.items.every((item) => item.letterCloze
-      ? item.letterCloze.gaps.every((_, index) => this.letterClozeAnswerFor(item.id, index).length > 0)
-      : this.answerFor(item.id).trim().length > 0);
-  }
-
-  isCorrect(item: ActivityItem): boolean {
-    if (item.letterCloze) {
-      const { parts, gaps } = item.letterCloze;
-      const answer = parts.map((part, index) => part + (gaps[index] === undefined ? '' : this.letterClozeAnswerFor(item.id, index))).join('');
-      return item.accepted.some((expected) => this.normalize(expected) === this.normalize(answer));
-    }
-    const answer = this.normalize(this.answerFor(item.id));
-    return item.accepted.some((expected) => this.normalize(expected) === answer);
-  }
-
-  isItemCorrect(item: ActivityItem): boolean {
-    return this.results()[this.activity()?.id ?? '']?.[item.id] ?? false;
-  }
-
-  optionIsAccepted(item: ActivityItem, option: string): boolean {
-    return item.accepted.some((expected) => this.normalize(expected) === this.normalize(option));
-  }
-
-  currentCorrectCount(): number {
-    return Object.values(this.results()[this.activity()?.id ?? ''] ?? {}).filter(Boolean).length;
-  }
-
-  isActivityComplete(activity: Activity): boolean {
-    const lessonId = this.lesson()?.id;
-    return !!lessonId && this.progress.hasCompletedActivity(lessonId, activity.id);
-  }
-
-  selectActivity(index: number): void {
-    const lesson = this.lesson();
-    if (!lesson || index < 0 || index >= lesson.activities.length) return;
-    const activity = lesson.activities[index];
-    const saved = this.progress.activityFor(lesson.id, activity.id);
-    if (saved) {
-      this.answers.update((answers) => ({ ...answers, ...saved.answers }));
-      this.results.update((results) => ({ ...results, [activity.id]: saved.results }));
-    }
-    this.activeIndex.set(index);
-    this.checked.set(!!saved);
-    this.selectedMatchItem.set(null);
-    this.selectedMatchOption.set(null);
-  }
-
-  async checkAnswers(): Promise<void> {
-    const activity = this.activity();
-    const lesson = this.lesson();
-    if (!lesson || !activity || !this.hasAnsweredAll() || this.checked()) return;
-    const result: Record<string, boolean> = {};
-    for (const item of activity.items) result[item.id] = this.isCorrect(item);
-    this.results.update((current) => ({ ...current, [activity.id]: result }));
-    this.checked.set(true);
-    const prefix = `${activity.id}:`;
-    const answers = Object.fromEntries(Object.entries(this.answers()).filter(([key]) => key.startsWith(prefix)));
-    await this.progress.saveActivityProgress(lesson.id, activity.id, answers, result);
-  }
-
-  async next(): Promise<void> {
-    const lesson = this.lesson();
-    if (!lesson || !this.checked()) return;
-    await this.progress.flush();
-    const nextIndex = lesson.activities.findIndex((activity) => !this.progress.hasCompletedActivity(lesson.id, activity.id));
-    if (nextIndex >= 0) {
-      this.selectActivity(nextIndex);
-      return;
-    }
-    const alreadyCompleted = this.progress.hasCompleted(lesson.id);
-    this.awardedXp.set(alreadyCompleted ? 0 : this.earnedXp());
-    await this.progress.completeLesson(lesson.id, this.finalScore(), this.earnedXp());
-    this.finished.set(true);
-  }
-
-  itemImage(item: ActivityItem): WorkbookImage | undefined {
-    return item.image ? this.allImages()[item.image - 1] : undefined;
-  }
-
-  expectedAnswer(item: ActivityItem): string {
-    return item.accepted[0];
-  }
-
-  audioTrackUrl(file: string): string {
-    return file.startsWith('/') ? file : `/assets/telegram_audio/${file}`;
-  }
-
-  isLastActivity(): boolean {
-    const lesson = this.lesson();
-    const activityId = this.activity()?.id;
-    return !!lesson && !!activityId && lesson.activities.every((activity) =>
-      activity.id === activityId || this.progress.hasCompletedActivity(lesson.id, activity.id),
-    );
   }
 
   private answerKey(itemId: string): string {
@@ -385,18 +941,5 @@ export class LessonComponent implements OnInit, OnDestroy {
 
   private letterClozeAnswerKey(itemId: string, gapIndex: number): string {
     return `${this.answerKey(itemId)}:gap:${gapIndex}`;
-  }
-
-  private normalize(value: string): string {
-    const normalized = value
-      .toLocaleLowerCase('pl-PL')
-      .replace(/ł/g, 'l')
-      .normalize('NFD')
-      .replace(/[\u0300-\u036f]/g, '')
-      .trim()
-      .replace(/\p{P}/gu, ' ')
-      .replace(/\s+/g, ' ')
-      .trim();
-    return /^\d[\d\s]*$/.test(normalized) ? normalized.replace(/\s/g, '') : normalized;
   }
 }

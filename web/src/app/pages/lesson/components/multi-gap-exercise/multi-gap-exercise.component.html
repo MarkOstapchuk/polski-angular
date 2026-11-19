@@ -1,0 +1,37 @@
+@if (isInline()) {
+  <div class="multi-gap-inline" role="group" [attr.aria-label]="prompt()">
+    @for (seg of inlineParts(); track $index; let i = $index) {
+      @if (seg) { <span class="inline-text">{{ seg }}</span> }
+      @if (i < gapCount()) {
+        <input #gapInput class="answer-input multi-gap-input"
+          [id]="i === 0 ? baseId() : baseId() + '-gap-' + i"
+          [value]="parts()[i]"
+          (input)="onGapInput(i, $event)"
+          (keydown.enter)="enterPressed.emit($event)"
+          [disabled]="disabled()"
+          [placeholder]="gapPlaceholder(i)"
+          [attr.enterkeyhint]="i < gapCount() - 1 ? 'next' : enterKeyHint()"
+          [attr.autocomplete]="'off'"
+          [attr.aria-label]="gapLabel(i) + ' — ' + prompt()">
+      }
+    }
+  </div>
+} @else {
+  <div class="multi-gap-grid" role="group" [attr.aria-label]="prompt()">
+    @for (i of gapIndices(); track i) {
+      <div class="multi-gap-field">
+        <label class="multi-gap-label" [for]="i === 0 ? baseId() : baseId() + '-gap-' + i">{{ gapLabel(i) }}</label>
+        <input #gapInput class="answer-input multi-gap-input"
+          [id]="i === 0 ? baseId() : baseId() + '-gap-' + i"
+          [value]="parts()[i]"
+          (input)="onGapInput(i, $event)"
+          (keydown.enter)="enterPressed.emit($event)"
+          [disabled]="disabled()"
+          [placeholder]="gapPlaceholder(i)"
+          [attr.enterkeyhint]="i < gapCount() - 1 ? 'next' : enterKeyHint()"
+          [attr.autocomplete]="'off'"
+          [attr.aria-label]="gapLabel(i) + ' — ' + prompt()">
+      </div>
+    }
+  </div>
+}

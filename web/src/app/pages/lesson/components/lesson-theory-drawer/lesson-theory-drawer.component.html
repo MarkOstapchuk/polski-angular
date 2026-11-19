@@ -1,0 +1,30 @@
+<section class="lesson-theory" id="lesson-theory-panel" aria-labelledby="lesson-theory-title">
+  <div class="theory-heading">
+    <div>
+      <p class="theory-kicker">{{ language.t('lesson.textbook') }} · {{ lessonLabel() }} · {{ language.t('lesson.pages') }} {{ theory().coursebookPages }}</p>
+      <h2 id="lesson-theory-title">{{ language.t('lesson.theory') }}</h2>
+    </div>
+    <button class="theory-close" type="button" (click)="closed.emit()" [attr.aria-label]="language.t('lesson.hideTheory')">×</button>
+  </div>
+  <div class="theory-grid">
+    <article class="theory-section">
+      <h3>{{ language.t('lesson.communication') }}</h3>
+      <p>{{ theory().communication }}</p>
+    </article>
+    <article class="theory-section">
+      <h3>{{ language.t('lesson.words') }}</h3>
+      <p>{{ theory().vocabulary }}</p>
+    </article>
+    <article class="theory-section theory-grammar">
+      <h3>{{ language.t('lesson.grammar') }}</h3>
+      <p>{{ theory().grammar }}</p>
+    </article>
+  </div>
+  <div class="theory-examples">
+    <h3>{{ language.t('lesson.examples') }}</h3>
+    @for (example of theory().examples; track example.polish) {
+      <p><strong lang="pl">{{ example.polish }}</strong><span>{{ example.translation }}</span></p>
+    }
+  </div>
+  <p class="theory-workbook">{{ language.t('lesson.workbookNext') }} {{ workbookPages() }}</p>
+</section>

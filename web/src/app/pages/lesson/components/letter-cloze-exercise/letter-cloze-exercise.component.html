@@ -1,0 +1,57 @@
+@if (item().letterCloze; as cloze) {
+  <div class="letter-cloze-line" role="group" [attr.aria-label]="item().prompt">
+    @for (part of cloze.parts; track $index; let gapIndex = $index) {
+      <span>{{ part }}</span>
+      @if (gapIndex < cloze.gaps.length) {
+        <input class="letter-cloze-gap" type="text"
+          [value]="gapValue(gapIndex)"
+          (focus)="onGapFocus($event)"
+          (input)="onGapInput(gapIndex, $event)"
+          (keydown)="onGapKeydown($event)"
+          (keydown.enter)="enterPressed.emit($event)"
+          [disabled]="disabled()"
+          [attr.maxlength]="cloze.gaps[gapIndex].length"
+          [attr.enterkeyhint]="enterKeyHintForGap(gapIndex, cloze.gaps.length)"
+          [attr.aria-label]="item().prompt + ', ' + language.t('lesson.missingLetter') + ' ' + (gapIndex + 1)"
+          autocomplete="off" autocapitalize="off" spellcheck="false">
+      }
+    }
+  </div>
+} @else if (promptGap(); as pg) {
+  <div class="prompt-gap-wrap">
+    <div class="prompt-gap-clue" aria-hidden="true">
+      @for (seg of pg.segments; track $index) {
+        @if (seg.isGap) {
+          <span class="prompt-gap-blank">{{ seg.text }}</span>
+        } @else {
+          <span>{{ seg.text }}</span>
+        }
+      }
+    </div>
+    <input #singleInput class="answer-input"
+      [id]="activityId() + '-' + item().id"
+      [ngModel]="singleValue()"
+      (ngModelChange)="valueChange.emit($event)"
+      [disabled]="disabled()"
+      [placeholder]="placeholder()"
+      [attr.enterkeyhint]="itemIndex() >= totalItems() - 1 ? 'done' : 'next'"
+      [attr.autocomplete]="'off'"
+      [attr.aria-label]="item().prompt"
+      (keydown.enter)="enterPressed.emit($event)">
+  </div>
+}
+
+@if (!disabled() && letterTiles().length > 0) {
+  <div class="letter-tiles-wrap">
+    <button type="button" class="letter-tiles-toggle" [attr.aria-expanded]="tilesOpen()" (click)="toggleTiles()">
+      {{ language.t('lesson.letterTilesToggle') }}
+    </button>
+    @if (tilesOpen()) {
+      <div class="letter-tiles-pool">
+        @for (ch of letterTiles(); track ch) {
+          <button type="button" class="letter-tile-btn" (click)="insertTile(ch)">{{ ch }}</button>
+        }
+      </div>
+    }
+  </div>
+}

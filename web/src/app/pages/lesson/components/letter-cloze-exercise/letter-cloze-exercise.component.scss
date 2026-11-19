@@ -1,0 +1,111 @@
+:host { display: block; min-width: 0; }
+
+.letter-cloze-line {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 2px;
+  color: #45453d;
+  font-size: 18px;
+  line-height: 2.4;
+  white-space: pre-wrap;
+}
+
+.letter-cloze-line span { white-space: pre-wrap; }
+
+.letter-cloze-gap {
+  box-sizing: border-box;
+  min-width: 44px;
+  width: 44px;
+  min-height: 44px;
+  height: 44px;
+  margin: 0 2px;
+  padding: 0 4px;
+  border: 0;
+  border-bottom: 2px solid #d69675;
+  border-radius: 6px;
+  background: #fff8f3;
+  color: #31332c;
+  font: inherit;
+  font-size: 16px;
+  font-weight: 700;
+  text-align: center;
+}
+
+.letter-cloze-gap:focus { border-color: #bd6144; background: #fff2ec; }
+.letter-cloze-gap:disabled { background: #fbfaf7; color: #6e6c64; }
+
+.prompt-gap-wrap { display: grid; gap: 8px; min-width: 0; }
+
+.prompt-gap-clue {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 2px;
+  color: #4a4940;
+  font-size: 16px;
+  font-weight: 650;
+  letter-spacing: .04em;
+}
+
+.prompt-gap-blank {
+  padding: 0 3px;
+  border-bottom: 2px solid #d69675;
+  color: #9e5439;
+}
+
+.answer-input {
+  width: 100%;
+  min-height: 44px;
+  box-sizing: border-box;
+  padding: 8px 12px;
+  border: 1px solid #e4e1d8;
+  border-radius: 9px;
+  background: #fff;
+  color: #31332c;
+  font: inherit;
+  font-size: 16px;
+}
+
+.answer-input:focus { border-color: #d69675; box-shadow: 0 0 0 3px #f7e7dd; }
+.answer-input:disabled { background: #fbfaf7; color: #6e6c64; }
+
+.letter-tiles-wrap { display: grid; gap: 8px; margin-top: 8px; justify-items: start; }
+
+.letter-tiles-toggle {
+  min-width: 44px;
+  min-height: 44px;
+  padding: 6px 12px;
+  border: 1px solid #e6e0d5;
+  border-radius: 9px;
+  background: #faf7f0;
+  color: #6b5b43;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.letter-tiles-pool { display: flex; flex-wrap: wrap; gap: 6px; }
+
+.letter-tile-btn {
+  display: grid;
+  min-width: 44px;
+  min-height: 44px;
+  padding: 6px 10px;
+  place-items: center;
+  border: 1px solid #e4dfd5;
+  border-radius: 8px;
+  background: #fff;
+  color: #3d3d35;
+  font: inherit;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.letter-tile-btn:hover { border-color: #d6a58d; background: #fff8f3; }
+
+@media (max-width: 600px) {
+  .letter-cloze-line { font-size: 16px; }
+}
