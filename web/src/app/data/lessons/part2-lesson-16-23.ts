@@ -523,7 +523,7 @@ export const LESSON_46 = lesson(46, 'Konsument na rynku', 'Porównujemy zakupy i
   exercise(20, 10, 'Sprzęty domowe', 'Podpisz ilustracje.', [
     ...['odkurzacz', 'toster', 'pralka', 'czajnik', 'suszarka', 'ekspres do kawy', 'depilator',
       'robot kuchenny', 'kuchenka', 'prostownica', 'kuchenka mikrofalowa', 'żelazko',
-      'radiomagnetofon / odtwarzacz CD', 'zmywarka', 'telewizor', 'odtwarzacz DVD', 'garnki', 'lodówka']
+      ['radiomagnetofon', 'odtwarzacz CD', 'radiomagnetofon / odtwarzacz CD'], 'zmywarka', 'telewizor', 'odtwarzacz DVD', 'garnki', 'lodówka']
       .map((x, i) => [`Ilustracja ${i + 1}`, x] as Entry),
   ]),
   exercise(20, 11, 'Popraw pytania', 'Skoryguj błędy w pytaniach.', [

@@ -2637,7 +2637,7 @@ export const LESSON_FIXTURES = {
             "id": "q1",
             "prompt": "Ona nie jest ___ szczupła, ___ wysoka, ___ jest bardzo ładna.",
             "accepted": [
-              "ani, ani, ale"
+              "ani; ani; ale"
             ]
           },
           {
@@ -2651,14 +2651,14 @@ export const LESSON_FIXTURES = {
             "id": "q3",
             "prompt": "Ola nie jest ___ energiczna, ___ wysportowana.",
             "accepted": [
-              "ani, ani"
+              "ani; ani"
             ]
           },
           {
             "id": "q4",
             "prompt": "Ta dziewczyna jest inteligentna ___ utalentowana, ___ leniwa.",
             "accepted": [
-              "i, ale"
+              "i; ale"
             ]
           },
           {
@@ -2672,7 +2672,7 @@ export const LESSON_FIXTURES = {
             "id": "q6",
             "prompt": "Elena to dobra studentka, ___ jest pracowita ___ inteligentna.",
             "accepted": [
-              "bo, i"
+              "bo; i"
             ]
           },
           {
@@ -2686,7 +2686,7 @@ export const LESSON_FIXTURES = {
             "id": "q8",
             "prompt": "Ten chłopak nie jest ___ utalentowany, ___ pracowity.",
             "accepted": [
-              "ani, ani"
+              "ani; ani"
             ]
           },
           {
