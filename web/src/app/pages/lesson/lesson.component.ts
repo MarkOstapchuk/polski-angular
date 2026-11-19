@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, computed, DestroyRef, effect, ElementRef, HostListener, inject, OnDestroy, signal, viewChild } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, DestroyRef, effect, ElementRef, HostListener, inject, signal, viewChild } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { map } from 'rxjs';
@@ -58,7 +58,7 @@ const PONS_BLOCKED_SELECTOR =
   styleUrl: './lesson.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class LessonComponent implements OnDestroy {
+export class LessonComponent {
   private readonly destroyRef = inject(DestroyRef);
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
@@ -81,10 +81,6 @@ export class LessonComponent implements OnDestroy {
   readonly revealedHints = signal<Record<string, boolean>>({});
   readonly lastFocusedInput = signal<HTMLInputElement | HTMLTextAreaElement | null>(null);
 
-  private longPressTimer: ReturnType<typeof setTimeout> | null = null;
-  private longPressOrigin: { x: number; y: number } | null = null;
-  private ignoreOptionClick = false;
-  private ignoreOptionClickTimer: ReturnType<typeof setTimeout> | null = null;
   private lastOverlayTrigger: HTMLElement | null = null;
   private pickerScrollRafId: number | null = null;
   private readonly pickerScrollRequest = signal(0);
@@ -227,11 +223,6 @@ export class LessonComponent implements OnDestroy {
       this.schedulePickerScrollIntoView();
       onCleanup(() => this.cancelPickerScrollRaf());
     });
-  }
-
-  ngOnDestroy(): void {
-    this.cancelWordLookup();
-    if (this.ignoreOptionClickTimer) clearTimeout(this.ignoreOptionClickTimer);
   }
 
   @HostListener('document:keydown', ['$event'])
@@ -389,46 +380,6 @@ export class LessonComponent implements OnDestroy {
     this.restoreTriggerFocus();
   }
 
-  startWordLookup(event: PointerEvent): void {
-    if (event.button !== 0) return;
-    const target = event.target instanceof HTMLElement ? event.target : null;
-    if (!target || target.closest(PONS_BLOCKED_SELECTOR)) return;
-    this.cancelWordLookup();
-    this.ignoreOptionClick = false;
-    if (this.ignoreOptionClickTimer) clearTimeout(this.ignoreOptionClickTimer);
-    const x = event.clientX;
-    const y = event.clientY;
-    this.longPressOrigin = { x, y };
-    this.longPressTimer = setTimeout(() => {
-      this.longPressTimer = null;
-      this.longPressOrigin = null;
-      const word = this.wordAtPoint(x, y);
-      if (word) {
-        if (target.closest('.option-button, .match-source, .match-target, .word-bank-chip, .word-chip, .classify-bucket-btn, .classify-summary-chip')) {
-          this.ignoreOptionClick = true;
-          this.ignoreOptionClickTimer = setTimeout(() => (this.ignoreOptionClick = false), 1000);
-        }
-        this.openDictionary(word);
-      }
-    }, 450);
-  }
-
-  moveWordLookup(event: PointerEvent): void {
-    const origin = this.longPressOrigin;
-    if (origin && Math.hypot(event.clientX - origin.x, event.clientY - origin.y) > 12) this.cancelWordLookup();
-  }
-
-  cancelWordLookup(): void {
-    if (this.longPressTimer) clearTimeout(this.longPressTimer);
-    this.longPressTimer = null;
-    this.longPressOrigin = null;
-  }
-
-  suppressWordContextMenu(event: MouseEvent): void {
-    const target = event.target instanceof HTMLElement ? event.target : null;
-    if (target && !target.closest(PONS_BLOCKED_SELECTOR)) event.preventDefault();
-  }
-
   onMainClick(event: MouseEvent): void {
     if (!this.dictionaryMode()) return;
     const target = event.target instanceof HTMLElement ? event.target : null;
@@ -473,7 +424,7 @@ export class LessonComponent implements OnDestroy {
   }
 
   onSubAnswerChange(event: { itemId: string; value: string }): void {
-    if (this.dictionaryMode() || this.consumeIgnoredOptionClick()) return;
+    if (this.dictionaryMode()) return;
     if (!this.checked()) this.setAnswer(event.itemId, event.value);
   }
 
@@ -486,7 +437,7 @@ export class LessonComponent implements OnDestroy {
   }
 
   selectOption(itemId: string, value: string): void {
-    if (this.dictionaryMode() || this.consumeIgnoredOptionClick()) return;
+    if (this.dictionaryMode()) return;
     if (!this.checked()) this.setAnswer(itemId, value);
   }
 
@@ -931,13 +882,6 @@ export class LessonComponent implements OnDestroy {
       if (offset >= start && offset <= start + match[0].length) return match[0];
     }
     return null;
-  }
-
-  private consumeIgnoredOptionClick(): boolean {
-    if (!this.ignoreOptionClick) return false;
-    this.ignoreOptionClick = false;
-    if (this.ignoreOptionClickTimer) clearTimeout(this.ignoreOptionClickTimer);
-    return true;
   }
 
   private answerKey(itemId: string): string {

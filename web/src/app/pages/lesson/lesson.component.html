@@ -13,9 +13,6 @@
     @if (!finished()) {
       @if (activity(); as activity) {
         <main class="lesson-main" [class.dictionary-mode]="dictionaryMode()"
-          (pointerdown)="startWordLookup($event)" (pointermove)="moveWordLookup($event)"
-          (pointerup)="cancelWordLookup()" (pointercancel)="cancelWordLookup()" (pointerleave)="cancelWordLookup()"
-          (contextmenu)="suppressWordContextMenu($event)"
           (click)="onMainClick($event)"
           (dblclick)="onWordDoubleClick($event)">
 

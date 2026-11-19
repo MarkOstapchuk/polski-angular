@@ -585,11 +585,11 @@ export const TIER1_TESTS = [
             await page.domClick(triggerSel);
             await sleep(80);
             await page.clickTextWord('.question-prompt', 0);
-          } else {
-            await page.longPress('.question-prompt', 550, 0);
           }
         } else {
-          await page.longPress('.question-prompt', 550, 0);
+          await page.domClick('.dictionary-toggle-btn');
+          await sleep(80);
+          await page.clickTextWord('.question-prompt', 0);
         }
 
         await page.waitForSelector('section.dictionary-sheet[role="dialog"]', { timeoutMs: 5000 }).catch(() => false);

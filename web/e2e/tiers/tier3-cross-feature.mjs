@@ -222,7 +222,9 @@ export const TIER3_TESTS = [
         rec.soft('audio:0.75x-speed(F12)', hasAudioBtn && playbackRate === 0.75, `hasAudioBtn=${hasAudioBtn} playbackRate=${playbackRate}`);
 
         // PONS dictionary open & Esc close (F13)
-        await page.longPress('.lesson-heading .instruction, .question-prompt', 550, 0);
+        await page.domClick('.dictionary-toggle-btn');
+        await sleep(80);
+        await page.clickTextWord('.lesson-heading .instruction, .question-prompt', 0);
         await page.waitForSelector('section.dictionary-sheet[role="dialog"]', { timeoutMs: 4000 }).catch(() => false);
         const ponsOpen = await page.evaluate(() => Boolean(document.querySelector('section.dictionary-sheet[role="dialog"]')));
         rec.soft('pons:opened', ponsOpen, `ponsOpen=${ponsOpen}`);

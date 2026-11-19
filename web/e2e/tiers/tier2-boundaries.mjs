@@ -766,7 +766,9 @@ export const TIER2_TESTS = [
         );
 
         // PONS 500 error
-        await page.longPress('.question-prompt', 520, 0);
+        await page.domClick('.dictionary-toggle-btn');
+        await sleep(80);
+        await page.clickTextWord('.question-prompt', 0);
         await page.waitForSelector('section.dictionary-sheet[role="dialog"]', { timeoutMs: 4000 }).catch(() => false);
         const ponsErr = await page.evaluate(
           () => document.querySelector('.dictionary-error[role="alert"]')?.textContent?.trim() || ''
@@ -777,7 +779,7 @@ export const TIER2_TESTS = [
 
         // PONS empty []
         page.supabaseMock.setFaults({ ponsStatus: null, ponsEmpty: true });
-        await page.longPress('.question-prompt', 520, 1);
+        await page.clickTextWord('.question-prompt', 1);
         await page.waitForSelector('section.dictionary-sheet[role="dialog"]', { timeoutMs: 4000 }).catch(() => false);
         const ponsEmpty = await page.evaluate(
           () => document.querySelector('.dictionary-sheet')?.textContent || ''

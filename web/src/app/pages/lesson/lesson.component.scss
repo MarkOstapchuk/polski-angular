@@ -13,9 +13,6 @@
 .lesson-main { max-width: 796px; margin: 0 auto; padding: 28px 24px 45px; }
 .lesson-main.dictionary-mode { user-select: none; cursor: help; }
 .lesson-main input, .lesson-main textarea { -webkit-user-select: text; user-select: text; }
-@media (pointer: coarse) {
-  .lesson-main { -webkit-touch-callout: none; user-select: none; }
-}
 
 .exercise-picker { margin: 0 0 18px; }
 .exercise-picker-head { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; margin-bottom: 8px; }
