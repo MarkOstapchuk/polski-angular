@@ -241,10 +241,17 @@ export const LESSONS: Lesson[] = [
         ['na / toaleta / jest / lewo / tam', 'Toaleta jest tam na lewo.'],
         ['pani / dziękuję / bardzo', ['Dziękuję pani bardzo.', 'Bardzo pani dziękuję.']],
       ]),
-      typedExercise(1, 8, 'Gdzie jest sekretariat?', 'Wpisz określenia kierunku pasujące do ilustracji.', [
-        ['1 · n_a _e_o', 'na lewo'], ['2 · __u / __u__aj', ['tu', 'tutaj']],
-        ['3 · t___', 'tam'], ['4 · __a __r__o', 'na prawo'],
-      ]),
+      {
+        id: 'l01-exercise-8', sourceExerciseId: 'WB-L01-E08', sourceLabel: 'Zeszyt ćwiczeń · ćwiczenie 8',
+        kind: ActivityKind.LetterCloze, title: 'Gdzie jest sekretariat?',
+        instruction: 'Wpisz brakujące litery zgodnie z ilustracją.',
+        items: [
+          letterCloze('q1', '1 · na lewo', '1 · na lewo', ['1 · n', ' ', 'e', 'o'], ['a', 'l', 'w']),
+          letterCloze('q2', '2 · tutaj', '2 · tutaj', ['2 · ', 'u', 'aj'], ['t', 't']),
+          letterCloze('q3', '3 · tam', '3 · tam', ['3 · t', '', ''], ['a', 'm']),
+          letterCloze('q4', '4 · na prawo', '4 · na prawo', ['4 · ', 'a ', 'r', '', 'o'], ['n', 'p', 'a', 'w']),
+        ],
+      },
       {
         id: 'l01-exercise-10-match', sourceExerciseId: 'WB-L01-E10', sourceLabel: 'Zeszyt ćwiczeń · ćwiczenie 10',
         kind: ActivityKind.Match, title: 'Połącz początki i zakończenia',
@@ -392,11 +399,19 @@ export const LESSONS: Lesson[] = [
         ['Ono jest tu.', 'One są tu.'], ['Ona jest tam.', 'One są tam.'],
         ['On jest w sekretariacie.', 'Oni są w sekretariacie.'],
       ]),
-      typedExercise(2, 10, 'Odmień czasownik „mieszkać”', 'Wpisz brakującą formę czasownika.', [
-        ['on · mie__ka__', 'mieszka'], ['ty · mies__ka__z', 'mieszkasz'],
-        ['oni/one · mi__s__k__j__', 'mieszkają'], ['ja · mie__ka__', 'mieszkam'],
-        ['wy · __ie__ka___', 'mieszkacie'], ['my · m__esz__am__', 'mieszkamy'],
-      ]),
+      {
+        id: 'l02-exercise-10', sourceExerciseId: 'WB-L02-E10', sourceLabel: 'Zeszyt ćwiczeń · ćwiczenie 10',
+        kind: ActivityKind.LetterCloze, title: 'Odmień czasownik „mieszkać”',
+        instruction: 'Wpisz brakujące litery w formach czasownika.',
+        items: [
+          letterCloze('q1', 'on · mieszka', 'on · mieszka', ['on · mie', '', 'ka'], ['s', 'z']),
+          letterCloze('q2', 'ty · mieszkasz', 'ty · mieszkasz', ['ty · mies', 'ka', '', ''], ['z', 's', 'z']),
+          letterCloze('q3', 'oni/one · mieszkają', 'oni/one · mieszkają', ['oni/one · mi', 's', 'k', 'j', ''], ['e', 'z', 'a', 'ą']),
+          letterCloze('q4', 'ja · mieszkam', 'ja · mieszkam', ['ja · mie', '', 'ka', ''], ['s', 'z', 'm']),
+          letterCloze('q5', 'wy · mieszkacie', 'wy · mieszkacie', ['wy · ', 'ie', '', 'ka', '', '', ''], ['m', 's', 'z', 'c', 'i', 'e']),
+          letterCloze('q6', 'my · mieszkamy', 'my · mieszkamy', ['my · m', 'esz', 'am', ''], ['i', 'k', 'y']),
+        ],
+      },
       typedExercise(2, 11, 'Czasowniki w zdaniach', 'Wpisz właściwą formę czasownika z nawiasu.', [
         ['Oni ___ (grać) w golfa.', 'grają'], ['___ (wy–mieć) telefon?', 'macie'],
         ['Nie ___ (my–rozumieć).', 'rozumiemy'], ['Gdzie państwo ___ (mieszkać)?', 'mieszkają'],

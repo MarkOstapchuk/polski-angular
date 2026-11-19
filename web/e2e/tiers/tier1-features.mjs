@@ -510,32 +510,17 @@ export const TIER1_TESTS = [
           rec.soft('lesson:item-hint(F14)', hintShown, `hintShown=${hintShown}`);
         }
 
-        // F14: Polish Diacritic Quick-Bar [ą ć ę ł ń ó ś ź ż] inserts at cursor
-        const diacritics = await page.evaluate(() => {
-          const btns = [...document.querySelectorAll('button')].filter((b) =>
-            ['ą', 'ć', 'ę', 'ł', 'ń', 'ó', 'ś', 'ź', 'ż'].includes((b.textContent || '').trim())
-          );
-          const letters = btns.map((b) => b.textContent.trim());
-          const unique = new Set(letters);
-          return { count: unique.size, letters: [...unique] };
+        // F14: Latin-input hint shown on typed exercises (diacritic quick-bar removed)
+        const latinHint = await page.evaluate(() => {
+          const el = document.querySelector('[data-latin-input-hint]');
+          const bar = document.querySelector('.diacritic-bar');
+          return { hasHint: Boolean(el && (el.textContent || '').trim().length > 10), hasBar: Boolean(bar) };
         });
         rec.soft(
-          'lesson:diacritic-bar(F14)',
-          diacritics.count === 9,
-          `found ${diacritics.count}/9 diacritic buttons: ${diacritics.letters.join(' ')}`
+          'lesson:latin-input-hint(F14)',
+          latinHint.hasHint && !latinHint.hasBar,
+          JSON.stringify(latinHint)
         );
-
-        if (diacritics.count === 9) {
-          const typedVal = await page.evaluate(() => {
-            const field = document.querySelector('.question-row textarea, .question-row input.answer-input');
-            const btn = [...document.querySelectorAll('button')].find((b) => (b.textContent || '').trim() === 'ć');
-            if (!field || !btn) return null;
-            field.focus();
-            btn.click();
-            return field.value;
-          });
-          rec.soft('lesson:diacritic-inserts(F14)', Boolean(typedVal && typedVal.includes('ć')), `value="${typedVal}"`);
-        }
 
         const rt = checkRuntimeClean(page);
         rec.soft('runtime-clean', rt.ok, JSON.stringify(rt));

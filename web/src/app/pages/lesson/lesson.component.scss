@@ -38,6 +38,7 @@
 .utility-pill:hover { border-color: #d7a387; background: #fff8f3; }
 .utility-pill.is-open, .utility-pill.is-active { border-color: #d97956; background: #fff2ec; color: #a54d31; }
 .dictionary-hint { margin: 0; color: #7f796e; font-size: 12px; line-height: 1.4; }
+.latin-input-hint { margin: 6px 0 0; color: #7f796e; font-size: 13px; line-height: 1.4; }
 
 .lesson-layout { display: grid; grid-template-columns: minmax(0, 1fr); gap: 20px; align-items: start; }
 .lesson-primary { min-width: 0; }

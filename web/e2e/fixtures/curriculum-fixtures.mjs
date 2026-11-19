@@ -1104,37 +1104,32 @@ export const LESSON_FIXTURES = {
         "index": 13,
         "id": "l01-exercise-8",
         "sourceExerciseId": "WB-L01-E08",
-        "kind": "typed",
-        "instruction": "Wpisz określenia kierunku pasujące do ilustracji.",
+        "kind": "letter-cloze",
+        "instruction": "Wpisz brakujące litery zgodnie z ilustracją.",
         "items": [
           {
             "id": "q1",
-            "prompt": "1 · n_a _e_o",
-            "accepted": [
-              "na lewo"
-            ]
+            "prompt": "1 · na lewo",
+            "accepted": ["1 · na lewo"],
+            "letterCloze": { "parts": ["1 · n", " ", "e", "o"], "gaps": ["a", "l", "w"] }
           },
           {
             "id": "q2",
-            "prompt": "2 · __u / __u__aj",
-            "accepted": [
-              "tu",
-              "tutaj"
-            ]
+            "prompt": "2 · tutaj",
+            "accepted": ["2 · tutaj"],
+            "letterCloze": { "parts": ["2 · ", "u", "aj"], "gaps": ["t", "t"] }
           },
           {
             "id": "q3",
-            "prompt": "3 · t___",
-            "accepted": [
-              "tam"
-            ]
+            "prompt": "3 · tam",
+            "accepted": ["3 · tam"],
+            "letterCloze": { "parts": ["3 · t", "", ""], "gaps": ["a", "m"] }
           },
           {
             "id": "q4",
-            "prompt": "4 · __a __r__o",
-            "accepted": [
-              "na prawo"
-            ]
+            "prompt": "4 · na prawo",
+            "accepted": ["4 · na prawo"],
+            "letterCloze": { "parts": ["4 · ", "a ", "r", "", "o"], "gaps": ["n", "p", "a", "w"] }
           }
         ]
       },

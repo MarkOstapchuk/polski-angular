@@ -72,6 +72,9 @@
               <div class="lesson-heading activity-heading">
                 <h1>{{ activity.title }}</h1>
                 <p class="instruction">{{ activity.instruction }}</p>
+                @if (hasTextInputs()) {
+                  <p class="latin-input-hint" data-latin-input-hint>{{ language.t('lesson.latinInputHint') }}</p>
+                }
                 <div class="source-line">
                   <span class="source-dot"></span>{{ activity.sourceLabel }}
                   <span class="source-id">{{ activity.sourceExerciseId }}</span>
@@ -84,7 +87,7 @@
                 </div>
               }
 
-              <section class="exercise-card" #exerciseCard [class.is-checked]="checked()" (focusin)="onExerciseFocusIn($event)">
+              <section class="exercise-card" #exerciseCard [class.is-checked]="checked()">
                 @if (images().length) {
                   <div class="image-strip">
                     @for (image of images(); track image.src) {
@@ -279,11 +282,6 @@
               </section>
 
               <div class="lesson-bottom-dock">
-                @if (!checked() && hasTextInputs()) {
-                  <app-diacritic-bar
-                    [targetInput]="lastFocusedInput()"
-                    [container]="exerciseCardRef()?.nativeElement ?? null" />
-                }
                 <app-lesson-footer
                   [checked]="checked()"
                   [answeredCount]="answeredCount()"

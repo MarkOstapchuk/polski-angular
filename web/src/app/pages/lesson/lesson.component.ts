@@ -15,7 +15,6 @@ import { LanguageService } from '../../i18n/language.service';
 import { ProgressService } from '../../services/progress.service';
 import { ChoiceExerciseComponent } from './components/choice-exercise/choice-exercise.component';
 import { ClassifyExerciseComponent } from './components/classify-exercise/classify-exercise.component';
-import { DiacriticBarComponent } from './components/diacritic-bar/diacritic-bar.component';
 import { AudioPlayerTrack, LessonAudioBarComponent } from './components/lesson-audio-bar/lesson-audio-bar.component';
 import { LessonCompletionComponent } from './components/lesson-completion/lesson-completion.component';
 import { LessonDictionaryModalComponent } from './components/lesson-dictionary-modal/lesson-dictionary-modal.component';
@@ -44,7 +43,6 @@ const PONS_BLOCKED_SELECTOR =
     LessonDictionaryModalComponent,
     LessonFooterComponent,
     LessonCompletionComponent,
-    DiacriticBarComponent,
     ChoiceExerciseComponent,
     TypedExerciseComponent,
     MultiGapExerciseComponent,
@@ -79,7 +77,6 @@ export class LessonComponent {
   readonly lightboxImage = signal<WorkbookImage | null>(null);
   readonly theoryOpen = signal(false);
   readonly revealedHints = signal<Record<string, boolean>>({});
-  readonly lastFocusedInput = signal<HTMLInputElement | HTMLTextAreaElement | null>(null);
 
   private lastOverlayTrigger: HTMLElement | null = null;
   private pickerScrollRafId: number | null = null;
@@ -340,18 +337,6 @@ export class LessonComponent {
     nextUnanswered?.focus();
   }
 
-  onExerciseFocusIn(event: FocusEvent): void {
-    const target = event.target;
-    if (
-      (target instanceof HTMLInputElement || target instanceof HTMLTextAreaElement)
-      && !target.disabled
-      && !target.readOnly
-      && (target.classList.contains('answer-input') || target.classList.contains('letter-cloze-gap'))
-    ) {
-      this.lastFocusedInput.set(target);
-    }
-  }
-
   lessonLabel(lessonId: number): string {
     return lessonId > 26
       ? `${this.language.t('lesson.part')} 2 · ${this.language.t('lesson.lesson')} ${String(lessonId - 26).padStart(2, '0')}`
@@ -592,7 +577,6 @@ export class LessonComponent {
     this.checked.set(!!saved);
     this.wordBankTypeMode.set(false);
     this.wordOrderTypeItems.set({});
-    this.lastFocusedInput.set(null);
     this.scrollToTop();
     this.scrollActivePickerIntoView();
   }
@@ -641,7 +625,6 @@ export class LessonComponent {
     for (const item of activity.items) result[item.id] = this.isCorrect(item);
     this.results.update((current) => ({ ...current, [activity.id]: result }));
     this.checked.set(true);
-    this.lastFocusedInput.set(null);
     this.retriedActivityIds.update((set) => {
       if (!set.has(activity.id)) return set;
       const next = new Set(set);
@@ -660,7 +643,6 @@ export class LessonComponent {
     this.checked.set(false);
     this.matchExercise()?.clearSelection();
     this.wordBankExercise()?.clearSelection();
-    this.lastFocusedInput.set(null);
     this.scrollToTop();
   }
 
@@ -671,7 +653,6 @@ export class LessonComponent {
     this.checked.set(false);
     this.matchExercise()?.clearSelection();
     this.wordBankExercise()?.clearSelection();
-    this.lastFocusedInput.set(null);
     this.scrollToTop();
   }
 
@@ -759,7 +740,6 @@ export class LessonComponent {
     this.dictionaryMode.set(false);
     this.lightboxImage.set(null);
     this.theoryOpen.set(false);
-    this.lastFocusedInput.set(null);
 
     const restoredResults: Record<string, Record<string, boolean>> = {};
     const restoredAnswers: Record<string, string> = {};

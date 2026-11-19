@@ -484,7 +484,7 @@ export const TIER2_TESTS = [
   {
     id: 'T2-08',
     tier: 2,
-    title: 'Polish Diacritics Caret Insertion & Smart Accent Warning (F14 / F24)',
+    title: 'Latin Input Hint & Smart Accent Warning (F14 / F24)',
     viewports: [VIEWPORTS.mobile, VIEWPORTS.desktop],
     async run({ chrome, baseUrl, viewport }) {
       const start = Date.now();
@@ -500,22 +500,12 @@ export const TIER2_TESTS = [
         await page.domClick('nav.exercise-picker button.exercise-picker-button', 7); // l01-spelling
         await sleep(100);
 
-        // Caret insertion in middle of text
-        const caretResult = await page.evaluate(() => {
-          const inp = document.querySelector('.question-row input.answer-input, .question-row textarea');
-          const btn = [...document.querySelectorAll('button')].find((b) => (b.textContent || '').trim() === 'ó');
-          if (!inp || !btn) return { ok: false, reason: 'missing input or ó button' };
-          inp.focus();
-          Object.getOwnPropertyDescriptor(
-            inp.tagName === 'TEXTAREA' ? HTMLTextAreaElement.prototype : HTMLInputElement.prototype,
-            'value'
-          )?.set?.call(inp, 'przeczytac');
-          inp.dispatchEvent(new Event('input', { bubbles: true }));
-          inp.setSelectionRange(2, 2);
-          btn.click();
-          return { ok: inp.value === 'prózeczytac', value: inp.value };
+        const latinHint = await page.evaluate(() => {
+          const el = document.querySelector('[data-latin-input-hint]');
+          const bar = document.querySelector('.diacritic-bar');
+          return { hasHint: Boolean(el && (el.textContent || '').trim().length > 10), hasBar: Boolean(bar) };
         });
-        rec.soft('diacritics:caret-insert(F14)', caretResult.ok, JSON.stringify(caretResult));
+        rec.soft('diacritics:latin-input-hint(F14)', latinHint.hasHint && !latinHint.hasBar, JSON.stringify(latinHint));
 
         // Submit ASCII-stripped answers on L1[7] -> expect smart accent mismatch warning (F24)
         const asciiAnswers = ['rozumiem', 'powtorzyc', 'przeliterowac', 'wiem', 'pamietam', 'przeczytac', 'znaczy'];
