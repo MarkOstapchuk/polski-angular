@@ -1781,7 +1781,7 @@ export const LESSON_FIXTURES = {
         "id": "l03-exercise-4",
         "sourceExerciseId": "WB-L03-E04",
         "kind": "typed",
-        "instruction": "Odpowiedz na pytania o przedmioty z ilustracji.",
+        "instruction": "Odpowiedz na każde pytanie pełnym zdaniem na podstawie ilustracji. Przykład: „Czy to jest stół?” — „Nie, to nie jest stół. To jest krzesło.”",
         "items": [
           {
             "id": "q1",

@@ -551,7 +551,7 @@ export const LESSONS: Lesson[] = [
           choice('q5', 'ołó-', '-wek', l03WordEndings), choice('q6', 'komór-', '-ka', l03WordEndings),
         ],
       },
-      typedExercise(3, 4, 'Co to jest?', 'Odpowiedz na pytania o przedmioty z ilustracji.', [
+      typedExercise(3, 4, 'Co to jest?', 'Odpowiedz na każde pytanie pełnym zdaniem na podstawie ilustracji. Przykład: „Czy to jest stół?” — „Nie, to nie jest stół. To jest krzesło.”', [
         ['1. Czy to jest okno?', 'Nie, to nie jest okno. To jest klucz.'],
         ['2. Czy to jest sekretarka?', 'Nie, to nie jest sekretarka. To jest nauczycielka.'],
         ['3. Czy to jest ołówek?', 'Nie, to nie jest ołówek. To jest gumka.'],

@@ -41,7 +41,7 @@ export const INSTRUCTION_TRANSLATIONS: Record<string, { ru: string; en: string }
   'Wpisz kolor zgodny z rodzajem rzeczownika.': { ru: 'Впишите цвет, согласованный с родом существительного.', en: 'Enter the color matching the noun\'s gender.' },
   'Odtwórz nagranie i popraw zapis. Polskie znaki są częścią odpowiedzi.': { ru: 'Прослушайте запись и исправьте написание. Польские диакритические знаки являются частью ответа.', en: 'Play the recording and correct the spelling. Polish diacritics are part of the answer.' },
   'Połącz początki i końcówki wyrazów.': { ru: 'Соедините начала и окончания слов.', en: 'Match the beginnings and endings of the words.' },
-  'Odpowiedz na pytania o przedmioty z ilustracji.': { ru: 'Ответьте на вопросы о предметах на иллюстрации.', en: 'Answer the questions about the objects in the illustration.' },
+  'Odpowiedz na każde pytanie pełnym zdaniem na podstawie ilustracji. Przykład: „Czy to jest stół?” — „Nie, to nie jest stół. To jest krzesło.”': { ru: 'Ответьте на каждый вопрос полным предложением по иллюстрации. Например: «Это стол?» — «Нет, это не стол. Это стул.»', en: 'Answer each question in a full sentence based on the illustration. Example: “Is this a table?” — “No, this is not a table. This is a chair.”' },
   'Wpisz kategorię każdego przymiotnika.': { ru: 'Укажите категорию каждого прилагательного.', en: 'Enter the category of each adjective.' },
   'Wpisz wyraz o przeciwnym znaczeniu.': { ru: 'Впишите слово с противоположным значением.', en: 'Enter a word with the opposite meaning.' },
   'Uzupełnij wyrażenia właściwą formą przymiotnika.': { ru: 'Дополните выражения правильной формой прилагательного.', en: 'Complete the expressions with the correct adjective form.' },
