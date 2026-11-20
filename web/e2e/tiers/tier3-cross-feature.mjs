@@ -468,6 +468,13 @@ export const TIER3_TESTS = [
               });
               const ok = info.has && info.len > 200 && (lang === 'ru' ? info.cyr > 20 : info.cyr === 0);
               rec.soft(`theory-i18n:${lang}:L${lesson}`, ok, JSON.stringify(info));
+              const instrCheck = await page.evaluate(() => {
+                const tr = document.querySelector('.instruction-translation');
+                const txt = tr?.textContent?.trim() || '';
+                return { has: Boolean(tr), txt };
+              });
+              const instrOk = lang === 'pl' ? !instrCheck.has : (instrCheck.has && instrCheck.txt.startsWith('(') && instrCheck.txt.endsWith(')'));
+              rec.soft(`instruction-i18n:${lang}:L${lesson}`, instrOk, JSON.stringify(instrCheck));
             }
           } finally {
             await page.close();

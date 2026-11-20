@@ -9,6 +9,7 @@ import { Activity, ActivityItem, AdaptedActivity, AdaptedItem, getLesson, Lesson
 import { LESSON_THEORY, LessonTheoryId } from '../../data/lesson-theory';
 import { LESSON_THEORY_EN } from '../../data/lesson-theory.en';
 import { LESSON_THEORY_PL } from '../../data/lesson-theory.pl';
+import { INSTRUCTION_TRANSLATIONS } from '../../data/instruction-translations';
 import { WORKBOOK_IMAGES, WorkbookImage } from '../../data/workbook-images';
 import { LanguageSwitcherComponent } from '../../i18n/language-switcher.component';
 import { LanguageService } from '../../i18n/language.service';
@@ -341,6 +342,12 @@ export class LessonComponent {
     return lessonId > 26
       ? `${this.language.t('lesson.part')} 2 · ${this.language.t('lesson.lesson')} ${String(lessonId - 26).padStart(2, '0')}`
       : `${this.language.t('lesson.lesson')} ${String(lessonId).padStart(2, '0')}`;
+  }
+
+  instructionTranslation(instruction: string): string | null {
+    const locale = this.language.locale();
+    if (locale === 'pl') return null;
+    return INSTRUCTION_TRANSLATIONS[instruction]?.[locale] ?? null;
   }
 
   dashboardUrl(): string {

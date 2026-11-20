@@ -71,7 +71,12 @@
             <div class="lesson-primary">
               <div class="lesson-heading activity-heading">
                 <h1>{{ activity.title }}</h1>
-                <p class="instruction">{{ activity.instruction }}</p>
+                <p class="instruction">
+                  {{ activity.instruction }}
+                  @if (instructionTranslation(activity.instruction); as tr) {
+                    <span class="instruction-translation">({{ tr }})</span>
+                  }
+                </p>
                 @if (hasTextInputs()) {
                   <p class="latin-input-hint" data-latin-input-hint>{{ language.t('lesson.latinInputHint') }}</p>
                 }
