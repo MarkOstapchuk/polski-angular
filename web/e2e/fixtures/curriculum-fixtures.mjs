@@ -1723,50 +1723,56 @@ export const LESSON_FIXTURES = {
         "index": 6,
         "id": "l03-exercise-3",
         "sourceExerciseId": "WB-L03-E03",
-        "kind": "typed",
-        "instruction": "Połącz początki i końcówki wyrazów.",
+        "kind": "match",
+        "instruction": "Połącz początek wyrazu z pasującą końcówką.",
         "items": [
           {
             "id": "q1",
-            "prompt": "ze- + -szyt",
+            "prompt": "ze-",
             "accepted": [
-              "zeszyt"
-            ]
+              "-szyt"
+            ],
+            "options": ["-tor", "-ka", "-szyt", "-wek", "-cz", "-ół"]
           },
           {
             "id": "q2",
-            "prompt": "st- + -ół",
+            "prompt": "st-",
             "accepted": [
-              "stół"
-            ]
+              "-ół"
+            ],
+            "options": ["-tor", "-ka", "-szyt", "-wek", "-cz", "-ół"]
           },
           {
             "id": "q3",
-            "prompt": "segrega- + -tor",
+            "prompt": "segrega-",
             "accepted": [
-              "segregator"
-            ]
+              "-tor"
+            ],
+            "options": ["-tor", "-ka", "-szyt", "-wek", "-cz", "-ół"]
           },
           {
             "id": "q4",
-            "prompt": "klu- + -cz",
+            "prompt": "klu-",
             "accepted": [
-              "klucz"
-            ]
+              "-cz"
+            ],
+            "options": ["-tor", "-ka", "-szyt", "-wek", "-cz", "-ół"]
           },
           {
             "id": "q5",
-            "prompt": "ołó- + -wek",
+            "prompt": "ołó-",
             "accepted": [
-              "ołówek"
-            ]
+              "-wek"
+            ],
+            "options": ["-tor", "-ka", "-szyt", "-wek", "-cz", "-ół"]
           },
           {
             "id": "q6",
-            "prompt": "komór- + -ka",
+            "prompt": "komór-",
             "accepted": [
-              "komórka"
-            ]
+              "-ka"
+            ],
+            "options": ["-tor", "-ka", "-szyt", "-wek", "-cz", "-ół"]
           }
         ]
       },

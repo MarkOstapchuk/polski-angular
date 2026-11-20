@@ -45,6 +45,7 @@ const l01PhraseEndings = ['znaczy?', 'pytanie.', 'mówi po polsku…?', 'rozumie
 const l02QuestionEndings = ['a. pani', 'b. u ciebie', 'c. w porządku', 'd. słychać', 'e. staremu', 'f. nowego'];
 const l02PronounVerbs = ['a. śpiewa', 'b. pytają', 'c. znacie', 'd. grają', 'e. kocham', 'f. mieszka', 'g. czytasz', 'h. nazywamy się', 'i. ogląda'];
 const l03AdjectiveOptions = ['a. biały', 'b. białe', 'c. żółta', 'd. zielona', 'e. czarna', 'f. czerwone'];
+const l03WordEndings = ['-tor', '-ka', '-szyt', '-wek', '-cz', '-ół'];
 const l03QuestionAnswers = ['a. Nie, to jest sekretarka.', 'b. To jest kubek.', 'c. To dziecko jest małe.', 'd. Tak, to jest nauczyciel.', 'e. To jest dziecko.', 'f. Tak, to jest kawa.', 'g. Ten nauczyciel jest miły.', 'h. Ta kawa jest czarna.'];
 const l04QuestionAnswers = ['a. Tak, bardzo.', 'b. Tak, bardzo dobrze, jestem z Hiszpanii.', 'c. Bo chcę studiować w Krakowie.', 'd. Nic nowego.', 'e. Z Madrytu.', 'f. Nie wiem, ale myślę, że tak.'];
 const l05QuestionAnswers = ['a. Prawie 18.', 'b. Bo mam egzamin.', 'c. Bardzo sympatyczna.', 'd. Gram w tenisa.', 'e. Grać w tenisa.', 'f. W Gdańsku.', 'g. Policjantem.', 'h. Bardzo profesjonalną.', 'i. Z Gdańska.', 'j. Pracowitym.'];
@@ -541,10 +542,15 @@ export const LESSONS: Lesson[] = [
           typed('q9', 'sary', 'szary'), typed('q10', 'bialy', 'biały'),
         ],
       },
-      typedExercise(3, 3, 'Ułóż nazwy przedmiotów', 'Połącz początki i końcówki wyrazów.', [
-        ['ze- + -szyt', 'zeszyt'], ['st- + -ół', 'stół'], ['segrega- + -tor', 'segregator'],
-        ['klu- + -cz', 'klucz'], ['ołó- + -wek', 'ołówek'], ['komór- + -ka', 'komórka'],
-      ]),
+      {
+        id: 'l03-exercise-3', sourceExerciseId: 'WB-L03-E03', sourceLabel: 'Zeszyt ćwiczeń · ćwiczenie 3',
+        kind: ActivityKind.Match, title: 'Połącz fragmenty wyrazów', instruction: 'Połącz początek wyrazu z pasującą końcówką.',
+        items: [
+          choice('q1', 'ze-', '-szyt', l03WordEndings), choice('q2', 'st-', '-ół', l03WordEndings),
+          choice('q3', 'segrega-', '-tor', l03WordEndings), choice('q4', 'klu-', '-cz', l03WordEndings),
+          choice('q5', 'ołó-', '-wek', l03WordEndings), choice('q6', 'komór-', '-ka', l03WordEndings),
+        ],
+      },
       typedExercise(3, 4, 'Co to jest?', 'Odpowiedz na pytania o przedmioty z ilustracji.', [
         ['1. Czy to jest okno?', 'Nie, to nie jest okno. To jest klucz.'],
         ['2. Czy to jest sekretarka?', 'Nie, to nie jest sekretarka. To jest nauczycielka.'],
