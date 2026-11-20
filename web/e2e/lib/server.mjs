@@ -46,6 +46,10 @@ const STATIC_SEO_ROUTES = new Map([
   ['/seo/index.html', 'seo/index.html'],
   ['/seo', 'seo/index.html'],
   ['/seo/', 'seo/index.html'],
+  ['/ru', 'ru/index.html'],
+  ['/ru/', 'ru/index.html'],
+  ['/en', 'en/index.html'],
+  ['/en/', 'en/index.html'],
 ]);
 
 function safeResolve(rootDir, relPath) {

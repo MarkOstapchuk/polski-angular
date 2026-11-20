@@ -52,6 +52,8 @@ export const TIER1_TESTS = [
         // Static SEO landing & guides
         for (const seoRoute of [
           '/seo/index.html',
+          '/ru',
+          '/en',
           '/nauka/polskie-znaki',
           '/gramatyka/przypadki',
           '/slownictwo/podstawowe-zwroty',
@@ -77,6 +79,15 @@ export const TIER1_TESTS = [
             touch.ok,
             touch.violations.map((v) => `${v.target}=${v.width}x${v.height}`).join(', ')
           );
+          if (seoRoute === '/seo/index.html' || seoRoute === '/ru' || seoRoute === '/en') {
+            await page.waitForSelector('[data-demo-quiz] .demo-opt', { timeoutMs: 3000 });
+            await page.domClick('[data-demo-quiz] .demo-opt', 0);
+            const demoFb = await page.evaluate(() => ({
+              fb: document.querySelector('[data-demo-fb]')?.textContent?.trim() || '',
+              nextVisible: !document.querySelector('[data-demo-next]')?.hidden,
+            }));
+            rec.soft(`seo:${seoRoute}:demo-quiz-interactive`, Boolean(demoFb.fb && demoFb.nextVisible), JSON.stringify(demoFb));
+          }
         }
 
         const rt = checkRuntimeClean(page);

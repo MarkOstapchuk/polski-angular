@@ -16,6 +16,8 @@ const origin = configuredOrigin
   : '';
 const pages = [
   { route: '/', file: 'seo/index.html' },
+  { route: '/ru', file: 'ru/index.html' },
+  { route: '/en', file: 'en/index.html' },
   { route: '/nauka/polskie-znaki', file: 'nauka/polskie-znaki/index.html' },
   { route: '/gramatyka/przypadki', file: 'gramatyka/przypadki/index.html' },
   { route: '/slownictwo/podstawowe-zwroty', file: 'slownictwo/podstawowe-zwroty/index.html' },
