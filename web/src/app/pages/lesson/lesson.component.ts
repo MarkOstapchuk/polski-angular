@@ -460,6 +460,7 @@ export class LessonComponent {
   }
 
   onWordBankTypeModeChange(isTypeMode: boolean): void {
+    if (this.wordBankTypeMode() === isTypeMode) return;
     this.wordBankTypeMode.set(isTypeMode);
     const lesson = this.lesson();
     const activity = this.activity();
@@ -474,7 +475,9 @@ export class LessonComponent {
   }
 
   onWordOrderModeChange(itemId: string, mode: 'chips' | 'type'): void {
-    this.wordOrderTypeItems.update((cur) => ({ ...cur, [itemId]: mode === 'type' }));
+    const nextIsType = mode === 'type';
+    if (!!this.wordOrderTypeItems()[itemId] === nextIsType) return;
+    this.wordOrderTypeItems.update((cur) => ({ ...cur, [itemId]: nextIsType }));
     const lesson = this.lesson();
     const activity = this.activity();
     if (lesson && activity) {
