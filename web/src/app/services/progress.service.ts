@@ -1,4 +1,5 @@
-import { Injectable, signal } from '@angular/core';
+import { Injectable, inject, signal } from '@angular/core';
+import { AnalyticsService } from './analytics.service';
 import { supabase } from './supabase.client';
 
 export interface LearnerProgress {
@@ -75,6 +76,7 @@ function mergeProgress(remote: LearnerProgress, local: LearnerProgress): Learner
 
 @Injectable({ providedIn: 'root' })
 export class ProgressService {
+  private readonly analytics = inject(AnalyticsService);
   readonly progress = signal<LearnerProgress>(this.readProgress());
   readonly syncError = signal<string | null>(null);
   private userId: string | null = null;
@@ -109,7 +111,9 @@ export class ProgressService {
       for (const saved of [local, legacy, pending]) if (saved) progress = mergeProgress(progress, saved);
       this.userId = userId;
       this.progress.set(progress);
+      this.syncPersonProperties(progress);
       this.syncError.set('Nie udało się wczytać postępów z chmury. Zapisuję je na tym urządzeniu i zsynchronizuję po powrocie połączenia.');
+      this.analytics.track('progress_sync_error', { metadata: { phase: 'load' } });
       this.storeProgress(localKey, progress);
       if (pending || local || legacy) this.persist(progress, userId);
       return;
@@ -119,6 +123,7 @@ export class ProgressService {
     for (const saved of [local, legacy, pending]) if (saved) progress = mergeProgress(progress, saved);
     this.userId = userId;
     this.progress.set(progress);
+    this.syncPersonProperties(progress);
     this.syncError.set(null);
     this.storeProgress(localKey, progress);
     try {
@@ -137,8 +142,8 @@ export class ProgressService {
     return this.progress().completedLessonIds.includes(lessonId);
   }
 
-  isUnlocked(lessonId: number, firstLessonId = 1): boolean {
-    return lessonId === firstLessonId || this.hasCompleted(lessonId - 1);
+  isUnlocked(_lessonId: number, _firstLessonId = 1): boolean {
+    return true;
   }
 
   scoreFor(lessonId: number): number | null {
@@ -166,6 +171,7 @@ export class ProgressService {
       next.bestStreak = Math.max(current.bestStreak, next.streak);
     }
 
+    this.syncPersonProperties(next);
     return this.save(next);
   }
 
@@ -261,7 +267,18 @@ export class ProgressService {
         // Local progress remains available even if browser storage is unavailable.
       }
     }).catch(() => {
-      if (this.userId === userId) this.syncError.set('Nie udało się zsynchronizować postępów. Zachowałem je na tym urządzeniu i spróbuję ponownie po powrocie połączenia.');
+      if (this.userId === userId) {
+        this.syncError.set('Nie udało się zsynchronizować postępów. Zachowałem je na tym urządzeniu i spróbuję ponownie po powrocie połączenia.');
+        this.analytics.track('progress_sync_error', { metadata: { phase: 'save' } });
+      }
+    });
+  }
+
+  private syncPersonProperties(progress: LearnerProgress): void {
+    this.analytics.updatePersonProperties({
+      completed_lessons_count: progress.completedLessonIds.length,
+      total_xp: progress.totalXp,
+      streak: progress.streak,
     });
   }
 }

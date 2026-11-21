@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@a
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { COURSES } from '../../data/lesson-catalog';
+import { AnalyticsService } from '../../services/analytics.service';
 import { AuthService } from '../../services/auth.service';
 import { supabase } from '../../services/supabase.client';
 import { LanguageSwitcherComponent } from '../../i18n/language-switcher.component';
@@ -17,6 +18,7 @@ import { LanguageService } from '../../i18n/language.service';
 })
 export class FeedbackComponent {
   readonly courses = COURSES;
+  private readonly analytics = inject(AnalyticsService);
   private readonly auth = inject(AuthService);
   private readonly route = inject(ActivatedRoute);
   readonly language = inject(LanguageService);
@@ -46,6 +48,13 @@ export class FeedbackComponent {
         message,
       });
       if (error) throw error;
+      this.analytics.track('feedback_submitted', {
+        courseId: this.category() === 'course' ? this.courseId() : undefined,
+        metadata: {
+          category: this.category(),
+          message_length: message.length,
+        },
+      });
       this.message.set('');
       this.sent.set(true);
     } catch {

@@ -2,6 +2,7 @@ import { Injectable, inject, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import type { CanActivateFn } from '@angular/router';
 import type { User } from '@supabase/supabase-js';
+import { AnalyticsService } from './analytics.service';
 import { ProgressService } from './progress.service';
 import { supabase } from './supabase.client';
 
@@ -10,12 +11,14 @@ type AppUser = Pick<User, 'id' | 'email'>;
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
+  private readonly analytics = inject(AnalyticsService);
   readonly user = signal<AppUser | null>(null);
 
   async currentUser(): Promise<AppUser | null> {
     const cachedUser = typeof navigator !== 'undefined' && !navigator.onLine ? this.readOfflineUser() : null;
     if (cachedUser) {
       this.user.set(cachedUser);
+      this.identifyUser(cachedUser);
       return cachedUser;
     }
 
@@ -25,10 +28,12 @@ export class AuthService {
       const user = data.session?.user ?? null;
       if (user) {
         this.storeOfflineUser(user);
+        this.identifyUser(user);
       } else if (typeof navigator !== 'undefined' && !navigator.onLine) {
         const offlineUser = this.readOfflineUser();
         if (offlineUser) {
           this.user.set(offlineUser);
+          this.identifyUser(offlineUser);
           return offlineUser;
         }
       } else {
@@ -40,6 +45,7 @@ export class AuthService {
       const offlineUser = typeof navigator !== 'undefined' && !navigator.onLine ? this.readOfflineUser() : null;
       if (offlineUser) {
         this.user.set(offlineUser);
+        this.identifyUser(offlineUser);
         return offlineUser;
       }
       throw error;
@@ -53,9 +59,11 @@ export class AuthService {
       options: { emailRedirectTo: window.location.origin },
     });
     if (error) throw error;
+    const createdUser = data.session?.user ?? data.user ?? null;
     this.user.set(data.session?.user ?? null);
     if (data.session?.user) this.storeOfflineUser(data.session.user);
     else this.clearOfflineUser();
+    if (createdUser) this.identifyUser(createdUser);
     return !!data.session;
   }
 
@@ -64,6 +72,7 @@ export class AuthService {
     if (error) throw error;
     this.user.set(data.user);
     this.storeOfflineUser(data.user);
+    this.identifyUser(data.user);
   }
 
   async signOut(): Promise<void> {
@@ -71,6 +80,13 @@ export class AuthService {
     if (error) throw error;
     this.user.set(null);
     this.clearOfflineUser();
+    this.analytics.reset();
+  }
+
+  private identifyUser(user: AppUser): void {
+    this.analytics.identify(user.id, {
+      email: user.email ?? undefined,
+    });
   }
 
   private storeOfflineUser(user: AppUser): void {
@@ -106,6 +122,7 @@ export class AuthService {
 
 export const authGuard: CanActivateFn = async (_route, state) => {
   const auth = inject(AuthService);
+  const analytics = inject(AnalyticsService);
   const progress = inject(ProgressService);
   const router = inject(Router);
 
@@ -113,15 +130,20 @@ export const authGuard: CanActivateFn = async (_route, state) => {
   try {
     user = await auth.currentUser();
   } catch {
+    analytics.track('auth_guard_redirected', { metadata: { reason: 'session_error', target_url: state.url } });
     return router.createUrlTree(['/auth'], { queryParams: { error: 'session' } });
   }
 
-  if (!user) return router.createUrlTree(['/auth'], { queryParams: { next: state.url } });
+  if (!user) {
+    analytics.track('auth_guard_redirected', { metadata: { reason: 'unauthenticated', target_url: state.url } });
+    return router.createUrlTree(['/auth'], { queryParams: { next: state.url } });
+  }
 
   try {
     await progress.loadForUser(user.id);
     return true;
   } catch {
+    analytics.track('auth_guard_redirected', { metadata: { reason: 'progress_error', target_url: state.url } });
     return router.createUrlTree(['/auth'], { queryParams: { error: 'progress' } });
   }
 };

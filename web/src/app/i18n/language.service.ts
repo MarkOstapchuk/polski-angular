@@ -1,4 +1,5 @@
-import { Injectable, signal } from '@angular/core';
+import { Injectable, inject, signal } from '@angular/core';
+import { AnalyticsService } from '../services/analytics.service';
 
 export type Language = 'pl' | 'ru' | 'en';
 
@@ -271,6 +272,7 @@ const messages: Record<Language, Record<string, string>> = {
 
 @Injectable({ providedIn: 'root' })
 export class LanguageService {
+  private readonly analytics = inject(AnalyticsService);
   readonly locale = signal<Language>(this.initialLanguage());
 
   constructor() {
@@ -283,9 +285,20 @@ export class LanguageService {
 
   setLanguage(language: Language): void {
     if (!['pl', 'ru', 'en'].includes(language)) return;
+    const previous = this.locale();
     this.locale.set(language);
     try { localStorage.setItem('polski-language', language); } catch {}
     this.applyDocumentLanguage(language);
+    this.analytics.setLocale(language);
+    if (previous !== language) {
+      this.analytics.track('language_changed', {
+        metadata: {
+          from_locale: previous,
+          to_locale: language,
+          current_path: typeof window !== 'undefined' ? window.location.pathname : null,
+        },
+      });
+    }
   }
 
   private initialLanguage(): Language {

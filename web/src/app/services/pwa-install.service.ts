@@ -1,4 +1,5 @@
-import { Injectable, signal } from '@angular/core';
+import { Injectable, inject, signal } from '@angular/core';
+import { AnalyticsService } from './analytics.service';
 
 interface InstallPromptEvent extends Event {
   prompt(): Promise<void>;
@@ -7,6 +8,7 @@ interface InstallPromptEvent extends Event {
 
 @Injectable({ providedIn: 'root' })
 export class PwaInstallService {
+  private readonly analytics = inject(AnalyticsService);
   readonly installAvailable = signal(false);
   readonly needsIOSInstructions = signal(false);
   readonly instructionsVisible = signal(false);
@@ -27,16 +29,22 @@ export class PwaInstallService {
     window.addEventListener('appinstalled', () => {
       this.installPrompt = null;
       this.installAvailable.set(false);
+      this.analytics.track('pwa_installed');
     });
   }
 
   async install(): Promise<void> {
     if (!this.installPrompt) {
-      if (this.needsIOSInstructions()) this.instructionsVisible.set(true);
+      if (this.needsIOSInstructions()) {
+        this.instructionsVisible.set(true);
+        this.analytics.track('pwa_install_clicked', { metadata: { platform: 'ios_instructions' } });
+      }
       return;
     }
+    this.analytics.track('pwa_install_clicked', { metadata: { platform: 'prompt' } });
     await this.installPrompt.prompt();
-    await this.installPrompt.userChoice;
+    const choice = await this.installPrompt.userChoice;
+    this.analytics.track('pwa_install_prompt_result', { metadata: { outcome: choice.outcome, platform: choice.platform } });
     this.installPrompt = null;
     this.installAvailable.set(false);
   }

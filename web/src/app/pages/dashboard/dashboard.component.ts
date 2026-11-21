@@ -4,6 +4,7 @@ import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { map } from 'rxjs';
 import { COURSES, CourseSummary, LESSON_CATALOG, LessonSummary } from '../../data/lesson-catalog';
 import { AuthService } from '../../services/auth.service';
+import { AnalyticsService } from '../../services/analytics.service';
 import { ProgressService } from '../../services/progress.service';
 import { PwaInstallService } from '../../services/pwa-install.service';
 import { LanguageSwitcherComponent } from '../../i18n/language-switcher.component';
@@ -32,6 +33,7 @@ export class DashboardComponent {
   private readonly router = inject(Router);
   private readonly route = inject(ActivatedRoute);
   readonly auth = inject(AuthService);
+  private readonly analytics = inject(AnalyticsService);
   readonly language = inject(LanguageService);
   readonly progressService = inject(ProgressService);
   readonly pwa = inject(PwaInstallService);
@@ -71,6 +73,16 @@ export class DashboardComponent {
     effect(() => {
       const course = this.selectedCourse();
       if (!course) return;
+      const snapshot = this.progressService.progress();
+      this.analytics.trackOnce(`dashboard_opened:${course.id}`, 'dashboard_opened', {
+        courseId: course.id,
+        metadata: {
+          completed_lessons_count: snapshot.completedLessonIds.length,
+          total_xp: snapshot.totalXp,
+          streak: snapshot.streak,
+          is_new_user: snapshot.completedLessonIds.length === 0,
+        },
+      });
       try {
         if (typeof localStorage !== 'undefined') localStorage.setItem(ACTIVE_COURSE_KEY, course.id);
       } catch {
@@ -80,13 +92,36 @@ export class DashboardComponent {
   }
 
   openCourse(course: CourseSummary): void {
+    this.analytics.track('course_switched', {
+      courseId: course.id,
+      metadata: {
+        from_course_id: this.selectedCourse()?.id ?? 'choose',
+        to_course_id: course.id,
+      },
+    });
     void this.router.navigate(['/course', course.id]);
   }
 
-  openLesson(lesson: LessonSummary): void {
+  openLesson(lesson: LessonSummary, source: 'continue_card' | 'path_list' = 'path_list'): void {
     const course = this.selectedCourse();
     if (!course || !this.progressService.isUnlocked(lesson.id, course.firstLessonId)) return;
+    this.analytics.track('lesson_card_clicked', {
+      courseId: course.id,
+      lessonId: lesson.id,
+      metadata: {
+        lesson_title: lesson.title,
+        source,
+        is_completed: this.progressService.hasCompleted(lesson.id),
+      },
+    });
     void this.router.navigate(['/learn', lesson.id]);
+  }
+
+  trackGuideClick(guidePath: string): void {
+    this.analytics.track('guide_clicked', {
+      courseId: this.selectedCourse()?.id,
+      metadata: { guide_path: guidePath, source: 'dashboard' },
+    });
   }
 
   courseCompleteCount(course: CourseSummary): number {
@@ -133,6 +168,13 @@ export class DashboardComponent {
     this.signingOut.set(true);
     try {
       await this.progressService.flush();
+      const snapshot = this.progressService.progress();
+      this.analytics.track('user_signed_out', {
+        metadata: {
+          completed_lessons_count: snapshot.completedLessonIds.length,
+          total_xp: snapshot.totalXp,
+        },
+      });
       await this.auth.signOut();
       this.signOutConfirmOpen.set(false);
       await this.router.navigateByUrl('/auth');

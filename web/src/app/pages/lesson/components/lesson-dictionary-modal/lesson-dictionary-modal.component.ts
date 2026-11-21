@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, Component, effect, ElementRef, inject, model, output, signal, viewChild } from '@angular/core';
 import { LanguageService } from '../../../../i18n/language.service';
+import { AnalyticsService } from '../../../../services/analytics.service';
 import { supabase } from '../../../../services/supabase.client';
 
 @Component({
@@ -10,6 +11,7 @@ import { supabase } from '../../../../services/supabase.client';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class LessonDictionaryModalComponent {
+  private readonly analytics = inject(AnalyticsService);
   readonly language = inject(LanguageService);
   readonly word = model<string | null>(null);
   readonly closed = output<void>();
@@ -48,9 +50,30 @@ export class LessonDictionaryModalComponent {
       const { data, error } = await supabase.functions.invoke<{ translations: string[] }>('pons-dictionary', { body: { word, lang: this.language.locale() } });
       if (request !== this.requestCounter) return;
       if (error) throw error;
-      this.translations.set(data?.translations ?? []);
+      const translations = data?.translations ?? [];
+      this.translations.set(translations);
+      this.analytics.track('dictionary_word_looked_up', {
+        metadata: {
+          word_length: word.length,
+          locale: this.language.locale(),
+          found: translations.length > 0,
+          error: false,
+          translations_count: translations.length,
+        },
+      });
     } catch {
-      if (request === this.requestCounter) this.error.set(this.language.t('lesson.dictionaryError'));
+      if (request === this.requestCounter) {
+        this.error.set(this.language.t('lesson.dictionaryError'));
+        this.analytics.track('dictionary_word_looked_up', {
+          metadata: {
+            word_length: word.length,
+            locale: this.language.locale(),
+            found: false,
+            error: true,
+            translations_count: 0,
+          },
+        });
+      }
     } finally {
       if (request === this.requestCounter) this.loading.set(false);
     }

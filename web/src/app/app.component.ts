@@ -2,6 +2,8 @@ import { ChangeDetectionStrategy, Component, DestroyRef, inject } from '@angular
 import { RouterOutlet } from '@angular/router';
 import { SwUpdate, VersionReadyEvent } from '@angular/service-worker';
 import { filter } from 'rxjs';
+import { LanguageService } from './i18n/language.service';
+import { AnalyticsService } from './services/analytics.service';
 import { PwaInstallService } from './services/pwa-install.service';
 
 @Component({
@@ -19,6 +21,8 @@ export class AppComponent {
   };
 
   constructor() {
+    const language = inject(LanguageService);
+    inject(AnalyticsService).init(language.locale());
     inject(PwaInstallService);
     if (!this.swUpdate.isEnabled || typeof window === 'undefined') return;
 

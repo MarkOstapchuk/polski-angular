@@ -1,4 +1,31 @@
 (() => {
+  const capture = (event, props) => {
+    try {
+      if (window.posthog && typeof window.posthog.capture === 'function') {
+        window.posthog.capture(event, props);
+      }
+    } catch {
+      // Analytics must never interrupt landing interactions.
+    }
+  };
+
+  document.querySelectorAll('a[href="/auth"]').forEach((link) => {
+    link.addEventListener('click', () => {
+      const ctaLocation = link.hasAttribute('data-demo-cta')
+        ? 'demo_finish'
+        : link.closest('header')
+          ? 'nav_login'
+          : link.closest('.actions')
+            ? 'page_cta'
+            : 'inline_link';
+      capture('landing_cta_clicked', {
+        lang: document.documentElement.lang || 'pl',
+        source_page: window.location.pathname,
+        cta_location: ctaLocation,
+      });
+    });
+  });
+
   const root = document.querySelector('[data-demo-quiz]');
   if (!root) return;
   const lang = root.getAttribute('data-lang') || 'pl';
@@ -88,13 +115,19 @@
       b.disabled = true;
       if (bi === item.a) b.classList.add('is-right');
     });
-    if (i === item.a) {
+    const isRight = i === item.a;
+    if (isRight) {
       score++;
       fbEl.textContent = `${t.right} ${item.note}`;
     } else {
       btn.classList.add('is-wrong');
       fbEl.textContent = `${t.wrong(item.opts[item.a])}. ${item.note}`;
     }
+    capture('demo_quiz_answered', {
+      lang,
+      question_index: idx,
+      correct: isRight,
+    });
     nextBtn.textContent = idx === t.questions.length - 1 ? t.finish : t.next;
     nextBtn.hidden = false;
   }
@@ -104,6 +137,11 @@
       idx++;
       render();
     } else {
+      capture('demo_quiz_completed', {
+        lang,
+        score,
+        total: t.questions.length,
+      });
       stepEl.textContent = `${score} / ${t.questions.length}`;
       qEl.textContent = t.doneTitle(score, t.questions.length);
       optsEl.innerHTML = '';

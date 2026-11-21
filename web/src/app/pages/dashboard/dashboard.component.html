@@ -86,7 +86,7 @@
           [completeCount]="completeCount()"
           [lessonLabel]="lessonLabel(currentLesson())"
           [lessonNumber]="lessonNumber(currentLesson())"
-          (open)="openLesson(currentLesson())" />
+          (open)="openLesson(currentLesson(), 'continue_card')" />
 
         <div class="section-heading" id="lesson-path">
           <div><p class="eyebrow">{{ language.t('dashboard.path') }}</p><h2>{{ course.name }} · {{ language.t('dashboard.lessons') }}</h2></div>
@@ -153,9 +153,9 @@
         <p class="eyebrow">{{ language.t('dashboard.materials') }}</p>
         <h2 id="learning-guides-title">{{ language.t('dashboard.readPractice') }}</h2>
         <div class="learning-guides-grid">
-          <a href="/nauka/polskie-znaki"><strong>{{ language.t('dashboard.polishLetters') }}</strong><span>{{ language.t('dashboard.lettersHint') }}</span></a>
-          <a href="/gramatyka/przypadki"><strong>{{ language.t('dashboard.cases') }}</strong><span>{{ language.t('dashboard.casesHint') }}</span></a>
-          <a href="/slownictwo/podstawowe-zwroty"><strong>{{ language.t('dashboard.basicPhrases') }}</strong><span>{{ language.t('dashboard.phrasesHint') }}</span></a>
+          <a href="/nauka/polskie-znaki" (click)="trackGuideClick('/nauka/polskie-znaki')"><strong>{{ language.t('dashboard.polishLetters') }}</strong><span>{{ language.t('dashboard.lettersHint') }}</span></a>
+          <a href="/gramatyka/przypadki" (click)="trackGuideClick('/gramatyka/przypadki')"><strong>{{ language.t('dashboard.cases') }}</strong><span>{{ language.t('dashboard.casesHint') }}</span></a>
+          <a href="/slownictwo/podstawowe-zwroty" (click)="trackGuideClick('/slownictwo/podstawowe-zwroty')"><strong>{{ language.t('dashboard.basicPhrases') }}</strong><span>{{ language.t('dashboard.phrasesHint') }}</span></a>
         </div>
       </section>
     </div>

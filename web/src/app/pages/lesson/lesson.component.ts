@@ -13,6 +13,7 @@ import { INSTRUCTION_TRANSLATIONS } from '../../data/instruction-translations';
 import { WORKBOOK_IMAGES, WorkbookImage } from '../../data/workbook-images';
 import { LanguageSwitcherComponent } from '../../i18n/language-switcher.component';
 import { LanguageService } from '../../i18n/language.service';
+import { AnalyticsService } from '../../services/analytics.service';
 import { ProgressService } from '../../services/progress.service';
 import { ChoiceExerciseComponent } from './components/choice-exercise/choice-exercise.component';
 import { ClassifyExerciseComponent } from './components/classify-exercise/classify-exercise.component';
@@ -62,6 +63,7 @@ export class LessonComponent {
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
   private readonly progress = inject(ProgressService);
+  private readonly analytics = inject(AnalyticsService);
   readonly language = inject(LanguageService);
   readonly syncError = this.progress.syncError;
 
@@ -82,6 +84,11 @@ export class LessonComponent {
   private lastOverlayTrigger: HTMLElement | null = null;
   private pickerScrollRafId: number | null = null;
   private readonly pickerScrollRequest = signal(0);
+  private lessonOpenedAt = 0;
+  private activityViewedAt = 0;
+  private activityHintsUsed = 0;
+  private activityAssistLettersUsed = 0;
+  private abandonTracked = false;
 
   private readonly retriedActivityIds = signal<Set<string>>(new Set());
   private readonly wordBankTypeMode = signal(false);
@@ -179,7 +186,17 @@ export class LessonComponent {
   readonly earnedXp = computed(() => 10 + Math.round(this.finalScore() / 10));
 
   constructor() {
-    this.destroyRef.onDestroy(() => this.cancelPickerScrollRaf());
+    const onPageHide = (): void => this.trackLessonAbandoned('pagehide');
+    if (typeof window !== 'undefined') {
+      window.addEventListener('pagehide', onPageHide);
+    }
+    this.destroyRef.onDestroy(() => {
+      if (typeof window !== 'undefined') {
+        window.removeEventListener('pagehide', onPageHide);
+      }
+      this.trackLessonAbandoned('navigate_away');
+      this.cancelPickerScrollRaf();
+    });
 
     this.route.paramMap
       .pipe(
@@ -355,11 +372,31 @@ export class LessonComponent {
   }
 
   toggleTheory(): void {
-    this.theoryOpen.update((open) => !open);
+    const next = !this.theoryOpen();
+    this.theoryOpen.set(next);
+    const lesson = this.lesson();
+    if (lesson) {
+      this.analytics.track('theory_toggled', {
+        lessonId: lesson.id,
+        courseId: this.courseIdFor(lesson.id),
+        activityId: this.activity()?.id,
+        metadata: { open: next },
+      });
+    }
   }
 
   toggleDictionaryMode(): void {
-    this.dictionaryMode.update((mode) => !mode);
+    const next = !this.dictionaryMode();
+    this.dictionaryMode.set(next);
+    const lesson = this.lesson();
+    if (lesson) {
+      this.analytics.track('dictionary_mode_toggled', {
+        lessonId: lesson.id,
+        courseId: this.courseIdFor(lesson.id),
+        activityId: this.activity()?.id,
+        metadata: { enabled: next },
+      });
+    }
   }
 
   openLightbox(image: WorkbookImage): void {
@@ -398,6 +435,7 @@ export class LessonComponent {
 
   setAnswer(itemId: string, value: string): void {
     this.answers.update((current) => ({ ...current, [this.answerKey(itemId)]: value }));
+    if (value.trim()) this.trackFirstInput();
   }
 
   answerFor(itemId: string): string {
@@ -413,6 +451,7 @@ export class LessonComponent {
       ...current,
       [this.letterClozeAnswerKey(itemId, gapIndex)]: value,
     }));
+    if (value.trim()) this.trackFirstInput();
   }
 
   onSubAnswerChange(event: { itemId: string; value: string }): void {
@@ -422,10 +461,30 @@ export class LessonComponent {
 
   onWordBankTypeModeChange(isTypeMode: boolean): void {
     this.wordBankTypeMode.set(isTypeMode);
+    const lesson = this.lesson();
+    const activity = this.activity();
+    if (lesson && activity) {
+      this.analytics.track('exercise_input_mode_changed', {
+        lessonId: lesson.id,
+        courseId: this.courseIdFor(lesson.id),
+        activityId: activity.id,
+        metadata: { ux_mode: this.adaptedActivity()?.uxMode ?? 'word-bank', mode: isTypeMode ? 'type' : 'chips' },
+      });
+    }
   }
 
   onWordOrderModeChange(itemId: string, mode: 'chips' | 'type'): void {
     this.wordOrderTypeItems.update((cur) => ({ ...cur, [itemId]: mode === 'type' }));
+    const lesson = this.lesson();
+    const activity = this.activity();
+    if (lesson && activity) {
+      this.analytics.track('exercise_input_mode_changed', {
+        lessonId: lesson.id,
+        courseId: this.courseIdFor(lesson.id),
+        activityId: activity.id,
+        metadata: { ux_mode: 'word-order', mode },
+      });
+    }
   }
 
   selectOption(itemId: string, value: string): void {
@@ -460,7 +519,19 @@ export class LessonComponent {
 
   toggleHint(itemId: string): void {
     const key = this.answerKey(itemId);
-    this.revealedHints.update((current) => ({ ...current, [key]: !current[key] }));
+    const next = !this.revealedHints()[key];
+    this.revealedHints.update((current) => ({ ...current, [key]: next }));
+    if (next) this.activityHintsUsed++;
+    const lesson = this.lesson();
+    const activity = this.activity();
+    if (lesson && activity) {
+      this.analytics.track('hint_toggled', {
+        lessonId: lesson.id,
+        courseId: this.courseIdFor(lesson.id),
+        activityId: activity.id,
+        metadata: { item_id: itemId, shown: next, ux_mode: this.adaptedActivity()?.uxMode ?? null },
+      });
+    }
   }
 
   isHintShown(itemId: string): boolean {
@@ -512,6 +583,17 @@ export class LessonComponent {
     let k = 0;
     while (k < typed.length && k < expected.length && fold(typed[k]) === fold(expected[k])) k++;
     this.setAnswer(item.id, expected.slice(0, Math.min(expected.length, k + 1)));
+    this.activityAssistLettersUsed++;
+    const lesson = this.lesson();
+    const activity = this.activity();
+    if (lesson && activity) {
+      this.analytics.track('assist_letter_used', {
+        lessonId: lesson.id,
+        courseId: this.courseIdFor(lesson.id),
+        activityId: activity.id,
+        metadata: { item_id: item.id, ux_mode: this.adaptedActivity()?.uxMode ?? null },
+      });
+    }
   }
 
   /** Answer counted as correct, but Polish diacritics differ from the canonical spelling. */
@@ -584,6 +666,10 @@ export class LessonComponent {
     this.checked.set(!!saved);
     this.wordBankTypeMode.set(false);
     this.wordOrderTypeItems.set({});
+    this.activityViewedAt = Date.now();
+    this.activityHintsUsed = 0;
+    this.activityAssistLettersUsed = 0;
+    this.trackActivityViewed(lesson, activity, index, !!saved);
     this.scrollToTop();
     this.scrollActivePickerIntoView();
   }
@@ -593,6 +679,19 @@ export class LessonComponent {
     const adapted = this.adaptedActivity();
     const card = this.exerciseCardRef()?.nativeElement;
     if (!activity || !adapted || !card) return;
+    const lesson = this.lesson();
+    if (lesson) {
+      this.analytics.track('jump_to_unanswered_clicked', {
+        lessonId: lesson.id,
+        courseId: this.courseIdFor(lesson.id),
+        activityId: activity.id,
+        metadata: {
+          ux_mode: adapted.uxMode,
+          answered_count: this.answeredCount(),
+          total_items: activity.items.length,
+        },
+      });
+    }
 
     const firstUnansweredIndex = activity.items.findIndex((item) => !this.isItemAnswered(item));
     if (firstUnansweredIndex < 0) return;
@@ -628,6 +727,7 @@ export class LessonComponent {
     const activity = this.activity();
     const lesson = this.lesson();
     if (!lesson || !activity || !this.hasAnsweredAll() || this.checked()) return;
+    const isRetry = this.retriedActivityIds().has(activity.id);
     const result: Record<string, boolean> = {};
     for (const item of activity.items) result[item.id] = this.isCorrect(item);
     this.results.update((current) => ({ ...current, [activity.id]: result }));
@@ -641,13 +741,45 @@ export class LessonComponent {
     const prefix = `${activity.id}:`;
     const answers = Object.fromEntries(Object.entries(this.answers()).filter(([key]) => key.startsWith(prefix)));
     await this.progress.saveActivityProgress(lesson.id, activity.id, answers, result);
+    const correct = Object.values(result).filter(Boolean).length;
+    const total = activity.items.length;
+    const accuracyPct = total > 0 ? Math.round((correct / total) * 100) : 0;
+    const secondsSpent = this.activityViewedAt ? Math.max(0, Math.round((Date.now() - this.activityViewedAt) / 1000)) : 0;
+    this.analytics.track('check_clicked', {
+      lessonId: lesson.id,
+      courseId: this.courseIdFor(lesson.id),
+      activityId: activity.id,
+      metadata: {
+        correct,
+        total,
+        accuracy_pct: accuracyPct,
+        activity_index: this.activeIndex(),
+        ux_mode: this.adaptedActivity()?.uxMode ?? null,
+        seconds_spent: secondsSpent,
+        hints_used: this.activityHintsUsed,
+        assist_letters_used: this.activityAssistLettersUsed,
+        is_retry: isRetry,
+      },
+    });
   }
 
   retryWrongAnswers(): void {
     const activity = this.activity();
+    const lesson = this.lesson();
     if (!activity) return;
+    if (lesson) {
+      this.analytics.track('activity_retried', {
+        lessonId: lesson.id,
+        courseId: this.courseIdFor(lesson.id),
+        activityId: activity.id,
+        metadata: { ux_mode: this.adaptedActivity()?.uxMode ?? null, retry_scope: 'wrong_only' },
+      });
+    }
     this.clearActivityAnswers(activity, true);
     this.checked.set(false);
+    this.activityViewedAt = Date.now();
+    this.activityHintsUsed = 0;
+    this.activityAssistLettersUsed = 0;
     this.matchExercise()?.clearSelection();
     this.wordBankExercise()?.clearSelection();
     this.scrollToTop();
@@ -655,9 +787,21 @@ export class LessonComponent {
 
   retryActivity(): void {
     const activity = this.activity();
+    const lesson = this.lesson();
     if (!activity) return;
+    if (lesson) {
+      this.analytics.track('activity_retried', {
+        lessonId: lesson.id,
+        courseId: this.courseIdFor(lesson.id),
+        activityId: activity.id,
+        metadata: { ux_mode: this.adaptedActivity()?.uxMode ?? null, retry_scope: 'all' },
+      });
+    }
     this.clearActivityAnswers(activity, false);
     this.checked.set(false);
+    this.activityViewedAt = Date.now();
+    this.activityHintsUsed = 0;
+    this.activityAssistLettersUsed = 0;
     this.matchExercise()?.clearSelection();
     this.wordBankExercise()?.clearSelection();
     this.scrollToTop();
@@ -666,6 +810,11 @@ export class LessonComponent {
   retryWrongFromCompletion(): void {
     const lesson = this.lesson();
     if (!lesson) return;
+    this.analytics.track('activity_retried', {
+      lessonId: lesson.id,
+      courseId: this.courseIdFor(lesson.id),
+      metadata: { retry_scope: 'lesson_wrong' },
+    });
     const currentResults = this.results();
     let firstWrongIndex = -1;
     lesson.activities.forEach((activity, idx) => {
@@ -677,16 +826,23 @@ export class LessonComponent {
       }
     });
     this.finished.set(false);
+    this.abandonTracked = false;
     this.selectActivity(firstWrongIndex >= 0 ? firstWrongIndex : 0);
   }
 
   retryLessonFromCompletion(): void {
     const lesson = this.lesson();
     if (!lesson) return;
+    this.analytics.track('activity_retried', {
+      lessonId: lesson.id,
+      courseId: this.courseIdFor(lesson.id),
+      metadata: { retry_scope: 'lesson_all' },
+    });
     for (const activity of lesson.activities) {
       this.clearActivityAnswers(activity, false);
     }
     this.finished.set(false);
+    this.abandonTracked = false;
     this.selectActivity(0);
   }
 
@@ -704,6 +860,20 @@ export class LessonComponent {
     const alreadyCompleted = this.progress.hasCompleted(lesson.id);
     this.awardedXp.set(alreadyCompleted ? 0 : this.earnedXp());
     await this.progress.completeLesson(lesson.id, this.finalScore(), this.earnedXp());
+    const secondsInLesson = this.lessonOpenedAt ? Math.max(0, Math.round((Date.now() - this.lessonOpenedAt) / 1000)) : 0;
+    this.analytics.track('lesson_completed', {
+      lessonId: lesson.id,
+      courseId: this.courseIdFor(lesson.id),
+      metadata: {
+        lesson_title: lesson.title,
+        score: this.finalScore(),
+        xp: this.awardedXp(),
+        seconds_in_lesson: secondsInLesson,
+        activities_count: lesson.activities.length,
+        completed_lessons_total: this.progress.progress().completedLessonIds.length,
+        is_first_completion: !alreadyCompleted,
+      },
+    });
     this.finished.set(true);
     this.scrollToTop();
   }
@@ -730,6 +900,11 @@ export class LessonComponent {
   }
 
   private loadLesson(lessonId: number): void {
+    const previousLesson = this.lesson();
+    if (previousLesson && previousLesson.id !== lessonId) {
+      this.trackLessonAbandoned('navigate_away');
+    }
+
     const lesson = getLesson(lessonId);
     this.lesson.set(lesson);
     if (!lesson) {
@@ -747,6 +922,11 @@ export class LessonComponent {
     this.dictionaryMode.set(false);
     this.lightboxImage.set(null);
     this.theoryOpen.set(false);
+    this.lessonOpenedAt = Date.now();
+    this.activityViewedAt = this.lessonOpenedAt;
+    this.activityHintsUsed = 0;
+    this.activityAssistLettersUsed = 0;
+    this.abandonTracked = false;
 
     const restoredResults: Record<string, Record<string, boolean>> = {};
     const restoredAnswers: Record<string, string> = {};
@@ -764,10 +944,97 @@ export class LessonComponent {
     this.answers.set(restoredAnswers);
     const index = firstIncomplete < 0 ? 0 : firstIncomplete;
     this.activeIndex.set(index);
-    const saved = this.progress.activityFor(lesson.id, lesson.activities[index].id);
+    const initialActivity = lesson.activities[index];
+    const saved = this.progress.activityFor(lesson.id, initialActivity.id);
     this.checked.set(!!saved);
+    const completedLessonsCount = this.progress.progress().completedLessonIds.length;
+    this.analytics.trackOnce(`lesson_opened:${lesson.id}`, 'lesson_opened', {
+      lessonId: lesson.id,
+      courseId: this.courseIdFor(lesson.id),
+      activityId: initialActivity?.id,
+      metadata: {
+        lesson_title: lesson.title,
+        lesson_topic: lesson.topic,
+        activities_count: lesson.activities.length,
+        starting_activity_index: index,
+        ux_mode: this.adaptedActivity()?.uxMode ?? null,
+        is_first_lesson: completedLessonsCount === 0,
+        completed_lessons_count: completedLessonsCount,
+      },
+    });
+    if (initialActivity) {
+      this.trackActivityViewed(lesson, initialActivity, index, !!saved);
+    }
     this.scrollToTop();
     this.scrollActivePickerIntoView();
+  }
+
+  private trackFirstInput(): void {
+    const lessonId = this.lesson()?.id;
+    const activityId = this.activity()?.id;
+    if (!lessonId || !activityId) return;
+    const secondsToFirstInput = this.activityViewedAt
+      ? Math.max(0, Math.round((Date.now() - this.activityViewedAt) / 1000))
+      : 0;
+    this.analytics.trackOnce(`first_input:${lessonId}:${activityId}`, 'first_input', {
+      lessonId,
+      courseId: this.courseIdFor(lessonId),
+      activityId,
+      metadata: {
+        activity_index: this.activeIndex(),
+        ux_mode: this.adaptedActivity()?.uxMode ?? null,
+        seconds_to_first_input: secondsToFirstInput,
+      },
+    });
+  }
+
+  private trackActivityViewed(lesson: Lesson, activity: Activity, index: number, alreadyCompleted: boolean): void {
+    this.analytics.track('activity_viewed', {
+      lessonId: lesson.id,
+      courseId: this.courseIdFor(lesson.id),
+      activityId: activity.id,
+      metadata: {
+        activity_index: index,
+        activities_count: lesson.activities.length,
+        ux_mode: this.adaptedActivity()?.uxMode ?? null,
+        items_count: activity.items.length,
+        has_audio: this.activityAudioTracks().length > 0,
+        has_reading_text: !!activity.readingText,
+        has_images: this.allImages().length > 0,
+        has_text_inputs: this.hasTextInputs(),
+        already_completed: alreadyCompleted,
+      },
+    });
+  }
+
+  private trackLessonAbandoned(reason: 'navigate_away' | 'pagehide'): void {
+    const lesson = this.lesson();
+    const activity = this.activity();
+    if (!lesson || !activity || this.finished() || this.abandonTracked) return;
+    this.abandonTracked = true;
+    const completedActivities = lesson.activities.filter((a) => this.progress.hasCompletedActivity(lesson.id, a.id)).length;
+    const secondsInLesson = this.lessonOpenedAt ? Math.max(0, Math.round((Date.now() - this.lessonOpenedAt) / 1000)) : 0;
+    this.analytics.track('lesson_abandoned', {
+      lessonId: lesson.id,
+      courseId: this.courseIdFor(lesson.id),
+      activityId: activity.id,
+      metadata: {
+        lesson_title: lesson.title,
+        activity_index: this.activeIndex(),
+        activities_count: lesson.activities.length,
+        ux_mode: this.adaptedActivity()?.uxMode ?? null,
+        answered_count: this.answeredCount(),
+        total_items: activity.items.length,
+        completed_activities: completedActivities,
+        checked_current: this.checked(),
+        seconds_in_lesson: secondsInLesson,
+        reason,
+      },
+    });
+  }
+
+  private courseIdFor(lessonId: number): 'part-1' | 'part-2' {
+    return lessonId > 26 ? 'part-2' : 'part-1';
   }
 
   private clearActivityAnswers(activity: Activity, wrongOnly: boolean): void {

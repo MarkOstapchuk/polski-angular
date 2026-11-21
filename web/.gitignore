@@ -37,6 +37,12 @@ yarn-error.log
 testem.log
 /typings
 
+# Environment & generated secrets/config
+/.env
+/.env.local
+/.env.*.local
+/src/app/services/posthog.env.generated.ts
+
 # System files
 .DS_Store
 Thumbs.db

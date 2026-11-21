@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, Component, computed, effect, ElementRef, inject, input, signal, viewChild } from '@angular/core';
 import { LanguageService } from '../../../../i18n/language.service';
+import { AnalyticsService } from '../../../../services/analytics.service';
 
 export interface AudioPlayerTrack {
   file: string;
@@ -15,6 +16,7 @@ export interface AudioPlayerTrack {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class LessonAudioBarComponent {
+  private readonly analytics = inject(AnalyticsService);
   readonly language = inject(LanguageService);
   readonly tracks = input.required<AudioPlayerTrack[]>();
   private readonly audioRef = viewChild<ElementRef<HTMLAudioElement>>('audioEl');
@@ -49,13 +51,21 @@ export class LessonAudioBarComponent {
 
   togglePlayPause(): void {
     const el = this.audioRef()?.nativeElement;
-    if (!el || !this.activeTrack()) return;
+    const track = this.activeTrack();
+    if (!el || !track) return;
     this.audioError.set(false);
     el.playbackRate = this.speed();
     if (el.paused) {
-      void el.play().catch(() => {
+      void el.play().then(() => {
+        this.analytics.track('audio_played', {
+          metadata: { track_file: track.file, speed: this.speed() },
+        });
+      }).catch(() => {
         this.playing.set(false);
         this.audioError.set(true);
+        this.analytics.track('audio_error', {
+          metadata: { track_file: track.file },
+        });
       });
     } else {
       el.pause();
@@ -74,6 +84,9 @@ export class LessonAudioBarComponent {
     this.speed.set(next);
     const el = this.audioRef()?.nativeElement;
     if (el) el.playbackRate = next;
+    this.analytics.track('audio_speed_changed', {
+      metadata: { speed: next },
+    });
   }
 
   selectTrack(index: number): void {
