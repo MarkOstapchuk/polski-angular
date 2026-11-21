@@ -88,6 +88,16 @@
           [lessonNumber]="lessonNumber(currentLesson())"
           (open)="openLesson(currentLesson(), 'continue_card')" />
 
+        @if (progress().completedLessonIds.length === 0) {
+          <a class="placement-banner" routerLink="/test">
+            <div class="placement-banner-copy">
+              <strong>{{ language.t('dashboard.placementBannerTitle') }}</strong>
+              <span>{{ language.t('dashboard.placementBannerBody') }}</span>
+            </div>
+            <span class="placement-banner-cta">{{ language.t('dashboard.placementBannerAction') }}</span>
+          </a>
+        }
+
         <div class="section-heading" id="lesson-path">
           <div><p class="eyebrow">{{ language.t('dashboard.path') }}</p><h2>{{ course.name }} · {{ language.t('dashboard.lessons') }}</h2></div>
           <span class="section-progress">{{ completeCount() }} {{ language.t('lesson.of') }} {{ lessons().length }} {{ language.t('dashboard.lessons') }}</span>

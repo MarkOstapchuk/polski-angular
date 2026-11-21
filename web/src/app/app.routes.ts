@@ -6,6 +6,7 @@ import { authGuard } from './services/auth.service';
 
 export const routes: Routes = [
   { path: 'auth', component: AuthComponent, title: 'Konto · Polski' },
+  { path: 'test', loadComponent: () => import('./pages/placement-test/placement-test.component').then((m) => m.PlacementTestComponent), title: 'Test poziomujący · Polski' },
   { path: '', component: PublicHomeComponent, title: 'Kurs języka polskiego online A1–A2 · polski.' },
   { path: 'course/:courseId', component: DashboardComponent, canActivate: [authGuard], title: 'Kurs · Polski' },
   { path: 'feedback', loadComponent: () => import('./pages/feedback/feedback.component').then((m) => m.FeedbackComponent), canActivate: [authGuard], title: 'Opinie · Polski' },

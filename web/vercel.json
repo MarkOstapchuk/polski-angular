@@ -15,6 +15,7 @@
     { "source": "/gramatyka/przypadki", "destination": "/gramatyka/przypadki/index.html" },
     { "source": "/slownictwo/podstawowe-zwroty", "destination": "/slownictwo/podstawowe-zwroty/index.html" },
     { "source": "/auth", "destination": "/app.html" },
+    { "source": "/test", "destination": "/app.html" },
     { "source": "/course/:path*", "destination": "/app.html" },
     { "source": "/learn/:path*", "destination": "/app.html" },
     { "source": "/feedback", "destination": "/app.html" }

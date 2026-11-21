@@ -1,0 +1,120 @@
+<header class="test-header">
+  <a class="brand" routerLink="/">polski<span>.</span></a>
+  <div class="header-actions">
+    <app-language-switcher />
+    <a class="login-link" routerLink="/auth">{{ language.t('home.login') }}</a>
+  </div>
+</header>
+
+<main class="test-main">
+  @if (!completed()) {
+    <section class="test-intro">
+      <p class="eyebrow">{{ language.t('placement.eyebrow') }}</p>
+      <h1>{{ language.t('placement.title') }}</h1>
+      <p class="subtitle">{{ language.t('placement.subtitle') }}</p>
+    </section>
+
+    <section class="question-card" [attr.aria-label]="language.t('placement.title')">
+      <div class="progress-row">
+        <span class="step-label">
+          {{ language.t('placement.questionOf') }} {{ currentIndex() + 1 }} {{ language.t('placement.of') }} {{ questions.length }}
+        </span>
+        <span class="level-badge">{{ language.t('placement.level') }} {{ currentQuestion().level }}</span>
+      </div>
+
+      <div class="progress-track" role="progressbar" [attr.aria-valuenow]="progressPercent()" aria-valuemin="0" aria-valuemax="100">
+        <div class="progress-fill" [style.width.%]="progressPercent()"></div>
+      </div>
+
+      <p class="prompt">
+        {{ promptParts().before }}<span class="blank" aria-hidden="true">______</span>{{ promptParts().after }}
+      </p>
+
+      <div class="options-grid">
+        @for (option of currentQuestion().options; track option; let idx = $index) {
+          <button
+            type="button"
+            class="option-btn"
+            [class.is-selected]="answers()[currentIndex()] === idx"
+            (click)="selectOption(idx)"
+          >
+            <span class="option-key">{{ idx + 1 }}</span>
+            <span class="option-text">{{ option }}</span>
+          </button>
+        }
+      </div>
+
+      <div class="card-footer">
+        @if (currentIndex() > 0) {
+          <button type="button" class="text-btn" (click)="previousQuestion()">
+            {{ language.t('placement.back') }}
+          </button>
+        } @else {
+          <span></span>
+        }
+        <button type="button" class="skip-btn" (click)="skipQuestion()">
+          {{ language.t('placement.skip') }}
+        </button>
+      </div>
+    </section>
+  } @else if (result(); as res) {
+    <section class="result-card">
+      <p class="eyebrow">{{ language.t('placement.resultEyebrow') }}</p>
+      <h1>
+        {{ language.t('placement.resultTitle') }} {{ displayLessonNumber(res.recommendedLesson.id) }}
+      </h1>
+
+      <div class="stats-row">
+        <div class="stat-pill">
+          <small>{{ language.t('placement.estimatedLevel') }}</small>
+          <strong>{{ res.levelCode }}</strong>
+        </div>
+        <div class="stat-pill">
+          <small>{{ language.t('placement.scoreLabel') }}</small>
+          <strong>{{ res.score }} / {{ res.total }}</strong>
+        </div>
+      </div>
+
+      <div class="recommended-lesson">
+        <div class="lesson-meta">
+          <span class="part-tag">{{ courseLabel(res.recommendedLesson.id) }}</span>
+          <span class="lesson-num-tag">
+            {{ language.t('placement.lesson') }} {{ displayLessonNumber(res.recommendedLesson.id) }}
+          </span>
+        </div>
+        <h2>{{ res.recommendedLesson.title }}</h2>
+        <p class="lesson-sub">{{ res.recommendedLesson.subtitle }}</p>
+        <p class="lesson-topic">{{ res.recommendedLesson.topic }}</p>
+      </div>
+
+      <div class="result-actions">
+        <button type="button" class="primary-btn" [disabled]="startingLesson()" (click)="startRecommendedLesson()">
+          {{ language.t('placement.startLesson') }} {{ displayLessonNumber(res.recommendedLesson.id) }} →
+        </button>
+        <button type="button" class="secondary-btn" (click)="openCourseOverview()">
+          {{ language.t('placement.browseCourse') }}
+        </button>
+      </div>
+      <p class="signup-note">{{ language.t('placement.noSignupNote') }}</p>
+
+      <div class="breakdown">
+        <h3>{{ language.t('placement.breakdownTitle') }}</h3>
+        <ul class="breakdown-list">
+          @for (rec of res.records; track rec.questionId) {
+            <li [class.is-known]="rec.isCorrect">
+              <span class="status-dot" aria-hidden="true">{{ rec.isCorrect ? '✓' : '○' }}</span>
+              <span class="topic-name">{{ topicLabel(rec.questionId) }}</span>
+              <span class="status-text">{{ rec.isCorrect ? language.t('placement.known') : language.t('placement.toPractice') }}</span>
+            </li>
+          }
+        </ul>
+      </div>
+
+      <div class="retake-row">
+        <button type="button" class="text-btn" (click)="retake()">
+          {{ language.t('placement.retake') }}
+        </button>
+      </div>
+    </section>
+  }
+</main>
