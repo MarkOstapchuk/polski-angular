@@ -67,18 +67,22 @@ export const LESSON_34: Lesson = {
       choice('q11', '___ film', 'interesujący', ['interesujący', 'zainteresowany']),
       choice('q12', '___ dzień', 'męczący', ['męczący', 'zmęczony']),
     ], ActivityKind.Choice),
-    activity(5, 'Rozmowa po podróży', 'Odpowiedz na pytania do tekstu z podręcznika.', [
-      typed('q1', 'Dokąd leciał Tom?', 'Do Krakowa.'),
-      typed('q2', 'Jaki był lot?', 'Męczący.'),
-      typed('q3', 'Jak się czuł Tom?', 'Był zmęczony.'),
-      typed('q4', 'Z kim zaczął rozmawiać?', 'Ze współpasażerką.'),
-      typed('q5', 'Po co dziewczyna schyliła się?', 'Żeby schylić się po jej długopis.'),
-      typed('q6', 'Ile razy Tom był w Polsce?', 'Ani razu.'),
-      typed('q7', 'Kiedy Tom zaczyna kurs polskiego?', 'W przyszły poniedziałek.'),
-      typed('q8', 'Gdzie Tom będzie miał kurs?', 'W prywatnej szkole językowej.'),
-      typed('q9', 'Dokąd wcześniej planował pojechać?', 'Nad morze.'),
-      typed('q10', 'Co oznacza „c.d.n.”?', 'Ciąg dalszy nastąpi.'),
-    ]),
+    activity(5, 'Rozmowa po podróży', 'Połącz każde pytanie z pasującą odpowiedzią.', (() => {
+      const pairs: Array<[string, string]> = [
+        ['Dokąd leciał Tom?', 'Do Krakowa.'],
+        ['Jaki był lot?', 'Męczący.'],
+        ['Jak się czuł Tom?', 'Był zmęczony.'],
+        ['Z kim zaczął rozmawiać?', 'Ze współpasażerką.'],
+        ['Po co dziewczyna schyliła się?', 'Żeby podnieść swój długopis.'],
+        ['Ile razy Tom był w Polsce?', 'Ani razu.'],
+        ['Kiedy Tom zaczyna kurs polskiego?', 'W przyszły poniedziałek.'],
+        ['Gdzie Tom będzie miał kurs?', 'W prywatnej szkole językowej.'],
+        ['Dokąd wcześniej planował pojechać?', 'Nad morze.'],
+        ['Co oznacza „c.d.n.”?', 'Ciąg dalszy nastąpi.'],
+      ];
+      const answers = pairs.map(([, a]) => a);
+      return pairs.map(([q, a], i) => choice(`q${i + 1}`, q, a, answers));
+    })(), ActivityKind.Match),
     activity(6, 'Skróty', 'Wpisz rozwinięcie skrótu.', [
       ...[
         ['c.d.n.', 'ciąg dalszy nastąpi'], ['itd.', 'i tak dalej'], ['np.', 'na przykład'],

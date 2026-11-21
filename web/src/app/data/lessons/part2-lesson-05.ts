@@ -39,10 +39,10 @@ export const LESSON_31: Lesson = {
       typed('q9', 'Kogoś, ___ bardzo lubię.', 'kogo'),
       typed('q10', 'Ktoś, ___ jest wesoły.', 'kto'),
     ]),
-    activity(3, 'Opis dziecka', 'Posłuchaj i uzupełnij określenia.', [
-      typed('q1', 'To dziecko jest bardzo ___.', 'wesołe'),
-      typed('q2', 'Jest delikatne i bardzo ___.', 'ufne'),
-      typed('q3', 'Jest albo będzie ___.', 'gadatliwe'),
+    activity(3, 'Opis dziecka', 'Uzupełnij określenia dziecka właściwą formą przymiotnika z nawiasu.', [
+      typed('q1', 'To dziecko jest bardzo ___. (wesoły)', 'wesołe'),
+      typed('q2', 'Jest delikatne i bardzo ___. (ufny)', 'ufne'),
+      typed('q3', 'Jest albo będzie ___. (gadatliwy)', 'gadatliwe'),
     ]),
     activity(4, 'Popraw zdania', 'Skoryguj zaimki względne w zdaniach A i B.', [
       typed('q1', 'A. Ktoś, kege zna polski.', 'Ktoś, kto zna polski.'),
@@ -58,7 +58,7 @@ export const LESSON_31: Lesson = {
       typed('q11', 'B. Coś, o czego marzę.', 'Coś, o czym marzę.'),
       typed('q12', 'B. Coś, co szukam.', 'Coś, czego szukam.'),
     ]),
-    activity(5, 'Ułóż definicje', 'Zapisz całe zdanie z użyciem „kto”, „który” lub „co”.', [
+    activity(5, 'Ułóż definicje', 'Zapisz całe zdanie z użyciem „kto”, „który” lub „co”. Przykład: „można na nim polegać” → „To człowiek, na którym można polegać.”', [
       typed('q1', 'można na nim polegać', 'To człowiek, na którym można polegać.'),
       typed('q2', 'chętnie to dla tej osoby zrobię', 'To jest osoba, dla której chętnie to zrobię.'),
       typed('q3', 'opowiadałem ci o tej studentce', 'To studentka, o której ci opowiadałem.'),

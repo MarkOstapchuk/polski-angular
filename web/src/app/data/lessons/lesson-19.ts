@@ -70,7 +70,7 @@ export const LESSON_19: Lesson = {
         typed('q4', 'Jak…?', 'jak długo'),
         typed('q5', 'Trzy dni · odpowiedź', 'na trzy dni'),
         typed('q6', 'Na jakie… będzie rezerwacja?', 'nazwisko'),
-        typed('q7', 'Z klimatyzacją · prośba o pokój', 'z klimatyzacją'),
+        typed('q7', 'Prośba o pokój (klimatyzacja)', 'z klimatyzacją'),
       ],
     },
     {

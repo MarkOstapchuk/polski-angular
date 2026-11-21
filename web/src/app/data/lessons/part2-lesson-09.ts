@@ -27,7 +27,7 @@ export const LESSON_35: Lesson = {
       typed('q11', 'Zawiera leki i bandaże.', 'apteczka'),
       typed('q12', 'Dokument potrzebny do przekroczenia granicy.', 'paszport'),
     ]),
-    activity(2, 'Instrukcje i przypomnienia', 'Utwórz odpowiednią formę rozkazującą.', [
+    activity(2, 'Instrukcje i przypomnienia', 'Utwórz formę rozkazującą (2. os. lp., „ty”) samego czasownika. Przykład: „spakować plecak” → „Spakuj”.', [
       ...[
         ['spakować plecak', 'Spakuj'], ['wziąć paszport', 'Weź'], ['zapłacić rachunki', 'Zapłać'],
         ['zadzwonić do babci', 'Zadzwoń'], ['odwołać wizytę', 'Odwołaj'], ['posprzątać pokój', 'Posprzątaj'],

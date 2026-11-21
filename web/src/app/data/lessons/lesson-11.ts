@@ -135,7 +135,7 @@ export const LESSON_11: Lesson = {
         choice('q5', 'Polacy nigdy nie piją herbaty z mlekiem?', 'Nieprawda', PN),
       ],
     },
-    typedExercise(11, 3, 'Rodzina Łukasza', 'Odpowiedz na pytania o Łukasza i jego rodzinę.', [
+    typedExercise(11, 3, 'Rodzina Łukasza', 'Odpowiedz na pytania o Łukasza i jego rodzinę. Przykład: „Kim Łukasz jest z zawodu?” — „inżynierem elektronikiem”.', [
       ['Kim Łukasz jest z zawodu?', 'inżynierem elektronikiem'], ['Czy on ma dziewczynę?', 'tak'],
       ['Co mówi jego mama?', 'że on woli być kawalerem'], ['Czy brat Łukasza jest kawalerem?', 'nie, jest żonaty'],
       ['Ile dzieci ma Andrzej?', 'dwoje'], ['Z kim Łukasz gra w tenisa?', 'z bratową Joanną'],

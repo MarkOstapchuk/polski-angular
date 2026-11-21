@@ -102,13 +102,13 @@ export const LESSON_15: Lesson = {
       instruction: 'Wpisz formę liczby mnogiej zgodną z kluczem.',
       items: [
         typed('q2', 'Iwona boi się ___ (pająk).', 'pająków'),
-        typed('q3', 'Ania boi się ___ ___ (duży pies).', 'dużych psów'),
+        typed('q3', 'Ania boi się ___ (duży pies).', 'dużych psów'),
         typed('q4', 'Aneta boi się ___ (wariat).', 'wariatów'),
         typed('q5', 'Mami boi się ___ (egzamin) na studia.', 'egzaminów'),
         typed('q6', 'Angela boi się ___ (duch).', 'duchów'),
-        typed('q7', 'Ewa nie lubi ___ ___ (duże miasto).', 'dużych miast'),
-        typed('q8', 'Angela nie ma ___ ___ (francuska książka).', 'francuskich książek'),
-        typed('q9', 'Joanna szuka ___ ___ (stary klucz).', 'starych kluczy'),
+        typed('q7', 'Ewa nie lubi ___ (duże miasto).', 'dużych miast'),
+        typed('q8', 'Angela nie ma ___ (francuska książka).', 'francuskich książek'),
+        typed('q9', 'Joanna szuka ___ (stary klucz).', 'starych kluczy'),
       ],
     },
     {

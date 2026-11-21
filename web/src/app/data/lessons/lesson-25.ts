@@ -156,7 +156,7 @@ export const LESSON_25: Lesson = {
     },
     {
       id: 'l25-tom-story', ...src(10), kind: ActivityKind.Typed,
-      title: 'Co się stało Tomowi?', instruction: 'Odpowiedz na pytania na podstawie historii z nagrania i klucza.',
+      title: 'Co się stało Tomowi?', instruction: 'Odpowiedz pełnym zdaniem na pytania na podstawie historii z nagrania. Przykład: „O której godzinie Tom poszedł spać?” — „Tom poszedł spać o drugiej nad ranem.”',
       items: [
         typed('q1', 'O której godzinie Tom poszedł spać?', 'Tom poszedł spać o drugiej nad ranem.'),
         typed('q2', 'Dlaczego zaspał do szkoły?', 'Zaspał do szkoły, bo nie usłyszał budzika.'),

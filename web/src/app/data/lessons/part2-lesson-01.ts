@@ -68,14 +68,24 @@ export const LESSON_27: Lesson = {
       typed('q14', 'Kiedyś ___ się łowieniem ryb.', 'pasjonowałem'), typed('q15', 'Jeździć ___ ryby.', 'na'),
       typed('q16', 'Chłopiec woli grać ___ piłkę.', 'w'), typed('q17', 'Czy mogę zapytać o pana ___?', 'marzenia'),
     ]),
-    activity(5, 'Popraw definicje', 'Zapisz poprawną definicję.', [
-      typed('q1', 'Wdowiec', 'Wdowiec to mężczyzna, którego żona już nie żyje.'),
-      typed('q2', 'Rodzeństwo', 'Rodzeństwo to brat i siostra.'),
-      typed('q3', 'Kawaler', 'Kawaler to mężczyzna, który nie ma żony.'),
-      typed('q4', 'Bliźniak', 'Bliźniak to osoba, która ma brata lub siostrę urodzonych w tym samym dniu.'),
-      typed('q5', 'Jedynak', 'Jedynak to osoba, która nie ma brata ani siostry.'),
-      typed('q6', 'Panna', 'Panna to osoba, która nie ma męża.'),
-    ]),
+    activity(5, 'Popraw definicje', 'Połącz pojęcie z poprawną definicją.', (() => {
+      const defs = [
+        'Wdowiec to mężczyzna, którego żona już nie żyje.',
+        'Rodzeństwo to brat i siostra.',
+        'Kawaler to mężczyzna, który nie ma żony.',
+        'Bliźniak to osoba, która ma brata lub siostrę urodzonych w tym samym dniu.',
+        'Jedynak to osoba, która nie ma brata ani siostry.',
+        'Panna to osoba, która nie ma męża.',
+      ];
+      return [
+        choice('q1', 'Wdowiec', defs[0], defs),
+        choice('q2', 'Rodzeństwo', defs[1], defs),
+        choice('q3', 'Kawaler', defs[2], defs),
+        choice('q4', 'Bliźniak', defs[3], defs),
+        choice('q5', 'Jedynak', defs[4], defs),
+        choice('q6', 'Panna', defs[5], defs),
+      ];
+    })(), ActivityKind.Match),
     activity(6, 'Czasowniki i narzędnik', 'Ułóż zdania, używając podanego czasownika i rzeczownika.', [
       typed('q1', 'uwielbiać · gorąca czekolada', 'Uwielbiam gorącą czekoladę.'),
       typed('q2', 'nie znosić · gotowany szpinak', 'Nie znoszę gotowanego szpinaku.'),

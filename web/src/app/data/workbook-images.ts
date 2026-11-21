@@ -1025,5 +1025,40 @@ export const WORKBOOK_IMAGES: Record<string, WorkbookImage[]> = {
       "label": "j",
       "alt": "Pasta i szczoteczka do zębów"
     }
+  ],
+  "WB2-L12-E13": [
+    {
+      "src": "/assets/workbook/part2-lesson12-e13.png",
+      "label": "Fotografie 1–7",
+      "alt": "Fotografie ze stacji benzynowej i serwisu samochodowego (1–7)"
+    }
+  ],
+  "WB2-L18-E10": [
+    {
+      "src": "/assets/workbook/part2-lesson18-e10.png",
+      "label": "Ilustracje 1–5",
+      "alt": "Sylwetki pięciu zwierząt do podpisania (1–5)"
+    }
+  ],
+  "WB2-L20-E06": [
+    {
+      "src": "/assets/workbook/part2-lesson20-e06.png",
+      "label": "Fotografie 1–4",
+      "alt": "Fotografie haseł z kampanii przeciw nadmiernej konsumpcji (1–4)"
+    }
+  ],
+  "WB2-L20-E07": [
+    {
+      "src": "/assets/workbook/part2-lesson20-e07.png",
+      "label": "Plan sklepów",
+      "alt": "Rysunek miasteczka z rozmieszczeniem sklepów (drogeria, galanteria skórzana, cukiernia, apteka, jubiler, zegarmistrz, sklep spożywczy, piekarnia, sklep papierniczy, sklep obuwniczy, warzywniak)"
+    }
+  ],
+  "WB2-L20-E10": [
+    {
+      "src": "/assets/workbook/part2-lesson20-e10.png",
+      "label": "Ilustracje 1–18",
+      "alt": "Ilustracje sprzętów domowych do podpisania (1–18)"
+    }
   ]
 };

@@ -42,10 +42,15 @@ export const LESSON_28: Lesson = {
         typed('q18', '___ była poprzednia fala upałów? Na początku czerwca.', 'Kiedy'),
       ],
     },
-    activity(2, 'Kataklizmy', 'Odszukaj i wpisz osiem nazw klęsk żywiołowych.', [
-      typed('q1', '1', 'trzęsienie ziemi'), typed('q2', '2', 'powódź'), typed('q3', '3', 'huragan'),
-      typed('q4', '4', 'susza'), typed('q5', '5', 'pożar'), typed('q6', '6', 'lawina'),
-      typed('q7', '7', 'wybuch wulkanu'), typed('q8', '8', 'tsunami'),
+    activity(2, 'Kataklizmy', 'Wpisz osiem nazw klęsk żywiołowych na podstawie opisów.', [
+      typed('q1', '1. Drżenie ziemi i niszczenie budynków', 'trzęsienie ziemi'),
+      typed('q2', '2. Zalanie terenu przez wodę', 'powódź'),
+      typed('q3', '3. Bardzo silny, niszczycielski wiatr', 'huragan'),
+      typed('q4', '4. Długi brak deszczu', 'susza'),
+      typed('q5', '5. Ogień niszczący las lub budynek', 'pożar'),
+      typed('q6', '6. Masa śniegu spadająca z gór', 'lawina'),
+      typed('q7', '7. Erupcja lawy i popiołu', 'wybuch wulkanu'),
+      typed('q8', '8. Wielka, niszczycielska fala morska', 'tsunami'),
     ]),
     activity(3, 'Co pasuje?', 'Połącz opis z nazwą kataklizmu.', [
       choice('q1', 'pali się', 'pożar', ['pożar', 'lawina', 'susza', 'powódź', 'wulkan', 'huragan', 'trzęsienie ziemi', 'tsunami']),

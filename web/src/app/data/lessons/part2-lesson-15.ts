@@ -44,7 +44,7 @@ export const LESSON_41: Lesson = {
         ['Wieczór 24 grudnia.', 'Wigilia'], ['Nocna msza bożonarodzeniowa.', 'pasterka'],
         ['Osoba pilnująca owiec.', 'pasterz'], ['Tradycyjna ryba na Wigilię.', 'karp'],
         ['Świąteczna pieśń.', 'kolęda'], ['Miejsce narodzin Jezusa.', 'żłóbek'],
-        ['Cienki opłatek, którym dzielimy się przy stole.', 'opłatek'], ['Postać z Betlejemskiej stajenki.', 'anioł'],
+        ['Cienki biały listek z mąki i wody, którym dzielimy się przy stole.', 'opłatek'], ['Postać z Betlejemskiej stajenki.', 'anioł'],
         ['Świąteczne drzewko.', 'choinka'], ['Ozdoba zawieszana na choince.', 'bombka'],
         ['Rzecz pod choinką dla bliskiej osoby.', 'prezent'], ['Świeci na czubku choinki.', 'gwiazda'],
       ].map(([prompt, answer], i) => typed(`q${i + 1}`, prompt, answer)),
@@ -73,7 +73,7 @@ export const LESSON_41: Lesson = {
       typed('q7', 'Na końcu ___ do smaku.', 'doprawić'),
       typed('q8', 'Podawać z ___.', 'chlebem'),
     ]),
-    activity(6, 'Wigilia w Stanach i w Polsce', 'Posłuchaj nagrania i uzupełnij opowieść Steve’a.', [
+    activity(6, 'Wigilia w Stanach i w Polsce', 'Uzupełnij opowieść Steve’a wyrazami z ramki.', [
       typed('q1', 'Od pięciu lat spędzam ___ Bożego Narodzenia w Polsce.', 'święta'),
       typed('q2', 'Największa różnica między Polską a Stanami to ___.', 'Wigilia'),
       typed('q3', 'Na stole powinno być dwanaście ___.', 'potraw'),

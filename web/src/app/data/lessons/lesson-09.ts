@@ -122,15 +122,15 @@ export const LESSON_09: Lesson = {
     },
     {
       id: 'l09-odd-one', sourceExerciseId: 'WB-L09-E11', sourceLabel: 'Zeszyt ćwiczeń · ćwiczenie 11',
-      kind: ActivityKind.Typed, title: 'Co nie pasuje?',
-      instruction: 'Wpisz słowo, które nie pasuje do pozostałych.',
+      kind: ActivityKind.Choice, title: 'Co nie pasuje?',
+      instruction: 'Wybierz słowo, które nie pasuje do pozostałych.',
       items: [
-        typed('q1', 'makrela – pstrąg – kurczak – łosoś', 'kurczak', 'To jest mięso.'),
-        typed('q2', 'ryż – kasza – por – makaron', 'por', 'To jest warzywo.'),
-        typed('q3', 'salami – ser – szynka – kiełbasa', 'ser', 'To jest nabiał.'),
-        typed('q4', 'chipsy – słone paluszki – drożdżówka – arbuz', 'arbuz', 'To jest owoc.'),
-        typed('q5', 'bułka – brokuły – groszek – seler', 'bułka', 'To jest pieczywo.'),
-        typed('q6', 'wiśnie – jagody – wino – ananas', 'wino', 'To jest alkohol.'),
+        choice('q1', 'Które słowo nie pasuje?', 'kurczak', ['makrela', 'pstrąg', 'kurczak', 'łosoś'], 'To jest mięso.'),
+        choice('q2', 'Które słowo nie pasuje?', 'por', ['ryż', 'kasza', 'por', 'makaron'], 'To jest warzywo.'),
+        choice('q3', 'Które słowo nie pasuje?', 'ser', ['salami', 'ser', 'szynka', 'kiełbasa'], 'To jest nabiał.'),
+        choice('q4', 'Które słowo nie pasuje?', 'arbuz', ['chipsy', 'słone paluszki', 'drożdżówka', 'arbuz'], 'To jest owoc.'),
+        choice('q5', 'Które słowo nie pasuje?', 'bułka', ['bułka', 'brokuły', 'groszek', 'seler'], 'To jest pieczywo.'),
+        choice('q6', 'Które słowo nie pasuje?', 'wino', ['wiśnie', 'jagody', 'wino', 'ananas'], 'To jest alkohol.'),
       ],
     },
     {
@@ -149,7 +149,7 @@ export const LESSON_09: Lesson = {
     },
     typedExercise(9, 4, 'Jaki smak? Jaki kształt?', 'Uzupełnij określenia smaku i kształtu.', [
       ['Smak 1', 'kwaśny'], ['Smak 2', 'ostry'], ['Smak 3', 'słodki'], ['Smak 4', 'słony'], ['Smak 5', 'gorzki'],
-      ['Kształt · owalny', 'owalny'], ['Kształt · okrągły', 'okrągły'], ['Kształt · podłużny', 'podłużny'],
+      ['Kształt 1', 'owalny'], ['Kształt 2', 'okrągły'], ['Kształt 3', 'podłużny'],
     ]),
     typedExercise(9, 5, 'Co to za owoc lub warzywo?', 'Uzupełnij opisy wyrazami z ramki.', [
       ['1. Jest słodka; dodajemy ją do cukru i śmietany.', 'truskawka'],

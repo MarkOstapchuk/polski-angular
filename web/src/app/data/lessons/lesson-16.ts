@@ -139,7 +139,7 @@ export const LESSON_16: Lesson = {
         typed('q8', 'Szkoda, że jutro będzie zimno, nie lubię, kiedy jest tak ___.', 'chłodno'),
       ],
     },
-    typedExercise(16, 8, 'Prognoza pogody', 'Odpowiedz na pytania do nagrania.', [
+    typedExercise(16, 8, 'Prognoza pogody', 'Odpowiedz na pytania do nagrania. Przykład: „Gdzie jest pogodnie?” — „Na południu Polski.”', [
       ['Gdzie jest pogodnie?', 'Na południu Polski.'],
       ['Jaka pogoda jest w pozostałej części kraju?', 'Pochmurno, miejscami pada śnieg.'],
       ['Czy wszędzie pada śnieg?', 'Nie, śnieg pada tylko miejscami.'],

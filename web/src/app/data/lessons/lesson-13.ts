@@ -178,7 +178,7 @@ export const LESSON_13: Lesson = {
         typed('q9', 'On ___ na uniwersytet pieszo. (chodzić)', 'chodził'), typed('q10', 'Zwykle ___ obiad o 16:00. (jeść)', 'jadł'),
         typed('q11', 'Bo wtedy ___ przerwę. (mieć)', 'miał'), typed('q12', 'Następnie ___ jeszcze od 17:15 do 20:30. (uczyć się)', 'uczył się'),
         typed('q13', 'Po wykładach Paweł ___ na piwo ze znajomymi. (iść)', 'szedł'), typed('q14', '___ do domu o 23:30. (wracać)', 'wracał'),
-        typed('q15', 'Od 24:00 do 1:00 ___ albo ___ (czytać; uczyć się).', 'czytał albo uczył się'),
+        typed('q15', 'Od 24:00 do 1:00 ___ albo ___ (czytać; uczyć się).', 'czytał; uczył się'),
         typed('q16', 'A potem ___ spać. (iść)', 'szedł'),
       ],
     },

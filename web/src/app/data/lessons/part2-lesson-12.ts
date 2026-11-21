@@ -167,8 +167,8 @@ export const LESSON_38: Lesson = {
         ['Samochód za tobą chce was wyprzedzić.', 'Zjedź na prawy pas!'],
       ].map(([prompt, answer], i) => typed(`q${i + 1}`, prompt, answer)),
     ], ActivityKind.Match, '-match'),
-    activity(15, 'Słownictwo drogowe', 'Dopasuj definicje do nazw i zdefiniuj pozostałe wyrazy.', [
-      ...[
+    activity(15, 'Słownictwo drogowe', 'Dopasuj definicje do nazw.', (() => {
+      const pairs: Array<[string, string]> = [
         ['Parking poza centrum, skąd można kontynuować podróż transportem publicznym.', 'Parkuj i jedź'],
         ['Dokument uprawniający do prowadzenia pojazdu.', 'Prawo jazdy'],
         ['Fotel ochronny dla dziecka przewożonego samochodem.', 'Fotelik'],
@@ -176,7 +176,9 @@ export const LESSON_38: Lesson = {
         ['Służba dbająca o porządek i przestrzeganie przepisów w mieście.', 'Straż miejska'],
         ['Podzespół samochodu chroniący pasażerów podczas zderzenia.', 'Poduszka powietrzna'],
         ['Miejsce drogi, na którym często dochodzi do wypadków.', 'Czarny punkt'],
-      ].map(([prompt, answer], i) => typed(`q${i + 1}`, prompt, answer)),
-    ]),
+      ];
+      const names = pairs.map(([, name]) => name);
+      return pairs.map(([prompt, answer], i) => choice(`q${i + 1}`, prompt, answer, names));
+    })(), ActivityKind.Match),
   ],
 };

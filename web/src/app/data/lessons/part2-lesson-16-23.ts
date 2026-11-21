@@ -27,7 +27,7 @@ export const LESSON_42 = lesson(42, 'Przygody, przeżycia, wspomnienia', 'Opowia
     ['Oferowano mi transport osiołkiem.', 'narzędnik'], ['Zaufałam miejscowej znachorce.', 'celownik'],
   ]),
   exercise(16, 2, 'Czasownik i rzeczownik', 'Utwórz rzeczownik lub czasownik od podanego wyrazu.', [
-    ['wynajęcie', 'wynająć'], ['otoczenie', 'otaczać; otoczyć'], ['żeglować', 'żegluga; żeglowanie'], ['zmagać się', 'zmaganie'],
+    ['wynajęcie', 'wynająć'], ['otoczenie (niedokonany: ___ / dokonany: ___)', 'otaczać; otoczyć'], ['żeglować (rzeczownik 1: ___ / rzeczownik 2: ___)', 'żegluga; żeglowanie'], ['zmagać się', 'zmaganie'],
     ['zachwalać', 'zachwalanie'], ['zwiedzać', 'zwiedzanie'], ['ratować', 'ratunek'], ['ostrzegać', 'ostrzeżenie'],
   ]),
   exercise(16, 3, 'Na żaglówce', 'Wpisz nazwę elementu łodzi.', [
@@ -72,7 +72,7 @@ export const LESSON_42 = lesson(42, 'Przygody, przeżycia, wspomnienia', 'Opowia
     ['trząść się (ja, mężczyzna)', 'trząsłem się'], ['trząść się (ja, kobieta)', 'trzęsłam się'],
     ['trząść się (my, mężczyźni)', 'trzęśliśmy się'], ['trząść się (my, kobiety)', 'trzęsłyśmy się'],
   ]),
-  exercise(16, 8, 'Bezpiecznie w górach', 'Utwórz polecenia dla osób wybierających się na górską wycieczkę.', [
+  exercise(16, 8, 'Bezpiecznie w górach', 'Utwórz polecenia (2. os. lm., „wy”) — wpisz sam czasownik. Przykład: „zapoznać się z warunkami” → „Zapoznajcie się”.', [
     ['zapoznać się z warunkami', 'Zapoznajcie się'], ['przygotować prowiant', 'Przygotujcie'],
     ['spakować ciepłe rzeczy', 'Spakujcie'], ['pamiętać o czapkach i rękawiczkach', 'Pamiętajcie'],
     ['zabrać coś na deszcz', 'Zabierzcie'], ['wziąć dobrą mapę', 'Weźcie'], ['iść wcześnie rano', 'Idźcie'],
@@ -84,7 +84,7 @@ export const LESSON_42 = lesson(42, 'Przygody, przeżycia, wspomnienia', 'Opowia
   exercise(16, 9, 'Po wypadku', 'Posłuchaj nagrania i wpisz brakujące słowa.', [
     ['Człowiek ___ się ze strachu.', 'trzęsie'], ['Boi się wysokości: ma ___ wysokości.', 'lęk'],
     ['Długo iść przez jakiś teren to ___ go.', 'przemierzać'], ['Zacząć podróż to ___.', 'wyruszyć'],
-    ['Pęknięcie skały to ___.', 'załamanie'], ['Gęsia skórka pojawia się ze strachu lub zimna.', 'gęsia skórka'],
+    ['Pęknięcie skały to ___.', 'załamanie'], ['___ pojawia się ze strachu lub zimna.', 'gęsia skórka'],
     ['Kiedy bardzo się boi, ___ w panikę.', 'wpada'],
   ]),
   exercise(16, 10, 'Wspomnienia z wyprawy', 'Oceń zdania jako prawdziwe lub nieprawdziwe i dobierz synonimy.', [
@@ -420,7 +420,7 @@ export const LESSON_45 = lesson(45, 'Oszczędzaj!', 'Rozmawiamy o ekologii i cod
     ['Może być papierowe lub plastikowe.', 'opakowanie'], ['Używać mniej, żeby chronić zasoby.', 'oszczędzać'],
     ['Oddychamy nim.', 'powietrze'], ['Powtarzane zachowanie.', 'nawyk'],
     ['Pierwiastek obecny w paliwach kopalnych.', 'węgiel'], ['Droga przeznaczona do wędrówki.', 'szlak'],
-    ['Zakaz wjazdu lub palenia.', 'zakaz'], ['Zanieczyszczenie powietrza w mieście.', 'smog'],
+    ['Znak zabraniający wjazdu lub palenia.', 'zakaz'], ['Zanieczyszczenie powietrza w mieście.', 'smog'],
   ]),
   exercise(19, 7, 'Tryb przypuszczający', 'Utwórz formy trybu przypuszczającego.', [
     ['my (móc)', ['moglibyśmy', 'mogłybyśmy']], ['ty (musieć)', ['musiałbyś', 'musiałabyś']],
@@ -470,12 +470,12 @@ export const LESSON_46 = lesson(46, 'Konsument na rynku', 'Porównujemy zakupy i
     ['Mrożonki odrzuca', 'mimo ich wartości odżywczych'], ['O odkładaniu pieniędzy', 'nie ma mowy'],
     ['Zdaje sobie sprawę,', 'że ma wady'], ['Preferuje niezbyt', 'drogie rozrywki'],
   ], ActivityKind.Match),
-  exercise(20, 3, 'Synonimy w tekście', 'Zastąp podkreślone słowa wyrażeniami z tekstu.', [
+  exercise(20, 3, 'Synonimy w tekście', 'Dopasuj wyrażenie do jego synonimu.', [
     ['zaoszczędzone pieniądze', 'odłożone'], ['jedynie', 'wyłącznie'], ['odwiedza targ', 'zagląda'],
     ['pieniądze szybko znikają', 'rozchodzą się'], ['uważa za stratę czasu', 'uznaje za'],
     ['wie, że bycie tłumaczem to sztuka', 'zdaje sobie sprawę'],
     ['jedzie do Paryża', 'wybiera się'], ['kupił nowy sprzęt', 'nabył'],
-  ]),
+  ], ActivityKind.Match),
   exercise(20, 4, 'Przypadki po czasownikach', 'Wpisz nazwę przypadka.', [
     ['odrzucać +', 'biernik'], ['zależy komuś na +', 'miejscownik'], ['troszczyć się o +', 'biernik'],
     ['opiekować się +', 'narzędnik'], ['unikać +', 'dopełniacz'], ['uznawać za +', 'biernik'],
@@ -600,7 +600,7 @@ export const LESSON_47 = lesson(47, 'Sztuka i piractwo', 'Rozmawiamy o prawach a
     ['___ kandydaci mają drugą szansę. (nie przyjąć)', 'Nieprzyjęci'],
   ]),
   exercise(21, 4, 'Strona bierna', 'Przekształć zdania na stronę bierną.', [
-    ['Poliński wyreżyserował ten film.', 'Ten film został wyreżyserowany przez Polańskiego.'],
+    ['Polański wyreżyserował ten film.', 'Ten film został wyreżyserowany przez Polańskiego.'],
     ['Mój tata zrobił ten stół.', 'Ten stół został zrobiony przez mojego tatę.'],
     ['Piotrek kupił to biurko.', 'To biurko zostało kupione przez Piotrka.'],
     ['Michał ściągnął nowy serial.', 'Nowy serial został ściągnięty przez Michała.'],
@@ -626,7 +626,7 @@ export const LESSON_47 = lesson(47, 'Sztuka i piractwo', 'Rozmawiamy o prawach a
     ['Spektakl', 'Ogień uczuć'], ['Data i godzina', '14.02, godz. 19:00'], ['Imię', 'Zofia'],
     ['Nazwisko', 'Ostrogórska'], ['Liczba biletów', '2'], ['Telefon', '605 973 749'],
     ['E-mail', 'z_ostrogorska@poczta.pl'], ['Miejscowość', 'Kraków'], ['Płatność', 'przelew'],
-    ['Kwota', '150 zł'], ['Rząd i miejsca', '13; 19, 20'],
+    ['Kwota', '150 zł'], ['Rząd ___ · miejsca ___', '13; 19, 20'],
   ]),
   exercise(21, 7, 'Opinie o piractwie', 'Uzupełnij wypowiedzi słowami z tekstów.', [
     ['A. Ludzie ___ z Internetu filmy, muzykę, książki i gry.', 'ściągają'],
@@ -803,7 +803,7 @@ export const LESSON_49 = lesson(49, 'Czas na egzamin', 'Powtarzamy materiał i �
     ['Odpowiedź ___ trakcie nagrania lub ___ jego wysłuchaniu.', 'w; po'],
     ['Po ___: gramatyka.', 'drugie'], ['Gramatyka, ___ wybranie lub utworzenie formy.', 'czyli'],
     ['Utworzenie gramatycznie poprawnej formy ___ struktury.', 'lub'],
-    ['Po ___: rozumienie tekstów ___.', 'trzecie'], ['Po trzecie: rozumienie tekstów ___.', 'pisanych'],
+    ['Po ___: rozumienie tekstów pisanych.', 'trzecie'], ['Po trzecie: rozumienie tekstów ___.', 'pisanych'],
     ['Zadaniem zdających ___ przeczytanie tekstu.', 'jest'],
     ['___ następnie zaznaczenie.', 'a'],
     ['___ ze zdań to prawda.', 'które'], ['Ze zdań to prawda ___ nieprawda.', 'lub'],

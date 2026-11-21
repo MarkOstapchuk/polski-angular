@@ -49,7 +49,7 @@ export const LESSON_29: Lesson = {
       typed('q3', 'Film z oryginalną ścieżką i tekstem na ekranie', 'z napisami'),
       typed('q4', 'Urządzenie regulujące temperaturę w sali', 'klimatyzacja'),
       typed('q5', 'Prostokąt, na którym wyświetla się film', 'ekran'),
-      typed('q6', 'Miejsce w rzędzie kina', 'miejsce'),
+      typed('q6', 'Fotel w rzędzie kina', 'miejsce'),
       typed('q7', 'Opinia krytyka, np. w gazecie', 'recenzja'),
       typed('q8', 'Duży pokój w kinie', 'sala'),
       typed('q9', 'Projekcja filmu', 'seans'),
