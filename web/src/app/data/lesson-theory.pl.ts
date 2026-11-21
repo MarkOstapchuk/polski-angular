@@ -1,4 +1,5 @@
 import type { LessonTheory, LessonTheoryId } from './lesson-theory';
+import { PART3_THEORY_PL } from './lesson-theory-part3';
 
 // Polish translation of the lesson theory (source of truth: lesson-theory.ts, Russian).
 export const LESSON_THEORY_PL: Record<LessonTheoryId, LessonTheory> = {
@@ -495,4 +496,5 @@ export const LESSON_THEORY_PL: Record<LessonTheoryId, LessonTheory> = {
       { polish: 'Moim zdaniem odpowiedź jest poprawna.', translation: 'Moim zdaniem odpowiedź jest poprawna.' },
     ],
   },
+  ...PART3_THEORY_PL,
 };

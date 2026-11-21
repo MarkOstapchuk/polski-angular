@@ -10,7 +10,7 @@ export interface LessonSummary {
 }
 
 export interface CourseSummary {
-  id: 'part-1' | 'part-2';
+  id: 'part-1' | 'part-2' | 'part-3';
   name: string;
   level: string;
   description: string;
@@ -69,6 +69,27 @@ export const LESSON_CATALOG: LessonSummary[] = [
   { id: 47, title: 'Sztuka i piractwo', subtitle: 'Rozmawiamy o prawach autorskich i pobieraniu plików', topic: 'Prawa autorskie · strona bierna · opinie', color: 'violet', activityCount: 7 },
   { id: 48, title: 'Warto zobaczyć', subtitle: 'Opisujemy dzieła sztuki i wyrażamy swoje wrażenia', topic: 'Muzea · wystawy · rzeczowniki na -um', color: 'violet', activityCount: 11 },
   { id: 49, title: 'Czas na egzamin', subtitle: 'Powtarzamy materiał i ćwiczymy zadania egzaminacyjne', topic: 'Egzamin · poprawność · słownictwo i gramatyka', color: 'yellow', activityCount: 10 },
+  { id: 50, title: 'Przed egzaminem z polskiego', subtitle: 'Terminologia gramatyczna, formy egzaminacyjne i idiomy', topic: 'Egzamin · mianownik lm. · pluralia tantum · aspekt', color: 'blue', activityCount: 8 },
+  { id: 51, title: 'Mam to na końcu języka!', subtitle: 'Nauka języków, sposoby zapamiętywania i rady', topic: 'Okoliczniki sposobu · jak? vs jaki? · tryb przypuszczający', color: 'coral', activityCount: 8 },
+  { id: 52, title: 'Wyglądać jak milion dolarów', subtitle: 'Opisywanie wyglądu, komplementy i porównania', topic: 'Wygląd · stopniowanie przymiotników i przysłówków', color: 'lime', activityCount: 8 },
+  { id: 53, title: 'Jak żyjemy?', subtitle: 'Warunki pracy, płace, urządzenia domowe i oceny', topic: 'Praca i życie · składnia liczebników · idiomy', color: 'violet', activityCount: 8 },
+  { id: 54, title: 'Żyć za granicą', subtitle: 'Wielokulturowość, emigracja i relacje czasowe', topic: 'Odmiana liczebników głównych · wyrażenia czasowe', color: 'yellow', activityCount: 7 },
+  { id: 55, title: 'Powtórzenie (lekcje 0–4)', subtitle: 'Utrwalamy słownictwo, idiomy i gramatykę bloku 1', topic: 'Powtórzenie · liczebniki · stopniowanie · idiomy', color: 'blue', activityCount: 6 },
+  { id: 56, title: 'Muszę załatwić kilka spraw', subtitle: 'Urzędy, dokumenty, formalności i wyrażanie konieczności', topic: 'Alternacja ę : ą · mieć + bezokolicznik · rzeczowniki na -ę', color: 'coral', activityCount: 8 },
+  { id: 57, title: 'Usługi', subtitle: 'Warsztaty, naprawy, usterki, obiecywanie i oferowanie', topic: 'Odmiana przymiotnikowa · imiona na -y/-i · nazwiska -ski/-cka', color: 'lime', activityCount: 7 },
+  { id: 58, title: 'Pieniądze szczęścia nie dają…', subtitle: 'Budżet domowy, oszczędzanie, pewność i niepewność', topic: 'Finanse · odmiana pieniądz i miesiąc · idiomy', color: 'violet', activityCount: 8 },
+  { id: 59, title: 'Weźmy się do roboty!', subtitle: 'Ekonomia, rynek pracy, warunki i konsekwencje', topic: 'Zdania warunkowe · brak następstwa czasów · idiomy o pracy', color: 'yellow', activityCount: 7 },
+  { id: 60, title: 'Powtórzenie (lekcje 6–9)', subtitle: 'Utrwalamy gramatykę i słownictwo bloku 2', topic: 'Powtórzenie · urzędy · usługi · finanse · warunki', color: 'blue', activityCount: 6 },
+  { id: 61, title: 'Polityka? To mnie nie interesuje!', subtitle: 'Życie polityczne, ważność, obojętność i dystans', topic: 'Odmiana rzeczownika rząd · podmiot w dopełniaczu', color: 'coral', activityCount: 7 },
+  { id: 62, title: 'Mam do tego prawo!', subtitle: 'Równouprawnienie, dyskusja i wyrażanie opinii', topic: 'Państwa w dopełniaczu · rzeczowniki na -anin · idiomy z prawo', color: 'lime', activityCount: 8 },
+  { id: 63, title: 'W żadnym wypadku!', subtitle: 'Wypadki, relacjonowanie wydarzeń i mowa zależna', topic: 'Mowa zależna · odmiana zaimków dzierżawczych · idiomy', color: 'violet', activityCount: 8 },
+  { id: 64, title: 'W zgodzie z naturą', subtitle: 'Ekologia, klimat, aprobata, dezaprobata i protest', topic: 'Celownik lp. i lm. · przyroda i ekologia · idiomy', color: 'yellow', activityCount: 7 },
+  { id: 65, title: 'Powtórzenie (lekcje 11–14)', subtitle: 'Utrwalamy słownictwo i gramatykę bloku 3', topic: 'Powtórzenie · polityka · prawo · mowa zależna · celownik', color: 'blue', activityCount: 6 },
+  { id: 66, title: 'Czwarta władza', subtitle: 'Media, prasa, telewizja i nawiązywanie kontaktu', topic: 'Zaimki przeczące nikt/nic/żaden · wołacz · idiomy', color: 'coral', activityCount: 7 },
+  { id: 67, title: 'Przejdźmy do rzeczy!', subtitle: 'Reklama, namawianie, przekonywanie i opis przedmiotu', topic: 'Odmiana zaimka się · deklinacja zaimków · tryb rozkazujący', color: 'lime', activityCount: 7 },
+  { id: 68, title: 'Kultura', subtitle: 'Książka, film, muzyka i wydarzenia artystyczne', topic: 'Miejscownik po wyrażeniach przyimkowych · spójniki', color: 'violet', activityCount: 7 },
+  { id: 69, title: 'W co wierzymy?', subtitle: 'Religia, wiara, formułowanie pytań i hipotez', topic: 'Zaimki pytajne jaki/który/czyj · tryb warunkowy · idiomy', color: 'yellow', activityCount: 7 },
+  { id: 70, title: 'Powtórzenie (lekcje 16–19)', subtitle: 'Podsumowanie kursu i trening przed egzaminem', topic: 'Egzamin · transformacje · zaimki · idiomy', color: 'blue', activityCount: 7 },
 ];
 
 export const COURSES: CourseSummary[] = [
@@ -78,6 +99,10 @@ export const COURSES: CourseSummary[] = [
   },
   {
     id: 'part-2', name: 'Część 2', level: 'A2–B1', description: 'Kontynuacja nauki · 23 lekcje',
-    color: 'violet', firstLessonId: 27, lessons: LESSON_CATALOG.filter((lesson) => lesson.id >= 27),
+    color: 'violet', firstLessonId: 27, lessons: LESSON_CATALOG.filter((lesson) => lesson.id >= 27 && lesson.id <= 49),
+  },
+  {
+    id: 'part-3', name: 'Część 3', level: 'B2', description: 'Hurra!!! Po Polsku 3 · 21 lekcji',
+    color: 'blue', firstLessonId: 50, lessons: LESSON_CATALOG.filter((lesson) => lesson.id >= 50),
   },
 ];

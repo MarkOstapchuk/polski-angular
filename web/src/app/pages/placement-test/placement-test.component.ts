@@ -120,10 +120,12 @@ export class PlacementTestComponent {
   }
 
   displayLessonNumber(lessonId: number): number {
+    if (lessonId >= 50) return lessonId - 50;
     return lessonId > 26 ? lessonId - 26 : lessonId;
   }
 
   courseLabel(lessonId: number): string {
+    if (lessonId >= 50) return this.language.t('placement.part3');
     return lessonId > 26 ? this.language.t('placement.part2') : this.language.t('placement.part1');
   }
 

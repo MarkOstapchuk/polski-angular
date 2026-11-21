@@ -23,7 +23,7 @@ export class FeedbackComponent {
   private readonly route = inject(ActivatedRoute);
   readonly language = inject(LanguageService);
 
-  private readonly returnCourseId = signal<'part-1' | 'part-2'>(this.resolveInitialCourseId());
+  private readonly returnCourseId = signal<'part-1' | 'part-2' | 'part-3'>(this.resolveInitialCourseId());
   readonly backUrl = computed(() => `/course/${this.returnCourseId()}`);
   readonly category = signal<'app' | 'course'>('app');
   readonly courseId = signal<string>(this.returnCourseId());
@@ -64,13 +64,13 @@ export class FeedbackComponent {
     }
   }
 
-  private resolveInitialCourseId(): 'part-1' | 'part-2' {
+  private resolveInitialCourseId(): 'part-1' | 'part-2' | 'part-3' {
     const fromQuery = this.route.snapshot.queryParamMap.get('course');
-    if (fromQuery === 'part-1' || fromQuery === 'part-2') return fromQuery;
+    if (fromQuery === 'part-1' || fromQuery === 'part-2' || fromQuery === 'part-3') return fromQuery;
     try {
       if (typeof localStorage !== 'undefined') {
         const stored = localStorage.getItem('polski-active-course');
-        if (stored === 'part-1' || stored === 'part-2') return stored;
+        if (stored === 'part-1' || stored === 'part-2' || stored === 'part-3') return stored;
       }
     } catch {
       // Ignore storage access errors.

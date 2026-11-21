@@ -3,6 +3,7 @@ import type { Activity } from './lesson-types';
 import type { LessonTheory, TheoryBlock } from './lesson-theory';
 import { PART1_THEORY_BLOCKS } from './lesson-theory-blocks-part1';
 import { PART2_THEORY_BLOCKS } from './lesson-theory-blocks-part2';
+import { PART3_THEORY_BLOCKS } from './lesson-theory-blocks-part3';
 
 export interface ResolvedActivityTheory {
   block: TheoryBlock;
@@ -715,7 +716,7 @@ const LESSON_1_5_BLOCKS: Record<Language, Record<number, TheoryBlock[]>> = {
 };
 
 function parseWorkbookNumber(sourceExerciseId: string): number | null {
-  const match = /^WB-L\d+-E(\d+)$/i.exec(sourceExerciseId);
+  const match = /^(?:WB|WB2|H3)-L\d+-E(\d+)$/i.exec(sourceExerciseId);
   return match ? Number(match[1]) : null;
 }
 
@@ -791,6 +792,7 @@ export function resolveActivityTheory(
   const ruDetailed = PART1_THEORY_BLOCKS[lessonId] ?? PART2_THEORY_BLOCKS[lessonId];
   const customBlocks = theory.blocks
     ?? LESSON_1_5_BLOCKS[locale]?.[lessonId]
+    ?? PART3_THEORY_BLOCKS[locale]?.[lessonId]
     ?? (locale === 'ru' ? ruDetailed : undefined);
 
   let blocks: TheoryBlock[];

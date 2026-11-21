@@ -10,7 +10,7 @@ export interface CheckpointQuestion {
 
 export interface CheckpointTest {
   id: string;
-  courseId: 'part-1' | 'part-2';
+  courseId: 'part-1' | 'part-2' | 'part-3';
   afterLessonId: number;
   lessonRange: string;
   title: Record<Language, string>;
@@ -727,6 +727,298 @@ export const CHECKPOINT_TESTS: CheckpointTest[] = [
           pl: 'Po przyimku „dla” używamy dopełniacza: „dla środowiska”.',
           ru: 'После предлога «dla» используется родительный падеж: «dla środowiska».',
           en: 'After “dla”, use the genitive case: “dla środowiska”.',
+        },
+      },
+    ],
+  },
+  {
+    id: 'test-10',
+    courseId: 'part-3',
+    afterLessonId: 55,
+    lessonRange: '00–05',
+    title: {
+      pl: 'Test 10 · Część 3 (Lekcje 00–05)',
+      ru: 'Тест 10 · Часть 3 (Уроки 00–05)',
+      en: 'Test 10 · Part 3 (Lessons 00–05)',
+    },
+    description: {
+      pl: 'Idiomy, okoliczniki sposobu, stopniowanie oraz składnia i odmiana liczebników.',
+      ru: 'Идиомы, наречия образа действия, степени сравнения и склонение числительных.',
+      en: 'Idioms, adverbs of manner, comparatives, and numeral declension.',
+    },
+    questions: [
+      {
+        id: 't10-q1',
+        prompt: 'Mieszkam w Polsce już od ___ lat.',
+        options: ['dwadzieścia', 'dwudziestu', 'dwudziestoma', 'dwudziestym'],
+        correctIndex: 1,
+        explanation: {
+          pl: 'Po przyimku „od” używamy dopełniacza liczebnika: „od dwudziestu lat”.',
+          ru: 'После предлога «od» числительное стоит в родительном падеже: «od dwudziestu lat».',
+          en: 'After “od”, use the genitive numeral: “od dwudziestu lat”.',
+        },
+      },
+      {
+        id: 't10-q2',
+        prompt: 'Przed egzaminem siedział jak na ___ i bardzo się denerwował.',
+        options: ['igłach', 'szpilkach', 'gwoździach', 'krześle'],
+        correctIndex: 1,
+        explanation: {
+          pl: 'Polski idiom oznaczający niecierpliwość i stres to „siedzieć jak na szpilkach”.',
+          ru: 'Польская идиома «сидеть как на иголках» — «siedzieć jak na szpilkach».',
+          en: 'The Polish idiom for being on pins and needles is “siedzieć jak na szpilkach”.',
+        },
+      },
+      {
+        id: 't10-q3',
+        prompt: 'Na konferencji było ___ studentów z zagranicy.',
+        options: ['pięciu', 'pięć', 'piątka', 'pięcioma'],
+        correctIndex: 0,
+        explanation: {
+          pl: 'Z rzeczownikami rodzaju męskoosobowego („studentów”) używamy formy „pięciu”.',
+          ru: 'С существительными лично-мужского рода используется форма «pięciu».',
+          en: 'With masculine personal nouns (“studentów”), use “pięciu”.',
+        },
+      },
+      {
+        id: 't10-q4',
+        prompt: 'Po urlopie wyglądała kwitnąco — naprawdę ___ zdrowiem.',
+        options: ['tryskała', 'płynęła', 'świeciła', 'biegła'],
+        correctIndex: 0,
+        explanation: {
+          pl: 'Idiom „tryskać zdrowiem” oznacza wyglądać bardzo zdrowo i energicznie.',
+          ru: 'Идиома «tryskać zdrowiem» означает «пышать здоровьем».',
+          en: 'The idiom “tryskać zdrowiem” means to burst with health.',
+        },
+      },
+      {
+        id: 't10-q5',
+        prompt: 'Kraków przyjął nowych mieszkańców z ___ ramionami.',
+        options: ['szerokimi', 'otwartymi', 'dużymi', 'długimi'],
+        correctIndex: 1,
+        explanation: {
+          pl: 'Poprawny związek frazeologiczny to „przyjąć kogoś z otwartymi ramionami”.',
+          ru: 'Правильный фразеологизм — «przyjąć kogoś z otwartymi ramionami».',
+          en: 'The correct idiom is “przyjąć kogoś z otwartymi ramionami”.',
+        },
+      },
+    ],
+  },
+  {
+    id: 'test-11',
+    courseId: 'part-3',
+    afterLessonId: 60,
+    lessonRange: '06–10',
+    title: {
+      pl: 'Test 11 · Część 3 (Lekcje 06–10)',
+      ru: 'Тест 11 · Часть 3 (Уроки 06–10)',
+      en: 'Test 11 · Part 3 (Lessons 06–10)',
+    },
+    description: {
+      pl: 'Rzeczowniki na -ę, odmiana przymiotnikowa, pieniądz/miesiąc i zdania warunkowe.',
+      ru: 'Существительные на -ę, адъективное склонение, pieniądz/miesiąc и условные предложения.',
+      en: '-ę nouns, adjectival declension, pieniądz/miesiąc, and conditionals.',
+    },
+    questions: [
+      {
+        id: 't11-q1',
+        prompt: 'W formularzu trzeba wpisać swoje ___ i nazwisko, ale nie pamiętam jego ___.',
+        options: ['imię / imię', 'imię / imienia', 'imienia / imię', 'imię / imieniu'],
+        correctIndex: 1,
+        explanation: {
+          pl: 'Rzeczowniki nijakie na -ę w dopełniaczu przyjmują -enia: „imię -> imienia”.',
+          ru: 'Существительные среднего рода на -ę в родительном падеже имеют форму на -enia: «imienia».',
+          en: 'Neuter nouns in -ę take -enia in the genitive: “imię -> imienia”.',
+        },
+      },
+      {
+        id: 't11-q2',
+        prompt: 'Spotkałem wczoraj mojego ___ z kursu, pana ___.',
+        options: ['znajomy / Kowalski', 'znajomego / Kowalskiego', 'znajomym / Kowalskim', 'znajomemu / Kowalskiemu'],
+        correctIndex: 1,
+        explanation: {
+          pl: 'Rzeczowniki typu „znajomy” i nazwiska na -ski odmieniają się jak przymiotniki: „znajomego Kowalskiego”.',
+          ru: 'Слова типа «znajomy» и фамилии на -ski склоняются как прилагательные: «znajomego Kowalskiego».',
+          en: 'Adjectival nouns (“znajomy”) and -ski surnames decline like adjectives: “znajomego Kowalskiego”.',
+        },
+      },
+      {
+        id: 't11-q3',
+        prompt: 'Niestety, pod koniec ___ zawsze brakuje mi ___.',
+        options: ['miesiąc / pieniądze', 'miesiąca / pieniędzy', 'miesiącu / pieniądzach', 'miesiąca / pieniądzów'],
+        correctIndex: 1,
+        explanation: {
+          pl: 'Dopełniacz od „miesiąc” to „miesiąca”, a dopełniacz lm. od „pieniądze” to „pieniędzy”.',
+          ru: 'Родительный падеж: «miesiąca» и «pieniędzy».',
+          en: 'The genitive forms are “miesiąca” and “pieniędzy”.',
+        },
+      },
+      {
+        id: 't11-q4',
+        prompt: 'Mój dziadek to prawdziwa ___ — potrafi naprawić wszystko.',
+        options: ['złota rączka', 'ciężka ręka', 'prawa ręka', 'otwarta dłoń'],
+        correctIndex: 0,
+        explanation: {
+          pl: '„Złota rączka” to osoba, która umie sama wykonać różne naprawy.',
+          ru: '«Złota rączka» — мастер на все руки.',
+          en: '“Złota rączka” means a handyman / jack of all trades.',
+        },
+      },
+      {
+        id: 't11-q5',
+        prompt: 'Gdybyś wcześniej ___ o pomoc, zdążylibyśmy przed terminem.',
+        options: ['poprosisz', 'poprosił', 'prosisz', 'będziesz prosić'],
+        correctIndex: 1,
+        explanation: {
+          pl: 'W zdaniu warunkowym po „gdybyś” używamy formy „poprosił”.',
+          ru: 'В условном предложении после «gdybyś» используется форма «poprosił».',
+          en: 'In conditional clauses after “gdybyś”, use “poprosił”.',
+        },
+      },
+    ],
+  },
+  {
+    id: 'test-12',
+    courseId: 'part-3',
+    afterLessonId: 65,
+    lessonRange: '11–15',
+    title: {
+      pl: 'Test 12 · Część 3 (Lekcje 11–15)',
+      ru: 'Тест 12 · Часть 3 (Уроки 11–15)',
+      en: 'Test 12 · Part 3 (Lessons 11–15)',
+    },
+    description: {
+      pl: 'Odmiana rzeczowników na -anin, mowa zależna, podmiot w dopełniaczu i celownik.',
+      ru: 'Существительные на -anin, косвенная речь, подлежащее в родительном падеже и дательный.',
+      en: '-anin nouns, reported speech, genitive subjects, and the dative case.',
+    },
+    questions: [
+      {
+        id: 't12-q1',
+        prompt: 'W naszej grupie jest trzech ___ i dwóch Rosjan.',
+        options: ['Amerykaninów', 'Amerykanów', 'Amerykanie', 'Amerykanami'],
+        correctIndex: 1,
+        explanation: {
+          pl: 'Rzeczowniki na -anin w liczbie mnogiej tracą cząstkę -in-: „trzech Amerykanów”.',
+          ru: 'Существительные на -anin во множественном числе теряют суффикс -in-: «trzech Amerykanów».',
+          en: 'Nouns ending in -anin drop -in- in the plural: “trzech Amerykanów”.',
+        },
+      },
+      {
+        id: 't12-q2',
+        prompt: 'Świadek powiedział, ___ wypadek zdarzył się na skrzyżowaniu.',
+        options: ['czy', 'że', 'żeby', 'bo'],
+        correctIndex: 1,
+        explanation: {
+          pl: 'Zdanie oznajmujące w mowie zależnej wprowadzamy spójnikiem „że”.',
+          ru: 'Утверждение в косвенной речи вводится союзом «że».',
+          en: 'Statements in reported speech are introduced with “że”.',
+        },
+      },
+      {
+        id: 't12-q3',
+        prompt: 'W tej sprawie zapytałem naszych ___ o opinię.',
+        options: ['obywateli', 'obywatelów', 'obywatelom', 'obywatele'],
+        correctIndex: 0,
+        explanation: {
+          pl: 'Poprawny biernik/dopełniacz lm. od „obywatel” to „obywateli”.',
+          ru: 'Правильная форма мн. ч. от «obywatel» — «obywateli».',
+          en: 'The plural accusative/genitive of “obywatel” is “obywateli”.',
+        },
+      },
+      {
+        id: 't12-q4',
+        prompt: 'Pomagamy ___ w schronisku każdej zimy.',
+        options: ['zwierzęta', 'zwierząt', 'zwierzętom', 'zwierzętami'],
+        correctIndex: 2,
+        explanation: {
+          pl: 'Po „pomagać” używamy celownika liczby mnogiej (-om): „zwierzętom”.',
+          ru: 'После «pomagać» используется дательный падеж мн. ч. (-om): «zwierzętom».',
+          en: '“Pomagać” takes the dative plural (-om): “zwierzętom”.',
+        },
+      },
+      {
+        id: 't12-q5',
+        prompt: 'Na spotkaniu ___ kilkunastu dziennikarzy.',
+        options: ['byli', 'było', 'były', 'są'],
+        correctIndex: 1,
+        explanation: {
+          pl: 'Przy podmiocie w dopełniaczu („kilkunastu dziennikarzy”) orzeczenie ma formę 3. os. lp. r. nijakiego: „było”.',
+          ru: 'При подлежащем в родительном падеже сказуемое стоит в 3-м лице ед. ч. среднего рода: «było».',
+          en: 'With a genitive quantity subject, the verb takes 3rd person singular neuter: “było”.',
+        },
+      },
+    ],
+  },
+  {
+    id: 'test-13',
+    courseId: 'part-3',
+    afterLessonId: 70,
+    lessonRange: '16–20',
+    title: {
+      pl: 'Test 13 · Część 3 (Lekcje 16–20)',
+      ru: 'Тест 13 · Часть 3 (Уроки 16–20)',
+      en: 'Test 13 · Part 3 (Lessons 16–20)',
+    },
+    description: {
+      pl: 'Zaimki przeczące, wołacz, zaimek się, miejscownik i zaimki pytajne.',
+      ru: 'Отрицательные местоимения, звательный падеж, się, предложный и вопросительные местоимения.',
+      en: 'Negative pronouns, vocative, reflexive się, locative, and interrogatives.',
+    },
+    questions: [
+      {
+        id: 't13-q1',
+        prompt: 'Na konferencji nie było ___ przedstawiciela tamtej redakcji.',
+        options: ['żaden', 'żadnego', 'żadnemu', 'żadnym'],
+        correctIndex: 1,
+        explanation: {
+          pl: 'Po „nie było” używamy dopełniacza: „żadnego przedstawiciela”.',
+          ru: 'После «nie było» используется родительный падеж: «żadnego przedstawiciela».',
+          en: 'After “nie było”, use the genitive: “żadnego przedstawiciela”.',
+        },
+      },
+      {
+        id: 't13-q2',
+        prompt: 'Drodzy ___! Dziękujemy za udział w dzisiejszym spotkaniu.',
+        options: ['przyjaciele', 'przyjaciół', 'przyjaciołom', 'przyjacielach'],
+        correctIndex: 0,
+        explanation: {
+          pl: 'Wołacz liczby mnogiej jest równy mianownikowi: „Drodzy przyjaciele!”.',
+          ru: 'Звательный падеж мн. ч. совпадает с именительным: «Drodzy przyjaciele!».',
+          en: 'Plural vocative matches the nominative: “Drodzy przyjaciele!”.',
+        },
+      },
+      {
+        id: 't13-q3',
+        prompt: 'Kupiłem tę książkę dla ___, żeby poczytać w pociągu.',
+        options: ['się', 'siebie', 'sobie', 'sobą'],
+        correctIndex: 1,
+        explanation: {
+          pl: 'Po przyimku „dla” używamy dopełniacza zaimka zwrotnego: „dla siebie”.',
+          ru: 'После предлога «dla» используется родительный падеж возвратного местоимения: «dla siebie».',
+          en: 'After “dla”, use the genitive reflexive pronoun: “dla siebie”.',
+        },
+      },
+      {
+        id: 't13-q4',
+        prompt: 'Nie owijaj w ___ — powiedz wprost, co o tym myślisz!',
+        options: ['papier', 'bawełnę', 'jedwab', 'szmatę'],
+        correctIndex: 1,
+        explanation: {
+          pl: 'Idiom „nie owijać w bawełnę” oznacza mówić wprost, bez uników.',
+          ru: 'Идиома «nie owijać w bawełnę» означает «говорить прямо, без обиняков».',
+          en: '“Nie owijać w bawełnę” means not to beat around the bush.',
+        },
+      },
+      {
+        id: 't13-q5',
+        prompt: '___ to jest parasol? Został w przedpokoju.',
+        options: ['Jaki', 'Który', 'Czyj', 'Kogo'],
+        correctIndex: 2,
+        explanation: {
+          pl: 'O przynależność (do kogo należy rzecz) pytamy zaimkiem „czyj?” (r. m.).',
+          ru: 'О принадлежности спрашиваем местоимением «czyj?» (муж. род).',
+          en: 'To ask about ownership, use “czyj?” (masculine).',
         },
       },
     ],

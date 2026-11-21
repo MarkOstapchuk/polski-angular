@@ -140,12 +140,16 @@ export class DashboardComponent {
   }
 
   lessonLabel(lesson: LessonSummary): string {
+    if (lesson.id >= 50) {
+      return `${this.language.t('lesson.part')} 3 · ${this.language.t('lesson.lesson')} ${this.lessonNumber(lesson)}`;
+    }
     return lesson.id > 26
       ? `${this.language.t('lesson.part')} 2 · ${this.language.t('lesson.lesson')} ${this.lessonNumber(lesson)}`
       : `${this.language.t('lesson.lesson')} ${this.lessonNumber(lesson)}`;
   }
 
   lessonNumber(lesson: LessonSummary): string {
+    if (lesson.id >= 50) return String(lesson.id - 50).padStart(2, '0');
     return String(lesson.id > 26 ? lesson.id - 26 : lesson.id).padStart(2, '0');
   }
 
@@ -210,11 +214,11 @@ export class DashboardComponent {
     if (typeof window !== 'undefined') window.scrollTo({ top: 0, behavior });
   }
 
-  readActiveCourseId(): 'part-1' | 'part-2' {
+  readActiveCourseId(): 'part-1' | 'part-2' | 'part-3' {
     try {
       if (typeof localStorage !== 'undefined') {
         const stored = localStorage.getItem(ACTIVE_COURSE_KEY);
-        if (stored === 'part-1' || stored === 'part-2') return stored;
+        if (stored === 'part-1' || stored === 'part-2' || stored === 'part-3') return stored;
       }
     } catch {
       // Ignore storage access errors.

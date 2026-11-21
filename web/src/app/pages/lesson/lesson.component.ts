@@ -386,6 +386,9 @@ export class LessonComponent {
   }
 
   lessonLabel(lessonId: number): string {
+    if (lessonId >= 50) {
+      return `${this.language.t('lesson.part')} 3 · ${this.language.t('lesson.lesson')} ${String(lessonId - 50).padStart(2, '0')}`;
+    }
     return lessonId > 26
       ? `${this.language.t('lesson.part')} 2 · ${this.language.t('lesson.lesson')} ${String(lessonId - 26).padStart(2, '0')}`
       : `${this.language.t('lesson.lesson')} ${String(lessonId).padStart(2, '0')}`;
@@ -398,7 +401,8 @@ export class LessonComponent {
   }
 
   dashboardUrl(): string {
-    return (this.lesson()?.id ?? 1) > 26 ? '/course/part-2' : '/course/part-1';
+    const id = this.lesson()?.id ?? 1;
+    return id >= 50 ? '/course/part-3' : id > 26 ? '/course/part-2' : '/course/part-1';
   }
 
   toggleTheory(): void {
@@ -1086,8 +1090,8 @@ export class LessonComponent {
     });
   }
 
-  private courseIdFor(lessonId: number): 'part-1' | 'part-2' {
-    return lessonId > 26 ? 'part-2' : 'part-1';
+  private courseIdFor(lessonId: number): 'part-1' | 'part-2' | 'part-3' {
+    return lessonId >= 50 ? 'part-3' : lessonId > 26 ? 'part-2' : 'part-1';
   }
 
   private clearActivityAnswers(activity: Activity, wrongOnly: boolean): void {
