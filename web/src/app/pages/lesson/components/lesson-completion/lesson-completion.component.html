@@ -19,6 +19,19 @@
   </div>
   <p class="next-unlock">{{ finalScore() === 100 ? language.t('lesson.perfect') : language.t('lesson.mistakesLearn') }}</p>
 
+  @if (isGuest()) {
+    <div class="guest-save-card">
+      <strong>{{ language.t('lesson.guestSaveTitle') }}</strong>
+      <p>{{ language.t('lesson.guestSaveBody') }}</p>
+      <a
+        class="guest-save-btn"
+        routerLink="/auth"
+        [queryParams]="{ next: nextLesson() ? '/learn/' + nextLesson()!.id : dashboardUrl() }">
+        {{ language.t('lesson.guestSaveCta') }}
+      </a>
+    </div>
+  }
+
   <div class="completion-actions">
     @if (nextLesson(); as next) {
       <a class="return-button" [routerLink]="['/learn', next.id]">

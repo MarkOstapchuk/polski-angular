@@ -107,12 +107,7 @@ export class PlacementTestComponent {
     });
 
     try {
-      const user = this.auth.user() ?? await this.auth.currentUser().catch(() => null);
-      if (user) {
-        await this.router.navigate(['/learn', lessonId]);
-      } else {
-        await this.router.navigate(['/auth'], { queryParams: { next: `/learn/${lessonId}` } });
-      }
+      await this.router.navigate(['/learn', lessonId]);
     } finally {
       this.startingLesson.set(false);
     }
@@ -121,12 +116,7 @@ export class PlacementTestComponent {
   async openCourseOverview(): Promise<void> {
     const res = this.result();
     const courseId = res?.course.id ?? 'part-1';
-    const user = this.auth.user() ?? await this.auth.currentUser().catch(() => null);
-    if (user) {
-      await this.router.navigate(['/course', courseId]);
-    } else {
-      await this.router.navigate(['/auth'], { queryParams: { next: `/course/${courseId}` } });
-    }
+    await this.router.navigate(['/course', courseId]);
   }
 
   displayLessonNumber(lessonId: number): number {

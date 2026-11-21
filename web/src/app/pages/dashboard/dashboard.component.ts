@@ -48,6 +48,7 @@ export class DashboardComponent {
   readonly progress = this.progressService.progress;
   readonly userEmail = computed(() => this.auth.user()?.email ?? this.language.t('dashboard.learnerFallback'));
   readonly userInitial = computed(() => this.auth.user()?.email?.slice(0, 1).toUpperCase() ?? 'U');
+  readonly isGuest = computed(() => !this.auth.user());
   readonly signOutConfirmOpen = signal(false);
   readonly signingOut = signal(false);
   readonly activeNavSection = signal<'home' | 'course' | 'progress'>('home');

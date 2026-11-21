@@ -340,6 +340,7 @@
         [totalQuestions]="totalQuestions()"
         [awardedXp]="awardedXp()"
         [nextLesson]="nextLesson()"
+        [isGuest]="!auth.user()"
         (retryWrong)="retryWrongFromCompletion()"
         (retryLesson)="retryLessonFromCompletion()" />
     }

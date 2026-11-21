@@ -37,11 +37,19 @@
         <span class="note-spark">✦</span>
         <p>{{ language.t('dashboard.shortLesson') }}<br><strong>{{ language.t('dashboard.makesDifference') }}</strong></p>
       </div>
-      <button class="profile-button" type="button" (click)="openSignOutConfirm()" [attr.aria-label]="language.t('nav.logout')">
-        <span class="profile-avatar">{{ userInitial() }}</span>
-        <span class="profile-copy"><strong>{{ userEmail() }}</strong><small>{{ language.t('nav.logout') }}</small></span>
-        <span class="profile-menu">↗</span>
-      </button>
+      @if (isGuest()) {
+        <a class="profile-button" routerLink="/auth" [queryParams]="{ next: dashboardUrl() }" [attr.aria-label]="language.t('home.login')">
+          <span class="profile-avatar">{{ userInitial() }}</span>
+          <span class="profile-copy"><strong>{{ userEmail() }}</strong><small>{{ language.t('home.login') }}</small></span>
+          <span class="profile-menu">→</span>
+        </a>
+      } @else {
+        <button class="profile-button" type="button" (click)="openSignOutConfirm()" [attr.aria-label]="language.t('nav.logout')">
+          <span class="profile-avatar">{{ userInitial() }}</span>
+          <span class="profile-copy"><strong>{{ userEmail() }}</strong><small>{{ language.t('nav.logout') }}</small></span>
+          <span class="profile-menu">↗</span>
+        </button>
+      }
     </div>
   </aside>
 
@@ -59,7 +67,11 @@
       @if (pwa.installAvailable() || pwa.needsIOSInstructions()) {
         <button class="install-button" type="button" (click)="installApp()">{{ pwa.installAvailable() ? language.t('dashboard.installAppAction') : language.t('dashboard.installHelp') }}</button>
       }
-      <button class="top-avatar" type="button" (click)="openSignOutConfirm()" [attr.aria-label]="language.t('nav.logoutAccount') + ' ' + userEmail()" [title]="language.t('nav.logout')">{{ userInitial() }}</button>
+      @if (isGuest()) {
+        <a class="top-avatar" routerLink="/auth" [queryParams]="{ next: dashboardUrl() }" [attr.aria-label]="language.t('home.login')" [title]="language.t('home.login')">{{ userInitial() }}</a>
+      } @else {
+        <button class="top-avatar" type="button" (click)="openSignOutConfirm()" [attr.aria-label]="language.t('nav.logoutAccount') + ' ' + userEmail()" [title]="language.t('nav.logout')">{{ userInitial() }}</button>
+      }
     </header>
 
     <div class="content-wrap">

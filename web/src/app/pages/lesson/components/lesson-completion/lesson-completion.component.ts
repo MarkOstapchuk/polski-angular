@@ -21,6 +21,7 @@ export class LessonCompletionComponent {
   readonly totalQuestions = input.required<number>();
   readonly awardedXp = input.required<number>();
   readonly nextLesson = input<Lesson | undefined>(undefined);
+  readonly isGuest = input<boolean>(false);
 
   readonly retryWrong = output<void>();
   readonly retryLesson = output<void>();

@@ -15,6 +15,7 @@ import { WORKBOOK_IMAGES, WorkbookImage } from '../../data/workbook-images';
 import { LanguageSwitcherComponent } from '../../i18n/language-switcher.component';
 import { LanguageService } from '../../i18n/language.service';
 import { AnalyticsService } from '../../services/analytics.service';
+import { AuthService } from '../../services/auth.service';
 import { ProgressService } from '../../services/progress.service';
 import { ChoiceExerciseComponent } from './components/choice-exercise/choice-exercise.component';
 import { ClassifyExerciseComponent } from './components/classify-exercise/classify-exercise.component';
@@ -67,6 +68,7 @@ export class LessonComponent {
   private readonly router = inject(Router);
   private readonly progress = inject(ProgressService);
   private readonly analytics = inject(AnalyticsService);
+  readonly auth = inject(AuthService);
   readonly language = inject(LanguageService);
   readonly syncError = this.progress.syncError;
 

@@ -147,3 +147,18 @@ export const authGuard: CanActivateFn = async (_route, state) => {
     return router.createUrlTree(['/auth'], { queryParams: { error: 'progress' } });
   }
 };
+
+export const optionalAuthGuard: CanActivateFn = async () => {
+  const auth = inject(AuthService);
+  const progress = inject(ProgressService);
+
+  try {
+    const user = await auth.currentUser();
+    if (user) {
+      await progress.loadForUser(user.id).catch(() => undefined);
+    }
+  } catch {
+    // Guest mode works with localStorage when no session is available.
+  }
+  return true;
+};
