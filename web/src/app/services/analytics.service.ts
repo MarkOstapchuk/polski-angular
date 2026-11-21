@@ -1,5 +1,5 @@
 import { Injectable, NgZone, inject } from '@angular/core';
-import posthog from 'posthog-js';
+import type { PostHog } from 'posthog-js';
 import { POSTHOG_ENV } from './posthog.env.generated';
 import { supabase } from './supabase.client';
 
@@ -24,12 +24,14 @@ const SUPABASE_MIRRORED_EVENTS = new Set([
 /**
  * Product analytics service sending events, session replays, and user identification to PostHog,
  * while keeping authenticated learning funnel events mirrored to Supabase `analytics_events`.
- * Never throws or blocks user interactions if analytics is unavailable or unconfigured.
+ * Lazy-loads `posthog-js` so the initial Angular bundle stays lean and never blocks interactions.
  */
 @Injectable({ providedIn: 'root' })
 export class AnalyticsService {
   private readonly ngZone = inject(NgZone);
   private readonly sentOnceKeys = new Set<string>();
+  private readonly pendingOps: Array<(ph: PostHog) => void> = [];
+  private posthogClient: PostHog | null = null;
   private initialized = false;
   private identifiedUserId: string | null = null;
 
@@ -42,36 +44,51 @@ export class AnalyticsService {
       || ('standalone' in window.navigator && Boolean((window.navigator as Navigator & { standalone?: boolean }).standalone));
 
     this.ngZone.runOutsideAngular(() => {
-      posthog.init(POSTHOG_ENV.key, {
-        api_host: POSTHOG_ENV.host,
-        defaults: '2026-08-30',
-        capture_pageview: 'history_change',
-        capture_pageleave: true,
-        autocapture: true,
-        capture_dead_clicks: true,
-        capture_exceptions: true,
-        person_profiles: 'identified_only',
-        session_recording: {
-          maskAllInputs: false,
-          maskInputOptions: {
-            password: true,
-            email: true,
-          },
-        },
-      });
-      posthog.register({
-        app_surface: 'angular_app',
-        is_standalone_pwa: isStandalonePwa,
-        ...(initialLocale ? { ui_locale: initialLocale } : {}),
-      });
+      void import('posthog-js')
+        .then(({ default: posthog }) => {
+          posthog.init(POSTHOG_ENV.key, {
+            api_host: POSTHOG_ENV.host,
+            defaults: '2026-08-30',
+            capture_pageview: 'history_change',
+            capture_pageleave: true,
+            autocapture: true,
+            capture_dead_clicks: true,
+            capture_exceptions: true,
+            person_profiles: 'identified_only',
+            session_recording: {
+              maskAllInputs: false,
+              maskInputOptions: {
+                password: true,
+                email: true,
+              },
+            },
+          });
+          posthog.register({
+            app_surface: 'angular_app',
+            is_standalone_pwa: isStandalonePwa,
+            ...(initialLocale ? { ui_locale: initialLocale } : {}),
+          });
+          this.posthogClient = posthog;
+          for (const op of this.pendingOps.splice(0)) {
+            try {
+              op(posthog);
+            } catch {
+              // Never interrupt UI interactions if analytics fails.
+            }
+          }
+        })
+        .catch(() => {
+          this.pendingOps.length = 0;
+        });
     });
   }
 
   setLocale(locale: string): void {
     if (!this.initialized) return;
-    this.ngZone.runOutsideAngular(() => {
+    const userId = this.identifiedUserId;
+    this.runWithClient((posthog) => {
       posthog.register({ ui_locale: locale });
-      if (this.identifiedUserId) {
+      if (userId) {
         posthog.setPersonProperties({ ui_locale: locale });
       }
     });
@@ -83,7 +100,7 @@ export class AnalyticsService {
     this.identifiedUserId = userId;
     if (!this.initialized) return;
 
-    this.ngZone.runOutsideAngular(() => {
+    this.runWithClient((posthog) => {
       if (isNewIdentity) {
         posthog.identify(userId, cleanProps);
       } else if (Object.keys(cleanProps).length > 0) {
@@ -97,7 +114,7 @@ export class AnalyticsService {
     const cleanProps = Object.fromEntries(Object.entries(properties).filter(([, value]) => value !== undefined));
     if (Object.keys(cleanProps).length === 0) return;
 
-    this.ngZone.runOutsideAngular(() => {
+    this.runWithClient((posthog) => {
       posthog.setPersonProperties(cleanProps);
     });
   }
@@ -107,7 +124,7 @@ export class AnalyticsService {
     this.sentOnceKeys.clear();
     if (!this.initialized) return;
 
-    this.ngZone.runOutsideAngular(() => {
+    this.runWithClient((posthog) => {
       posthog.reset();
     });
   }
@@ -121,12 +138,8 @@ export class AnalyticsService {
     if (payload.courseId !== undefined) properties['course_id'] = payload.courseId;
 
     if (this.initialized) {
-      this.ngZone.runOutsideAngular(() => {
-        try {
-          posthog.capture(eventName, properties);
-        } catch {
-          // Never interrupt UI interactions if analytics fails.
-        }
+      this.runWithClient((posthog) => {
+        posthog.capture(eventName, properties);
       });
     }
 
@@ -149,5 +162,20 @@ export class AnalyticsService {
     if (this.sentOnceKeys.has(dedupeKey)) return;
     this.sentOnceKeys.add(dedupeKey);
     this.track(eventName, payload);
+  }
+
+  private runWithClient(fn: (posthog: PostHog) => void): void {
+    if (!this.posthogClient) {
+      if (this.pendingOps.length < 100) this.pendingOps.push(fn);
+      return;
+    }
+    const client = this.posthogClient;
+    this.ngZone.runOutsideAngular(() => {
+      try {
+        fn(client);
+      } catch {
+        // Never interrupt UI interactions if analytics fails.
+      }
+    });
   }
 }
