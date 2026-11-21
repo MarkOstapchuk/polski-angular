@@ -1,4 +1,5 @@
 import { ActivityKind, choice, Lesson, letterCloze, typed, typedExercise } from './lesson-types';
+import { COURSEBOOK_ACTIVITIES } from './coursebook-activities';
 import { LESSON_06 } from './lessons/lesson-06';
 import { LESSON_07 } from './lessons/lesson-07';
 import { LESSON_08 } from './lessons/lesson-08';
@@ -50,7 +51,7 @@ const l03QuestionAnswers = ['a. Nie, to jest sekretarka.', 'b. To jest kubek.', 
 const l04QuestionAnswers = ['a. Tak, bardzo.', 'b. Tak, bardzo dobrze, jestem z Hiszpanii.', 'c. Bo chcę studiować w Krakowie.', 'd. Nic nowego.', 'e. Z Madrytu.', 'f. Nie wiem, ale myślę, że tak.'];
 const l05QuestionAnswers = ['a. Prawie 18.', 'b. Bo mam egzamin.', 'c. Bardzo sympatyczna.', 'd. Gram w tenisa.', 'e. Grać w tenisa.', 'f. W Gdańsku.', 'g. Policjantem.', 'h. Bardzo profesjonalną.', 'i. Z Gdańska.', 'j. Pracowitym.'];
 
-export const LESSONS: Lesson[] = [
+const RAW_LESSONS: Lesson[] = [
   {
     id: 1,
     title: 'Pierwszy dzień w szkole',
@@ -973,6 +974,11 @@ export const LESSONS: Lesson[] = [
   LESSON_36, LESSON_37, LESSON_38, LESSON_39, LESSON_40, LESSON_41,
   LESSON_42, LESSON_43, LESSON_44, LESSON_45, LESSON_46, LESSON_47, LESSON_48, LESSON_49,
 ];
+
+export const LESSONS: Lesson[] = RAW_LESSONS.map((lesson) => {
+  const cb = COURSEBOOK_ACTIVITIES[lesson.id];
+  return cb?.length ? { ...lesson, activities: [...cb, ...lesson.activities] } : lesson;
+});
 
 export function getLesson(id: number): Lesson | undefined {
   return LESSONS.find((lesson) => lesson.id === id);

@@ -75,6 +75,7 @@ export interface Activity {
   kind: ActivityKind;
   title: string;
   instruction: string;
+  readingText?: string;
   audioUrl?: string;
   audioLabel?: string;
   items: ActivityItem[];
