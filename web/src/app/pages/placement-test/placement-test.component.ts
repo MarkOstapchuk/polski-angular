@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component, HostListener, computed, inject, signal } from '@angular/core';
+import { Meta } from '@angular/platform-browser';
 import { Router, RouterLink } from '@angular/router';
 import {
   PLACEMENT_QUESTIONS,
@@ -44,6 +45,12 @@ export class PlacementTestComponent {
   });
 
   constructor() {
+    const meta = inject(Meta);
+    meta.updateTag({
+      name: 'description',
+      content: 'Darmowy test poziomujący z języka polskiego (A1–B2). 12 krótkich pytań bez rejestracji — sprawdź, od której lekcji najlepiej zacząć.',
+    });
+    meta.updateTag({ name: 'robots', content: 'index,follow' });
     this.analytics.trackOnce('placement_test_started', 'placement_test_started', {
       metadata: { locale: this.language.locale() },
     });

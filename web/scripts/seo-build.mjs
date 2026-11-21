@@ -63,7 +63,13 @@ const pages = [
   { route: '/nauka/polskie-znaki', file: 'nauka/polskie-znaki/index.html' },
   { route: '/gramatyka/przypadki', file: 'gramatyka/przypadki/index.html' },
   { route: '/slownictwo/podstawowe-zwroty', file: 'slownictwo/podstawowe-zwroty/index.html' },
+  { route: '/ru/padezhi', file: 'ru/padezhi/index.html' },
+  { route: '/ru/glagoly-dvizheniya', file: 'ru/glagoly-dvizheniya/index.html' },
+  { route: '/ru/ekzamen-b1-b2', file: 'ru/ekzamen-b1-b2/index.html' },
+  { route: '/en/polish-cases', file: 'en/polish-cases/index.html' },
 ];
+
+const extraSitemapRoutes = ['/test'];
 
 for (const page of pages) {
   const file = resolve(outputDir, page.file);
@@ -82,7 +88,8 @@ await writeFile(robotsFile, origin
   : robots.replace(/^Sitemap:.*\n/m, ''));
 
 if (origin) {
-  const urls = pages.map(({ route }) => `  <url><loc>${origin}${route}</loc></url>`).join('\n');
+  const allRoutes = [...pages.map(({ route }) => route), ...extraSitemapRoutes];
+  const urls = allRoutes.map((route) => `  <url><loc>${origin}${route}</loc></url>`).join('\n');
   await writeFile(resolve(outputDir, 'sitemap.xml'), `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls}\n</urlset>\n`);
 } else {
   console.warn('SEO sitemap skipped: set SITE_URL to generate it for a local build.');

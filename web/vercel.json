@@ -10,7 +10,11 @@
   "rewrites": [
     { "source": "/", "destination": "/seo/index.html" },
     { "source": "/ru", "destination": "/ru/index.html" },
+    { "source": "/ru/padezhi", "destination": "/ru/padezhi/index.html" },
+    { "source": "/ru/glagoly-dvizheniya", "destination": "/ru/glagoly-dvizheniya/index.html" },
+    { "source": "/ru/ekzamen-b1-b2", "destination": "/ru/ekzamen-b1-b2/index.html" },
     { "source": "/en", "destination": "/en/index.html" },
+    { "source": "/en/polish-cases", "destination": "/en/polish-cases/index.html" },
     { "source": "/nauka/polskie-znaki", "destination": "/nauka/polskie-znaki/index.html" },
     { "source": "/gramatyka/przypadki", "destination": "/gramatyka/przypadki/index.html" },
     { "source": "/slownictwo/podstawowe-zwroty", "destination": "/slownictwo/podstawowe-zwroty/index.html" },
