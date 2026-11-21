@@ -20,7 +20,7 @@ export class LessonCompletionComponent {
   readonly correctAnswers = input.required<number>();
   readonly totalQuestions = input.required<number>();
   readonly awardedXp = input.required<number>();
-  readonly nextLesson = input<Lesson | undefined>(undefined);
+  readonly nextLesson = input<Pick<Lesson, 'id' | 'title'> | undefined>(undefined);
   readonly isGuest = input<boolean>(false);
 
   readonly retryWrong = output<void>();

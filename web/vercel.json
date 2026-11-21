@@ -18,6 +18,8 @@
     { "source": "/test", "destination": "/app.html" },
     { "source": "/course/:path*", "destination": "/app.html" },
     { "source": "/course-test/:path*", "destination": "/app.html" },
+    { "source": "/vocabulary", "destination": "/app.html" },
+    { "source": "/mistakes", "destination": "/app.html" },
     { "source": "/learn/:path*", "destination": "/app.html" },
     { "source": "/feedback", "destination": "/app.html" }
   ]

@@ -16,6 +16,14 @@
             <li>{{ translation }}</li>
           }
         </ul>
+        <button
+          type="button"
+          class="dictionary-save-btn"
+          [class.is-saved]="isSaved()"
+          (click)="toggleSave()"
+        >
+          {{ isSaved() ? language.t('vocab.savedInList') : language.t('vocab.addToList') }}
+        </button>
       }
       @if (!loading() && !error() && !translations().length) {
         <p class="dictionary-state">{{ language.t('lesson.translationNotFound') }}</p>

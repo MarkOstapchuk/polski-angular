@@ -6,8 +6,10 @@ import { CheckpointTest, getCheckpointAfterLesson, readCheckpointScores } from '
 import { COURSES, CourseSummary, LESSON_CATALOG, LessonSummary } from '../../data/lesson-catalog';
 import { AuthService } from '../../services/auth.service';
 import { AnalyticsService } from '../../services/analytics.service';
+import { MistakesService } from '../../services/mistakes.service';
 import { ProgressService } from '../../services/progress.service';
 import { PwaInstallService } from '../../services/pwa-install.service';
+import { VocabularyService } from '../../services/vocabulary.service';
 import { LanguageSwitcherComponent } from '../../i18n/language-switcher.component';
 import { LanguageService } from '../../i18n/language.service';
 import { DashboardContinueCardComponent } from './components/dashboard-continue-card/dashboard-continue-card.component';
@@ -37,6 +39,8 @@ export class DashboardComponent {
   private readonly analytics = inject(AnalyticsService);
   readonly language = inject(LanguageService);
   readonly progressService = inject(ProgressService);
+  readonly vocabulary = inject(VocabularyService);
+  readonly mistakes = inject(MistakesService);
   readonly pwa = inject(PwaInstallService);
   readonly courses = COURSES;
   private readonly routeCourseId = toSignal(this.route.paramMap.pipe(map((params) => params.get('courseId'))), {

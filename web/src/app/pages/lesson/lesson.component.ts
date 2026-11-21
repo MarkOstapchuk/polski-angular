@@ -5,10 +5,10 @@ import { map } from 'rxjs';
 import { adaptActivity, normalizeAnswer } from '../../data/activity-adapter';
 import { AUDIO_TRACKS } from '../../data/audio-tracks';
 import { PART2_AUDIO_TRACKS } from '../../data/part2-audio-tracks';
-import { Activity, ActivityItem, AdaptedActivity, AdaptedItem, getLesson, Lesson } from '../../data/lesson-bank';
-import { LESSON_THEORY, LessonTheoryId } from '../../data/lesson-theory';
-import { LESSON_THEORY_EN } from '../../data/lesson-theory.en';
-import { LESSON_THEORY_PL } from '../../data/lesson-theory.pl';
+import { Activity, ActivityItem, AdaptedActivity, AdaptedItem, Lesson } from '../../data/lesson-types';
+import { LESSON_CATALOG } from '../../data/lesson-catalog';
+import { loadLessonById, loadLessonTheory } from '../../data/lesson-loader';
+import type { LessonTheory } from '../../data/lesson-theory';
 import { resolveActivityTheory } from '../../data/lesson-theory-blocks';
 import { INSTRUCTION_TRANSLATIONS } from '../../data/instruction-translations';
 import { WORKBOOK_IMAGES, WorkbookImage } from '../../data/workbook-images';
@@ -16,6 +16,7 @@ import { LanguageSwitcherComponent } from '../../i18n/language-switcher.componen
 import { LanguageService } from '../../i18n/language.service';
 import { AnalyticsService } from '../../services/analytics.service';
 import { AuthService } from '../../services/auth.service';
+import { MistakesService } from '../../services/mistakes.service';
 import { ProgressService } from '../../services/progress.service';
 import { ChoiceExerciseComponent } from './components/choice-exercise/choice-exercise.component';
 import { ClassifyExerciseComponent } from './components/classify-exercise/classify-exercise.component';
@@ -67,6 +68,7 @@ export class LessonComponent {
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
   private readonly progress = inject(ProgressService);
+  private readonly mistakes = inject(MistakesService);
   private readonly analytics = inject(AnalyticsService);
   readonly auth = inject(AuthService);
   readonly language = inject(LanguageService);
@@ -101,17 +103,12 @@ export class LessonComponent {
   private readonly wordOrderTypeItems = signal<Record<string, boolean>>({});
 
   readonly lesson = signal<Lesson | undefined>(undefined);
+  readonly theory = signal<LessonTheory | undefined>(undefined);
+  private loadRequestId = 0;
+  private theoryRequestId = 0;
   readonly nextLesson = computed(() => {
     const id = this.lesson()?.id;
-    return id ? getLesson(id + 1) : undefined;
-  });
-
-  readonly theory = computed(() => {
-    const id = this.lesson()?.id;
-    if (!id) return undefined;
-    const locale = this.language.locale();
-    const table = locale === 'en' ? LESSON_THEORY_EN : locale === 'pl' ? LESSON_THEORY_PL : LESSON_THEORY;
-    return (table[id as LessonTheoryId] ?? LESSON_THEORY[id as LessonTheoryId]);
+    return id ? LESSON_CATALOG.find((item) => item.id === id + 1) : undefined;
   });
 
   readonly activeIndex = signal(0);
@@ -267,6 +264,19 @@ export class LessonComponent {
       if (!request || !list || this.finished()) return;
       this.schedulePickerScrollIntoView();
       onCleanup(() => this.cancelPickerScrollRaf());
+    });
+
+    effect(() => {
+      const id = this.lesson()?.id;
+      const locale = this.language.locale();
+      if (!id) {
+        this.theory.set(undefined);
+        return;
+      }
+      const reqId = ++this.theoryRequestId;
+      void loadLessonTheory(id, locale).then((loaded) => {
+        if (reqId === this.theoryRequestId) this.theory.set(loaded);
+      });
     });
   }
 
@@ -785,7 +795,26 @@ export class LessonComponent {
     if (!lesson || !activity || !this.hasAnsweredAll() || this.checked()) return;
     const isRetry = this.retriedActivityIds().has(activity.id);
     const result: Record<string, boolean> = {};
-    for (const item of activity.items) result[item.id] = this.isCorrect(item);
+    for (const item of activity.items) {
+      const ok = this.isCorrect(item);
+      result[item.id] = ok;
+      const mistakeKey = `${lesson.id}:${activity.id}:${item.id}`;
+      if (ok) {
+        this.mistakes.resolveMistake(mistakeKey);
+      } else if (!item.letterCloze && item.accepted.length > 0 && item.prompt.trim()) {
+        this.mistakes.recordMistake({
+          key: mistakeKey,
+          lessonId: lesson.id,
+          lessonTitle: lesson.title,
+          activityId: activity.id,
+          activityTitle: activity.title,
+          prompt: item.prompt,
+          accepted: item.accepted,
+          options: item.options,
+          userAnswer: this.answerFor(item.id),
+        });
+      }
+    }
     this.results.update((current) => ({ ...current, [activity.id]: result }));
     this.checked.set(true);
     this.retriedActivityIds.update((set) => {
@@ -955,13 +984,15 @@ export class LessonComponent {
     );
   }
 
-  private loadLesson(lessonId: number): void {
+  private async loadLesson(lessonId: number): Promise<void> {
     const previousLesson = this.lesson();
     if (previousLesson && previousLesson.id !== lessonId) {
       this.trackLessonAbandoned('navigate_away');
     }
 
-    const lesson = getLesson(lessonId);
+    const reqId = ++this.loadRequestId;
+    const lesson = await loadLessonById(lessonId);
+    if (reqId !== this.loadRequestId) return;
     this.lesson.set(lesson);
     if (!lesson) {
       void this.router.navigateByUrl(this.dashboardUrl());

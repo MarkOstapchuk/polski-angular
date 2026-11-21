@@ -1,0 +1,99 @@
+<header class="page-header">
+  <a class="back-link" routerLink="/course/part-1">← {{ language.t('lesson.back') }}</a>
+  <app-language-switcher />
+</header>
+
+<main class="page-main">
+  <section class="page-intro">
+    <p class="eyebrow">{{ language.t('mistakes.eyebrow') }}</p>
+    <h1>{{ language.t('mistakes.title') }}</h1>
+    <p class="subtitle">{{ language.t('mistakes.subtitle') }}</p>
+  </section>
+
+  @if (queue().length === 0) {
+    <section class="empty-card">
+      <div class="empty-icon">✓</div>
+      <h2>{{ language.t('mistakes.emptyTitle') }}</h2>
+      <p>{{ language.t('mistakes.emptyBody') }}</p>
+      <a class="primary-btn" routerLink="/course/part-1">{{ language.t('checkpoint.backToCourse') }}</a>
+    </section>
+  } @else if (!done() && current(); as item) {
+    <section class="practice-card">
+      <div class="card-top">
+        <span class="step-chip">{{ index() + 1 }} / {{ queue().length }}</span>
+        <a class="source-link" [routerLink]="['/learn', item.lessonId]">
+          {{ item.lessonTitle }} ↗
+        </a>
+      </div>
+
+      <p class="activity-title">{{ item.activityTitle }}</p>
+      <p class="prompt">{{ item.prompt }}</p>
+
+      @if (item.options?.length) {
+        <div class="options-grid">
+          @for (opt of item.options; track opt) {
+            <button
+              type="button"
+              class="option-btn"
+              [disabled]="checked()"
+              [class.is-selected]="userAnswer() === opt"
+              [class.is-right]="checked() && item.accepted.includes(opt)"
+              [class.is-wrong]="checked() && userAnswer() === opt && !lastCorrect()"
+              (click)="selectOption(opt)"
+            >
+              {{ opt }}
+            </button>
+          }
+        </div>
+      } @else {
+        <form class="typed-form" (ngSubmit)="checkCurrent()">
+          <input
+            type="text"
+            class="typed-input"
+            name="answer"
+            [ngModel]="userAnswer()"
+            (ngModelChange)="userAnswer.set($event)"
+            [disabled]="checked()"
+            [placeholder]="language.t('lesson.yourAnswer')"
+            autocomplete="off"
+          />
+          @if (!checked()) {
+            <button type="submit" class="primary-btn" [disabled]="!userAnswer().trim()">
+              {{ language.t('lesson.check') }}
+            </button>
+          }
+        </form>
+      }
+
+      @if (checked()) {
+        <div class="feedback-bar" [class.is-ok]="lastCorrect()" [class.is-err]="!lastCorrect()">
+          @if (lastCorrect()) {
+            <strong>{{ language.t('lesson.correct') }} ✓</strong>
+          } @else {
+            <div>
+              <strong>{{ language.t('lesson.correctAnswer') }}</strong>
+              <span>{{ item.accepted[0] }}</span>
+            </div>
+          }
+          <button type="button" class="primary-btn" (click)="next()">
+            {{ language.t('lesson.next') }} →
+          </button>
+        </div>
+      }
+    </section>
+  } @else {
+    <section class="empty-card">
+      <div class="empty-icon">✦</div>
+      <h2>{{ language.t('mistakes.doneTitle') }}</h2>
+      <p>{{ fixedCount() }} / {{ queue().length }} {{ language.t('mistakes.doneBody') }}</p>
+      <div class="done-actions">
+        @if (mistakesService.count() > 0) {
+          <button type="button" class="primary-btn" (click)="restart()">
+            {{ language.t('mistakes.morePractice') }} ({{ mistakesService.count() }})
+          </button>
+        }
+        <a class="secondary-btn" routerLink="/course/part-1">{{ language.t('checkpoint.backToCourse') }}</a>
+      </div>
+    </section>
+  }
+</main>

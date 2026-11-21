@@ -27,6 +27,12 @@
         (click)="navigateSection($event, 'progress', 'progress-card')">
         <span class="nav-icon stats-icon">▥</span><span>{{ language.t('nav.progress') }}</span>
       </a>
+      <a class="nav-link" routerLink="/vocabulary">
+        <span class="nav-icon">📖</span><span>{{ language.t('vocab.dashboardCardTitle') }}</span>
+      </a>
+      <a class="nav-link" routerLink="/mistakes">
+        <span class="nav-icon">↺</span><span>{{ language.t('mistakes.dashboardCardTitle') }}</span>
+      </a>
       <a class="nav-link" routerLink="/feedback" [queryParams]="{ course: selectedCourse()?.id ?? readActiveCourseId() }">
         <span class="nav-icon">✎</span><span>{{ language.t('nav.feedback') }}</span>
       </a>
@@ -109,6 +115,25 @@
             <span class="placement-banner-cta">{{ language.t('dashboard.placementBannerAction') }}</span>
           </a>
         }
+
+        <section class="quick-practice-row">
+          <a class="quick-practice-card" routerLink="/vocabulary">
+            <span class="quick-practice-icon">📖</span>
+            <span class="quick-practice-copy">
+              <strong>{{ language.t('vocab.dashboardCardTitle') }}</strong>
+              <small>{{ vocabulary.count() }} {{ language.t('vocab.dashboardCardMeta') }}</small>
+            </span>
+            <span class="quick-practice-arrow">→</span>
+          </a>
+          <a class="quick-practice-card" routerLink="/mistakes">
+            <span class="quick-practice-icon">↺</span>
+            <span class="quick-practice-copy">
+              <strong>{{ language.t('mistakes.dashboardCardTitle') }}</strong>
+              <small>{{ mistakes.count() }} {{ language.t('mistakes.dashboardCardMeta') }}</small>
+            </span>
+            <span class="quick-practice-arrow">→</span>
+          </a>
+        </section>
 
         <div class="section-heading" id="lesson-path">
           <div><p class="eyebrow">{{ language.t('dashboard.path') }}</p><h2>{{ course.name }} · {{ language.t('dashboard.lessons') }}</h2></div>

@@ -10,6 +10,8 @@ export const routes: Routes = [
   { path: '', component: PublicHomeComponent, title: 'Kurs języka polskiego online A1–A2 · polski.' },
   { path: 'course/:courseId', component: DashboardComponent, canActivate: [optionalAuthGuard], title: 'Kurs · Polski' },
   { path: 'course-test/:testId', loadComponent: () => import('./pages/checkpoint-test/checkpoint-test.component').then((m) => m.CheckpointTestComponent), canActivate: [optionalAuthGuard], title: 'Test kontrolny · Polski' },
+  { path: 'vocabulary', loadComponent: () => import('./pages/vocabulary/vocabulary.component').then((m) => m.VocabularyComponent), canActivate: [optionalAuthGuard], title: 'Słownik · Polski' },
+  { path: 'mistakes', loadComponent: () => import('./pages/mistakes/mistakes.component').then((m) => m.MistakesComponent), canActivate: [optionalAuthGuard], title: 'Błędy · Polski' },
   { path: 'feedback', loadComponent: () => import('./pages/feedback/feedback.component').then((m) => m.FeedbackComponent), canActivate: [authGuard], title: 'Opinie · Polski' },
   { path: 'learn/:lessonId', loadComponent: () => import('./pages/lesson/lesson.component').then((m) => m.LessonComponent), canActivate: [optionalAuthGuard], title: 'Lekcja · Polski' },
   { path: '**', redirectTo: '' },

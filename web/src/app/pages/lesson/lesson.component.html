@@ -346,6 +346,6 @@
     }
 
     <app-lesson-image-lightbox [image]="lightboxImage()" (closed)="closeLightbox()" />
-    <app-lesson-dictionary-modal [(word)]="dictionaryWord" (closed)="closeDictionary()" />
+    <app-lesson-dictionary-modal [(word)]="dictionaryWord" [lessonId]="lesson.id" (closed)="closeDictionary()" />
   </div>
 }

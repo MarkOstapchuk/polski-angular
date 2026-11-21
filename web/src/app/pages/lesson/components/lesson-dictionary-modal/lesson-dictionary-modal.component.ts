@@ -1,6 +1,7 @@
-import { ChangeDetectionStrategy, Component, effect, ElementRef, inject, model, output, signal, viewChild } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, effect, ElementRef, inject, input, model, output, signal, viewChild } from '@angular/core';
 import { LanguageService } from '../../../../i18n/language.service';
 import { AnalyticsService } from '../../../../services/analytics.service';
+import { VocabularyService } from '../../../../services/vocabulary.service';
 import { supabase } from '../../../../services/supabase.client';
 
 @Component({
@@ -12,8 +13,10 @@ import { supabase } from '../../../../services/supabase.client';
 })
 export class LessonDictionaryModalComponent {
   private readonly analytics = inject(AnalyticsService);
+  private readonly vocabulary = inject(VocabularyService);
   readonly language = inject(LanguageService);
   readonly word = model<string | null>(null);
+  readonly lessonId = input<number | undefined>(undefined);
   readonly closed = output<void>();
 
   private readonly closeBtn = viewChild<ElementRef<HTMLButtonElement>>('closeBtn');
@@ -21,6 +24,10 @@ export class LessonDictionaryModalComponent {
   readonly translations = signal<string[]>([]);
   readonly loading = signal(false);
   readonly error = signal<string | null>(null);
+  readonly isSaved = computed(() => {
+    const current = this.word();
+    return !!current && this.vocabulary.isSaved(current);
+  });
   private requestCounter = 0;
 
   constructor() {
@@ -30,6 +37,20 @@ export class LessonDictionaryModalComponent {
       queueMicrotask(() => this.closeBtn()?.nativeElement.focus({ preventScroll: true }));
       void this.fetchTranslation(currentWord);
     });
+  }
+
+  toggleSave(): void {
+    const currentWord = this.word();
+    if (!currentWord) return;
+    if (this.isSaved()) {
+      this.vocabulary.removeWord(currentWord);
+    } else if (this.translations().length) {
+      this.vocabulary.saveWord(currentWord, this.translations(), this.language.locale(), this.lessonId());
+      this.analytics.track('vocabulary_word_saved', {
+        lessonId: this.lessonId(),
+        metadata: { word_length: currentWord.length, locale: this.language.locale() },
+      });
+    }
   }
 
   close(): void {

@@ -4,7 +4,10 @@
 .dictionary-close:hover { background: #ebe6dc; }
 .dictionary-kicker { margin: 0 48px 7px 0; color: #9c7253; font-size: 12px; font-weight: 800; letter-spacing: .9px; }
 .dictionary-sheet h2 { margin: 0 48px 16px 0; color: #303129; font-size: 27px; }
-.dictionary-translations { display: grid; gap: 8px; margin: 0 0 18px; padding-left: 20px; color: #494940; font-size: 17px; line-height: 1.45; }
+.dictionary-translations { display: grid; gap: 8px; margin: 0 0 16px; padding-left: 20px; color: #494940; font-size: 17px; line-height: 1.45; }
+.dictionary-save-btn { display: inline-flex; align-items: center; justify-content: center; min-height: 42px; margin: 0 0 16px; padding: 8px 16px; border: 1.5px solid #bd5d3f; border-radius: 10px; background: #fdf6f2; color: #8c3f29; font-size: 14px; font-weight: 700; cursor: pointer; }
+.dictionary-save-btn:hover { background: #f8e8e1; }
+.dictionary-save-btn.is-saved { border-color: #668c69; background: #eef6ef; color: #2b6136; }
 .dictionary-state { margin: 0 0 18px; color: #7a766c; font-size: 15px; }
 .dictionary-error { color: #aa6256; }
 .dictionary-footer { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }

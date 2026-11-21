@@ -1,0 +1,95 @@
+<header class="page-header">
+  <a class="back-link" routerLink="/course/part-1">← {{ language.t('lesson.back') }}</a>
+  <app-language-switcher />
+</header>
+
+<main class="page-main">
+  <section class="page-intro">
+    <p class="eyebrow">{{ language.t('vocab.eyebrow') }}</p>
+    <h1>{{ language.t('vocab.title') }}</h1>
+    <p class="subtitle">{{ language.t('vocab.subtitle') }}</p>
+  </section>
+
+  @if (vocabulary.count() === 0) {
+    <section class="empty-card">
+      <div class="empty-icon">📖</div>
+      <h2>{{ language.t('vocab.emptyTitle') }}</h2>
+      <p>{{ language.t('vocab.emptyBody') }}</p>
+      <a class="primary-btn" routerLink="/course/part-1">{{ language.t('checkpoint.backToCourse') }}</a>
+    </section>
+  } @else {
+    <div class="mode-tabs" role="tablist">
+      <button type="button" role="tab" [class.active]="mode() === 'cards'" (click)="mode.set('cards')">
+        {{ language.t('vocab.tabCards') }} ({{ deck().length }})
+      </button>
+      <button type="button" role="tab" [class.active]="mode() === 'list'" (click)="mode.set('list')">
+        {{ language.t('vocab.tabList') }} ({{ vocabulary.count() }})
+      </button>
+    </div>
+
+    @if (mode() === 'cards') {
+      @if (!sessionDone() && currentCard(); as card) {
+        <section class="flashcard-wrap">
+          <div class="deck-progress">
+            <span>{{ cardIndex() + 1 }} / {{ deck().length }}</span>
+            <small>{{ language.t('vocab.tapToFlip') }}</small>
+          </div>
+
+          <button type="button" class="flashcard" [class.is-flipped]="flipped()" (click)="flipCard()">
+            <span class="card-kicker">{{ flipped() ? language.t('vocab.translation') : 'POLSKI' }}</span>
+            <strong class="card-word" [attr.lang]="flipped() ? null : 'pl'">{{ card.word }}</strong>
+            @if (flipped()) {
+              <ul class="card-translations">
+                @for (tr of card.translations; track tr) {
+                  <li>{{ tr }}</li>
+                }
+              </ul>
+            } @else {
+              <span class="card-hint">{{ language.t('vocab.showTranslation') }}</span>
+            }
+          </button>
+
+          @if (flipped()) {
+            <div class="card-actions">
+              <button type="button" class="again-btn" (click)="answerCard(false)">
+                {{ language.t('vocab.again') }}
+              </button>
+              <button type="button" class="know-btn" (click)="answerCard(true)">
+                {{ language.t('vocab.know') }} ✓
+              </button>
+            </div>
+          }
+        </section>
+      } @else {
+        <section class="done-card">
+          <div class="empty-icon">✦</div>
+          <h2>{{ language.t('vocab.sessionDoneTitle') }}</h2>
+          <p>{{ knownCount() }} / {{ deck().length }} {{ language.t('vocab.sessionDoneBody') }}</p>
+          <div class="done-actions">
+            <button type="button" class="primary-btn" (click)="restartDeck()">
+              {{ language.t('vocab.practiceAgain') }}
+            </button>
+            <a class="secondary-btn" routerLink="/course/part-1">{{ language.t('checkpoint.backToCourse') }}</a>
+          </div>
+        </section>
+      }
+    } @else {
+      <section class="word-list">
+        @for (item of vocabulary.words(); track item.id) {
+          <article class="word-row">
+            <div class="word-copy">
+              <strong lang="pl">{{ item.word }}</strong>
+              <span>{{ item.translations.join(' · ') }}</span>
+            </div>
+            <div class="word-meta">
+              @if (item.masteredCount > 0) {
+                <span class="mastery-chip">✓ {{ item.masteredCount }}</span>
+              }
+              <button type="button" class="remove-btn" (click)="removeWord(item.id)" [attr.aria-label]="language.t('vocab.remove')">×</button>
+            </div>
+          </article>
+        }
+      </section>
+    }
+  }
+</main>

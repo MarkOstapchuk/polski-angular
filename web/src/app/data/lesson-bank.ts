@@ -21,33 +21,6 @@ import { LESSON_23 } from './lessons/lesson-23';
 import { LESSON_24 } from './lessons/lesson-24';
 import { LESSON_25 } from './lessons/lesson-25';
 import { LESSON_26 } from './lessons/lesson-26';
-import { LESSON_27 } from './lessons/part2-lesson-01';
-import { LESSON_28 } from './lessons/part2-lesson-02';
-import { LESSON_29 } from './lessons/part2-lesson-03';
-import { LESSON_30 } from './lessons/part2-lesson-04';
-import { LESSON_31 } from './lessons/part2-lesson-05';
-import { LESSON_32 } from './lessons/part2-lesson-06';
-import { LESSON_33 } from './lessons/part2-lesson-07';
-import { LESSON_34 } from './lessons/part2-lesson-08';
-import { LESSON_35 } from './lessons/part2-lesson-09';
-import { LESSON_36 } from './lessons/part2-lesson-10';
-import { LESSON_37 } from './lessons/part2-lesson-11';
-import { LESSON_38 } from './lessons/part2-lesson-12';
-import { LESSON_39 } from './lessons/part2-lesson-13';
-import { LESSON_40 } from './lessons/part2-lesson-14';
-import { LESSON_41 } from './lessons/part2-lesson-15';
-import {
-  LESSON_42, LESSON_43, LESSON_44, LESSON_45, LESSON_46, LESSON_47, LESSON_48, LESSON_49,
-} from './lessons/part2-lesson-16-23';
-import {
-  LESSON_50, LESSON_51, LESSON_52, LESSON_53, LESSON_54, LESSON_55, LESSON_56,
-} from './lessons/part3-lesson-00-06';
-import {
-  LESSON_57, LESSON_58, LESSON_59, LESSON_60, LESSON_61, LESSON_62, LESSON_63,
-} from './lessons/part3-lesson-07-13';
-import {
-  LESSON_64, LESSON_65, LESSON_66, LESSON_67, LESSON_68, LESSON_69, LESSON_70,
-} from './lessons/part3-lesson-14-20';
 
 export * from './lesson-types';
 
@@ -979,12 +952,6 @@ const RAW_LESSONS: Lesson[] = [
   LESSON_06, LESSON_07, LESSON_08, LESSON_09, LESSON_10, LESSON_11, LESSON_12,
   LESSON_13, LESSON_14, LESSON_15, LESSON_16, LESSON_17, LESSON_18,
   LESSON_19, LESSON_20, LESSON_21, LESSON_22, LESSON_23, LESSON_24, LESSON_25, LESSON_26,
-  LESSON_27, LESSON_28, LESSON_29, LESSON_30, LESSON_31, LESSON_32, LESSON_33, LESSON_34, LESSON_35,
-  LESSON_36, LESSON_37, LESSON_38, LESSON_39, LESSON_40, LESSON_41,
-  LESSON_42, LESSON_43, LESSON_44, LESSON_45, LESSON_46, LESSON_47, LESSON_48, LESSON_49,
-  LESSON_50, LESSON_51, LESSON_52, LESSON_53, LESSON_54, LESSON_55, LESSON_56,
-  LESSON_57, LESSON_58, LESSON_59, LESSON_60, LESSON_61, LESSON_62, LESSON_63,
-  LESSON_64, LESSON_65, LESSON_66, LESSON_67, LESSON_68, LESSON_69, LESSON_70,
 ];
 
 function exerciseSortKey(sourceExerciseId: string): [number, number] {
