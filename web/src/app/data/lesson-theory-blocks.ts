@@ -1,6 +1,8 @@
 import type { Language } from '../i18n/language.service';
 import type { Activity } from './lesson-types';
 import type { LessonTheory, TheoryBlock } from './lesson-theory';
+import { PART1_THEORY_BLOCKS } from './lesson-theory-blocks-part1';
+import { PART2_THEORY_BLOCKS } from './lesson-theory-blocks-part2';
 
 export interface ResolvedActivityTheory {
   block: TheoryBlock;
@@ -786,10 +788,25 @@ export function resolveActivityTheory(
 ): ResolvedActivityTheory | null {
   if (!theory || !activities.length || activeIndex < 0 || activeIndex >= activities.length) return null;
 
-  const customBlocks = theory.blocks ?? LESSON_1_5_BLOCKS[locale]?.[lessonId];
-  const blocks = customBlocks?.length
-    ? customBlocks
-    : buildFallbackBlocks(lessonId, activities, theory, labels.overviewTitle, labels.grammarTitle, labels.practiceTitle);
+  const ruDetailed = PART1_THEORY_BLOCKS[lessonId] ?? PART2_THEORY_BLOCKS[lessonId];
+  const customBlocks = theory.blocks
+    ?? LESSON_1_5_BLOCKS[locale]?.[lessonId]
+    ?? (locale === 'ru' ? ruDetailed : undefined);
+
+  let blocks: TheoryBlock[];
+  if (customBlocks?.length) {
+    blocks = customBlocks;
+  } else {
+    blocks = buildFallbackBlocks(lessonId, activities, theory, labels.overviewTitle, labels.grammarTitle, labels.practiceTitle);
+    const referenceTables = (ruDetailed ?? []).map((b) => b.table).filter((t): t is NonNullable<typeof t> => !!t);
+    if (referenceTables.length && blocks.length > 0) {
+      const targetIdx = blocks.length > 1 ? 1 : 0;
+      blocks[targetIdx] = { ...blocks[targetIdx], table: referenceTables[0] };
+      if (referenceTables[1] && blocks.length > 2) {
+        blocks[2] = { ...blocks[2], table: referenceTables[1] };
+      }
+    }
+  }
 
   const currentActivity = activities[activeIndex];
   let matchedIndex = blocks.findIndex((b) => matchesBlock(currentActivity, b));
