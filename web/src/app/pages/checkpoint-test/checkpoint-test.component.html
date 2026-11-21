@@ -1,0 +1,83 @@
+<header class="checkpoint-header">
+  @if (test(); as t) {
+    <a class="back-link" [routerLink]="['/course', t.courseId]">
+      ← {{ language.t('lesson.back') }}
+    </a>
+  } @else {
+    <a class="back-link" routerLink="/course/part-1">
+      ← {{ language.t('lesson.back') }}
+    </a>
+  }
+  <app-language-switcher />
+</header>
+
+<main class="checkpoint-main">
+  @if (test(); as t) {
+    <section class="intro-block">
+      <span class="optional-badge">{{ language.t('checkpoint.badge') }}</span>
+      <h1>{{ t.title[language.locale()] }}</h1>
+      <p class="intro-desc">{{ t.description[language.locale()] }}</p>
+    </section>
+
+    @if (checked()) {
+      <section class="score-banner" [class.is-great]="score() >= t.questions.length - 1">
+        <div>
+          <small>{{ language.t('lesson.score') }}</small>
+          <strong>{{ score() }} / {{ t.questions.length }}</strong>
+        </div>
+        <div class="score-actions">
+          <button type="button" class="secondary-btn" (click)="retake()">
+            {{ language.t('placement.retake') }}
+          </button>
+          <a class="primary-btn" [routerLink]="['/course', t.courseId]">
+            {{ language.t('checkpoint.backToCourse') }}
+          </a>
+        </div>
+      </section>
+    }
+
+    <section class="questions-list">
+      @for (q of t.questions; track q.id; let qIdx = $index) {
+        <article
+          class="question-card"
+          [class.is-correct]="checked() && selectedAnswers()[q.id] === q.correctIndex"
+          [class.is-wrong]="checked() && selectedAnswers()[q.id] !== q.correctIndex"
+        >
+          <p class="q-number">{{ qIdx + 1 }}. {{ q.prompt }}</p>
+          <div class="options-grid">
+            @for (opt of q.options; track opt; let oIdx = $index) {
+              <button
+                type="button"
+                class="option-btn"
+                [disabled]="checked()"
+                [class.is-selected]="selectedAnswers()[q.id] === oIdx"
+                [class.is-right-answer]="checked() && oIdx === q.correctIndex"
+                [class.is-wrong-choice]="checked() && selectedAnswers()[q.id] === oIdx && oIdx !== q.correctIndex"
+                (click)="selectOption(q.id, oIdx)"
+              >
+                {{ opt }}
+              </button>
+            }
+          </div>
+          @if (checked()) {
+            <p class="explanation">{{ q.explanation[language.locale()] }}</p>
+          }
+        </article>
+      }
+    </section>
+
+    @if (!checked()) {
+      <div class="submit-bar">
+        <span class="progress-hint">{{ answeredCount() }} {{ language.t('lesson.of') }} {{ t.questions.length }}</span>
+        <button type="button" class="primary-btn" [disabled]="!allAnswered()" (click)="checkTest()">
+          {{ language.t('lesson.check') }}
+        </button>
+      </div>
+    }
+  } @else {
+    <section class="intro-block">
+      <h1>{{ language.t('checkpoint.notFound') }}</h1>
+      <a class="primary-btn" routerLink="/course/part-1">{{ language.t('checkpoint.backToCourse') }}</a>
+    </section>
+  }
+</main>

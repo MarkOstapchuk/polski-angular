@@ -9,6 +9,7 @@ export const routes: Routes = [
   { path: 'test', loadComponent: () => import('./pages/placement-test/placement-test.component').then((m) => m.PlacementTestComponent), title: 'Test poziomujący · Polski' },
   { path: '', component: PublicHomeComponent, title: 'Kurs języka polskiego online A1–A2 · polski.' },
   { path: 'course/:courseId', component: DashboardComponent, canActivate: [authGuard], title: 'Kurs · Polski' },
+  { path: 'course-test/:testId', loadComponent: () => import('./pages/checkpoint-test/checkpoint-test.component').then((m) => m.CheckpointTestComponent), canActivate: [authGuard], title: 'Test kontrolny · Polski' },
   { path: 'feedback', loadComponent: () => import('./pages/feedback/feedback.component').then((m) => m.FeedbackComponent), canActivate: [authGuard], title: 'Opinie · Polski' },
   { path: 'learn/:lessonId', loadComponent: () => import('./pages/lesson/lesson.component').then((m) => m.LessonComponent), canActivate: [authGuard], title: 'Lekcja · Polski' },
   { path: '**', redirectTo: '' },

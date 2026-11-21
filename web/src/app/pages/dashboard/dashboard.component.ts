@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component, computed, effect, inject, signal } 
 import { toSignal } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { map } from 'rxjs';
+import { CheckpointTest, getCheckpointAfterLesson, readCheckpointScores } from '../../data/checkpoint-tests';
 import { COURSES, CourseSummary, LESSON_CATALOG, LessonSummary } from '../../data/lesson-catalog';
 import { AuthService } from '../../services/auth.service';
 import { AnalyticsService } from '../../services/analytics.service';
@@ -50,6 +51,7 @@ export class DashboardComponent {
   readonly signOutConfirmOpen = signal(false);
   readonly signingOut = signal(false);
   readonly activeNavSection = signal<'home' | 'course' | 'progress'>('home');
+  readonly checkpointScores = signal(readCheckpointScores());
   readonly currentLesson = computed(() => {
     const lessons = this.lessons();
     return lessons.find((lesson) => !this.progressService.hasCompleted(lesson.id)) ?? lessons.at(-1) ?? LESSON_CATALOG[0];
@@ -149,6 +151,16 @@ export class DashboardComponent {
   isUnlocked(lesson: LessonSummary): boolean {
     const course = this.selectedCourse();
     return !!course && this.progressService.isUnlocked(lesson.id, course.firstLessonId);
+  }
+
+  checkpointAfter(lessonId: number): CheckpointTest | null {
+    const course = this.selectedCourse();
+    return course ? getCheckpointAfterLesson(course.id, lessonId) : null;
+  }
+
+  checkpointScoreLabel(testId: string): string | null {
+    const saved = this.checkpointScores()[testId];
+    return saved ? `${saved.score}/${saved.total}` : null;
   }
 
   installApp(): void {

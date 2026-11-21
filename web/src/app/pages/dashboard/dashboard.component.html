@@ -130,6 +130,27 @@
                 </span>
               </button>
             </article>
+            @if (checkpointAfter(lesson.id); as cp) {
+              <article class="path-row is-checkpoint">
+                <a class="path-node checkpoint-node" [routerLink]="['/course-test', cp.id]" [attr.aria-label]="cp.title[language.locale()]">
+                  <span>✦</span>
+                </a>
+                <a class="lesson-card checkpoint-card" [routerLink]="['/course-test', cp.id]">
+                  <span class="lesson-card-copy">
+                    <span class="lesson-unit checkpoint-badge">{{ language.t('checkpoint.badge') }} <span class="unit-dot">·</span> {{ cp.lessonRange }}</span>
+                    <strong>{{ cp.title[language.locale()] }}</strong>
+                    <small>{{ cp.description[language.locale()] }}</small>
+                  </span>
+                  <span class="lesson-card-end">
+                    @if (checkpointScoreLabel(cp.id); as scoreLabel) {
+                      <span class="done-chip">{{ scoreLabel }} <b>✓</b></span>
+                    } @else {
+                      <span class="play-chip">→</span>
+                    }
+                  </span>
+                </a>
+              </article>
+            }
           }
         </section>
 

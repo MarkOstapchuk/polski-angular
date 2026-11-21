@@ -85,6 +85,10 @@
 .unit-dot { padding: 0 3px; color: #d7a287; }
 .lesson-card-copy strong { color: #36362f; font-size: 15px; }
 .lesson-card-copy small { color: #7c7a71; font-size: 13px; }
+.path-row.is-checkpoint .checkpoint-node { display: grid; place-items: center; background: #fff; border: 2px solid #d7a287; color: #b84f31; text-decoration: none; font-size: 15px; }
+.checkpoint-card { border-style: dashed; border-color: #dec8ba; background: #fdf9f6; text-decoration: none; color: inherit; }
+.checkpoint-card:hover { border-color: #bd5d3f; }
+.checkpoint-badge { color: #b84f31; }
 .lesson-card-end { flex: none; margin-left: 10px; }
 .play-chip { display: grid; width: 32px; height: 32px; place-items: center; border-radius: 50%; background: #fff1eb; color: #d16b48; font-size: 18px; }
 .done-chip, .lock-chip { color: #5f7e60; font-size: 12px; font-weight: 700; }
