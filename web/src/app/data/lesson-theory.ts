@@ -4,12 +4,30 @@ export type LessonTheoryId =
   | 27 | 28 | 29 | 30 | 31 | 32 | 33 | 34 | 35 | 36 | 37 | 38 | 39
   | 40 | 41 | 42 | 43 | 44 | 45 | 46 | 47 | 48 | 49;
 
+export interface TheoryTable {
+  headers: string[];
+  rows: string[][];
+}
+
+export interface TheoryBlock {
+  id: string;
+  includeCoursebook?: boolean;
+  wbRange?: [number, number];
+  exerciseIds?: string[];
+  title: string;
+  summary: string;
+  bullets?: string[];
+  table?: TheoryTable;
+  examples?: Array<{ polish: string; translation: string }>;
+}
+
 export interface LessonTheory {
   coursebookPages: string;
   communication: string;
   vocabulary: string;
   grammar: string;
   examples: Array<{ polish: string; translation: string }>;
+  blocks?: TheoryBlock[];
 }
 
 export const LESSON_THEORY: Record<LessonTheoryId, LessonTheory> = {

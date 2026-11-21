@@ -1,0 +1,54 @@
+<section class="inline-theory" [class.is-expanded]="expanded()" aria-labelledby="inline-theory-title">
+  <button type="button" class="inline-theory-head" [attr.aria-expanded]="expanded()" (click)="toggled.emit()">
+    <span class="inline-theory-meta">
+      <span class="inline-theory-badge">📖 {{ language.t('lesson.blockTheory') }} · {{ blockIndex() + 1 }}/{{ totalBlocks() }}</span>
+      <strong id="inline-theory-title">{{ block().title }}</strong>
+    </span>
+    <span class="inline-theory-action">{{ expanded() ? language.t('lesson.blockTheoryHide') : language.t('lesson.blockTheoryShow') }}</span>
+  </button>
+
+  @if (expanded()) {
+    <div class="inline-theory-body">
+      <p class="inline-theory-summary">{{ block().summary }}</p>
+
+      @if (block().bullets?.length) {
+        <ul class="inline-theory-bullets">
+          @for (bullet of block().bullets!; track bullet) {
+            <li>{{ bullet }}</li>
+          }
+        </ul>
+      }
+
+      @if (block().table; as tbl) {
+        <div class="inline-theory-table-wrap">
+          <table class="inline-theory-table">
+            <thead>
+              <tr>
+                @for (header of tbl.headers; track header) {
+                  <th scope="col">{{ header }}</th>
+                }
+              </tr>
+            </thead>
+            <tbody>
+              @for (row of tbl.rows; track $index) {
+                <tr>
+                  @for (cell of row; track $index) {
+                    <td>{{ cell }}</td>
+                  }
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      }
+
+      @if (block().examples?.length) {
+        <div class="inline-theory-examples">
+          @for (ex of block().examples!; track ex.polish) {
+            <p><strong lang="pl">{{ ex.polish }}</strong><span>{{ ex.translation }}</span></p>
+          }
+        </div>
+      }
+    </div>
+  }
+</section>

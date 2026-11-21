@@ -9,6 +9,7 @@ import { Activity, ActivityItem, AdaptedActivity, AdaptedItem, getLesson, Lesson
 import { LESSON_THEORY, LessonTheoryId } from '../../data/lesson-theory';
 import { LESSON_THEORY_EN } from '../../data/lesson-theory.en';
 import { LESSON_THEORY_PL } from '../../data/lesson-theory.pl';
+import { resolveActivityTheory } from '../../data/lesson-theory-blocks';
 import { INSTRUCTION_TRANSLATIONS } from '../../data/instruction-translations';
 import { WORKBOOK_IMAGES, WorkbookImage } from '../../data/workbook-images';
 import { LanguageSwitcherComponent } from '../../i18n/language-switcher.component';
@@ -22,6 +23,7 @@ import { LessonCompletionComponent } from './components/lesson-completion/lesson
 import { LessonDictionaryModalComponent } from './components/lesson-dictionary-modal/lesson-dictionary-modal.component';
 import { LessonFooterComponent } from './components/lesson-footer/lesson-footer.component';
 import { LessonImageLightboxComponent } from './components/lesson-image-lightbox/lesson-image-lightbox.component';
+import { LessonInlineTheoryComponent } from './components/lesson-inline-theory/lesson-inline-theory.component';
 import { LessonTheoryDrawerComponent } from './components/lesson-theory-drawer/lesson-theory-drawer.component';
 import { LetterClozeExerciseComponent } from './components/letter-cloze-exercise/letter-cloze-exercise.component';
 import { MatchExerciseComponent } from './components/match-exercise/match-exercise.component';
@@ -40,6 +42,7 @@ const PONS_BLOCKED_SELECTOR =
     RouterLink,
     LanguageSwitcherComponent,
     LessonTheoryDrawerComponent,
+    LessonInlineTheoryComponent,
     LessonAudioBarComponent,
     LessonImageLightboxComponent,
     LessonDictionaryModalComponent,
@@ -79,6 +82,7 @@ export class LessonComponent {
   readonly dictionaryMode = signal(false);
   readonly lightboxImage = signal<WorkbookImage | null>(null);
   readonly theoryOpen = signal(false);
+  readonly inlineTheoryOverrides = signal<Record<string, boolean>>({});
   readonly revealedHints = signal<Record<string, boolean>>({});
 
   private lastOverlayTrigger: HTMLElement | null = null;
@@ -118,6 +122,30 @@ export class LessonComponent {
   private readonly results = signal<Record<string, Record<string, boolean>>>({});
 
   readonly activity = computed(() => this.lesson()?.activities[this.activeIndex()]);
+  readonly activeTheoryBlock = computed(() => {
+    const lesson = this.lesson();
+    const theory = this.theory();
+    if (!lesson || !theory) return null;
+    return resolveActivityTheory(
+      lesson.id,
+      lesson.activities,
+      this.activeIndex(),
+      theory,
+      this.language.locale(),
+      {
+        overviewTitle: this.language.t('lesson.blockOverviewTitle'),
+        grammarTitle: this.language.t('lesson.grammar'),
+        practiceTitle: this.language.t('lesson.blockPracticeTitle'),
+      },
+    );
+  });
+  readonly isInlineTheoryExpanded = computed(() => {
+    const resolved = this.activeTheoryBlock();
+    if (!resolved) return false;
+    const key = `${resolved.block.id}:${this.activeIndex()}`;
+    const override = this.inlineTheoryOverrides()[key];
+    return override !== undefined ? override : resolved.isBlockStart;
+  });
   readonly adaptedActivity = computed<AdaptedActivity | undefined>(() => {
     const activity = this.activity();
     return activity ? adaptActivity(activity) : undefined;
@@ -383,6 +411,25 @@ export class LessonComponent {
         metadata: { open: next },
       });
     }
+  }
+
+  toggleInlineTheory(): void {
+    const resolved = this.activeTheoryBlock();
+    const lesson = this.lesson();
+    if (!resolved || !lesson) return;
+    const key = `${resolved.block.id}:${this.activeIndex()}`;
+    const next = !this.isInlineTheoryExpanded();
+    this.inlineTheoryOverrides.update((cur) => ({ ...cur, [key]: next }));
+    this.analytics.track('inline_theory_toggled', {
+      lessonId: lesson.id,
+      courseId: this.courseIdFor(lesson.id),
+      activityId: this.activity()?.id,
+      metadata: {
+        block_id: resolved.block.id,
+        open: next,
+        is_block_start: resolved.isBlockStart,
+      },
+    });
   }
 
   toggleDictionaryMode(): void {
@@ -925,6 +972,7 @@ export class LessonComponent {
     this.dictionaryMode.set(false);
     this.lightboxImage.set(null);
     this.theoryOpen.set(false);
+    this.inlineTheoryOverrides.set({});
     this.lessonOpenedAt = Date.now();
     this.activityViewedAt = this.lessonOpenedAt;
     this.activityHintsUsed = 0;

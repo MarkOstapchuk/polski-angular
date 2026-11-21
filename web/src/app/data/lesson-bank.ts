@@ -975,9 +975,25 @@ const RAW_LESSONS: Lesson[] = [
   LESSON_42, LESSON_43, LESSON_44, LESSON_45, LESSON_46, LESSON_47, LESSON_48, LESSON_49,
 ];
 
+function exerciseSortKey(sourceExerciseId: string): [number, number] {
+  const isWorkbook = sourceExerciseId.startsWith('WB-') ? 1 : 0;
+  const match = /-E(\d+)/i.exec(sourceExerciseId);
+  const num = match ? Number(match[1]) : 999;
+  return [isWorkbook, num];
+}
+
+function sortActivitiesByBookOrder(activities: Activity[]): Activity[] {
+  return [...activities].sort((a, b) => {
+    const [aGroup, aNum] = exerciseSortKey(a.sourceExerciseId);
+    const [bGroup, bNum] = exerciseSortKey(b.sourceExerciseId);
+    return aGroup !== bGroup ? aGroup - bGroup : aNum - bNum;
+  });
+}
+
 export const LESSONS: Lesson[] = RAW_LESSONS.map((lesson) => {
   const cb = COURSEBOOK_ACTIVITIES[lesson.id];
-  return cb?.length ? { ...lesson, activities: [...cb, ...lesson.activities] } : lesson;
+  const combined = cb?.length ? [...cb, ...lesson.activities] : lesson.activities;
+  return { ...lesson, activities: sortActivitiesByBookOrder(combined) };
 });
 
 export function getLesson(id: number): Lesson | undefined {

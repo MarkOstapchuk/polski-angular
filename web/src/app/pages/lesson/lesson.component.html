@@ -92,6 +92,15 @@
                 </div>
               }
 
+              @if (activeTheoryBlock(); as tb) {
+                <app-lesson-inline-theory
+                  [block]="tb.block"
+                  [blockIndex]="tb.blockIndex"
+                  [totalBlocks]="tb.totalBlocks"
+                  [expanded]="isInlineTheoryExpanded()"
+                  (toggled)="toggleInlineTheory()" />
+              }
+
               <section class="exercise-card" #exerciseCard [class.is-checked]="checked()">
                 @if (activity.readingText) {
                   <div class="reading-passage">{{ activity.readingText }}</div>

@@ -91,6 +91,8 @@ const messages: Record<Language, Record<string, string>> = {
     'lesson.classifyAllDone': 'Wszystkie elementy przypisane — możesz kliknąć dowolny poniżej, aby poprawić',
     'lesson.matchChunk': 'Część', 'lesson.matchMatched': 'Dopasowane pary', 'lesson.matchUnassign': 'Usuń dopasowanie',
     'lesson.letterTilesToggle': 'Klawiatura liter',
+    'lesson.blockTheory': 'Teoria do tej części', 'lesson.blockTheoryShow': 'Pokaż', 'lesson.blockTheoryHide': 'Ukryj',
+    'lesson.blockExercises': 'ćw.', 'lesson.blockOverviewTitle': 'Komunikacja i słownictwo', 'lesson.blockPracticeTitle': 'Przykłady w użyciu',
   },
   ru: {
     language: 'Язык',
@@ -179,6 +181,8 @@ const messages: Record<Language, Record<string, string>> = {
     'lesson.classifyAllDone': 'Все элементы распределены — нажмите на любой ниже, чтобы изменить',
     'lesson.matchChunk': 'Часть', 'lesson.matchMatched': 'Совпавшие пары', 'lesson.matchUnassign': 'Отменить пару',
     'lesson.letterTilesToggle': 'Буквы для нажатия',
+    'lesson.blockTheory': 'Теория к блоку', 'lesson.blockTheoryShow': 'Показать', 'lesson.blockTheoryHide': 'Скрыть',
+    'lesson.blockExercises': 'упр.', 'lesson.blockOverviewTitle': 'Общение и слова', 'lesson.blockPracticeTitle': 'Примеры в речи',
   },
   en: {
     language: 'Language',
@@ -267,6 +271,8 @@ const messages: Record<Language, Record<string, string>> = {
     'lesson.classifyAllDone': 'All items sorted — tap any item below to change',
     'lesson.matchChunk': 'Set', 'lesson.matchMatched': 'Matched pairs', 'lesson.matchUnassign': 'Unassign pair',
     'lesson.letterTilesToggle': 'Letter tiles',
+    'lesson.blockTheory': 'Theory for this section', 'lesson.blockTheoryShow': 'Show', 'lesson.blockTheoryHide': 'Hide',
+    'lesson.blockExercises': 'ex.', 'lesson.blockOverviewTitle': 'Communication & vocabulary', 'lesson.blockPracticeTitle': 'Examples in context',
   },
 };
 
