@@ -1,4 +1,4 @@
-import { ActivityKind, choice, Lesson, letterCloze, typed, typedExercise } from './lesson-types';
+import { Activity, ActivityKind, choice, Lesson, letterCloze, typed, typedExercise } from './lesson-types';
 import { COURSEBOOK_ACTIVITIES } from './coursebook-activities';
 import { LESSON_06 } from './lessons/lesson-06';
 import { LESSON_07 } from './lessons/lesson-07';

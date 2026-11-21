@@ -4,7 +4,7 @@ import type { Language } from '../i18n/language.service';
 export interface PlacementQuestion {
   id: number;
   targetLessonId: number;
-  level: 'A1' | 'A1+' | 'A2' | 'A2+' | 'B1';
+  level: 'A1' | 'A1+' | 'A2' | 'A2+' | 'B1' | 'B2';
   prompt: string;
   options: [string, string, string, string];
   correctIndex: number;
@@ -21,7 +21,7 @@ export interface PlacementAnswerRecord {
 export interface PlacementResult {
   score: number;
   total: number;
-  levelCode: 'A1' | 'A1+' | 'A2' | 'A2+' | 'B1';
+  levelCode: 'A1' | 'A1+' | 'A2' | 'A2+' | 'B1' | 'B2';
   recommendedLesson: LessonSummary;
   course: CourseSummary;
   records: PlacementAnswerRecord[];
@@ -158,6 +158,32 @@ export const PLACEMENT_QUESTIONS: PlacementQuestion[] = [
       en: 'Conditionals (Lesson 45 · Part 2)',
     },
   },
+  {
+    id: 11,
+    targetLessonId: 54,
+    level: 'B2',
+    prompt: 'Mieszkam w Polsce już od ___ lat.',
+    options: ['dwadzieścia', 'dwudziestu', 'dwudziestoma', 'dwudziestym'],
+    correctIndex: 1,
+    topic: {
+      pl: 'Odmiana liczebników głównych (Lekcja 4 · Część 3 B2)',
+      ru: 'Склонение количественных числительных (Урок 4 · Часть 3 B2)',
+      en: 'Cardinal numeral declension (Lesson 4 · Part 3 B2)',
+    },
+  },
+  {
+    id: 12,
+    targetLessonId: 62,
+    level: 'B2',
+    prompt: 'W naszej grupie jest trzech ___ i dwóch Hiszpanów.',
+    options: ['Amerykaninów', 'Amerykanów', 'Amerykanie', 'Amerykanami'],
+    correctIndex: 1,
+    topic: {
+      pl: 'Rzeczowniki na -anin w liczbie mnogiej (Lekcja 12 · Część 3 B2)',
+      ru: 'Существительные на -anin во мн. ч. (Урок 12 · Часть 3 B2)',
+      en: '-anin nouns in the plural (Lesson 12 · Part 3 B2)',
+    },
+  },
 ];
 
 export function evaluatePlacementTest(selectedIndices: ReadonlyArray<number | null>): PlacementResult {
@@ -193,7 +219,7 @@ export function evaluatePlacementTest(selectedIndices: ReadonlyArray<number | nu
   }
 
   const targetLessonId = allMastered
-    ? 47
+    ? 66
     : PLACEMENT_QUESTIONS[recommendedIndex].targetLessonId;
   const recommendedLesson =
     LESSON_CATALOG.find((lesson) => lesson.id === targetLessonId) ?? LESSON_CATALOG[0];
@@ -201,7 +227,7 @@ export function evaluatePlacementTest(selectedIndices: ReadonlyArray<number | nu
     COURSES.find((c) => c.lessons.some((lesson) => lesson.id === recommendedLesson.id)) ?? COURSES[0];
 
   const levelCode: PlacementResult['levelCode'] = allMastered
-    ? 'B1'
+    ? 'B2'
     : PLACEMENT_QUESTIONS[recommendedIndex].level;
 
   return {
