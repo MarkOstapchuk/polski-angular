@@ -98,17 +98,18 @@
 
 .focus-context-strip {
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   gap: 6px;
   padding: 8px 12px 4px;
 }
 
 .focus-context-toggle {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: 8px;
   width: 100%;
   min-height: 44px;
-  padding: 6px 12px;
+  padding: 9px 12px;
   border: 1px solid #ece7dc;
   border-radius: 12px;
   background: #fff;
@@ -132,17 +133,23 @@
 .focus-instruction-preview {
   flex: 1;
   min-width: 0;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  white-space: normal;
+  overflow-wrap: anywhere;
   color: #5e5c52;
   font-weight: 600;
+  line-height: 1.4;
 }
 
-.focus-chevron { flex: none; color: #8c867a; font-size: 12px; }
+.focus-chevron {
+  flex: none;
+  margin-top: 2px;
+  color: #8c867a;
+  font-size: 12px;
+}
 
 .focus-context-panel {
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   gap: 10px;
   padding: 12px;
   border: 1px solid #ece7dc;
@@ -155,6 +162,7 @@
   color: #2d2e28;
   font-size: 18px;
   line-height: 1.25;
+  overflow-wrap: anywhere;
 }
 
 .focus-ex-instruction {
@@ -162,6 +170,7 @@
   color: #5c5b52;
   font-size: 14px;
   line-height: 1.5;
+  overflow-wrap: anywhere;
 }
 
 .focus-ex-translation { margin-left: 4px; color: #8c867a; }
@@ -212,12 +221,12 @@
 
 .focus-inline-theory-btn {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: space-between;
   gap: 8px;
   width: 100%;
   min-height: 44px;
-  padding: 6px 12px;
+  padding: 9px 12px;
   border: 1px solid #e7dfd0;
   border-radius: 12px;
   background: #faf5ea;
@@ -232,9 +241,9 @@
 .focus-inline-theory-label {
   flex: 1;
   min-width: 0;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  line-height: 1.35;
 }
 
 .focus-inline-theory-wrap { margin-top: 2px; }
