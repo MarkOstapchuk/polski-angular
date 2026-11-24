@@ -21,6 +21,7 @@ export class ChoiceExerciseComponent {
   readonly isCorrect = input<boolean>(false);
   readonly dictionaryMode = input<boolean>(false);
   readonly showHotkeyBadges = input<boolean>(true);
+  readonly focusStyle = input<boolean>(false);
 
   readonly valueChange = output<string>();
 

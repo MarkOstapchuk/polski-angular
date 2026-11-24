@@ -5,7 +5,6 @@ import { Activity, AdaptedItem, Lesson } from '../../../../data/lesson-types';
 import { WorkbookImage } from '../../../../data/workbook-images';
 import { LanguageService } from '../../../../i18n/language.service';
 import { ExerciseItemViewComponent } from '../exercise-item-view/exercise-item-view.component';
-import { LessonInlineTheoryComponent } from '../lesson-inline-theory/lesson-inline-theory.component';
 
 export interface FocusSummaryItem {
   id: string;
@@ -16,7 +15,7 @@ export interface FocusSummaryItem {
 @Component({
   selector: 'app-mobile-focus-deck',
   standalone: true,
-  imports: [RouterLink, ExerciseItemViewComponent, LessonInlineTheoryComponent],
+  imports: [RouterLink, ExerciseItemViewComponent],
   templateUrl: './mobile-focus-deck.component.html',
   styleUrl: './mobile-focus-deck.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -77,7 +76,6 @@ export class MobileFocusDeckComponent {
   readonly nextActivity = output<void>();
 
   readonly contextExpanded = signal(false);
-  readonly inlineTheoryOpen = signal(false);
   readonly focusCardRef = viewChild<ElementRef<HTMLElement>>('focusCard');
 
   readonly progressPct = computed(() => {
@@ -99,7 +97,6 @@ export class MobileFocusDeckComponent {
     effect(() => {
       this.activity().id;
       this.contextExpanded.set(false);
-      this.inlineTheoryOpen.set(false);
     }, { allowSignalWrites: true });
   }
 
@@ -109,10 +106,6 @@ export class MobileFocusDeckComponent {
 
   toggleContext(): void {
     this.contextExpanded.update((open) => !open);
-  }
-
-  toggleInlineTheory(): void {
-    this.inlineTheoryOpen.update((open) => !open);
   }
 
   onPickActivity(index: number): void {

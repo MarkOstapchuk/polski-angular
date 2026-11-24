@@ -3,9 +3,18 @@
 .question-body { display: grid; gap: 8px; min-width: 0; }
 .question-prompt { color: #3d3d35; font-size: 15px; font-weight: 650; line-height: 1.45; overflow-wrap: anywhere; }
 
-.question-body.is-focus { gap: 14px; }
-.question-body.is-focus .question-prompt { font-size: 18px; line-height: 1.5; }
-.question-body.is-focus .question-image { max-width: 210px; max-height: 150px; }
+.question-body.is-focus { gap: 16px; }
+.question-body.is-focus .inline-zoom {
+  justify-self: center;
+  padding: 12px;
+  border: 1.5px solid #ece7dc;
+  border-radius: 18px;
+  background: #fff;
+  box-shadow: 0 4px 14px rgba(40, 41, 34, .04);
+}
+.question-body.is-focus .question-image { max-width: min(74vw, 240px); max-height: 185px; width: auto; height: auto; }
+.question-body.is-focus .zoom-badge { right: 8px; bottom: 8px; background: rgba(40, 41, 34, .48); }
+.question-body.is-focus .question-prompt { font-size: 20px; font-weight: 750; color: #262721; line-height: 1.38; }
 .question-body.is-focus .assist-letter { justify-self: start; }
 
 .question-image { display: block; max-width: 150px; max-height: 120px; object-fit: contain; border-radius: 8px; }

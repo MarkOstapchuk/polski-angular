@@ -33,6 +33,7 @@
         [checked]="checked()"
         [isCorrect]="isCorrect()"
         [dictionaryMode]="dictionaryMode()"
+        [focusStyle]="focusStyle()"
         (valueChange)="optionSelect.emit($event)" />
     } @else if (item().wordOrder; as wo) {
       <app-word-order-exercise
@@ -44,6 +45,7 @@
         [value]="answer()"
         [disabled]="checked()"
         [dictionaryMode]="dictionaryMode()"
+        [focusStyle]="focusStyle()"
         [placeholder]="hasAudio() ? language.t('lesson.typeWhatYouHear') : language.t('lesson.yourAnswer')"
         [enterKeyHint]="enterKeyHint()"
         (valueChange)="answerChange.emit($event)"
@@ -58,6 +60,7 @@
         [gapLabels]="mg.labels"
         [value]="answer()"
         [disabled]="checked()"
+        [focusStyle]="focusStyle()"
         [enterKeyHint]="enterKeyHint()"
         (valueChange)="answerChange.emit($event)"
         (enterPressed)="enterPressed.emit($event)" />
@@ -83,6 +86,7 @@
         [placeholder]="hasAudio() ? language.t('lesson.typeWhatYouHear') : language.t('lesson.yourAnswer')"
         [enterKeyHint]="enterKeyHint()"
         [multiline]="item().uxMode === 'long-text'"
+        [focusStyle]="focusStyle()"
         (valueChange)="answerChange.emit($event)"
         (enterPressed)="enterPressed.emit($event)" />
       @if (canAssistNextLetter()) {

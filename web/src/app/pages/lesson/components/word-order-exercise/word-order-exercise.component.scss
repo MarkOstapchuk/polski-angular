@@ -72,3 +72,10 @@
 }
 
 .control-pill:hover { border-color: #d6a58d; background: #fff8f3; color: #9e5439; }
+
+.word-order-builder.is-focus { gap: 16px; }
+.word-order-builder.is-focus .word-order-answer { min-height: 92px; padding: 14px 2px; border: 0; border-top: 2px solid #e7e2d7; border-bottom: 2px solid #e7e2d7; border-radius: 0; background: transparent; gap: 8px; }
+.word-order-builder.is-focus .word-order-pool { gap: 9px; justify-content: center; }
+.word-order-builder.is-focus .word-chip { border: 2px solid #e4dfd5; border-bottom-width: 4px; border-radius: 14px; padding: 10px 15px; font-size: 16px; font-weight: 700; }
+.word-order-builder.is-focus .word-chip:active:not(:disabled) { transform: translateY(2px); border-bottom-width: 2px; }
+.word-order-builder.is-focus .word-chip.placed-chip { border-color: #d77a58; border-bottom-color: #bd6144; }

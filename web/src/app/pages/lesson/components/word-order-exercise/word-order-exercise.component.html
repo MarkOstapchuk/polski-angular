@@ -1,5 +1,5 @@
 @if (!typeMode()) {
-  <div class="word-order-builder">
+  <div class="word-order-builder" [class.is-focus]="focusStyle()">
     <div class="word-order-answer" [attr.aria-label]="language.t('lesson.wordOrderAnswerArea')">
       @if (assembledTokens().length === 0) {
         <span class="word-order-placeholder">{{ language.t('lesson.wordOrderHint') }}</span>
@@ -41,6 +41,7 @@
       [placeholder]="placeholder()"
       [enterKeyHint]="enterKeyHint()"
       [multiline]="multiline() || isSentenceOrder()"
+      [focusStyle]="focusStyle()"
       (valueChange)="valueChange.emit($event)"
       (enterPressed)="enterPressed.emit($event)" />
     @if (!disabled()) {

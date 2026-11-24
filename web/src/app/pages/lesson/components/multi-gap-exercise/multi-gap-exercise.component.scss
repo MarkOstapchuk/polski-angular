@@ -58,3 +58,7 @@
   .multi-gap-grid { grid-template-columns: minmax(0, 1fr); }
   .multi-gap-inline .answer-input.multi-gap-input { flex: 1 1 110px; }
 }
+
+.multi-gap-inline.is-focus { font-size: 17px; line-height: 1.6; gap: 10px; }
+.is-focus .answer-input.multi-gap-input { min-height: 52px; padding: 10px 14px; border: 2px solid #e2ddd2; border-radius: 14px; font-size: 17px; }
+.is-focus .answer-input.multi-gap-input:focus { border-color: #d97956; box-shadow: 0 0 0 3px #f7e7dd; }

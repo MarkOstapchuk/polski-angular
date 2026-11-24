@@ -1,5 +1,5 @@
 @if (isInline()) {
-  <div class="multi-gap-inline" role="group" [attr.aria-label]="prompt()">
+  <div class="multi-gap-inline" [class.is-focus]="focusStyle()" role="group" [attr.aria-label]="prompt()">
     @for (seg of inlineParts(); track $index; let i = $index) {
       @if (seg) { <span class="inline-text">{{ seg }}</span> }
       @if (i < gapCount()) {
@@ -17,7 +17,7 @@
     }
   </div>
 } @else {
-  <div class="multi-gap-grid" role="group" [attr.aria-label]="prompt()">
+  <div class="multi-gap-grid" [class.is-focus]="focusStyle()" role="group" [attr.aria-label]="prompt()">
     @for (i of gapIndices(); track i) {
       <div class="multi-gap-field">
         <label class="multi-gap-label" [for]="i === 0 ? baseId() : baseId() + '-gap-' + i">{{ gapLabel(i) }}</label>

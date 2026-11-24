@@ -17,7 +17,7 @@
         <span aria-hidden="true">📖</span>
       </button>
 
-      @if (hasTheory()) {
+      @if (hasTheory() || activeTheoryBlock()) {
         <button type="button" class="focus-icon-btn"
           [class.is-open]="theoryOpen()"
           [attr.aria-expanded]="theoryOpen()"
@@ -26,6 +26,9 @@
           [title]="language.t('lesson.theory')"
           (click)="toggleTheory.emit()">
           <span aria-hidden="true">📚</span>
+          @if (activeTheoryBlock()) {
+            <span class="focus-theory-dot" aria-hidden="true"></span>
+          }
         </button>
       }
 
@@ -43,20 +46,19 @@
       [attr.aria-expanded]="contextExpanded()"
       [attr.aria-label]="language.t('lesson.focusExerciseToggle')"
       (click)="toggleContext()">
-      <span class="focus-ex-badge">{{ language.t('lesson.blockExercises') }} {{ activityIndex() + 1 }}/{{ lesson().activities.length }}</span>
+      <span class="focus-context-meta">
+        <span class="focus-ex-badge">{{ language.t('lesson.blockExercises') }} {{ activityIndex() + 1 }}/{{ lesson().activities.length }}</span>
+        <span class="focus-chevron" aria-hidden="true">{{ contextExpanded() ? '▴' : '▾' }}</span>
+      </span>
       <span class="focus-instruction-preview">{{ activity().instruction }}</span>
-      <span class="focus-chevron" aria-hidden="true">{{ contextExpanded() ? '▴' : '▾' }}</span>
     </button>
 
     @if (contextExpanded()) {
       <div class="focus-context-panel">
         <h1 class="focus-ex-title">{{ activity().title }}</h1>
-        <p class="focus-ex-instruction">
-          {{ activity().instruction }}
-          @if (instructionTranslation(); as tr) {
-            <span class="focus-ex-translation">({{ tr }})</span>
-          }
-        </p>
+        @if (instructionTranslation(); as tr) {
+          <p class="focus-ex-instruction">{{ tr }}</p>
+        }
         @if (hasTextInputs()) {
           <p class="focus-latin-hint">{{ language.t('lesson.latinInputHint') }}</p>
         }
@@ -74,25 +76,6 @@
           }
         </div>
       </div>
-    }
-
-    @if (activeTheoryBlock(); as tb) {
-      <button type="button" class="focus-inline-theory-btn"
-        [attr.aria-expanded]="inlineTheoryOpen()"
-        (click)="toggleInlineTheory()">
-        <span class="focus-inline-theory-label">📖 {{ tb.block.title }}</span>
-        <span aria-hidden="true">{{ inlineTheoryOpen() ? '▴' : '▾' }}</span>
-      </button>
-      @if (inlineTheoryOpen()) {
-        <div class="focus-inline-theory-wrap">
-          <app-lesson-inline-theory
-            [block]="tb.block"
-            [blockIndex]="tb.blockIndex"
-            [totalBlocks]="tb.totalBlocks"
-            [expanded]="true"
-            (toggled)="inlineTheoryOpen.set(false)" />
-        </div>
-      }
     }
 
     @if (dictionaryMode()) {

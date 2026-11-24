@@ -15,6 +15,7 @@ export class TypedExerciseComponent {
   readonly placeholder = input.required<string>();
   readonly enterKeyHint = input<'done' | 'next'>('next');
   readonly multiline = input<boolean>(false);
+  readonly focusStyle = input<boolean>(false);
 
   readonly valueChange = output<string>();
   readonly enterPressed = output<Event>();
@@ -25,6 +26,7 @@ export class TypedExerciseComponent {
     afterRenderEffect((onCleanup) => {
       this.inputId();
       this.multiline();
+      this.focusStyle();
       this.value();
       this.textareaEl();
       this.resizeTextarea();
@@ -51,6 +53,7 @@ export class TypedExerciseComponent {
     const el = this.textareaEl()?.nativeElement;
     if (!el) return;
     el.style.height = 'auto';
-    el.style.height = `${Math.max(44, el.scrollHeight)}px`;
+    const minHeight = this.focusStyle() ? 124 : 44;
+    el.style.height = `${Math.max(minHeight, el.scrollHeight)}px`;
   }
 }

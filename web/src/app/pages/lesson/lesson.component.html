@@ -70,14 +70,32 @@
               (retryAll)="retryActivity()"
               (nextActivity)="next()" />
 
-            @if (theoryOpen() && theory(); as t) {
+            @if (theoryOpen() && (theory() || activeTheoryBlock())) {
               <div class="focus-theory-overlay" (click)="theoryOpen.set(false)">
                 <div class="focus-theory-sheet" (click)="$event.stopPropagation()">
-                  <app-lesson-theory-drawer
-                    [theory]="t"
-                    [lessonLabel]="lessonLabel(lesson.id)"
-                    [workbookPages]="lesson.pages"
-                    (closed)="theoryOpen.set(false)" />
+                  <div class="focus-theory-sheet-bar">
+                    <strong>📚 {{ language.t('lesson.theory') }}</strong>
+                    <button type="button" class="focus-theory-sheet-close"
+                      [attr.aria-label]="language.t('lesson.hideTheory')"
+                      (click)="theoryOpen.set(false)">×</button>
+                  </div>
+                  <div class="focus-theory-sheet-body">
+                    @if (activeTheoryBlock(); as tb) {
+                      <app-lesson-inline-theory
+                        [block]="tb.block"
+                        [blockIndex]="tb.blockIndex"
+                        [totalBlocks]="tb.totalBlocks"
+                        [expanded]="true"
+                        (toggled)="theoryOpen.set(false)" />
+                    }
+                    @if (theory(); as t) {
+                      <app-lesson-theory-drawer
+                        [theory]="t"
+                        [lessonLabel]="lessonLabel(lesson.id)"
+                        [workbookPages]="lesson.pages"
+                        (closed)="theoryOpen.set(false)" />
+                    }
+                  </div>
                 </div>
               </div>
             }

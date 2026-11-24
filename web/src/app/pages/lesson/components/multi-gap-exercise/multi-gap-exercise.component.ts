@@ -19,6 +19,7 @@ export class MultiGapExerciseComponent {
   readonly value = input<string>('');
   readonly disabled = input<boolean>(false);
   readonly enterKeyHint = input<'done' | 'next'>('next');
+  readonly focusStyle = input<boolean>(false);
 
   readonly valueChange = output<string>();
   readonly enterPressed = output<Event>();
