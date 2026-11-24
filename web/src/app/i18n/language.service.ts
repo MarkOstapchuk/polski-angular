@@ -156,6 +156,10 @@ const messages: Record<Language, Record<string, string>> = {
     'lesson.letterTilesToggle': 'Klawiatura liter',
     'lesson.blockTheory': 'Teoria do tej części', 'lesson.blockTheoryShow': 'Pokaż', 'lesson.blockTheoryHide': 'Ukryj',
     'lesson.blockExercises': 'ćw.', 'lesson.blockOverviewTitle': 'Komunikacja i słownictwo', 'lesson.blockPracticeTitle': 'Przykłady w użyciu',
+    'lesson.switchToList': 'Lista', 'lesson.switchToCards': 'Karty',
+    'lesson.focusCheck': 'Sprawdź', 'lesson.focusSummary': 'Podsumowanie',
+    'lesson.focusRetryRound': 'Poprawa błędów', 'lesson.focusViewList': 'Zobacz wszystkie odpowiedzi',
+    'lesson.focusExerciseToggle': 'Pokaż instrukcję i listę ćwiczeń',
   },
   ru: {
     language: 'Язык',
@@ -309,6 +313,10 @@ const messages: Record<Language, Record<string, string>> = {
     'lesson.letterTilesToggle': 'Буквы для нажатия',
     'lesson.blockTheory': 'Теория к блоку', 'lesson.blockTheoryShow': 'Показать', 'lesson.blockTheoryHide': 'Скрыть',
     'lesson.blockExercises': 'упр.', 'lesson.blockOverviewTitle': 'Общение и слова', 'lesson.blockPracticeTitle': 'Примеры в речи',
+    'lesson.switchToList': 'Список', 'lesson.switchToCards': 'Карточки',
+    'lesson.focusCheck': 'Проверить', 'lesson.focusSummary': 'Итог',
+    'lesson.focusRetryRound': 'Работа над ошибками', 'lesson.focusViewList': 'Посмотреть списком',
+    'lesson.focusExerciseToggle': 'Показать инструкцию и список упражнений',
   },
   en: {
     language: 'Language',
@@ -462,6 +470,10 @@ const messages: Record<Language, Record<string, string>> = {
     'lesson.letterTilesToggle': 'Letter tiles',
     'lesson.blockTheory': 'Theory for this section', 'lesson.blockTheoryShow': 'Show', 'lesson.blockTheoryHide': 'Hide',
     'lesson.blockExercises': 'ex.', 'lesson.blockOverviewTitle': 'Communication & vocabulary', 'lesson.blockPracticeTitle': 'Examples in context',
+    'lesson.switchToList': 'List', 'lesson.switchToCards': 'Cards',
+    'lesson.focusCheck': 'Check', 'lesson.focusSummary': 'Summary',
+    'lesson.focusRetryRound': 'Fixing mistakes', 'lesson.focusViewList': 'View as list',
+    'lesson.focusExerciseToggle': 'Show instruction and exercises',
   },
 };
 

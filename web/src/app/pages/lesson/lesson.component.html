@@ -1,334 +1,316 @@
 @if (lesson(); as lesson) {
   <div class="lesson-shell">
-    <header class="lesson-topbar">
-      <a class="close-button" [routerLink]="dashboardUrl()" [attr.aria-label]="language.t('lesson.back')">×</a>
-      <div class="top-progress" [attr.aria-label]="language.t('lesson.progress')">
-        <div class="progress-track"><span [style.width.%]="finished() ? 100 : activityProgress()"></span></div>
-        <small>{{ finished() ? lesson.activities.length : activeIndex() + 1 }} / {{ lesson.activities.length }}</small>
-      </div>
-      <div class="lesson-xp"><span>✦</span> {{ finished() ? '+' + awardedXp() : language.t('lesson.upTo') + ' 20' }} XP</div>
-      <app-language-switcher />
-    </header>
+    @if (finished() || !isMobileFocusMode()) {
+      <header class="lesson-topbar">
+        <a class="close-button" [routerLink]="dashboardUrl()" [attr.aria-label]="language.t('lesson.back')">×</a>
+        <div class="top-progress" [attr.aria-label]="language.t('lesson.progress')">
+          <div class="progress-track"><span [style.width.%]="finished() ? 100 : activityProgress()"></span></div>
+          <small>{{ finished() ? lesson.activities.length : activeIndex() + 1 }} / {{ lesson.activities.length }}</small>
+        </div>
+        <div class="lesson-xp"><span>✦</span> {{ finished() ? '+' + awardedXp() : language.t('lesson.upTo') + ' 20' }} XP</div>
+        <app-language-switcher />
+      </header>
+    }
 
     @if (!finished()) {
       @if (activity(); as activity) {
-        <main class="lesson-main" [class.dictionary-mode]="dictionaryMode()"
-          (click)="onMainClick($event)"
-          (dblclick)="onWordDoubleClick($event)">
+        @if (isMobileFocusMode()) {
+          <div class="focus-shell" [class.dictionary-mode]="dictionaryMode()"
+            (click)="onMainClick($event)"
+            (dblclick)="onWordDoubleClick($event)">
+            <app-mobile-focus-deck
+              [dashboardUrl]="dashboardUrl()"
+              [lesson]="lesson"
+              [activity]="activity"
+              [activityIndex]="activeIndex()"
+              [instructionTranslation]="instructionTranslation(activity.instruction)"
+              [hasTextInputs]="hasTextInputs()"
+              [hasTheory]="!!theory()"
+              [theoryOpen]="theoryOpen()"
+              [dictionaryMode]="dictionaryMode()"
+              [activeTheoryBlock]="activeTheoryBlock()"
+              [completedActivityIds]="completedActivityIds()"
+              [sharedImages]="images()"
+              [activeItem]="activeFocusItem()"
+              [activeItemOriginalIndex]="activeFocusOriginalIndex()"
+              [activeItemImage]="activeFocusItemImage()"
+              [queuePosition]="focusIndex()"
+              [queueLength]="focusQueueIds().length"
+              [isRetryRound]="focusIsRetryRound()"
+              [answers]="answers()"
+              [activeAnswer]="activeFocusAnswer()"
+              [canCheckCurrent]="canCheckCurrentFocus()"
+              [itemChecked]="focusItemChecked()"
+              [itemCorrect]="activeFocusItemCorrect()"
+              [accentHint]="activeFocusAccentHint()"
+              [expectedAnswer]="activeFocusExpectedAnswer()"
+              [hintShown]="activeFocusHintShown()"
+              [canAssistNextLetter]="canAssistCurrentFocusLetter()"
+              [showSummary]="focusSummaryOpen()"
+              [summaryItems]="focusSummaryItems()"
+              [correctCount]="currentCorrectCount()"
+              [totalActivityItems]="activity.items.length"
+              [isLastActivity]="isLastActivity()"
+              [syncError]="syncError()"
+              (selectActivity)="selectActivity($event)"
+              (toggleTheory)="toggleTheory()"
+              (toggleDictionary)="toggleDictionaryMode()"
+              (switchToList)="switchToListView()"
+              (answerChange)="onFocusAnswerChange($event)"
+              (optionSelect)="onFocusOptionSelect($event)"
+              (letterClozeGapChange)="onFocusLetterClozeGap($event)"
+              (enterPressed)="onInputEnter($event)"
+              (wordOrderModeChange)="onFocusWordOrderModeChange($event)"
+              (toggleHint)="onFocusToggleHint()"
+              (assistNextLetter)="onFocusAssistNextLetter()"
+              (openLightbox)="openLightbox($event)"
+              (checkItem)="checkCurrentFocusItem()"
+              (advance)="advanceFocusCard()"
+              (retryWrong)="retryWrongAnswers()"
+              (retryAll)="retryActivity()"
+              (nextActivity)="next()" />
 
-          <nav class="exercise-picker" [attr.aria-label]="language.t('lesson.exercisePicker')">
-            <div class="exercise-picker-head">
-              <p class="exercise-picker-label">{{ language.t('lesson.exercisePicker') }}</p>
-              <span class="exercise-picker-counter">{{ activeIndex() + 1 }} / {{ lesson.activities.length }}</span>
-            </div>
-            <div class="exercise-picker-row">
-              <button class="picker-step" type="button" [disabled]="!canScrollPickerLeft()"
-                (click)="scrollPicker(-1)" [attr.aria-label]="language.t('lesson.scrollLeft')">‹</button>
-              <div class="exercise-picker-list" #pickerList (scroll)="updatePickerScrollState()">
-                @for (exercise of lesson.activities; track exercise.id; let index = $index) {
-                  <button class="exercise-picker-button" type="button"
-                    [class.is-active]="activeIndex() === index" [class.is-complete]="isActivityComplete(exercise)"
-                    [attr.aria-current]="activeIndex() === index ? 'step' : null"
-                    [attr.aria-label]="language.t('lesson.exercise') + ' ' + (index + 1) + ': ' + exercise.title"
-                    [title]="exercise.title" (click)="selectActivity(index)">
-                    <span>{{ index + 1 }}</span>
-                    @if (isActivityComplete(exercise)) { <small aria-hidden="true">✓</small> }
+            @if (theoryOpen() && theory(); as t) {
+              <div class="focus-theory-overlay" (click)="theoryOpen.set(false)">
+                <div class="focus-theory-sheet" (click)="$event.stopPropagation()">
+                  <app-lesson-theory-drawer
+                    [theory]="t"
+                    [lessonLabel]="lessonLabel(lesson.id)"
+                    [workbookPages]="lesson.pages"
+                    (closed)="theoryOpen.set(false)" />
+                </div>
+              </div>
+            }
+          </div>
+        } @else {
+          <main class="lesson-main" [class.dictionary-mode]="dictionaryMode()"
+            (click)="onMainClick($event)"
+            (dblclick)="onWordDoubleClick($event)">
+
+            <nav class="exercise-picker" [attr.aria-label]="language.t('lesson.exercisePicker')">
+              <div class="exercise-picker-head">
+                <p class="exercise-picker-label">{{ language.t('lesson.exercisePicker') }}</p>
+                <span class="exercise-picker-counter">{{ activeIndex() + 1 }} / {{ lesson.activities.length }}</span>
+              </div>
+              <div class="exercise-picker-row">
+                <button class="picker-step" type="button" [disabled]="!canScrollPickerLeft()"
+                  (click)="scrollPicker(-1)" [attr.aria-label]="language.t('lesson.scrollLeft')">‹</button>
+                <div class="exercise-picker-list" #pickerList (scroll)="updatePickerScrollState()">
+                  @for (exercise of lesson.activities; track exercise.id; let index = $index) {
+                    <button class="exercise-picker-button" type="button"
+                      [class.is-active]="activeIndex() === index" [class.is-complete]="isActivityComplete(exercise)"
+                      [attr.aria-current]="activeIndex() === index ? 'step' : null"
+                      [attr.aria-label]="language.t('lesson.exercise') + ' ' + (index + 1) + ': ' + exercise.title"
+                      [title]="exercise.title" (click)="selectActivity(index)">
+                      <span>{{ index + 1 }}</span>
+                      @if (isActivityComplete(exercise)) { <small aria-hidden="true">✓</small> }
+                    </button>
+                  }
+                </div>
+                <button class="picker-step" type="button" [disabled]="!canScrollPickerRight()"
+                  (click)="scrollPicker(1)" [attr.aria-label]="language.t('lesson.scrollRight')">›</button>
+              </div>
+            </nav>
+
+            <div class="lesson-heading lesson-context">
+              <p class="lesson-breadcrumb">{{ lessonLabel(lesson.id) }} <span>·</span> {{ lesson.topic }}</p>
+              <div class="lesson-utility-row">
+                @if (theory(); as t) {
+                  <button type="button" class="utility-pill theory-toggle-btn"
+                    [class.is-open]="theoryOpen()"
+                    [attr.aria-expanded]="theoryOpen()"
+                    aria-controls="lesson-theory-panel"
+                    (click)="toggleTheory()">
+                    <span>{{ theoryOpen() ? language.t('lesson.hideTheory') : language.t('lesson.showTheory') }}</span>
+                    <small>str. {{ t.coursebookPages }}</small>
+                  </button>
+                }
+                <button type="button" class="utility-pill dictionary-toggle-btn"
+                  [class.is-active]="dictionaryMode()"
+                  [attr.aria-pressed]="dictionaryMode()"
+                  [attr.aria-label]="language.t('lesson.dictionaryToggleAria')"
+                  (click)="toggleDictionaryMode()">
+                  <span aria-hidden="true">📖</span> {{ language.t('lesson.dictionaryButton') }}
+                </button>
+                @if (isMobileViewport() && eligibleForFocusMode()) {
+                  <button type="button" class="utility-pill focus-mode-btn" (click)="switchToCardsView()">
+                    <span aria-hidden="true">▢</span> {{ language.t('lesson.switchToCards') }}
                   </button>
                 }
               </div>
-              <button class="picker-step" type="button" [disabled]="!canScrollPickerRight()"
-                (click)="scrollPicker(1)" [attr.aria-label]="language.t('lesson.scrollRight')">›</button>
+              <p class="dictionary-hint">
+                {{ dictionaryMode() ? language.t('lesson.dictionaryModeOn') : language.t('lesson.lookup') }}
+              </p>
             </div>
-          </nav>
 
-          <div class="lesson-heading lesson-context">
-            <p class="lesson-breadcrumb">{{ lessonLabel(lesson.id) }} <span>·</span> {{ lesson.topic }}</p>
-            <div class="lesson-utility-row">
-              @if (theory(); as t) {
-                <button type="button" class="utility-pill theory-toggle-btn"
-                  [class.is-open]="theoryOpen()"
-                  [attr.aria-expanded]="theoryOpen()"
-                  aria-controls="lesson-theory-panel"
-                  (click)="toggleTheory()">
-                  <span>{{ theoryOpen() ? language.t('lesson.hideTheory') : language.t('lesson.showTheory') }}</span>
-                  <small>str. {{ t.coursebookPages }}</small>
-                </button>
-              }
-              <button type="button" class="utility-pill dictionary-toggle-btn"
-                [class.is-active]="dictionaryMode()"
-                [attr.aria-pressed]="dictionaryMode()"
-                [attr.aria-label]="language.t('lesson.dictionaryToggleAria')"
-                (click)="toggleDictionaryMode()">
-                <span aria-hidden="true">📖</span> {{ language.t('lesson.dictionaryButton') }}
-              </button>
-            </div>
-            <p class="dictionary-hint">
-              {{ dictionaryMode() ? language.t('lesson.dictionaryModeOn') : language.t('lesson.lookup') }}
-            </p>
-          </div>
-
-          <div class="lesson-layout" [class.has-theory]="theoryOpen() && !!theory()">
-            <div class="lesson-primary">
-              <div class="lesson-heading activity-heading">
-                <h1>{{ activity.title }}</h1>
-                <p class="instruction">
-                  {{ activity.instruction }}
-                  @if (instructionTranslation(activity.instruction); as tr) {
-                    <span class="instruction-translation">({{ tr }})</span>
-                  }
-                </p>
-                @if (hasTextInputs()) {
-                  <p class="latin-input-hint" data-latin-input-hint>{{ language.t('lesson.latinInputHint') }}</p>
-                }
-                <div class="source-line">
-                  <span class="source-dot"></span>{{ activity.sourceLabel }}
-                  <span class="source-id">{{ activity.sourceExerciseId }}</span>
-                </div>
-              </div>
-
-              @if (activityAudioTracks().length) {
-                <div class="sticky-audio-wrap">
-                  <app-lesson-audio-bar [tracks]="activityAudioTracks()" />
-                </div>
-              }
-
-              @if (activeTheoryBlock(); as tb) {
-                <app-lesson-inline-theory
-                  [block]="tb.block"
-                  [blockIndex]="tb.blockIndex"
-                  [totalBlocks]="tb.totalBlocks"
-                  [expanded]="isInlineTheoryExpanded()"
-                  (toggled)="toggleInlineTheory()" />
-              }
-
-              <section class="exercise-card" #exerciseCard [class.is-checked]="checked()">
-                @if (activity.readingText) {
-                  <div class="reading-passage">{{ activity.readingText }}</div>
-                }
-                @if (images().length) {
-                  <div class="image-strip">
-                    @for (image of images(); track image.src) {
-                      <figure>
-                        <button type="button" class="image-zoom-button" (click)="openLightbox(image)"
-                          [attr.aria-label]="language.t('lesson.zoomImage') + ': ' + image.alt"
-                          [title]="language.t('lesson.zoomHint')">
-                          <img [src]="image.src" [alt]="image.alt" loading="lazy">
-                          <span class="zoom-badge" aria-hidden="true">⤢</span>
-                        </button>
-                        @if (image.label) { <figcaption>{{ image.label }}</figcaption> }
-                      </figure>
+            <div class="lesson-layout" [class.has-theory]="theoryOpen() && !!theory()">
+              <div class="lesson-primary">
+                <div class="lesson-heading activity-heading">
+                  <h1>{{ activity.title }}</h1>
+                  <p class="instruction">
+                    {{ activity.instruction }}
+                    @if (instructionTranslation(activity.instruction); as tr) {
+                      <span class="instruction-translation">({{ tr }})</span>
                     }
+                  </p>
+                  @if (hasTextInputs()) {
+                    <p class="latin-input-hint" data-latin-input-hint>{{ language.t('lesson.latinInputHint') }}</p>
+                  }
+                  <div class="source-line">
+                    <span class="source-dot"></span>{{ activity.sourceLabel }}
+                    <span class="source-id">{{ activity.sourceExerciseId }}</span>
+                  </div>
+                </div>
+
+                @if (activityAudioTracks().length) {
+                  <div class="sticky-audio-wrap">
+                    <app-lesson-audio-bar [tracks]="activityAudioTracks()" />
                   </div>
                 }
 
-                @if (adaptedActivity(); as adapted) {
-                  @if (adapted.uxMode === 'match') {
-                    <app-match-exercise
-                      [activityId]="activity.id"
-                      [items]="activity.items"
-                      [matchOptions]="matchOptions()"
-                      [answers]="answers()"
-                      [results]="activityResults()"
-                      [checked]="checked()"
-                      [dictionaryMode]="dictionaryMode()"
-                      (answerChange)="onSubAnswerChange($event)" />
-                  } @else if (adapted.uxMode === 'classify') {
-                    <app-classify-exercise
-                      [activityId]="activity.id"
-                      [items]="activity.items"
-                      [categories]="adapted.categories ?? []"
-                      [answers]="answers()"
-                      [results]="activityResults()"
-                      [checked]="checked()"
-                      [dictionaryMode]="dictionaryMode()"
-                      [allImages]="allImages()"
-                      [revealedHints]="revealedHints()"
-                      (answerChange)="onSubAnswerChange($event)"
-                      (openLightbox)="openLightbox($event)"
-                      (toggleHint)="toggleHint($event)" />
-                  } @else if (adapted.uxMode === 'word-bank' || adapted.uxMode === 'dialogue-order') {
-                    <app-word-bank-exercise
-                      [adapted]="adapted"
-                      [activity]="activity"
-                      [answers]="answers()"
-                      [results]="activityResults()"
-                      [checked]="checked()"
-                      [dictionaryMode]="dictionaryMode()"
-                      [allImages]="allImages()"
-                      [revealedHints]="revealedHints()"
-                      [hasAudio]="activityAudioTracks().length > 0"
-                      (answerChange)="onSubAnswerChange($event)"
-                      (toggleHint)="toggleHint($event)"
-                      (openLightbox)="openLightbox($event)"
-                      (enterPressed)="onInputEnter($event)"
-                      (typeModeChange)="onWordBankTypeModeChange($event)" />
-                  } @else {
-                    <div class="question-list" [class.choice-list]="adapted.uxMode === 'choice'">
-                      @for (item of adapted.items; track item.id; let index = $index) {
-                        <div class="question-row" [attr.data-item-id]="item.id"
-                          [class.answer-correct]="checked() && isItemCorrect(item.raw)"
-                          [class.answer-wrong]="checked() && !isItemCorrect(item.raw)">
-                          <div class="question-number">{{ index + 1 }}</div>
-                          <div class="question-body">
-                            @if (itemImage(item.raw); as image) {
-                              <button type="button" class="image-zoom-button inline-zoom" (click)="openLightbox(image)"
-                                [attr.aria-label]="language.t('lesson.zoomImage') + ': ' + image.alt"
-                                [title]="language.t('lesson.zoomHint')">
-                                <img class="question-image" [src]="image.src" [alt]="image.alt" loading="lazy">
-                                <span class="zoom-badge" aria-hidden="true">⤢</span>
-                              </button>
-                            }
+                @if (activeTheoryBlock(); as tb) {
+                  <app-lesson-inline-theory
+                    [block]="tb.block"
+                    [blockIndex]="tb.blockIndex"
+                    [totalBlocks]="tb.totalBlocks"
+                    [expanded]="isInlineTheoryExpanded()"
+                    (toggled)="toggleInlineTheory()" />
+                }
 
-                            @if (item.uxMode === 'letter-cloze') {
-                              <app-letter-cloze-exercise
-                                [activityId]="activity.id"
-                                [item]="item.raw"
-                                [answers]="answers()"
-                                [disabled]="checked()"
-                                [itemIndex]="index"
-                                [totalItems]="adapted.items.length"
-                                [cardElement]="exerciseCardRef()?.nativeElement ?? null"
-                                (gapChange)="setLetterClozeGap(item.id, $event.gapIndex, $event.value)"
-                                (enterPressed)="onInputEnter($event)" />
-                            } @else {
-                              @if (item.uxMode !== 'multi-gap' || !item.multiGap?.inlineParts?.length) {
-                                <label class="question-prompt" [for]="activity.id + '-' + item.id">{{ item.raw.prompt }}</label>
-                              }
-
-                              @if (item.uxMode === 'choice' && item.choiceOptions) {
-                                <app-choice-exercise
-                                  [prompt]="item.raw.prompt"
-                                  [options]="item.choiceOptions"
-                                  [accepted]="item.raw.accepted"
-                                  [value]="answerFor(item.id)"
-                                  [checked]="checked()"
-                                  [isCorrect]="isItemCorrect(item.raw)"
-                                  [dictionaryMode]="dictionaryMode()"
-                                  (valueChange)="selectOption(item.id, $event)" />
-                              } @else if (item.wordOrder; as wo) {
-                                <app-word-order-exercise
-                                  [inputId]="activity.id + '-' + item.id"
-                                  [prompt]="item.raw.prompt"
-                                  [tokens]="wo.tokens"
-                                  [isSentenceOrder]="wo.isSentenceOrder"
-                                  [multiline]="itemMaxAcceptedLength(item.raw) >= 25"
-                                  [value]="answerFor(item.id)"
-                                  [disabled]="checked()"
-                                  [dictionaryMode]="dictionaryMode()"
-                                  [placeholder]="activityAudioTracks().length ? language.t('lesson.typeWhatYouHear') : language.t('lesson.yourAnswer')"
-                                  [enterKeyHint]="enterKeyHint(index)"
-                                  (valueChange)="setAnswer(item.id, $event)"
-                                  (enterPressed)="onInputEnter($event)"
-                                  (modeChange)="onWordOrderModeChange(item.id, $event)" />
-                              } @else if (item.uxMode === 'multi-gap' && item.multiGap; as mg) {
-                                <app-multi-gap-exercise
-                                  [baseId]="activity.id + '-' + item.id"
-                                  [prompt]="item.raw.prompt"
-                                  [gapCount]="mg.gapCount"
-                                  [inlineParts]="mg.inlineParts"
-                                  [gapLabels]="mg.labels"
-                                  [value]="answerFor(item.id)"
-                                  [disabled]="checked()"
-                                  [enterKeyHint]="enterKeyHint(index)"
-                                  (valueChange)="setAnswer(item.id, $event)"
-                                  (enterPressed)="onInputEnter($event)" />
-                              } @else if (item.uxMode === 'prompt-gap' && item.promptGap) {
-                                <app-letter-cloze-exercise
-                                  [activityId]="activity.id"
-                                  [item]="item.raw"
-                                  [answers]="answers()"
-                                  [disabled]="checked()"
-                                  [itemIndex]="index"
-                                  [totalItems]="adapted.items.length"
-                                  [promptGap]="item.promptGap"
-                                  [placeholder]="activityAudioTracks().length ? language.t('lesson.typeWhatYouHear') : language.t('lesson.yourAnswer')"
-                                  [cardElement]="exerciseCardRef()?.nativeElement ?? null"
-                                  (valueChange)="setAnswer(item.id, $event)"
-                                  (enterPressed)="onInputEnter($event)" />
-                              } @else {
-                                <app-typed-exercise
-                                  [inputId]="activity.id + '-' + item.id"
-                                  [prompt]="item.raw.prompt"
-                                  [value]="answerFor(item.id)"
-                                  [disabled]="checked()"
-                                  [placeholder]="activityAudioTracks().length ? language.t('lesson.typeWhatYouHear') : language.t('lesson.yourAnswer')"
-                                  [enterKeyHint]="enterKeyHint(index)"
-                                  [multiline]="item.uxMode === 'long-text'"
-                                  (valueChange)="setAnswer(item.id, $event)"
-                                  (enterPressed)="onInputEnter($event)" />
-                                @if (canAssistNextLetter(item.raw, item.uxMode)) {
-                                  <button class="assist-letter" type="button" data-assist-letter (click)="assistNextLetter(item.raw)">
-                                    <span aria-hidden="true">✨</span> {{ language.t('lesson.nextLetter') }}
-                                  </button>
-                                }
-                              }
-                            }
-
-                            @if (item.raw.hint) {
-                              <div class="item-hint-wrap">
-                                <button class="hint-toggle" type="button"
-                                  [attr.aria-expanded]="isHintShown(item.id)"
-                                  (click)="toggleHint(item.id)">
-                                  <span aria-hidden="true">💡</span>
-                                  {{ isHintShown(item.id) ? language.t('lesson.hideHint') : language.t('lesson.showHint') }}
-                                </button>
-                                @if (isHintShown(item.id)) {
-                                  <p class="item-hint">{{ item.raw.hint }}</p>
-                                }
-                              </div>
-                            }
-
-                            @if (checked()) {
-                              <div class="answer-feedback" [class.feedback-right]="isItemCorrect(item.raw)" [class.feedback-wrong]="!isItemCorrect(item.raw)" aria-live="polite">
-                                @if (isItemCorrect(item.raw)) {
-                                  <span>✓ {{ language.t('lesson.correct') }}</span>
-                                  @if (accentHintFor(item.raw); as accentHint) {
-                                    <small class="accent-warning" data-accent-warning>{{ language.t('lesson.accentHint') }} <strong>{{ accentHint }}</strong></small>
-                                  }
-                                }
-                                @else { <span>{{ language.t('lesson.correctAnswer') }} <strong>{{ expectedAnswer(item.raw) }}</strong></span> }
-                              </div>
-                              @if (item.raw.explanation) { <small class="answer-explanation">{{ item.raw.explanation }}</small> }
-                            }
-                          </div>
-                        </div>
+                <section class="exercise-card" #exerciseCard [class.is-checked]="checked()">
+                  @if (activity.readingText) {
+                    <div class="reading-passage">{{ activity.readingText }}</div>
+                  }
+                  @if (images().length) {
+                    <div class="image-strip">
+                      @for (image of images(); track image.src) {
+                        <figure>
+                          <button type="button" class="image-zoom-button" (click)="openLightbox(image)"
+                            [attr.aria-label]="language.t('lesson.zoomImage') + ': ' + image.alt"
+                            [title]="language.t('lesson.zoomHint')">
+                            <img [src]="image.src" [alt]="image.alt" loading="lazy">
+                            <span class="zoom-badge" aria-hidden="true">⤢</span>
+                          </button>
+                          @if (image.label) { <figcaption>{{ image.label }}</figcaption> }
+                        </figure>
                       }
                     </div>
                   }
-                }
-              </section>
 
-              <div class="lesson-bottom-dock">
-                <app-lesson-footer
-                  [checked]="checked()"
-                  [answeredCount]="answeredCount()"
-                  [totalCount]="activity.items.length"
-                  [correctCount]="currentCorrectCount()"
-                  [hasAnsweredAll]="hasAnsweredAll()"
-                  [isLastActivity]="isLastActivity()"
-                  (check)="checkAnswers()"
-                  (next)="next()"
-                  (jumpToUnanswered)="jumpToUnanswered()"
-                  (retryWrong)="retryWrongAnswers()"
-                  (retryAll)="retryActivity()" />
+                  @if (adaptedActivity(); as adapted) {
+                    @if (adapted.uxMode === 'match') {
+                      <app-match-exercise
+                        [activityId]="activity.id"
+                        [items]="activity.items"
+                        [matchOptions]="matchOptions()"
+                        [answers]="answers()"
+                        [results]="activityResults()"
+                        [checked]="checked()"
+                        [dictionaryMode]="dictionaryMode()"
+                        (answerChange)="onSubAnswerChange($event)" />
+                    } @else if (adapted.uxMode === 'classify') {
+                      <app-classify-exercise
+                        [activityId]="activity.id"
+                        [items]="activity.items"
+                        [categories]="adapted.categories ?? []"
+                        [answers]="answers()"
+                        [results]="activityResults()"
+                        [checked]="checked()"
+                        [dictionaryMode]="dictionaryMode()"
+                        [allImages]="allImages()"
+                        [revealedHints]="revealedHints()"
+                        (answerChange)="onSubAnswerChange($event)"
+                        (openLightbox)="openLightbox($event)"
+                        (toggleHint)="toggleHint($event)" />
+                    } @else if (adapted.uxMode === 'word-bank' || adapted.uxMode === 'dialogue-order') {
+                      <app-word-bank-exercise
+                        [adapted]="adapted"
+                        [activity]="activity"
+                        [answers]="answers()"
+                        [results]="activityResults()"
+                        [checked]="checked()"
+                        [dictionaryMode]="dictionaryMode()"
+                        [allImages]="allImages()"
+                        [revealedHints]="revealedHints()"
+                        [hasAudio]="activityAudioTracks().length > 0"
+                        (answerChange)="onSubAnswerChange($event)"
+                        (toggleHint)="toggleHint($event)"
+                        (openLightbox)="openLightbox($event)"
+                        (enterPressed)="onInputEnter($event)"
+                        (typeModeChange)="onWordBankTypeModeChange($event)" />
+                    } @else {
+                      <div class="question-list" [class.choice-list]="adapted.uxMode === 'choice'">
+                        @for (item of adapted.items; track item.id; let index = $index) {
+                          <div class="question-row" [attr.data-item-id]="item.id"
+                            [class.answer-correct]="checked() && isItemCorrect(item.raw)"
+                            [class.answer-wrong]="checked() && !isItemCorrect(item.raw)">
+                            <div class="question-number">{{ index + 1 }}</div>
+                            <app-exercise-item-view
+                              [activityId]="activity.id"
+                              [item]="item"
+                              [itemIndex]="index"
+                              [totalItems]="adapted.items.length"
+                              [answers]="answers()"
+                              [answer]="answerFor(item.id)"
+                              [checked]="checked()"
+                              [isCorrect]="isItemCorrect(item.raw)"
+                              [showFeedback]="true"
+                              [dictionaryMode]="dictionaryMode()"
+                              [hasAudio]="activityAudioTracks().length > 0"
+                              [image]="itemImage(item.raw)"
+                              [hintShown]="isHintShown(item.id)"
+                              [canAssistNextLetter]="canAssistNextLetter(item.raw, item.uxMode)"
+                              [accentHint]="accentHintFor(item.raw)"
+                              [expectedAnswer]="expectedAnswer(item.raw)"
+                              [enterKeyHint]="enterKeyHint(index)"
+                              [cardElement]="exerciseCardRef()?.nativeElement ?? null"
+                              (answerChange)="setAnswer(item.id, $event)"
+                              (optionSelect)="selectOption(item.id, $event)"
+                              (letterClozeGapChange)="setLetterClozeGap(item.id, $event.gapIndex, $event.value)"
+                              (enterPressed)="onInputEnter($event)"
+                              (wordOrderModeChange)="onWordOrderModeChange(item.id, $event)"
+                              (toggleHint)="toggleHint(item.id)"
+                              (assistNextLetter)="assistNextLetter(item.raw)"
+                              (openLightbox)="openLightbox($event)" />
+                          </div>
+                        }
+                      </div>
+                    }
+                  }
+                </section>
+
+                <div class="lesson-bottom-dock">
+                  <app-lesson-footer
+                    [checked]="checked()"
+                    [answeredCount]="answeredCount()"
+                    [totalCount]="activity.items.length"
+                    [correctCount]="currentCorrectCount()"
+                    [hasAnsweredAll]="hasAnsweredAll()"
+                    [isLastActivity]="isLastActivity()"
+                    (check)="checkAnswers()"
+                    (next)="next()"
+                    (jumpToUnanswered)="jumpToUnanswered()"
+                    (retryWrong)="retryWrongAnswers()"
+                    (retryAll)="retryActivity()" />
+                </div>
+
+                @if (syncError(); as syncMessage) {
+                  <p class="sync-warning" role="alert">{{ syncMessage }}</p>
+                }
+                <p class="shortcuts-note">{{ language.t('lesson.shortcutsHint') }}</p>
+                <p class="offline-note">✦ {{ language.t('lesson.offlineNote') }}</p>
               </div>
 
-              @if (syncError(); as syncMessage) {
-                <p class="sync-warning" role="alert">{{ syncMessage }}</p>
+              @if (theoryOpen() && theory(); as t) {
+                <app-lesson-theory-drawer
+                  [theory]="t"
+                  [lessonLabel]="lessonLabel(lesson.id)"
+                  [workbookPages]="lesson.pages"
+                  (closed)="theoryOpen.set(false)" />
               }
-              <p class="shortcuts-note">{{ language.t('lesson.shortcutsHint') }}</p>
-              <p class="offline-note">✦ {{ language.t('lesson.offlineNote') }}</p>
             </div>
-
-            @if (theoryOpen() && theory(); as t) {
-              <app-lesson-theory-drawer
-                [theory]="t"
-                [lessonLabel]="lessonLabel(lesson.id)"
-                [workbookPages]="lesson.pages"
-                (closed)="theoryOpen.set(false)" />
-            }
-          </div>
-        </main>
+          </main>
+        }
       }
     } @else {
       <app-lesson-completion

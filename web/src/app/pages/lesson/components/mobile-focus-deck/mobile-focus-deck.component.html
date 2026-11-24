@@ -1,0 +1,224 @@
+<div class="focus-deck">
+  <header class="focus-topbar">
+    <a class="focus-close-btn" [routerLink]="dashboardUrl()" [attr.aria-label]="language.t('lesson.back')">×</a>
+
+    <div class="focus-progress" [attr.aria-label]="language.t('lesson.progress')">
+      <div class="focus-progress-track"><span [style.width.%]="progressPct()"></span></div>
+      <small>{{ stepLabel() }}</small>
+    </div>
+
+    <div class="focus-topbar-actions">
+      <button type="button" class="focus-icon-btn"
+        [class.is-active]="dictionaryMode()"
+        [attr.aria-pressed]="dictionaryMode()"
+        [attr.aria-label]="language.t('lesson.dictionaryToggleAria')"
+        [title]="language.t('lesson.dictionaryButton')"
+        (click)="toggleDictionary.emit()">
+        <span aria-hidden="true">📖</span>
+      </button>
+
+      @if (hasTheory()) {
+        <button type="button" class="focus-icon-btn"
+          [class.is-open]="theoryOpen()"
+          [attr.aria-expanded]="theoryOpen()"
+          aria-controls="lesson-theory-panel"
+          [attr.aria-label]="theoryOpen() ? language.t('lesson.hideTheory') : language.t('lesson.showTheory')"
+          [title]="language.t('lesson.theory')"
+          (click)="toggleTheory.emit()">
+          <span aria-hidden="true">📚</span>
+        </button>
+      }
+
+      <button type="button" class="focus-icon-btn"
+        [attr.aria-label]="language.t('lesson.switchToList')"
+        [title]="language.t('lesson.switchToList')"
+        (click)="switchToList.emit()">
+        <span aria-hidden="true">☰</span>
+      </button>
+    </div>
+  </header>
+
+  <div class="focus-context-strip">
+    <button type="button" class="focus-context-toggle"
+      [attr.aria-expanded]="contextExpanded()"
+      [attr.aria-label]="language.t('lesson.focusExerciseToggle')"
+      (click)="toggleContext()">
+      <span class="focus-ex-badge">{{ language.t('lesson.blockExercises') }} {{ activityIndex() + 1 }}/{{ lesson().activities.length }}</span>
+      <span class="focus-instruction-preview">{{ activity().instruction }}</span>
+      <span class="focus-chevron" aria-hidden="true">{{ contextExpanded() ? '▴' : '▾' }}</span>
+    </button>
+
+    @if (contextExpanded()) {
+      <div class="focus-context-panel">
+        <h1 class="focus-ex-title">{{ activity().title }}</h1>
+        <p class="focus-ex-instruction">
+          {{ activity().instruction }}
+          @if (instructionTranslation(); as tr) {
+            <span class="focus-ex-translation">({{ tr }})</span>
+          }
+        </p>
+        @if (hasTextInputs()) {
+          <p class="focus-latin-hint">{{ language.t('lesson.latinInputHint') }}</p>
+        }
+        <div class="focus-picker-scroll" role="navigation" [attr.aria-label]="language.t('lesson.exercisePicker')">
+          @for (ex of lesson().activities; track ex.id; let idx = $index) {
+            <button type="button" class="focus-picker-btn"
+              [class.is-active]="activityIndex() === idx"
+              [class.is-complete]="isActivityComplete(ex.id)"
+              [attr.aria-current]="activityIndex() === idx ? 'step' : null"
+              [attr.aria-label]="language.t('lesson.exercise') + ' ' + (idx + 1) + ': ' + ex.title"
+              (click)="onPickActivity(idx)">
+              <span>{{ idx + 1 }}</span>
+              @if (isActivityComplete(ex.id)) { <small aria-hidden="true">✓</small> }
+            </button>
+          }
+        </div>
+      </div>
+    }
+
+    @if (activeTheoryBlock(); as tb) {
+      <button type="button" class="focus-inline-theory-btn"
+        [attr.aria-expanded]="inlineTheoryOpen()"
+        (click)="toggleInlineTheory()">
+        <span class="focus-inline-theory-label">📖 {{ tb.block.title }}</span>
+        <span aria-hidden="true">{{ inlineTheoryOpen() ? '▴' : '▾' }}</span>
+      </button>
+      @if (inlineTheoryOpen()) {
+        <div class="focus-inline-theory-wrap">
+          <app-lesson-inline-theory
+            [block]="tb.block"
+            [blockIndex]="tb.blockIndex"
+            [totalBlocks]="tb.totalBlocks"
+            [expanded]="true"
+            (toggled)="inlineTheoryOpen.set(false)" />
+        </div>
+      }
+    }
+
+    @if (dictionaryMode()) {
+      <p class="focus-dict-banner">{{ language.t('lesson.dictionaryModeOn') }}</p>
+    }
+  </div>
+
+  <main class="focus-stage">
+    @if (showSummary()) {
+      <section class="focus-summary-card" aria-live="polite">
+        <div class="focus-summary-badge" [class.is-perfect]="correctCount() === totalActivityItems()">
+          {{ correctCount() === totalActivityItems() ? '✦' : '↗' }}
+        </div>
+        <h2 class="focus-summary-title">{{ correctCount() }} {{ language.t('lesson.of') }} {{ totalActivityItems() }} {{ language.t('lesson.correctly') }}</h2>
+        <p class="focus-summary-copy">{{ correctCount() === totalActivityItems() ? language.t('lesson.greatWork') : language.t('lesson.rememberForms') }}</p>
+
+        <div class="focus-summary-dots" [attr.aria-label]="language.t('lesson.score')">
+          @for (dot of summaryItems(); track dot.id) {
+            <span class="focus-summary-dot"
+              [class.dot-right]="dot.correct"
+              [class.dot-wrong]="!dot.correct">{{ dot.index }}</span>
+          }
+        </div>
+
+        <button type="button" class="focus-view-list-btn" (click)="switchToList.emit()">
+          {{ language.t('lesson.focusViewList') }}
+        </button>
+      </section>
+    } @else if (activeItem(); as item) {
+      @if (isRetryRound()) {
+        <div class="focus-retry-pill">{{ language.t('lesson.focusRetryRound') }} · {{ queuePosition() + 1 }} / {{ queueLength() }}</div>
+      }
+
+      @if (sharedImages().length) {
+        <div class="focus-shared-images">
+          @for (image of sharedImages(); track image.src) {
+            <button type="button" class="focus-thumb-btn" (click)="openLightbox.emit(image)"
+              [attr.aria-label]="language.t('lesson.zoomImage') + ': ' + image.alt">
+              <img [src]="image.src" [alt]="image.alt" loading="lazy">
+            </button>
+          }
+        </div>
+      }
+
+      <section class="focus-card" #focusCard
+        [attr.data-item-id]="item.id"
+        [class.is-checked-right]="itemChecked() && itemCorrect()"
+        [class.is-checked-wrong]="itemChecked() && !itemCorrect()">
+        <app-exercise-item-view
+          [activityId]="activity().id"
+          [item]="item"
+          [itemIndex]="activeItemOriginalIndex()"
+          [totalItems]="totalActivityItems()"
+          [answers]="answers()"
+          [answer]="activeAnswer()"
+          [checked]="itemChecked()"
+          [isCorrect]="itemCorrect()"
+          [showFeedback]="false"
+          [dictionaryMode]="dictionaryMode()"
+          [hasAudio]="false"
+          [image]="activeItemImage()"
+          [hintShown]="hintShown()"
+          [canAssistNextLetter]="canAssistNextLetter()"
+          [accentHint]="accentHint()"
+          [expectedAnswer]="expectedAnswer()"
+          [enterKeyHint]="'done'"
+          [cardElement]="focusCardRef()?.nativeElement ?? null"
+          [focusStyle]="true"
+          (answerChange)="answerChange.emit($event)"
+          (optionSelect)="optionSelect.emit($event)"
+          (letterClozeGapChange)="letterClozeGapChange.emit($event)"
+          (enterPressed)="enterPressed.emit($event)"
+          (wordOrderModeChange)="wordOrderModeChange.emit($event)"
+          (toggleHint)="toggleHint.emit()"
+          (assistNextLetter)="assistNextLetter.emit()"
+          (openLightbox)="openLightbox.emit($event)" />
+      </section>
+    }
+
+    @if (syncError(); as syncMessage) {
+      <p class="sync-warning" role="alert">{{ syncMessage }}</p>
+    }
+  </main>
+
+  <footer class="focus-dock">
+    @if (showSummary()) {
+      <div class="focus-summary-actions">
+        @if (correctCount() < totalActivityItems()) {
+          <button type="button" class="focus-secondary-btn" (click)="retryWrong.emit()">
+            {{ language.t('lesson.fixMistakes') }}
+          </button>
+        } @else {
+          <button type="button" class="focus-secondary-btn" (click)="retryAll.emit()">
+            {{ language.t('lesson.retryActivity') }}
+          </button>
+        }
+        <button type="button" class="focus-primary-btn is-green" (click)="nextActivity.emit()">
+          {{ isLastActivity() ? language.t('lesson.seeResults') : language.t('lesson.next') }} <span aria-hidden="true">→</span>
+        </button>
+      </div>
+    } @else if (!itemChecked()) {
+      <button type="button" class="focus-primary-btn is-check" [disabled]="!canCheckCurrent()" (click)="checkItem.emit()">
+        {{ language.t('lesson.focusCheck') }}
+      </button>
+    } @else {
+      <div class="focus-feedback-dock" [class.is-correct]="itemCorrect()" [class.is-wrong]="!itemCorrect()" aria-live="polite">
+        <div class="focus-feedback-text">
+          @if (itemCorrect()) {
+            <strong class="focus-feedback-title">✓ {{ language.t('lesson.correct') }}</strong>
+            @if (accentHint(); as hint) {
+              <small class="focus-accent-hint">{{ language.t('lesson.accentHint') }} <strong>{{ hint }}</strong></small>
+            }
+          } @else {
+            <strong class="focus-feedback-title">{{ language.t('lesson.correctAnswer') }} <span>{{ expectedAnswer() }}</span></strong>
+          }
+          @if (activeItem()?.raw.explanation; as explanation) {
+            <small class="focus-explanation">{{ explanation }}</small>
+          }
+        </div>
+        <button type="button" class="focus-primary-btn"
+          [class.is-green]="itemCorrect()"
+          [class.is-red]="!itemCorrect()"
+          (click)="advance.emit()">
+          {{ isLastInQueue() ? language.t('lesson.focusSummary') : language.t('lesson.next') }} <span aria-hidden="true">→</span>
+        </button>
+      </div>
+    }
+  </footer>
+</div>

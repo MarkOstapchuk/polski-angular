@@ -5,7 +5,7 @@ import { map } from 'rxjs';
 import { adaptActivity, normalizeAnswer } from '../../data/activity-adapter';
 import { AUDIO_TRACKS } from '../../data/audio-tracks';
 import { PART2_AUDIO_TRACKS } from '../../data/part2-audio-tracks';
-import { Activity, ActivityItem, AdaptedActivity, AdaptedItem, Lesson } from '../../data/lesson-types';
+import { Activity, ActivityItem, ActivityUxMode, AdaptedActivity, AdaptedItem, Lesson } from '../../data/lesson-types';
 import { LESSON_CATALOG } from '../../data/lesson-catalog';
 import { loadLessonById, loadLessonTheory } from '../../data/lesson-loader';
 import type { LessonTheory } from '../../data/lesson-theory';
@@ -18,8 +18,8 @@ import { AnalyticsService } from '../../services/analytics.service';
 import { AuthService } from '../../services/auth.service';
 import { MistakesService } from '../../services/mistakes.service';
 import { ProgressService } from '../../services/progress.service';
-import { ChoiceExerciseComponent } from './components/choice-exercise/choice-exercise.component';
 import { ClassifyExerciseComponent } from './components/classify-exercise/classify-exercise.component';
+import { ExerciseItemViewComponent } from './components/exercise-item-view/exercise-item-view.component';
 import { AudioPlayerTrack, LessonAudioBarComponent } from './components/lesson-audio-bar/lesson-audio-bar.component';
 import { LessonCompletionComponent } from './components/lesson-completion/lesson-completion.component';
 import { LessonDictionaryModalComponent } from './components/lesson-dictionary-modal/lesson-dictionary-modal.component';
@@ -27,15 +27,21 @@ import { LessonFooterComponent } from './components/lesson-footer/lesson-footer.
 import { LessonImageLightboxComponent } from './components/lesson-image-lightbox/lesson-image-lightbox.component';
 import { LessonInlineTheoryComponent } from './components/lesson-inline-theory/lesson-inline-theory.component';
 import { LessonTheoryDrawerComponent } from './components/lesson-theory-drawer/lesson-theory-drawer.component';
-import { LetterClozeExerciseComponent } from './components/letter-cloze-exercise/letter-cloze-exercise.component';
 import { MatchExerciseComponent } from './components/match-exercise/match-exercise.component';
-import { MultiGapExerciseComponent } from './components/multi-gap-exercise/multi-gap-exercise.component';
-import { TypedExerciseComponent } from './components/typed-exercise/typed-exercise.component';
+import { MobileFocusDeckComponent } from './components/mobile-focus-deck/mobile-focus-deck.component';
 import { WordBankExerciseComponent } from './components/word-bank-exercise/word-bank-exercise.component';
-import { WordOrderExerciseComponent } from './components/word-order-exercise/word-order-exercise.component';
 
 const PONS_BLOCKED_SELECTOR =
   'input, textarea, select, audio, button:not(.option-button):not(.match-source):not(.match-target):not(.word-bank-chip):not(.word-chip):not(.classify-bucket-btn):not(.classify-summary-chip), a';
+
+const FOCUS_ELIGIBLE_MODES = new Set<ActivityUxMode>([
+  'choice',
+  'typed',
+  'word-order',
+  'multi-gap',
+  'prompt-gap',
+  'letter-cloze',
+]);
 
 @Component({
   selector: 'app-lesson',
@@ -50,14 +56,11 @@ const PONS_BLOCKED_SELECTOR =
     LessonDictionaryModalComponent,
     LessonFooterComponent,
     LessonCompletionComponent,
-    ChoiceExerciseComponent,
-    TypedExerciseComponent,
-    MultiGapExerciseComponent,
-    WordOrderExerciseComponent,
+    ExerciseItemViewComponent,
+    MobileFocusDeckComponent,
     WordBankExerciseComponent,
     ClassifyExerciseComponent,
     MatchExerciseComponent,
-    LetterClozeExerciseComponent,
   ],
   templateUrl: './lesson.component.html',
   styleUrl: './lesson.component.scss',
@@ -79,8 +82,20 @@ export class LessonComponent {
   private readonly matchExercise = viewChild(MatchExerciseComponent);
   private readonly classifyExercise = viewChild(ClassifyExerciseComponent);
   private readonly wordBankExercise = viewChild(WordBankExerciseComponent);
+  private readonly mobileFocusDeck = viewChild(MobileFocusDeckComponent);
   readonly exerciseCardRef = viewChild<ElementRef<HTMLElement>>('exerciseCard');
   private readonly pickerListRef = viewChild<ElementRef<HTMLElement>>('pickerList');
+
+  readonly isMobileViewport = signal(
+    typeof window !== 'undefined' && typeof window.matchMedia === 'function' && window.matchMedia('(max-width: 600px)').matches,
+  );
+  readonly mobileViewOverride = signal<'auto' | 'list' | 'cards'>('auto');
+  readonly focusQueueIds = signal<string[]>([]);
+  readonly focusIndex = signal(0);
+  readonly focusItemChecked = signal(false);
+  readonly focusItemResults = signal<Record<string, boolean>>({});
+  readonly focusSummaryOpen = signal(false);
+  readonly focusIsRetryRound = signal(false);
 
   readonly dictionaryWord = signal<string | null>(null);
   readonly dictionaryMode = signal(false);
@@ -212,15 +227,89 @@ export class LessonComponent {
   readonly finalScore = computed(() => this.totalQuestions() ? Math.round((this.correctAnswers() / this.totalQuestions()) * 100) : 0);
   readonly earnedXp = computed(() => 10 + Math.round(this.finalScore() / 10));
 
+  readonly eligibleForFocusMode = computed(() => {
+    const act = this.activity();
+    const adapted = this.adaptedActivity();
+    return !!act && !!adapted && act.items.length >= 2 && this.activityAudioTracks().length === 0 && !act.readingText && FOCUS_ELIGIBLE_MODES.has(adapted.uxMode);
+  });
+  readonly isMobileFocusMode = computed(() => this.isMobileViewport() && this.eligibleForFocusMode() && this.mobileViewOverride() !== 'list');
+  readonly completedActivityIds = computed(() => {
+    const lesson = this.lesson();
+    if (!lesson) return new Set<string>();
+    return new Set(lesson.activities.filter((a) => this.progress.hasCompletedActivity(lesson.id, a.id)).map((a) => a.id));
+  });
+  readonly activeFocusItem = computed<AdaptedItem | undefined>(() => {
+    const adapted = this.adaptedActivity();
+    const id = this.focusQueueIds()[this.focusIndex()];
+    return adapted && id ? adapted.items.find((i) => i.id === id) : undefined;
+  });
+  readonly activeFocusOriginalIndex = computed(() => {
+    const adapted = this.adaptedActivity();
+    const item = this.activeFocusItem();
+    return adapted && item ? adapted.items.findIndex((i) => i.id === item.id) : 0;
+  });
+  readonly activeFocusItemImage = computed(() => {
+    const item = this.activeFocusItem();
+    return item ? this.itemImage(item.raw) : undefined;
+  });
+  readonly activeFocusAnswer = computed(() => {
+    const item = this.activeFocusItem();
+    return item ? this.answerFor(item.id) : '';
+  });
+  readonly canCheckCurrentFocus = computed(() => {
+    const item = this.activeFocusItem();
+    return !!item && this.isItemAnswered(item.raw);
+  });
+  readonly activeFocusItemCorrect = computed(() => {
+    const item = this.activeFocusItem();
+    return item ? !!this.focusItemResults()[item.id] : false;
+  });
+  readonly activeFocusAccentHint = computed(() => {
+    const item = this.activeFocusItem();
+    return item ? this.accentHintFor(item.raw) : null;
+  });
+  readonly activeFocusExpectedAnswer = computed(() => {
+    const item = this.activeFocusItem();
+    return item ? this.expectedAnswer(item.raw) : '';
+  });
+  readonly activeFocusHintShown = computed(() => {
+    const item = this.activeFocusItem();
+    return !!item && this.isHintShown(item.id);
+  });
+  readonly canAssistCurrentFocusLetter = computed(() => {
+    const item = this.activeFocusItem();
+    return !!item && this.canAssistNextLetter(item.raw, item.uxMode);
+  });
+  readonly focusSummaryItems = computed(() => {
+    const activity = this.activity();
+    if (!activity) return [];
+    const res = this.results()[activity.id] ?? this.focusItemResults();
+    return activity.items.map((item, idx) => ({ id: item.id, index: idx + 1, correct: !!res[item.id] }));
+  });
+
   constructor() {
     const onPageHide = (): void => this.trackLessonAbandoned('pagehide');
+    let cleanupMediaQuery: (() => void) | undefined;
     if (typeof window !== 'undefined') {
       window.addEventListener('pagehide', onPageHide);
+      if (typeof window.matchMedia === 'function') {
+        const mq = window.matchMedia('(max-width: 600px)');
+        this.isMobileViewport.set(mq.matches);
+        const onMediaChange = (event: MediaQueryListEvent): void => {
+          this.isMobileViewport.set(event.matches);
+          if (event.matches && this.eligibleForFocusMode() && this.mobileViewOverride() !== 'list') {
+            this.syncFocusStateWithActivity();
+          }
+        };
+        mq.addEventListener('change', onMediaChange);
+        cleanupMediaQuery = () => mq.removeEventListener('change', onMediaChange);
+      }
     }
     this.destroyRef.onDestroy(() => {
       if (typeof window !== 'undefined') {
         window.removeEventListener('pagehide', onPageHide);
       }
+      cleanupMediaQuery?.();
       this.trackLessonAbandoned('navigate_away');
       this.cancelPickerScrollRaf();
     });
@@ -313,7 +402,23 @@ export class LessonComponent {
     const isEditable = !!target?.closest('input:not([type="range"]), textarea, select, [contenteditable="true"]');
     const isInteractive = !!target?.closest('input, textarea, select, button, a, audio, summary, [role="button"], [contenteditable="true"]');
 
+    if (this.isMobileFocusMode() && this.theoryOpen()) return;
+
     if (event.key === 'Enter' && !isInteractive) {
+      if (this.isMobileFocusMode()) {
+        event.preventDefault();
+        if (this.focusSummaryOpen()) {
+          void this.next();
+        } else if (this.focusItemChecked()) {
+          this.advanceFocusCard();
+        } else {
+          const item = this.activeFocusItem()?.raw;
+          if (item && this.isItemAnswered(item)) {
+            void this.checkCurrentFocusItem();
+          }
+        }
+        return;
+      }
       if (this.checked()) {
         event.preventDefault();
         void this.next();
@@ -332,7 +437,19 @@ export class LessonComponent {
       return;
     }
 
-    if (/^[1-9]$/.test(event.key) && !isEditable && !this.checked() && !event.repeat) {
+    if (/^[1-9]$/.test(event.key) && !isEditable && !event.repeat) {
+      if (this.isMobileFocusMode()) {
+        if (this.focusItemChecked() || this.focusSummaryOpen()) return;
+        const targetItem = this.activeFocusItem();
+        const optionIndex = Number(event.key) - 1;
+        if (targetItem?.choiceOptions && optionIndex < targetItem.choiceOptions.length) {
+          event.preventDefault();
+          this.selectOption(targetItem.id, targetItem.choiceOptions[optionIndex].value);
+        }
+        return;
+      }
+
+      if (this.checked()) return;
       if (adapted.uxMode === 'classify') {
         event.preventDefault();
         this.classifyExercise()?.selectCategoryByShortcut(Number(event.key) - 1);
@@ -372,6 +489,26 @@ export class LessonComponent {
 
   onInputEnter(event: Event): void {
     event.preventDefault();
+    if (this.isMobileFocusMode()) {
+      if (this.focusSummaryOpen()) {
+        void this.next();
+        return;
+      }
+      if (this.focusItemChecked()) {
+        this.advanceFocusCard();
+        return;
+      }
+      const item = this.activeFocusItem()?.raw;
+      if (item && this.isItemAnswered(item)) {
+        void this.checkCurrentFocusItem();
+        return;
+      }
+      this.focusNextEmptyInput(
+        this.mobileFocusDeck()?.focusCardElement(),
+        event.target as HTMLInputElement | HTMLTextAreaElement,
+      );
+      return;
+    }
     if (this.checked()) {
       void this.next();
       return;
@@ -380,19 +517,10 @@ export class LessonComponent {
       void this.checkAnswers();
       return;
     }
-    const card = this.exerciseCardRef()?.nativeElement;
-    if (!card) return;
-    const inputs = Array.from(
-      card.querySelectorAll<HTMLInputElement | HTMLTextAreaElement>(
-        '.answer-input:not(:disabled):not([readonly]), .letter-cloze-gap:not(:disabled):not([readonly])',
-      ),
+    this.focusNextEmptyInput(
+      this.exerciseCardRef()?.nativeElement,
+      event.target as HTMLInputElement | HTMLTextAreaElement,
     );
-    const active = event.target as HTMLInputElement | HTMLTextAreaElement;
-    const currentIdx = inputs.indexOf(active);
-    const nextUnanswered = inputs.slice(currentIdx + 1).find((el) => !el.value.trim())
-      ?? inputs.slice(0, Math.max(0, currentIdx)).find((el) => !el.value.trim())
-      ?? inputs[currentIdx + 1];
-    nextUnanswered?.focus();
   }
 
   lessonLabel(lessonId: number): string {
@@ -498,6 +626,7 @@ export class LessonComponent {
 
   setAnswer(itemId: string, value: string): void {
     this.answers.update((current) => ({ ...current, [this.answerKey(itemId)]: value }));
+    if (!this.isMobileFocusMode()) this.clearFocusItemResult(itemId);
     if (value.trim()) this.trackFirstInput();
   }
 
@@ -514,7 +643,38 @@ export class LessonComponent {
       ...current,
       [this.letterClozeAnswerKey(itemId, gapIndex)]: value,
     }));
+    if (!this.isMobileFocusMode()) this.clearFocusItemResult(itemId);
     if (value.trim()) this.trackFirstInput();
+  }
+
+  onFocusAnswerChange(value: string): void {
+    const item = this.activeFocusItem();
+    if (item && !this.focusItemChecked()) this.setAnswer(item.id, value);
+  }
+
+  onFocusOptionSelect(value: string): void {
+    const item = this.activeFocusItem();
+    if (item && !this.focusItemChecked()) this.selectOption(item.id, value);
+  }
+
+  onFocusLetterClozeGap(event: { gapIndex: number; value: string }): void {
+    const item = this.activeFocusItem();
+    if (item && !this.focusItemChecked()) this.setLetterClozeGap(item.id, event.gapIndex, event.value);
+  }
+
+  onFocusWordOrderModeChange(mode: 'chips' | 'type'): void {
+    const item = this.activeFocusItem();
+    if (item) this.onWordOrderModeChange(item.id, mode);
+  }
+
+  onFocusToggleHint(): void {
+    const item = this.activeFocusItem();
+    if (item) this.toggleHint(item.id);
+  }
+
+  onFocusAssistNextLetter(): void {
+    const item = this.activeFocusItem();
+    if (item && !this.focusItemChecked()) this.assistNextLetter(item.raw);
   }
 
   onSubAnswerChange(event: { itemId: string; value: string }): void {
@@ -633,7 +793,8 @@ export class LessonComponent {
 
   /** T6 tap-assist: short single-answer typed items can reveal one more correct letter per tap. */
   canAssistNextLetter(item: ActivityItem, uxMode?: string): boolean {
-    if (this.checked() || uxMode === 'long-text' || item.letterCloze) return false;
+    const itemLocked = this.isMobileFocusMode() ? this.focusItemChecked() : this.checked();
+    if (itemLocked || uxMode === 'long-text' || item.letterCloze) return false;
     const adapted = this.adaptedItemById(item.id);
     if (adapted?.multiGap && adapted.multiGap.gapCount > 1) return false;
     const expected = item.accepted[0] ?? '';
@@ -664,7 +825,9 @@ export class LessonComponent {
 
   /** Answer counted as correct, but Polish diacritics differ from the canonical spelling. */
   accentHintFor(item: ActivityItem): string | null {
-    if (!this.isItemCorrect(item) || item.letterCloze) return null;
+    const itemCorrect = this.isItemCorrect(item)
+      || (this.isMobileFocusMode() && this.focusItemChecked() && this.focusItemResults()[item.id] === true);
+    if (!itemCorrect || item.letterCloze) return null;
     const adapted = this.adaptedItemById(item.id);
     if (adapted?.multiGap && adapted.multiGap.gapCount > 1) return null;
     const raw = this.answerFor(item.id).trim().toLocaleLowerCase('pl-PL').replace(/\s+/g, ' ');
@@ -673,10 +836,6 @@ export class LessonComponent {
     if (item.accepted.some((a) => canon(a) === raw)) return null;
     const match = item.accepted.find((a) => normalizeAnswer(a) === normalizeAnswer(raw) && /[ąćęłńóśźż]/i.test(a));
     return match ?? null;
-  }
-
-  itemMaxAcceptedLength(item: ActivityItem): number {
-    return Math.max(0, ...item.accepted.map((a) => a.length));
   }
 
   currentCorrectCount(): number {
@@ -732,12 +891,82 @@ export class LessonComponent {
     this.checked.set(!!saved);
     this.wordBankTypeMode.set(false);
     this.wordOrderTypeItems.set({});
+    this.initFocusState(activity, { startAtSummary: !!saved });
     this.activityViewedAt = Date.now();
     this.activityHintsUsed = 0;
     this.activityAssistLettersUsed = 0;
     this.trackActivityViewed(lesson, activity, index, !!saved);
     this.scrollToTop();
     this.scrollActivePickerIntoView();
+  }
+
+  switchToListView(): void {
+    this.mobileViewOverride.set('list');
+    const lesson = this.lesson();
+    const activity = this.activity();
+    if (lesson && activity) {
+      this.analytics.track('focus_mode_toggled', {
+        lessonId: lesson.id,
+        courseId: this.courseIdFor(lesson.id),
+        activityId: activity.id,
+        metadata: { mode: 'list', ux_mode: this.adaptedActivity()?.uxMode ?? null },
+      });
+    }
+    this.scrollToTop();
+    this.scrollActivePickerIntoView();
+  }
+
+  switchToCardsView(): void {
+    this.mobileViewOverride.set('cards');
+    this.syncFocusStateWithActivity();
+    const lesson = this.lesson();
+    const activity = this.activity();
+    if (lesson && activity) {
+      this.analytics.track('focus_mode_toggled', {
+        lessonId: lesson.id,
+        courseId: this.courseIdFor(lesson.id),
+        activityId: activity.id,
+        metadata: { mode: 'cards', ux_mode: this.adaptedActivity()?.uxMode ?? null },
+      });
+    }
+    this.scrollToTop();
+  }
+
+  async checkCurrentFocusItem(): Promise<void> {
+    const lesson = this.lesson();
+    const activity = this.activity();
+    const item = this.activeFocusItem()?.raw;
+    if (!lesson || !activity || !item || this.focusItemChecked() || !this.isItemAnswered(item)) return;
+
+    const ok = this.evaluateAndRecordItem(lesson, activity, item);
+    const updatedResults = { ...this.focusItemResults(), [item.id]: ok };
+    this.focusItemResults.set(updatedResults);
+    this.focusItemChecked.set(true);
+
+    if (this.focusIndex() >= this.focusQueueIds().length - 1) {
+      const isRetry = this.retriedActivityIds().has(activity.id);
+      const finalResult: Record<string, boolean> = {};
+      for (const entry of activity.items) {
+        finalResult[entry.id] = entry.id in updatedResults
+          ? updatedResults[entry.id]
+          : this.evaluateAndRecordItem(lesson, activity, entry);
+      }
+      this.focusItemResults.set(finalResult);
+      await this.finalizeActivityCheck(lesson, activity, finalResult, isRetry, true);
+    }
+  }
+
+  advanceFocusCard(): void {
+    if (!this.focusItemChecked()) return;
+    const queueLen = this.focusQueueIds().length;
+    if (this.focusIndex() >= queueLen - 1) {
+      this.focusItemChecked.set(false);
+      this.focusSummaryOpen.set(true);
+    } else {
+      this.focusIndex.update((idx) => idx + 1);
+      this.focusItemChecked.set(false);
+    }
+    this.scrollToTop();
   }
 
   jumpToUnanswered(): void {
@@ -796,62 +1025,16 @@ export class LessonComponent {
     const isRetry = this.retriedActivityIds().has(activity.id);
     const result: Record<string, boolean> = {};
     for (const item of activity.items) {
-      const ok = this.isCorrect(item);
-      result[item.id] = ok;
-      const mistakeKey = `${lesson.id}:${activity.id}:${item.id}`;
-      if (ok) {
-        this.mistakes.resolveMistake(mistakeKey);
-      } else if (!item.letterCloze && item.accepted.length > 0 && item.prompt.trim()) {
-        this.mistakes.recordMistake({
-          key: mistakeKey,
-          lessonId: lesson.id,
-          lessonTitle: lesson.title,
-          activityId: activity.id,
-          activityTitle: activity.title,
-          prompt: item.prompt,
-          accepted: item.accepted,
-          options: item.options,
-          userAnswer: this.answerFor(item.id),
-        });
-      }
+      result[item.id] = this.evaluateAndRecordItem(lesson, activity, item);
     }
-    this.results.update((current) => ({ ...current, [activity.id]: result }));
-    this.checked.set(true);
-    this.retriedActivityIds.update((set) => {
-      if (!set.has(activity.id)) return set;
-      const next = new Set(set);
-      next.delete(activity.id);
-      return next;
-    });
-    const prefix = `${activity.id}:`;
-    const answers = Object.fromEntries(Object.entries(this.answers()).filter(([key]) => key.startsWith(prefix)));
-    await this.progress.saveActivityProgress(lesson.id, activity.id, answers, result);
-    const correct = Object.values(result).filter(Boolean).length;
-    const total = activity.items.length;
-    const accuracyPct = total > 0 ? Math.round((correct / total) * 100) : 0;
-    const secondsSpent = this.activityViewedAt ? Math.max(0, Math.round((Date.now() - this.activityViewedAt) / 1000)) : 0;
-    this.analytics.track('check_clicked', {
-      lessonId: lesson.id,
-      courseId: this.courseIdFor(lesson.id),
-      activityId: activity.id,
-      metadata: {
-        correct,
-        total,
-        accuracy_pct: accuracyPct,
-        activity_index: this.activeIndex(),
-        ux_mode: this.adaptedActivity()?.uxMode ?? null,
-        seconds_spent: secondsSpent,
-        hints_used: this.activityHintsUsed,
-        assist_letters_used: this.activityAssistLettersUsed,
-        is_retry: isRetry,
-      },
-    });
+    await this.finalizeActivityCheck(lesson, activity, result, isRetry, false);
   }
 
   retryWrongAnswers(): void {
     const activity = this.activity();
     const lesson = this.lesson();
     if (!activity) return;
+    const prevResults = { ...(this.results()[activity.id] ?? {}) };
     if (lesson) {
       this.analytics.track('activity_retried', {
         lessonId: lesson.id,
@@ -862,6 +1045,7 @@ export class LessonComponent {
     }
     this.clearActivityAnswers(activity, true);
     this.checked.set(false);
+    this.initFocusState(activity, { wrongOnly: true, prevResults });
     this.activityViewedAt = Date.now();
     this.activityHintsUsed = 0;
     this.activityAssistLettersUsed = 0;
@@ -884,6 +1068,7 @@ export class LessonComponent {
     }
     this.clearActivityAnswers(activity, false);
     this.checked.set(false);
+    this.initFocusState(activity);
     this.activityViewedAt = Date.now();
     this.activityHintsUsed = 0;
     this.activityAssistLettersUsed = 0;
@@ -1033,8 +1218,12 @@ export class LessonComponent {
     const index = firstIncomplete < 0 ? 0 : firstIncomplete;
     this.activeIndex.set(index);
     const initialActivity = lesson.activities[index];
-    const saved = this.progress.activityFor(lesson.id, initialActivity.id);
+    const saved = initialActivity ? this.progress.activityFor(lesson.id, initialActivity.id) : null;
     this.checked.set(!!saved);
+    this.mobileViewOverride.set('auto');
+    if (initialActivity) {
+      this.initFocusState(initialActivity, { startAtSummary: !!saved });
+    }
     const completedLessonsCount = this.progress.progress().completedLessonIds.length;
     this.analytics.trackOnce(`lesson_opened:${lesson.id}`, 'lesson_opened', {
       lessonId: lesson.id,
@@ -1232,5 +1421,143 @@ export class LessonComponent {
 
   private letterClozeAnswerKey(itemId: string, gapIndex: number): string {
     return `${this.answerKey(itemId)}:gap:${gapIndex}`;
+  }
+
+  private initFocusState(
+    activity: Activity,
+    options: { wrongOnly?: boolean; prevResults?: Record<string, boolean>; startAtSummary?: boolean } = {},
+  ): void {
+    const prevResults = options.prevResults ?? {};
+    if (options.wrongOnly) {
+      const wrongIds = activity.items.filter((item) => prevResults[item.id] !== true).map((item) => item.id);
+      if (wrongIds.length > 0) {
+        const keptResults: Record<string, boolean> = {};
+        for (const item of activity.items) {
+          if (prevResults[item.id] === true) keptResults[item.id] = true;
+        }
+        this.focusQueueIds.set(wrongIds);
+        this.focusIndex.set(0);
+        this.focusItemChecked.set(false);
+        this.focusItemResults.set(keptResults);
+        this.focusSummaryOpen.set(false);
+        this.focusIsRetryRound.set(true);
+        return;
+      }
+    }
+    this.focusQueueIds.set(activity.items.map((item) => item.id));
+    this.focusIndex.set(0);
+    this.focusItemChecked.set(false);
+    this.focusItemResults.set(options.startAtSummary ? { ...(this.results()[activity.id] ?? {}) } : {});
+    this.focusSummaryOpen.set(!!options.startAtSummary);
+    this.focusIsRetryRound.set(false);
+  }
+
+  private syncFocusStateWithActivity(): void {
+    const activity = this.activity();
+    if (!activity) return;
+    if (this.checked()) {
+      this.focusItemResults.set({ ...(this.results()[activity.id] ?? {}) });
+      this.focusItemChecked.set(false);
+      this.focusSummaryOpen.set(true);
+      return;
+    }
+    let queue = this.focusQueueIds();
+    if (queue.length === 0) {
+      queue = activity.items.map((item) => item.id);
+      this.focusQueueIds.set(queue);
+    }
+    const results = this.focusItemResults();
+    const nextIdx = queue.findIndex((id) => {
+      const item = activity.items.find((entry) => entry.id === id);
+      return !!item && (!this.isItemAnswered(item) || !(id in results));
+    });
+    this.focusIndex.set(nextIdx >= 0 ? nextIdx : Math.max(0, queue.length - 1));
+    this.focusItemChecked.set(false);
+    this.focusSummaryOpen.set(false);
+  }
+
+  private clearFocusItemResult(itemId: string): void {
+    if (!(itemId in this.focusItemResults())) return;
+    this.focusItemResults.update((current) => {
+      const next = { ...current };
+      delete next[itemId];
+      return next;
+    });
+  }
+
+  private evaluateAndRecordItem(lesson: Lesson, activity: Activity, item: ActivityItem): boolean {
+    const ok = this.isCorrect(item);
+    const mistakeKey = `${lesson.id}:${activity.id}:${item.id}`;
+    if (ok) {
+      this.mistakes.resolveMistake(mistakeKey);
+    } else if (!item.letterCloze && item.accepted.length > 0 && item.prompt.trim()) {
+      this.mistakes.recordMistake({
+        key: mistakeKey,
+        lessonId: lesson.id,
+        lessonTitle: lesson.title,
+        activityId: activity.id,
+        activityTitle: activity.title,
+        prompt: item.prompt,
+        accepted: item.accepted,
+        options: item.options,
+        userAnswer: this.answerFor(item.id),
+      });
+    }
+    return ok;
+  }
+
+  private async finalizeActivityCheck(
+    lesson: Lesson,
+    activity: Activity,
+    result: Record<string, boolean>,
+    isRetry: boolean,
+    focusMode: boolean,
+  ): Promise<void> {
+    this.results.update((current) => ({ ...current, [activity.id]: result }));
+    this.checked.set(true);
+    this.retriedActivityIds.update((set) => {
+      if (!set.has(activity.id)) return set;
+      const next = new Set(set);
+      next.delete(activity.id);
+      return next;
+    });
+    const prefix = `${activity.id}:`;
+    const answers = Object.fromEntries(Object.entries(this.answers()).filter(([key]) => key.startsWith(prefix)));
+    await this.progress.saveActivityProgress(lesson.id, activity.id, answers, result);
+    const correct = Object.values(result).filter(Boolean).length;
+    const total = activity.items.length;
+    const accuracyPct = total > 0 ? Math.round((correct / total) * 100) : 0;
+    const secondsSpent = this.activityViewedAt ? Math.max(0, Math.round((Date.now() - this.activityViewedAt) / 1000)) : 0;
+    this.analytics.track('check_clicked', {
+      lessonId: lesson.id,
+      courseId: this.courseIdFor(lesson.id),
+      activityId: activity.id,
+      metadata: {
+        correct,
+        total,
+        accuracy_pct: accuracyPct,
+        activity_index: this.activeIndex(),
+        ux_mode: this.adaptedActivity()?.uxMode ?? null,
+        seconds_spent: secondsSpent,
+        hints_used: this.activityHintsUsed,
+        assist_letters_used: this.activityAssistLettersUsed,
+        is_retry: isRetry,
+        ...(focusMode ? { focus_mode: true } : {}),
+      },
+    });
+  }
+
+  private focusNextEmptyInput(card: HTMLElement | null | undefined, active: HTMLInputElement | HTMLTextAreaElement): void {
+    if (!card) return;
+    const inputs = Array.from(
+      card.querySelectorAll<HTMLInputElement | HTMLTextAreaElement>(
+        '.answer-input:not(:disabled):not([readonly]), .letter-cloze-gap:not(:disabled):not([readonly])',
+      ),
+    );
+    const currentIdx = inputs.indexOf(active);
+    const nextUnanswered = inputs.slice(currentIdx + 1).find((el) => !el.value.trim())
+      ?? inputs.slice(0, Math.max(0, currentIdx)).find((el) => !el.value.trim())
+      ?? inputs[currentIdx + 1];
+    nextUnanswered?.focus();
   }
 }

@@ -1,0 +1,125 @@
+<div class="question-body" [class.is-focus]="focusStyle()">
+  @if (image(); as img) {
+    <button type="button" class="image-zoom-button inline-zoom" (click)="openLightbox.emit(img)"
+      [attr.aria-label]="language.t('lesson.zoomImage') + ': ' + img.alt"
+      [title]="language.t('lesson.zoomHint')">
+      <img class="question-image" [src]="img.src" [alt]="img.alt" loading="lazy">
+      <span class="zoom-badge" aria-hidden="true">⤢</span>
+    </button>
+  }
+
+  @if (item().uxMode === 'letter-cloze') {
+    <app-letter-cloze-exercise
+      [activityId]="activityId()"
+      [item]="item().raw"
+      [answers]="answers()"
+      [disabled]="checked()"
+      [itemIndex]="itemIndex()"
+      [totalItems]="totalItems()"
+      [cardElement]="cardElement()"
+      (gapChange)="letterClozeGapChange.emit($event)"
+      (enterPressed)="enterPressed.emit($event)" />
+  } @else {
+    @if (item().uxMode !== 'multi-gap' || !item().multiGap?.inlineParts?.length) {
+      <label class="question-prompt" [for]="activityId() + '-' + item().id">{{ item().raw.prompt }}</label>
+    }
+
+    @if (item().uxMode === 'choice' && item().choiceOptions; as choiceOpts) {
+      <app-choice-exercise
+        [prompt]="item().raw.prompt"
+        [options]="choiceOpts"
+        [accepted]="item().raw.accepted"
+        [value]="answer()"
+        [checked]="checked()"
+        [isCorrect]="isCorrect()"
+        [dictionaryMode]="dictionaryMode()"
+        (valueChange)="optionSelect.emit($event)" />
+    } @else if (item().wordOrder; as wo) {
+      <app-word-order-exercise
+        [inputId]="activityId() + '-' + item().id"
+        [prompt]="item().raw.prompt"
+        [tokens]="wo.tokens"
+        [isSentenceOrder]="wo.isSentenceOrder"
+        [multiline]="itemMaxAcceptedLength() >= 25"
+        [value]="answer()"
+        [disabled]="checked()"
+        [dictionaryMode]="dictionaryMode()"
+        [placeholder]="hasAudio() ? language.t('lesson.typeWhatYouHear') : language.t('lesson.yourAnswer')"
+        [enterKeyHint]="enterKeyHint()"
+        (valueChange)="answerChange.emit($event)"
+        (enterPressed)="enterPressed.emit($event)"
+        (modeChange)="wordOrderModeChange.emit($event)" />
+    } @else if (item().uxMode === 'multi-gap' && item().multiGap; as mg) {
+      <app-multi-gap-exercise
+        [baseId]="activityId() + '-' + item().id"
+        [prompt]="item().raw.prompt"
+        [gapCount]="mg.gapCount"
+        [inlineParts]="mg.inlineParts"
+        [gapLabels]="mg.labels"
+        [value]="answer()"
+        [disabled]="checked()"
+        [enterKeyHint]="enterKeyHint()"
+        (valueChange)="answerChange.emit($event)"
+        (enterPressed)="enterPressed.emit($event)" />
+    } @else if (item().uxMode === 'prompt-gap' && item().promptGap; as pg) {
+      <app-letter-cloze-exercise
+        [activityId]="activityId()"
+        [item]="item().raw"
+        [answers]="answers()"
+        [disabled]="checked()"
+        [itemIndex]="itemIndex()"
+        [totalItems]="totalItems()"
+        [promptGap]="pg"
+        [placeholder]="hasAudio() ? language.t('lesson.typeWhatYouHear') : language.t('lesson.yourAnswer')"
+        [cardElement]="cardElement()"
+        (valueChange)="answerChange.emit($event)"
+        (enterPressed)="enterPressed.emit($event)" />
+    } @else {
+      <app-typed-exercise
+        [inputId]="activityId() + '-' + item().id"
+        [prompt]="item().raw.prompt"
+        [value]="answer()"
+        [disabled]="checked()"
+        [placeholder]="hasAudio() ? language.t('lesson.typeWhatYouHear') : language.t('lesson.yourAnswer')"
+        [enterKeyHint]="enterKeyHint()"
+        [multiline]="item().uxMode === 'long-text'"
+        (valueChange)="answerChange.emit($event)"
+        (enterPressed)="enterPressed.emit($event)" />
+      @if (canAssistNextLetter()) {
+        <button class="assist-letter" type="button" data-assist-letter (click)="assistNextLetter.emit()">
+          <span aria-hidden="true">✨</span> {{ language.t('lesson.nextLetter') }}
+        </button>
+      }
+    }
+  }
+
+  @if (item().raw.hint) {
+    <div class="item-hint-wrap">
+      <button class="hint-toggle" type="button"
+        [attr.aria-expanded]="hintShown()"
+        (click)="toggleHint.emit()">
+        <span aria-hidden="true">💡</span>
+        {{ hintShown() ? language.t('lesson.hideHint') : language.t('lesson.showHint') }}
+      </button>
+      @if (hintShown()) {
+        <p class="item-hint">{{ item().raw.hint }}</p>
+      }
+    </div>
+  }
+
+  @if (checked() && showFeedback()) {
+    <div class="answer-feedback" [class.feedback-right]="isCorrect()" [class.feedback-wrong]="!isCorrect()" aria-live="polite">
+      @if (isCorrect()) {
+        <span>✓ {{ language.t('lesson.correct') }}</span>
+        @if (accentHint(); as hint) {
+          <small class="accent-warning" data-accent-warning>{{ language.t('lesson.accentHint') }} <strong>{{ hint }}</strong></small>
+        }
+      } @else {
+        <span>{{ language.t('lesson.correctAnswer') }} <strong>{{ expectedAnswer() }}</strong></span>
+      }
+    </div>
+    @if (item().raw.explanation) {
+      <small class="answer-explanation">{{ item().raw.explanation }}</small>
+    }
+  }
+</div>
