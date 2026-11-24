@@ -132,6 +132,9 @@
             <button type="button" class="focus-thumb-btn" (click)="openLightbox.emit(image)"
               [attr.aria-label]="language.t('lesson.zoomImage') + ': ' + image.alt">
               <img [src]="image.src" [alt]="image.alt" loading="lazy">
+              @if (image.label) {
+                <span class="focus-thumb-label">{{ image.label }}</span>
+              }
             </button>
           }
         </div>
