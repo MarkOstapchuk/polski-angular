@@ -1,24 +1,23 @@
-:host { display: block; }
+:host { display: block; height: 100%; }
 
 .focus-deck {
-  min-height: 100dvh;
+  height: 100%;
   display: flex;
   flex-direction: column;
+  overflow: hidden;
+  padding-top: env(safe-area-inset-top);
   background: #fbfaf7;
   color: #282922;
 }
 
 .focus-topbar {
-  position: sticky;
-  top: 0;
-  z-index: 4;
+  flex: none;
   display: flex;
   align-items: center;
   gap: 8px;
-  height: 52px;
+  height: 48px;
   padding: 0 8px 0 6px;
-  background: rgba(251, 250, 247, .96);
-  backdrop-filter: blur(12px);
+  background: #fbfaf7;
 }
 
 .focus-close-btn {
@@ -106,19 +105,20 @@
 }
 
 .focus-context-strip {
+  flex: none;
   display: grid;
   grid-template-columns: minmax(0, 1fr);
-  gap: 6px;
-  padding: 4px 16px 6px;
+  gap: 4px;
+  padding: 2px 16px 4px;
 }
 
 .focus-context-toggle {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
-  gap: 5px;
+  gap: 4px;
   width: 100%;
   min-height: 44px;
-  padding: 2px 0 4px;
+  padding: 2px 0;
   border: 0;
   background: transparent;
   color: #2d2e28;
@@ -155,15 +155,17 @@
   white-space: normal;
   overflow-wrap: anywhere;
   color: #2d2e28;
-  font-size: 16px;
+  font-size: 14.5px;
   font-weight: 750;
-  line-height: 1.38;
+  line-height: 1.32;
 }
 
 .focus-context-panel {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
   gap: 10px;
+  max-height: 45dvh;
+  overflow-y: auto;
   padding: 12px;
   border: 1px solid #e9e4d9;
   border-radius: 16px;
@@ -244,11 +246,14 @@
 
 .focus-stage {
   flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  gap: 14px;
-  padding: 8px 16px 20px;
+  gap: 10px;
+  padding: 6px 16px 10px;
 }
 
 .focus-retry-pill {
@@ -374,16 +379,14 @@
 .sync-warning { margin: 6px 0 0; color: #aa6256; font-size: 13px; line-height: 1.5; text-align: center; }
 
 .focus-dock {
-  position: sticky;
-  bottom: 0;
-  z-index: 4;
-  padding: 14px 16px calc(16px + env(safe-area-inset-bottom));
-  background: linear-gradient(to bottom, rgba(251, 250, 247, 0), #fbfaf7 18%);
+  flex: none;
+  padding: 8px 16px calc(12px + env(safe-area-inset-bottom));
+  background: #fbfaf7;
 }
 
 .focus-primary-btn {
   width: 100%;
-  min-height: 52px;
+  min-height: 50px;
   padding: 0 18px;
   border: 0;
   border-radius: 14px;
@@ -411,7 +414,7 @@
 
 .focus-secondary-btn {
   width: 100%;
-  min-height: 52px;
+  min-height: 50px;
   padding: 0 14px;
   border: 2px solid #e4dfd5;
   border-bottom-width: 4px;

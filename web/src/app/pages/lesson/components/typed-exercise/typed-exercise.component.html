@@ -1,7 +1,7 @@
 @if (multiline()) {
   <textarea #textareaEl class="answer-input answer-textarea"
     [class.is-focus]="focusStyle()"
-    [attr.rows]="focusStyle() ? 4 : 1"
+    [attr.rows]="focusStyle() ? 3 : 1"
     [id]="inputId()"
     [value]="value()"
     (input)="onValueInput($event)"

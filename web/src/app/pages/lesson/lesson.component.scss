@@ -1,5 +1,5 @@
-:host { display: block; min-height: 100vh; background: #fbfaf7; color: #282922; }
-.lesson-shell { min-height: 100vh; }
+:host { display: block; min-height: 100vh; min-height: 100dvh; background: #fbfaf7; color: #282922; }
+.lesson-shell { min-height: 100vh; min-height: 100dvh; }
 .lesson-topbar { position: sticky; z-index: 4; top: 0; display: flex; align-items: center; gap: 18px; height: 65px; padding: 0 max(calc((100vw - 1140px) / 2), 24px); border-bottom: 1px solid #eeece6; background: rgba(255, 255, 255, .95); backdrop-filter: blur(12px); }
 .close-button { display: grid; flex: none; width: 44px; height: 44px; place-items: center; border-radius: 50%; color: #7e7a71; text-decoration: none; font-size: 26px; line-height: 1; }
 .close-button:hover { background: #f3f0e9; color: #45433d; }
@@ -69,7 +69,7 @@
 .answer-correct .question-number { background: #eaf3e7; color: #54704d; }
 .answer-wrong .question-number { background: #fbede8; color: #aa6256; }
 
-.focus-shell { min-height: 100dvh; }
+.focus-shell { position: fixed; inset: 0; z-index: 5; height: 100dvh; overflow: hidden; background: #fbfaf7; }
 .focus-shell.dictionary-mode { user-select: none; cursor: help; }
 .focus-shell input, .focus-shell textarea { -webkit-user-select: text; user-select: text; }
 .focus-theory-overlay { position: fixed; inset: 0; z-index: 10; display: flex; align-items: flex-end; justify-content: center; padding: 12px 10px calc(12px + env(safe-area-inset-bottom)); background: rgba(37, 37, 31, .48); backdrop-filter: blur(5px); }

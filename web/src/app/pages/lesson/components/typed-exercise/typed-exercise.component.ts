@@ -53,7 +53,7 @@ export class TypedExerciseComponent {
     const el = this.textareaEl()?.nativeElement;
     if (!el) return;
     el.style.height = 'auto';
-    const minHeight = this.focusStyle() ? 124 : 44;
+    const minHeight = this.focusStyle() ? 84 : 44;
     el.style.height = `${Math.max(minHeight, el.scrollHeight)}px`;
   }
 }

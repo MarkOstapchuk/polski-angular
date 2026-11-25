@@ -26,13 +26,13 @@
 }
 
 .answer-input.is-focus {
-  min-height: 56px;
-  padding: 14px 16px;
+  min-height: 52px;
+  padding: 12px 14px;
   border: 2px solid #e2ddd2;
   border-radius: 16px;
   background: #fff;
-  font-size: 18px;
-  line-height: 1.48;
+  font-size: 17px;
+  line-height: 1.45;
   box-shadow: inset 0 2px 4px rgba(40, 41, 34, .03);
 }
 
@@ -42,5 +42,5 @@
 }
 
 .answer-textarea.is-focus {
-  min-height: 124px;
+  min-height: 84px;
 }
