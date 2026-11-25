@@ -2,8 +2,8 @@
   display: block;
   min-height: 100vh;
   padding: 0 clamp(18px, 5vw, 64px) 64px;
-  color: #25251f;
-  background: #fbfaf7;
+  color: var(--text);
+  background: var(--bg);
 }
 
 .checkpoint-header {
@@ -14,21 +14,21 @@
   max-width: 780px;
   margin: auto;
   padding: 20px 0;
-  border-bottom: 1px solid #ece9e1;
+  border-bottom: 1px solid var(--border);
 }
 
 .back-link {
   display: inline-flex;
   align-items: center;
   min-height: 40px;
-  color: #6c6d64;
+  color: var(--text-secondary);
   font-size: 14px;
   font-weight: 650;
   text-decoration: none;
 }
 
 .back-link:hover {
-  color: #b84f31;
+  color: var(--accent-text);
 }
 
 .checkpoint-main {
@@ -41,8 +41,8 @@
   display: inline-block;
   padding: 4px 10px;
   border-radius: 999px;
-  background: #f6ebe5;
-  color: #a64f35;
+  background: var(--accent-bg);
+  color: var(--accent-text);
   font-size: 11px;
   font-weight: 800;
   letter-spacing: 0.08em;
@@ -57,7 +57,7 @@
 
 .intro-desc {
   margin: 0;
-  color: #6c6d64;
+  color: var(--text-secondary);
   font-size: 15px;
   line-height: 1.55;
 }
@@ -70,26 +70,26 @@
   gap: 16px;
   margin-top: 22px;
   padding: 18px 20px;
-  border: 1.5px solid #e7d7cc;
+  border: 1.5px solid var(--accent-border-soft);
   border-radius: 14px;
-  background: #fff;
+  background: var(--bg-elevated);
 }
 
 .score-banner.is-great {
-  border-color: #b7d7be;
-  background: #f4fbf5;
+  border-color: var(--success-border);
+  background: var(--success-bg);
 }
 
 .score-banner small {
   display: block;
-  color: #7c7a71;
+  color: var(--text-muted);
   font-size: 12px;
   font-weight: 700;
 }
 
 .score-banner strong {
   font-size: 26px;
-  color: #292a23;
+  color: var(--text-strong);
 }
 
 .score-actions {
@@ -106,17 +106,17 @@
 
 .question-card {
   padding: 20px;
-  border: 1px solid #eeece5;
+  border: 1px solid var(--border);
   border-radius: 14px;
-  background: #fff;
+  background: var(--bg-elevated);
 }
 
 .question-card.is-correct {
-  border-color: #b7d7be;
+  border-color: var(--success-border);
 }
 
 .question-card.is-wrong {
-  border-color: #ebc2bc;
+  border-color: var(--error-border);
 }
 
 .q-number {
@@ -124,7 +124,7 @@
   font-size: 17px;
   font-weight: 700;
   line-height: 1.45;
-  color: #292a23;
+  color: var(--text-strong);
 }
 
 .options-grid {
@@ -136,10 +136,10 @@
 .option-btn {
   min-height: 46px;
   padding: 10px 14px;
-  border: 1.5px solid #e7e2da;
+  border: 1.5px solid var(--border-strong);
   border-radius: 10px;
-  background: #fbfaf7;
-  color: #302a26;
+  background: var(--bg);
+  color: var(--text);
   font-size: 15px;
   font-weight: 600;
   text-align: left;
@@ -147,33 +147,33 @@
 }
 
 .option-btn:hover:not(:disabled) {
-  border-color: #bd5d3f;
-  background: #fdf6f2;
+  border-color: var(--accent-border);
+  background: var(--accent-bg-hover);
 }
 
 .option-btn.is-selected {
-  border-color: #bd5d3f;
-  background: #f8e8e1;
+  border-color: var(--accent-border);
+  background: var(--accent-bg);
 }
 
 .option-btn.is-right-answer {
-  border-color: #3f8a52;
-  background: #e3f3e6;
-  color: #1c572b;
+  border-color: var(--success-border);
+  background: var(--success-bg);
+  color: var(--success-text);
 }
 
 .option-btn.is-wrong-choice {
-  border-color: #c94a38;
-  background: #fdeceb;
-  color: #8f291c;
+  border-color: var(--error-border);
+  background: var(--error-bg);
+  color: var(--error-text);
 }
 
 .explanation {
   margin: 12px 0 0;
   padding: 10px 12px;
   border-radius: 8px;
-  background: #f8f6f2;
-  color: #55534b;
+  background: var(--bg-subtle);
+  color: var(--text-secondary);
   font-size: 13px;
   line-height: 1.45;
 }
@@ -185,13 +185,13 @@
   gap: 16px;
   margin-top: 24px;
   padding: 16px 20px;
-  border: 1px solid #eeece5;
+  border: 1px solid var(--border);
   border-radius: 14px;
-  background: #fff;
+  background: var(--bg-elevated);
 }
 
 .progress-hint {
-  color: #7c7a71;
+  color: var(--text-muted);
   font-size: 14px;
   font-weight: 650;
 }
@@ -211,13 +211,14 @@
 }
 
 .primary-btn {
-  border: 1px solid #bd5d3f;
-  background: #bd5d3f;
+  border: 1px solid var(--accent-strong);
+  background: var(--accent-strong);
   color: #fff;
 }
 
 .primary-btn:hover:not(:disabled) {
-  background: #8c3f29;
+  background: var(--accent-shadow);
+  border-color: var(--accent-shadow);
 }
 
 .primary-btn:disabled {
@@ -226,9 +227,9 @@
 }
 
 .secondary-btn {
-  border: 1px solid #d8c5b9;
-  background: #fff;
-  color: #302a26;
+  border: 1px solid var(--border-warm);
+  background: var(--bg-elevated);
+  color: var(--text);
 }
 
 @media (max-width: 560px) {

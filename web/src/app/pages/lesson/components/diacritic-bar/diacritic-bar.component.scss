@@ -1,12 +1,12 @@
 :host { display: block; }
-.diacritic-bar { margin-bottom: 8px; padding: 8px 10px; border: 1px solid #ebe6dc; border-radius: 13px; background: rgba(255, 255, 255, .97); backdrop-filter: blur(8px); box-shadow: 0 -4px 16px #28292210; }
+.diacritic-bar { margin-bottom: 8px; padding: 8px 10px; border: 1px solid var(--border); border-radius: 13px; background: var(--bg-header); backdrop-filter: blur(8px); box-shadow: var(--shadow-dock); }
 .diacritic-bar.is-keyboard-docked { position: fixed; left: 0; right: 0; z-index: 7; margin: 0; border-radius: 12px 12px 0 0; padding: 8px 10px calc(8px + env(safe-area-inset-bottom)); }
 .diacritic-keys { display: grid; grid-template-columns: repeat(10, minmax(44px, 1fr)); gap: 6px; }
-.diacritic-key, .diacritic-shift { display: grid; min-width: 44px; min-height: 44px; place-items: center; padding: 0; border: 1px solid #e7e1d7; border-radius: 10px; background: #fbfaf7; color: #34342d; font: inherit; font-size: 17px; font-weight: 700; cursor: pointer; user-select: none; }
-.diacritic-key:hover, .diacritic-shift:hover { border-color: #d77a58; background: #fff2ec; color: #a54d31; }
-.diacritic-key:active { background: #fbe4d9; transform: translateY(1px); }
-.diacritic-shift { background: #f3efe7; color: #5c574d; font-size: 14px; font-weight: 800; }
-.diacritic-shift[aria-pressed="true"] { border-color: #d77a58; background: #d97956; color: #fff; }
+.diacritic-key, .diacritic-shift { display: grid; min-width: 44px; min-height: 44px; place-items: center; padding: 0; border: 1px solid var(--border-strong); border-radius: 10px; background: var(--bg-subtle); color: var(--text); font: inherit; font-size: 17px; font-weight: 700; cursor: pointer; user-select: none; }
+.diacritic-key:hover, .diacritic-shift:hover { border-color: var(--accent-border); background: var(--accent-bg); color: var(--accent-text); }
+.diacritic-key:active { background: var(--accent-border-soft); transform: translateY(1px); }
+.diacritic-shift { background: var(--bg-muted); color: var(--text-secondary); font-size: 14px; font-weight: 800; }
+.diacritic-shift[aria-pressed="true"] { border-color: var(--accent-border); background: var(--accent); color: #fff; }
 
 @media (max-width: 600px) {
   .diacritic-bar { padding: 7px 8px; }

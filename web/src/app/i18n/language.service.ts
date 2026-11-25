@@ -160,6 +160,7 @@ const messages: Record<Language, Record<string, string>> = {
     'lesson.focusCheck': 'Sprawdź', 'lesson.focusSummary': 'Podsumowanie',
     'lesson.focusRetryRound': 'Poprawa błędów', 'lesson.focusViewList': 'Zobacz wszystkie odpowiedzi',
     'lesson.focusExerciseToggle': 'Pokaż instrukcję i listę ćwiczeń',
+    'theme.switchToDark': 'Włącz tryb ciemny', 'theme.switchToLight': 'Włącz tryb jasny',
   },
   ru: {
     language: 'Язык',
@@ -317,6 +318,7 @@ const messages: Record<Language, Record<string, string>> = {
     'lesson.focusCheck': 'Проверить', 'lesson.focusSummary': 'Итог',
     'lesson.focusRetryRound': 'Работа над ошибками', 'lesson.focusViewList': 'Посмотреть списком',
     'lesson.focusExerciseToggle': 'Показать инструкцию и список упражнений',
+    'theme.switchToDark': 'Включить тёмную тему', 'theme.switchToLight': 'Включить светлую тему',
   },
   en: {
     language: 'Language',
@@ -474,6 +476,7 @@ const messages: Record<Language, Record<string, string>> = {
     'lesson.focusCheck': 'Check', 'lesson.focusSummary': 'Summary',
     'lesson.focusRetryRound': 'Fixing mistakes', 'lesson.focusViewList': 'View as list',
     'lesson.focusExerciseToggle': 'Show instruction and exercises',
+    'theme.switchToDark': 'Switch to dark mode', 'theme.switchToLight': 'Switch to light mode',
   },
 };
 

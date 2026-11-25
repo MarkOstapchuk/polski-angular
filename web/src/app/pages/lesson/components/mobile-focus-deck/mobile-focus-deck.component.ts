@@ -4,6 +4,7 @@ import type { ResolvedActivityTheory } from '../../../../data/lesson-theory-bloc
 import { Activity, AdaptedItem, Lesson } from '../../../../data/lesson-types';
 import { WorkbookImage } from '../../../../data/workbook-images';
 import { LanguageService } from '../../../../i18n/language.service';
+import { ThemeService } from '../../../../services/theme.service';
 import { ExerciseItemViewComponent } from '../exercise-item-view/exercise-item-view.component';
 
 export interface FocusSummaryItem {
@@ -22,6 +23,7 @@ export interface FocusSummaryItem {
 })
 export class MobileFocusDeckComponent {
   readonly language = inject(LanguageService);
+  readonly theme = inject(ThemeService);
 
   readonly dashboardUrl = input.required<string>();
   readonly lesson = input.required<Lesson>();

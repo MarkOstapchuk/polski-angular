@@ -1,29 +1,29 @@
 .completion-main { display: flex; flex-direction: column; align-items: center; max-width: 580px; margin: 0 auto; padding: 64px 24px 55px; text-align: center; }
-.completion-spark { display: grid; width: 63px; height: 63px; place-items: center; margin-bottom: 20px; border-radius: 20px; background: #f7e4d7; color: #d47c55; font-size: 30px; transform: rotate(-6deg); }
-.lesson-breadcrumb { margin: 0 0 11px; color: #8c877b; font-size: 12px; font-weight: 800; letter-spacing: 1px; }
-.completion-main h1 { margin: 0; color: #2d2e28; font-size: clamp(26px, 3vw, 34px); letter-spacing: -1.1px; line-height: 1.15; }
-.completion-copy { margin: 10px 0 25px; color: #78756c; font-size: 15px; line-height: 1.5; }
-.score-orb { display: grid; align-content: center; justify-items: center; width: 152px; height: 152px; border: 8px solid #f0e5d7; border-radius: 50%; background: #fff; box-shadow: 0 8px 22px #493c1c0c; }
-.score-orb.score-high { border-color: #dce9d7; }
-.score-orb > strong { color: #c27953; font-size: 36px; letter-spacing: -2px; }
-.score-orb.score-high > strong { color: #6f9067; }
+.completion-spark { display: grid; width: 63px; height: 63px; place-items: center; margin-bottom: 20px; border-radius: 20px; background: var(--accent-bg); color: var(--accent); font-size: 30px; transform: rotate(-6deg); }
+.lesson-breadcrumb { margin: 0 0 11px; color: var(--text-subtle); font-size: 12px; font-weight: 800; letter-spacing: 1px; }
+.completion-main h1 { margin: 0; color: var(--text-strong); font-size: clamp(26px, 3vw, 34px); letter-spacing: -1.1px; line-height: 1.15; }
+.completion-copy { margin: 10px 0 25px; color: var(--text-muted); font-size: 15px; line-height: 1.5; }
+.score-orb { display: grid; align-content: center; justify-items: center; width: 152px; height: 152px; border: 8px solid var(--warn-bg); border-radius: 50%; background: var(--bg-elevated); box-shadow: var(--shadow-card); }
+.score-orb.score-high { border-color: var(--success-bg); }
+.score-orb > strong { color: var(--accent); font-size: 36px; letter-spacing: -2px; }
+.score-orb.score-high > strong { color: var(--success); }
 .score-orb strong small { font-size: 17px; }
-.score-orb > span { margin-top: 2px; color: #7d796f; font-size: 12px; }
+.score-orb > span { margin-top: 2px; color: var(--text-muted); font-size: 12px; }
 .completion-stats { display: flex; gap: 10px; width: min(100%, 390px); margin-top: 23px; }
-.completion-stats > div { display: grid; flex: 1; gap: 5px; padding: 13px 9px; border: 1px solid #eeece5; border-radius: 11px; background: #fff; }
-.completion-stats strong { color: #484941; font-size: 15px; }
-.completion-stats small { color: #7e7b72; font-size: 12px; }
-.next-unlock { max-width: 380px; margin: 18px 0 22px; color: #767268; font-size: 14px; line-height: 1.55; }
-.guest-save-card { width: min(100%, 440px); margin: 0 0 22px; padding: 16px 18px; border: 1.5px solid #e6c6b7; border-radius: 14px; background: #fdf6f2; text-align: left; }
-.guest-save-card strong { display: block; color: #2d2e28; font-size: 15px; }
-.guest-save-card p { margin: 6px 0 12px; color: #6c6d64; font-size: 13px; line-height: 1.5; }
-.guest-save-btn { display: inline-flex; align-items: center; justify-content: center; min-height: 40px; padding: 8px 14px; border-radius: 9px; background: #302a26; color: #fff; font-size: 13px; font-weight: 700; text-decoration: none; }
-.guest-save-btn:hover { background: #1e1a17; }
+.completion-stats > div { display: grid; flex: 1; gap: 5px; padding: 13px 9px; border: 1px solid var(--border); border-radius: 11px; background: var(--bg-elevated); }
+.completion-stats strong { color: var(--text-strong); font-size: 15px; }
+.completion-stats small { color: var(--text-muted); font-size: 12px; }
+.next-unlock { max-width: 380px; margin: 18px 0 22px; color: var(--text-muted); font-size: 14px; line-height: 1.55; }
+.guest-save-card { width: min(100%, 440px); margin: 0 0 22px; padding: 16px 18px; border: 1.5px solid var(--accent-border-soft); border-radius: 14px; background: var(--accent-bg); text-align: left; }
+.guest-save-card strong { display: block; color: var(--text-strong); font-size: 15px; }
+.guest-save-card p { margin: 6px 0 12px; color: var(--text-secondary); font-size: 13px; line-height: 1.5; }
+.guest-save-btn { display: inline-flex; align-items: center; justify-content: center; min-height: 44px; padding: 8px 14px; border-radius: 9px; background: var(--text-strong); color: var(--bg); font-size: 13px; font-weight: 700; text-decoration: none; }
+.guest-save-btn:hover { opacity: .9; }
 .completion-actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; width: min(100%, 440px); }
-.return-button { display: inline-flex; align-items: center; justify-content: center; gap: 16px; min-height: 48px; padding: 12px 20px; border-radius: 10px; background: #dd7856; box-shadow: 0 3px 0 #bd6144; color: #fff; text-decoration: none; font-size: 14px; font-weight: 800; }
+.return-button { display: inline-flex; align-items: center; justify-content: center; gap: 16px; min-height: 48px; padding: 12px 20px; border-radius: 10px; background: var(--accent); box-shadow: 0 3px 0 var(--accent-shadow); color: #fff; text-decoration: none; font-size: 14px; font-weight: 800; }
 .return-button span { font-size: 15px; }
-.secondary-button { display: inline-flex; align-items: center; justify-content: center; min-height: 44px; padding: 10px 16px; border: 1px solid #e4dfd5; border-radius: 10px; background: #fff; color: #56534a; text-decoration: none; font: inherit; font-size: 14px; font-weight: 700; cursor: pointer; }
-.secondary-button:hover { border-color: #d6a58d; background: #fff8f3; color: #9e5439; }
+.secondary-button { display: inline-flex; align-items: center; justify-content: center; min-height: 44px; padding: 10px 16px; border: 1px solid var(--border-strong); border-radius: 10px; background: var(--bg-elevated); color: var(--text-secondary); text-decoration: none; font: inherit; font-size: 14px; font-weight: 700; cursor: pointer; }
+.secondary-button:hover { border-color: var(--border-hover); background: var(--accent-bg-hover); color: var(--accent-text); }
 
 @media (max-width: 600px) {
   .completion-main { padding-top: 44px; }

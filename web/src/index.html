@@ -6,6 +6,21 @@
   <base href="/">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#fbfaf7">
+  <script>
+    (function () {
+      try {
+        var s = localStorage.getItem('polski-theme-v1');
+        var d = s === 'dark' || (s !== 'light' && window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches);
+        var m = d ? 'dark' : 'light';
+        document.documentElement.dataset.theme = m;
+        document.documentElement.style.colorScheme = m;
+        if (d) {
+          var meta = document.querySelector('meta[name="theme-color"]');
+          if (meta) meta.content = '#151613';
+        }
+      } catch (e) {}
+    })();
+  </script>
   <meta name="description" content="Krótki, interaktywny kurs języka polskiego z ćwiczeniami, odsłuchem i zapisem postępów.">
   <meta name="robots" content="noindex, nofollow">
   <meta name="mobile-web-app-capable" content="yes">

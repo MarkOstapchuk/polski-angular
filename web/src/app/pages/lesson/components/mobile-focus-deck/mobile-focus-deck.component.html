@@ -55,7 +55,15 @@
 
     @if (contextExpanded()) {
       <div class="focus-context-panel">
-        <h1 class="focus-ex-title">{{ activity().title }}</h1>
+        <div class="focus-panel-head">
+          <h1 class="focus-ex-title">{{ activity().title }}</h1>
+          <button type="button" class="focus-theme-btn"
+            (click)="theme.toggle()"
+            [attr.aria-label]="theme.isDark() ? language.t('theme.switchToLight') : language.t('theme.switchToDark')"
+            [title]="theme.isDark() ? language.t('theme.switchToLight') : language.t('theme.switchToDark')">
+            <span aria-hidden="true">{{ theme.isDark() ? '☀️' : '🌙' }}</span>
+          </button>
+        </div>
         @if (instructionTranslation(); as tr) {
           <p class="focus-ex-instruction">{{ tr }}</p>
         }

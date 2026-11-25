@@ -5,6 +5,7 @@ import { filter } from 'rxjs';
 import { LanguageService } from './i18n/language.service';
 import { AnalyticsService } from './services/analytics.service';
 import { PwaInstallService } from './services/pwa-install.service';
+import { ThemeService } from './services/theme.service';
 
 @Component({
   selector: 'app-root',
@@ -22,6 +23,7 @@ export class AppComponent {
 
   constructor() {
     const language = inject(LanguageService);
+    inject(ThemeService);
     inject(AnalyticsService).init(language.locale());
     inject(PwaInstallService);
     if (!this.swUpdate.isEnabled || typeof window === 'undefined') return;
