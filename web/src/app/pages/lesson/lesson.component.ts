@@ -14,6 +14,7 @@ import { INSTRUCTION_TRANSLATIONS } from '../../data/instruction-translations';
 import { WORKBOOK_IMAGES, WorkbookImage } from '../../data/workbook-images';
 import { LanguageSwitcherComponent } from '../../i18n/language-switcher.component';
 import { LanguageService } from '../../i18n/language.service';
+import { IconComponent } from '../../shared/icon/icon.component';
 import { AnalyticsService } from '../../services/analytics.service';
 import { AuthService } from '../../services/auth.service';
 import { MistakesService } from '../../services/mistakes.service';
@@ -50,6 +51,7 @@ const FOCUS_ELIGIBLE_MODES = new Set<ActivityUxMode>([
   imports: [
     RouterLink,
     LanguageSwitcherComponent,
+    IconComponent,
     LessonTheoryDrawerComponent,
     LessonInlineTheoryComponent,
     LessonAudioBarComponent,

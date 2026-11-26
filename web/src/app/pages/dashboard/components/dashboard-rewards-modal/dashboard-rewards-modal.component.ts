@@ -6,6 +6,8 @@ import {
 } from '../../../../data/rewards';
 import { LanguageService } from '../../../../i18n/language.service';
 import { LearnerProgress } from '../../../../services/progress.service';
+import { ChestIconComponent } from '../../../../shared/chest-icon/chest-icon.component';
+import { IconComponent } from '../../../../shared/icon/icon.component';
 
 export interface ChestRewardModalData {
   title: string;
@@ -16,6 +18,7 @@ export interface ChestRewardModalData {
 @Component({
   selector: 'app-dashboard-rewards-modal',
   standalone: true,
+  imports: [IconComponent, ChestIconComponent],
   templateUrl: './dashboard-rewards-modal.component.html',
   styleUrl: './dashboard-rewards-modal.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

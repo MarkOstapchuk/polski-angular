@@ -32,9 +32,10 @@
 .kicker-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); }
 .continue-content h2 { margin: 14px 0 5px; color: var(--text-strong); font-size: clamp(20px, 2.3vw, 28px); letter-spacing: -.8px; }
 .continue-content p { margin: 0; color: var(--text-secondary); font-size: 14px; line-height: 1.45; }
-.continue-meta { display: flex; flex-wrap: wrap; gap: 9px; margin-top: 17px; color: var(--text-muted); font-size: 12px; }
-.primary-button { min-height: 44px; margin-top: 17px; padding: 11px 16px; border: 0; border-radius: 10px; background: var(--accent-strong); box-shadow: 0 4px 0 var(--accent-shadow); color: #fff; font-size: 14px; font-weight: 750; cursor: pointer; }
-.primary-button span { margin-left: 15px; font-size: 15px; }
+.continue-meta { display: flex; flex-wrap: wrap; align-items: center; gap: 9px; margin-top: 17px; color: var(--text-muted); font-size: 12px; }
+.meta-inline { display: inline-flex; align-items: center; gap: 4px; }
+.primary-button { display: inline-flex; align-items: center; gap: 10px; min-height: 44px; margin-top: 17px; padding: 11px 16px; border: 0; border-radius: 10px; background: var(--accent-strong); box-shadow: 0 4px 0 var(--accent-shadow); color: #fff; font-size: 14px; font-weight: 750; cursor: pointer; }
+.btn-arrow { display: inline-flex; }
 .primary-button:hover { transform: translateY(-1px); }
 .continue-art { position: absolute; top: 0; right: 3%; width: 39%; height: 100%; pointer-events: none; }
 .art-sun { position: absolute; top: 22px; right: 23px; width: 114px; height: 114px; border-radius: 50%; background: var(--hero-sun); }

@@ -14,6 +14,8 @@ import { SoundService } from '../../services/sound.service';
 import { VocabularyService } from '../../services/vocabulary.service';
 import { LanguageSwitcherComponent } from '../../i18n/language-switcher.component';
 import { LanguageService } from '../../i18n/language.service';
+import { ChestIconComponent } from '../../shared/chest-icon/chest-icon.component';
+import { IconComponent } from '../../shared/icon/icon.component';
 import { DashboardContinueCardComponent } from './components/dashboard-continue-card/dashboard-continue-card.component';
 import { DashboardDialogsComponent } from './components/dashboard-dialogs/dashboard-dialogs.component';
 import { DashboardProgressRailComponent } from './components/dashboard-progress-rail/dashboard-progress-rail.component';
@@ -27,6 +29,8 @@ const ACTIVE_COURSE_KEY = 'polski-active-course';
   imports: [
     RouterLink,
     LanguageSwitcherComponent,
+    IconComponent,
+    ChestIconComponent,
     DashboardContinueCardComponent,
     DashboardProgressRailComponent,
     DashboardDialogsComponent,

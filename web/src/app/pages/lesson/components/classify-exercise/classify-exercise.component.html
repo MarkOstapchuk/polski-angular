@@ -3,8 +3,8 @@
     <div class="classify-deck-head">
       <span class="classify-progress">{{ activeCardIndex() + 1 }} / {{ items().length }}</span>
       <div class="classify-nav">
-        <button type="button" class="classify-nav-btn" (click)="prevCard()" [attr.aria-label]="language.t('lesson.classifyPrev')">‹</button>
-        <button type="button" class="classify-nav-btn" (click)="nextCard()" [attr.aria-label]="language.t('lesson.classifyNext')">›</button>
+        <button type="button" class="classify-nav-btn" (click)="prevCard()" [attr.aria-label]="language.t('lesson.classifyPrev')"><app-icon name="chevron-left" [size]="16" /></button>
+        <button type="button" class="classify-nav-btn" (click)="nextCard()" [attr.aria-label]="language.t('lesson.classifyNext')"><app-icon name="chevron-right" [size]="16" /></button>
       </div>
     </div>
 
@@ -21,7 +21,7 @@
       @if (item.hint) {
         <div class="item-hint-wrap">
           <button class="hint-toggle" type="button" [attr.aria-expanded]="isHintShown(item.id)" (click)="toggleHint.emit(item.id)">
-            <span aria-hidden="true">💡</span>
+            <app-icon name="lightbulb" [size]="14" />
             {{ isHintShown(item.id) ? language.t('lesson.hideHint') : language.t('lesson.showHint') }}
           </button>
           @if (isHintShown(item.id)) { <p class="item-hint">{{ item.hint }}</p> }
@@ -30,7 +30,7 @@
 
       @if (checked()) {
         <div class="answer-feedback" [class.feedback-right]="isItemCorrect(item.id)" [class.feedback-wrong]="!isItemCorrect(item.id)" aria-live="polite">
-          @if (isItemCorrect(item.id)) { <span>✓ {{ language.t('lesson.correct') }}</span> }
+          @if (isItemCorrect(item.id)) { <span><app-icon name="check" [size]="15" [strokeWidth]="2.5" /> {{ language.t('lesson.correct') }}</span> }
           @else { <span>{{ language.t('lesson.correctAnswer') }} <span>{{ item.accepted[0] }}</span></span> }
         </div>
       }
@@ -75,7 +75,7 @@
                     (click)="jumpToItem(entry.idx)">
                     <span>{{ entry.item.prompt }}</span>
                     @if (checked() && !isItemCorrect(entry.item.id)) {
-                      <small>→ {{ entry.item.accepted[0] }}</small>
+                      <small><app-icon name="arrow-right" [size]="12" /> {{ entry.item.accepted[0] }}</small>
                     }
                   </button>
                 }

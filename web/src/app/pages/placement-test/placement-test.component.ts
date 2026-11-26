@@ -10,11 +10,12 @@ import { LanguageSwitcherComponent } from '../../i18n/language-switcher.componen
 import { LanguageService } from '../../i18n/language.service';
 import { AnalyticsService } from '../../services/analytics.service';
 import { AuthService } from '../../services/auth.service';
+import { IconComponent } from '../../shared/icon/icon.component';
 
 @Component({
   selector: 'app-placement-test',
   standalone: true,
-  imports: [RouterLink, LanguageSwitcherComponent],
+  imports: [RouterLink, LanguageSwitcherComponent, IconComponent],
   templateUrl: './placement-test.component.html',
   styleUrl: './placement-test.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

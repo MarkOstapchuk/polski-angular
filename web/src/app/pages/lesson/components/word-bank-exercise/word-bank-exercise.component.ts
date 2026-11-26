@@ -3,13 +3,14 @@ import { normalizeAnswer } from '../../../../data/activity-adapter';
 import { Activity, AdaptedActivity, AdaptedItem, WordBankEntry } from '../../../../data/lesson-types';
 import { WorkbookImage } from '../../../../data/workbook-images';
 import { LanguageService } from '../../../../i18n/language.service';
+import { IconComponent } from '../../../../shared/icon/icon.component';
 import { MultiGapExerciseComponent } from '../multi-gap-exercise/multi-gap-exercise.component';
 import { TypedExerciseComponent } from '../typed-exercise/typed-exercise.component';
 
 @Component({
   selector: 'app-word-bank-exercise',
   standalone: true,
-  imports: [TypedExerciseComponent, MultiGapExerciseComponent],
+  imports: [TypedExerciseComponent, MultiGapExerciseComponent, IconComponent],
   templateUrl: './word-bank-exercise.component.html',
   styleUrl: './word-bank-exercise.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

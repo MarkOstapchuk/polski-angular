@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component, computed, effect, ElementRef, inject, input, signal, viewChild } from '@angular/core';
 import { LanguageService } from '../../../../i18n/language.service';
 import { AnalyticsService } from '../../../../services/analytics.service';
+import { IconComponent } from '../../../../shared/icon/icon.component';
 
 export interface AudioPlayerTrack {
   file: string;
@@ -11,6 +12,7 @@ export interface AudioPlayerTrack {
 @Component({
   selector: 'app-lesson-audio-bar',
   standalone: true,
+  imports: [IconComponent],
   templateUrl: './lesson-audio-bar.component.html',
   styleUrl: './lesson-audio-bar.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

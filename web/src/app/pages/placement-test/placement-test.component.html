@@ -89,7 +89,7 @@
 
       <div class="result-actions">
         <button type="button" class="primary-btn" [disabled]="startingLesson()" (click)="startRecommendedLesson()">
-          {{ language.t('placement.startLesson') }} {{ displayLessonNumber(res.recommendedLesson.id) }} →
+          {{ language.t('placement.startLesson') }} {{ displayLessonNumber(res.recommendedLesson.id) }} <app-icon name="arrow-right" [size]="16" />
         </button>
         <button type="button" class="secondary-btn" (click)="openCourseOverview()">
           {{ language.t('placement.browseCourse') }}
@@ -102,7 +102,9 @@
         <ul class="breakdown-list">
           @for (rec of res.records; track rec.questionId) {
             <li [class.is-known]="rec.isCorrect">
-              <span class="status-dot" aria-hidden="true">{{ rec.isCorrect ? '✓' : '○' }}</span>
+              <span class="status-dot" aria-hidden="true">
+                <app-icon [name]="rec.isCorrect ? 'check' : 'circle-dot'" [size]="14" />
+              </span>
               <span class="topic-name">{{ topicLabel(rec.questionId) }}</span>
               <span class="status-text">{{ rec.isCorrect ? language.t('placement.known') : language.t('placement.toPractice') }}</span>
             </li>

@@ -3,10 +3,12 @@ import { LanguageService } from '../../../../i18n/language.service';
 import { AnalyticsService } from '../../../../services/analytics.service';
 import { VocabularyService } from '../../../../services/vocabulary.service';
 import { supabase } from '../../../../services/supabase.client';
+import { IconComponent } from '../../../../shared/icon/icon.component';
 
 @Component({
   selector: 'app-lesson-dictionary-modal',
   standalone: true,
+  imports: [IconComponent],
   templateUrl: './lesson-dictionary-modal.component.html',
   styleUrl: './lesson-dictionary-modal.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

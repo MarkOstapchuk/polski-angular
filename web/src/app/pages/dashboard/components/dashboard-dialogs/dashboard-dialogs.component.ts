@@ -1,9 +1,11 @@
 import { ChangeDetectionStrategy, Component, HostListener, inject, input, output } from '@angular/core';
 import { LanguageService } from '../../../../i18n/language.service';
+import { IconComponent } from '../../../../shared/icon/icon.component';
 
 @Component({
   selector: 'app-dashboard-dialogs',
   standalone: true,
+  imports: [IconComponent],
   templateUrl: './dashboard-dialogs.component.html',
   styleUrl: './dashboard-dialogs.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

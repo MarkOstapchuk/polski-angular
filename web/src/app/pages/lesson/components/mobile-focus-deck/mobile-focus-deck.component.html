@@ -1,6 +1,6 @@
 <div class="focus-deck">
   <header class="focus-topbar">
-    <a class="focus-close-btn" [routerLink]="dashboardUrl()" [attr.aria-label]="language.t('lesson.back')">×</a>
+    <a class="focus-close-btn" [routerLink]="dashboardUrl()" [attr.aria-label]="language.t('lesson.back')"><app-icon name="close" [size]="20" /></a>
 
     <div class="focus-progress" [attr.aria-label]="language.t('lesson.progress')">
       <div class="focus-progress-track"><span [style.width.%]="progressPct()"></span></div>
@@ -14,7 +14,7 @@
         [attr.aria-label]="language.t('lesson.dictionaryToggleAria')"
         [title]="language.t('lesson.dictionaryButton')"
         (click)="toggleDictionary.emit()">
-        <span aria-hidden="true">📖</span>
+        <app-icon name="book-open" [size]="18" />
       </button>
 
       @if (hasTheory() || activeTheoryBlock()) {
@@ -25,7 +25,7 @@
           [attr.aria-label]="theoryOpen() ? language.t('lesson.hideTheory') : language.t('lesson.showTheory')"
           [title]="language.t('lesson.theory')"
           (click)="toggleTheory.emit()">
-          <span aria-hidden="true">📚</span>
+          <app-icon name="library" [size]="18" />
           @if (activeTheoryBlock()) {
             <span class="focus-theory-dot" aria-hidden="true"></span>
           }
@@ -36,7 +36,7 @@
         [attr.aria-label]="language.t('lesson.switchToList')"
         [title]="language.t('lesson.switchToList')"
         (click)="switchToList.emit()">
-        <span aria-hidden="true">☰</span>
+        <app-icon name="list" [size]="18" />
       </button>
     </div>
   </header>
@@ -48,7 +48,7 @@
       (click)="toggleContext()">
       <span class="focus-context-meta">
         <span class="focus-ex-badge">{{ language.t('lesson.blockExercises') }} {{ activityIndex() + 1 }}/{{ lesson().activities.length }}</span>
-        <span class="focus-chevron" aria-hidden="true">{{ contextExpanded() ? '▴' : '▾' }}</span>
+        <span class="focus-chevron" aria-hidden="true"><app-icon [name]="contextExpanded() ? 'chevron-up' : 'chevron-down'" [size]="14" /></span>
       </span>
       <span class="focus-instruction-preview">{{ activity().instruction }}</span>
     </button>
@@ -63,13 +63,13 @@
               [attr.aria-pressed]="!sound.enabled()"
               [attr.aria-label]="sound.enabled() ? language.t('sound.mute') : language.t('sound.unmute')"
               [title]="sound.enabled() ? language.t('sound.mute') : language.t('sound.unmute')">
-              <span aria-hidden="true">{{ sound.enabled() ? '🔊' : '🔇' }}</span>
+              <app-icon [name]="sound.enabled() ? 'volume-2' : 'volume-x'" [size]="18" />
             </button>
             <button type="button" class="focus-theme-btn"
               (click)="theme.toggle()"
               [attr.aria-label]="theme.isDark() ? language.t('theme.switchToLight') : language.t('theme.switchToDark')"
               [title]="theme.isDark() ? language.t('theme.switchToLight') : language.t('theme.switchToDark')">
-              <span aria-hidden="true">{{ theme.isDark() ? '☀️' : '🌙' }}</span>
+              <app-icon [name]="theme.isDark() ? 'sun' : 'moon'" [size]="18" />
             </button>
           </div>
         </div>
@@ -88,7 +88,7 @@
               [attr.aria-label]="language.t('lesson.exercise') + ' ' + (idx + 1) + ': ' + ex.title"
               (click)="onPickActivity(idx)">
               <span>{{ idx + 1 }}</span>
-              @if (isActivityComplete(ex.id)) { <small aria-hidden="true">✓</small> }
+              @if (isActivityComplete(ex.id)) { <small aria-hidden="true"><app-icon name="check" [size]="10" [strokeWidth]="3" /></small> }
             </button>
           }
         </div>
@@ -104,7 +104,7 @@
     @if (showSummary()) {
       <section class="focus-summary-card" aria-live="polite">
         <div class="focus-summary-badge" [class.is-perfect]="correctCount() === totalActivityItems()">
-          {{ correctCount() === totalActivityItems() ? '✦' : '↗' }}
+          <app-icon [name]="correctCount() === totalActivityItems() ? 'trophy' : 'trending-up'" [size]="24" />
         </div>
         <h2 class="focus-summary-title">{{ correctCount() }} {{ language.t('lesson.of') }} {{ totalActivityItems() }} {{ language.t('lesson.correctly') }}</h2>
         <p class="focus-summary-copy">{{ correctCount() === totalActivityItems() ? language.t('lesson.greatWork') : language.t('lesson.rememberForms') }}</p>
@@ -193,7 +193,7 @@
           </button>
         }
         <button type="button" class="focus-primary-btn is-green" (click)="nextActivity.emit()">
-          {{ isLastActivity() ? language.t('lesson.seeResults') : language.t('lesson.next') }} <span aria-hidden="true">→</span>
+          {{ isLastActivity() ? language.t('lesson.seeResults') : language.t('lesson.next') }} <app-icon name="arrow-right" [size]="17" />
         </button>
       </div>
     } @else if (!itemChecked()) {
@@ -209,7 +209,7 @@
         aria-live="polite">
         <div class="focus-feedback-text">
           @if (itemCorrect()) {
-            <strong class="focus-feedback-title">✓ {{ language.t('lesson.correct') }}</strong>
+            <strong class="focus-feedback-title"><app-icon name="check" [size]="16" [strokeWidth]="2.5" /> {{ language.t('lesson.correct') }}</strong>
             @if (accentHint(); as hint) {
               <small class="focus-accent-hint">{{ language.t('lesson.accentHint') }} <strong>{{ hint }}</strong></small>
             }
@@ -226,7 +226,7 @@
           [class.is-green]="itemCorrect()"
           [class.is-red]="!itemCorrect()"
           (click)="advance.emit()">
-          {{ isLastInQueue() ? language.t('lesson.focusSummary') : language.t('lesson.next') }} <span aria-hidden="true">→</span>
+          {{ isLastInQueue() ? language.t('lesson.focusSummary') : language.t('lesson.next') }} <app-icon name="arrow-right" [size]="17" />
         </button>
       </div>
     }

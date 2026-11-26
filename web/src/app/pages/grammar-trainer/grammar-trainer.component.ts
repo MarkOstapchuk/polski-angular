@@ -16,6 +16,7 @@ import { AnalyticsService } from '../../services/analytics.service';
 import { MistakesService } from '../../services/mistakes.service';
 import { SoundService } from '../../services/sound.service';
 import { AnswerDiffComponent } from '../../shared/answer-diff/answer-diff.component';
+import { IconComponent } from '../../shared/icon/icon.component';
 
 type TrainerCategoryOption = TrainerCategoryId | 'mix';
 type TrainerStage = 'setup' | 'session' | 'done';
@@ -25,7 +26,7 @@ const POLISH_DIACRITICS = ['ą', 'ć', 'ę', 'ł', 'ń', 'ó', 'ś', 'ź', 'ż']
 @Component({
   selector: 'app-grammar-trainer',
   standalone: true,
-  imports: [FormsModule, RouterLink, LanguageSwitcherComponent, AnswerDiffComponent],
+  imports: [FormsModule, RouterLink, LanguageSwitcherComponent, AnswerDiffComponent, IconComponent],
   templateUrl: './grammar-trainer.component.html',
   styleUrl: './grammar-trainer.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

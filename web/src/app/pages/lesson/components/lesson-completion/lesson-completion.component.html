@@ -1,5 +1,5 @@
 <main class="completion-main">
-  <div class="completion-spark">✦</div>
+  <div class="completion-spark"><app-icon name="trophy" [size]="28" /></div>
   <p class="lesson-breadcrumb">{{ lessonLabel() }} · {{ language.t('lesson.completed') }}</p>
   <h1>{{ language.t('lesson.greatWork') }}</h1>
   <p class="completion-copy">{{ lessonTitle() }} — {{ language.t('lesson.completionCopy') }}</p>
@@ -35,12 +35,12 @@
   <div class="completion-actions">
     @if (nextLesson(); as next) {
       <a class="return-button" [routerLink]="['/learn', next.id]">
-        {{ language.t('lesson.nextLesson') }} <span aria-hidden="true">→</span>
+        {{ language.t('lesson.nextLesson') }} <app-icon name="arrow-right" [size]="16" />
       </a>
       <a class="secondary-button" [routerLink]="dashboardUrl()">{{ language.t('lesson.back') }}</a>
     } @else {
       <a class="return-button" [routerLink]="dashboardUrl()">
-        {{ language.t('lesson.back') }} <span aria-hidden="true">→</span>
+        {{ language.t('lesson.back') }} <app-icon name="arrow-right" [size]="16" />
       </a>
     }
 

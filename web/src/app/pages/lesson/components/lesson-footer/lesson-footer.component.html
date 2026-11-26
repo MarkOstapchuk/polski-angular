@@ -7,16 +7,16 @@
       </div>
       @if (!hasAnsweredAll()) {
         <button class="secondary-action" type="button" (click)="jumpToUnanswered.emit()">
-          {{ language.t('lesson.jumpUnanswered') }} <span aria-hidden="true">↓</span>
+          {{ language.t('lesson.jumpUnanswered') }} <app-icon name="arrow-down" [size]="15" />
         </button>
       }
     </div>
     <button class="check-button" type="button" [disabled]="!hasAnsweredAll()" (click)="check.emit()">
-      {{ language.t('lesson.check') }} <span aria-hidden="true">→</span>
+      {{ language.t('lesson.check') }} <app-icon name="arrow-right" [size]="16" />
     </button>
   } @else {
     <div class="result-strip" [class.result-perfect]="correctCount() === totalCount()">
-      <span class="result-icon">{{ correctCount() === totalCount() ? '✦' : '↗' }}</span>
+      <span class="result-icon"><app-icon [name]="correctCount() === totalCount() ? 'sparkles' : 'trending-up'" [size]="18" /></span>
       <span>
         <strong>{{ correctCount() }} {{ language.t('lesson.of') }} {{ totalCount() }} {{ language.t('lesson.correctly') }}</strong>
         <small>{{ correctCount() === totalCount() ? language.t('lesson.greatWork') : language.t('lesson.rememberForms') }}</small>
@@ -33,7 +33,7 @@
         </button>
       }
       <button class="check-button next-button" type="button" (click)="next.emit()">
-        {{ isLastActivity() ? language.t('lesson.seeResults') : language.t('lesson.next') }} <span aria-hidden="true">→</span>
+        {{ isLastActivity() ? language.t('lesson.seeResults') : language.t('lesson.next') }} <app-icon name="arrow-right" [size]="16" />
       </button>
     </div>
   }

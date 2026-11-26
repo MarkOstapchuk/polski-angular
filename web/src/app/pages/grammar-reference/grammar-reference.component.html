@@ -1,5 +1,5 @@
 <header class="page-header">
-  <a class="back-link" routerLink="/course/part-1">← {{ language.t('lesson.back') }}</a>
+  <a class="back-link" routerLink="/course/part-1"><app-icon name="arrow-left" [size]="16" /> {{ language.t('lesson.back') }}</a>
   <app-language-switcher />
 </header>
 
@@ -12,7 +12,7 @@
 
   <section class="search-panel">
     <div class="search-box">
-      <span class="search-icon" aria-hidden="true">⌕</span>
+      <span class="search-icon" aria-hidden="true"><app-icon name="search" [size]="17" /></span>
       <input type="search" class="search-input"
         [ngModel]="query()"
         (ngModelChange)="onQueryChange($event)"
@@ -20,7 +20,7 @@
         [attr.aria-label]="language.t('grammarRef.searchPlaceholder')"
         autocomplete="off" />
       @if (query()) {
-        <button type="button" class="clear-btn" (click)="clearSearch()" [attr.aria-label]="language.t('grammarRef.clearSearch')">×</button>
+        <button type="button" class="clear-btn" (click)="clearSearch()" [attr.aria-label]="language.t('grammarRef.clearSearch')"><app-icon name="close" [size]="16" /></button>
       }
     </div>
 
@@ -75,7 +75,7 @@
               <span class="lesson-topic">{{ entry.topic }}</span>
             </button>
             <a class="open-lesson-link" [routerLink]="['/learn', entry.lessonId]">
-              {{ language.t('grammarRef.openLesson') }} →
+              {{ language.t('grammarRef.openLesson') }} <app-icon name="arrow-right" [size]="15" />
             </a>
           </div>
 

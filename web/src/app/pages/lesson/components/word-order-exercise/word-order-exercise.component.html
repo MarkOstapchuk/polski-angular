@@ -8,7 +8,7 @@
           <button type="button" class="word-chip placed-chip"
             [disabled]="disabled()"
             [attr.aria-label]="language.t('lesson.wordOrderRemove') + ': ' + placed.text"
-            (click)="removeTokenAt(pos)">{{ placed.text }} <span aria-hidden="true">×</span></button>
+            (click)="removeTokenAt(pos)">{{ placed.text }} <app-icon name="close" [size]="12" /></button>
         }
       }
     </div>

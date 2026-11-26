@@ -3,10 +3,12 @@ import { normalizeAnswer } from '../../../../data/activity-adapter';
 import { ActivityItem } from '../../../../data/lesson-types';
 import { WorkbookImage } from '../../../../data/workbook-images';
 import { LanguageService } from '../../../../i18n/language.service';
+import { IconComponent } from '../../../../shared/icon/icon.component';
 
 @Component({
   selector: 'app-classify-exercise',
   standalone: true,
+  imports: [IconComponent],
   templateUrl: './classify-exercise.component.html',
   styleUrl: './classify-exercise.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

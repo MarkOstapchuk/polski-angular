@@ -27,6 +27,7 @@
     "@angular/router": "^22.0.0",
     "@angular/service-worker": "^22.0.0",
     "@supabase/supabase-js": "^2.100.1",
+    "lucide": "^1.81.0",
     "posthog-js": "^1.453.2",
     "rxjs": "^7.8.2",
     "tslib": "^2.8.1",

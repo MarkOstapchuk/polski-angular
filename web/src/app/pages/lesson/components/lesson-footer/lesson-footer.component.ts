@@ -1,9 +1,11 @@
 import { ChangeDetectionStrategy, Component, inject, input, output } from '@angular/core';
 import { LanguageService } from '../../../../i18n/language.service';
+import { IconComponent } from '../../../../shared/icon/icon.component';
 
 @Component({
   selector: 'app-lesson-footer',
   standalone: true,
+  imports: [IconComponent],
   templateUrl: './lesson-footer.component.html',
   styleUrl: './lesson-footer.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

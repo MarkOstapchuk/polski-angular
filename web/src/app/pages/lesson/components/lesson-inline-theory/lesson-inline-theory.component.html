@@ -1,7 +1,7 @@
 <section class="inline-theory" [class.is-expanded]="expanded()" aria-labelledby="inline-theory-title">
   <button type="button" class="inline-theory-head" [attr.aria-expanded]="expanded()" (click)="toggled.emit()">
     <span class="inline-theory-meta">
-      <span class="inline-theory-badge">📖 {{ language.t('lesson.blockTheory') }} · {{ blockIndex() + 1 }}/{{ totalBlocks() }}</span>
+      <span class="inline-theory-badge"><app-icon name="book-open" [size]="14" /> {{ language.t('lesson.blockTheory') }} · {{ blockIndex() + 1 }}/{{ totalBlocks() }}</span>
       <strong id="inline-theory-title">{{ block().title }}</strong>
     </span>
     <span class="inline-theory-action">{{ expanded() ? language.t('lesson.blockTheoryHide') : language.t('lesson.blockTheoryShow') }}</span>

@@ -6,11 +6,12 @@ import { getCheckpointTestById, saveCheckpointScore } from '../../data/checkpoin
 import { LanguageSwitcherComponent } from '../../i18n/language-switcher.component';
 import { LanguageService } from '../../i18n/language.service';
 import { AnalyticsService } from '../../services/analytics.service';
+import { IconComponent } from '../../shared/icon/icon.component';
 
 @Component({
   selector: 'app-checkpoint-test',
   standalone: true,
-  imports: [RouterLink, LanguageSwitcherComponent],
+  imports: [RouterLink, LanguageSwitcherComponent, IconComponent],
   templateUrl: './checkpoint-test.component.html',
   styleUrl: './checkpoint-test.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

@@ -1,5 +1,5 @@
 <header class="page-header">
-  <a class="back-link" routerLink="/course/part-1">← {{ language.t('lesson.back') }}</a>
+  <a class="back-link" routerLink="/course/part-1"><app-icon name="arrow-left" [size]="16" /> {{ language.t('lesson.back') }}</a>
   <app-language-switcher />
 </header>
 
@@ -13,7 +13,7 @@
   @if (stage() === 'setup') {
     <section class="category-grid" [attr.aria-label]="language.t('trainer.chooseTopic')">
       <button type="button" class="category-card" [class.is-selected]="selectedCategory() === 'mix'" (click)="selectedCategory.set('mix')">
-        <span class="cat-icon">⚡</span>
+        <span class="cat-icon"><app-icon name="zap" [size]="20" /></span>
         <div class="cat-copy">
           <strong>{{ language.t('trainer.catMix') }}</strong>
           <small>{{ language.t('trainer.catMixDesc') }}</small>
@@ -21,7 +21,7 @@
         <span class="cat-count">{{ categoryCounts.mix }}</span>
       </button>
       <button type="button" class="category-card" [class.is-selected]="selectedCategory() === 'cases'" (click)="selectedCategory.set('cases')">
-        <span class="cat-icon">7</span>
+        <span class="cat-icon"><app-icon name="hash" [size]="20" /></span>
         <div class="cat-copy">
           <strong>{{ language.t('trainer.catCases') }}</strong>
           <small>{{ language.t('trainer.catCasesDesc') }}</small>
@@ -29,7 +29,7 @@
         <span class="cat-count">{{ categoryCounts.cases }}</span>
       </button>
       <button type="button" class="category-card" [class.is-selected]="selectedCategory() === 'verbs'" (click)="selectedCategory.set('verbs')">
-        <span class="cat-icon">↻</span>
+        <span class="cat-icon"><app-icon name="refresh-cw" [size]="20" /></span>
         <div class="cat-copy">
           <strong>{{ language.t('trainer.catVerbs') }}</strong>
           <small>{{ language.t('trainer.catVerbsDesc') }}</small>
@@ -37,7 +37,7 @@
         <span class="cat-count">{{ categoryCounts.verbs }}</span>
       </button>
       <button type="button" class="category-card" [class.is-selected]="selectedCategory() === 'numbers'" (click)="selectedCategory.set('numbers')">
-        <span class="cat-icon">◷</span>
+        <span class="cat-icon"><app-icon name="clock" [size]="20" /></span>
         <div class="cat-copy">
           <strong>{{ language.t('trainer.catNumbers') }}</strong>
           <small>{{ language.t('trainer.catNumbersDesc') }}</small>
@@ -65,7 +65,7 @@
         </div>
       </div>
       <button type="button" class="start-btn" (click)="startSession()">
-        {{ language.t('trainer.startSet') }} →
+        {{ language.t('trainer.startSet') }} <app-icon name="arrow-right" [size]="16" />
       </button>
     </section>
   } @else if (stage() === 'session' && current(); as item) {
@@ -128,7 +128,7 @@
           [class.anim-wrong]="!lastCorrect()">
           <div class="feedback-main">
             @if (lastCorrect()) {
-              <strong>{{ language.t('lesson.correct') }} ✓</strong>
+              <strong>{{ language.t('lesson.correct') }} <app-icon name="check" [size]="15" [strokeWidth]="2.5" /></strong>
               @if (accentHint(); as hint) {
                 <small class="accent-note">{{ language.t('lesson.accentHint') }} <strong lang="pl">{{ hint }}</strong></small>
               }
@@ -140,14 +140,14 @@
             <p class="explanation-text">{{ item.explanation[language.locale()] }}</p>
           </div>
           <button type="button" class="primary-btn" (click)="next()">
-            {{ index() + 1 < queue().length ? language.t('lesson.next') : language.t('lesson.focusSummary') }} →
+            {{ index() + 1 < queue().length ? language.t('lesson.next') : language.t('lesson.focusSummary') }} <app-icon name="arrow-right" [size]="15" />
           </button>
         </div>
       }
     </section>
   } @else {
     <section class="done-card">
-      <div class="done-badge">✦</div>
+      <div class="done-badge"><app-icon name="trophy" [size]="34" /></div>
       <h2>{{ language.t('trainer.doneTitle') }}</h2>
       <p class="done-score">{{ correctCount() }} / {{ queue().length }} · {{ accuracyPct() }}%</p>
       <p class="done-copy">{{ language.t('trainer.doneBody') }}</p>

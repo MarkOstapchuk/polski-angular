@@ -7,6 +7,7 @@ import { LanguageService } from '../../../../i18n/language.service';
 import { SoundService } from '../../../../services/sound.service';
 import { ThemeService } from '../../../../services/theme.service';
 import { AnswerDiffComponent } from '../../../../shared/answer-diff/answer-diff.component';
+import { IconComponent } from '../../../../shared/icon/icon.component';
 import { ExerciseItemViewComponent } from '../exercise-item-view/exercise-item-view.component';
 
 export interface FocusSummaryItem {
@@ -18,7 +19,7 @@ export interface FocusSummaryItem {
 @Component({
   selector: 'app-mobile-focus-deck',
   standalone: true,
-  imports: [RouterLink, ExerciseItemViewComponent, AnswerDiffComponent],
+  imports: [RouterLink, ExerciseItemViewComponent, AnswerDiffComponent, IconComponent],
   templateUrl: './mobile-focus-deck.component.html',
   styleUrl: './mobile-focus-deck.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

@@ -2,11 +2,12 @@ import { ChangeDetectionStrategy, Component, computed, effect, inject, input, ou
 import { normalizeAnswer } from '../../../../data/activity-adapter';
 import { LanguageService } from '../../../../i18n/language.service';
 import { TypedExerciseComponent } from '../typed-exercise/typed-exercise.component';
+import { IconComponent } from '../../../../shared/icon/icon.component';
 
 @Component({
   selector: 'app-word-order-exercise',
   standalone: true,
-  imports: [TypedExerciseComponent],
+  imports: [TypedExerciseComponent, IconComponent],
   templateUrl: './word-order-exercise.component.html',
   styleUrl: './word-order-exercise.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

@@ -7,11 +7,12 @@ import { AuthService } from '../../services/auth.service';
 import { supabase } from '../../services/supabase.client';
 import { LanguageSwitcherComponent } from '../../i18n/language-switcher.component';
 import { LanguageService } from '../../i18n/language.service';
+import { IconComponent } from '../../shared/icon/icon.component';
 
 @Component({
   selector: 'app-feedback',
   standalone: true,
-  imports: [FormsModule, RouterLink, LanguageSwitcherComponent],
+  imports: [FormsModule, RouterLink, LanguageSwitcherComponent, IconComponent],
   templateUrl: './feedback.component.html',
   styleUrl: './feedback.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

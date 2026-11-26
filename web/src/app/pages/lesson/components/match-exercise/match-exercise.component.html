@@ -27,11 +27,13 @@
               (click)="selectSource(item.id)">
               <span class="match-pair-index" data-pair-badge>{{ pairNumberFor(item.id) }}</span>
               <span class="match-prompt">{{ item.prompt }}</span>
-              <small>→ {{ answerFor(item.id) }}</small>
+              <small><app-icon name="arrow-right" [size]="12" /> {{ answerFor(item.id) }}</small>
             </button>
             <button type="button" class="match-unassign"
               [attr.aria-label]="language.t('lesson.matchUnassign') + ': ' + item.prompt"
-              (click)="unassign(item.id)">×</button>
+              (click)="unassign(item.id)">
+              <app-icon name="close" [size]="12" />
+            </button>
           </div>
         }
       </div>
@@ -55,17 +57,19 @@
                 <span class="match-pair-index" data-pair-badge>{{ num }}</span>
               }
               <span class="match-prompt">{{ item.prompt }}</span>
-              @if (answerFor(item.id)) { <small>→ {{ answerFor(item.id) }}</small> }
+              @if (answerFor(item.id)) { <small><app-icon name="arrow-right" [size]="12" /> {{ answerFor(item.id) }}</small> }
             </button>
             @if (answerFor(item.id) && !checked()) {
               <button type="button" class="match-unassign"
                 [attr.aria-label]="language.t('lesson.matchUnassign') + ': ' + item.prompt"
-                (click)="unassign(item.id)">×</button>
+                (click)="unassign(item.id)">
+                <app-icon name="close" [size]="12" />
+              </button>
             }
           </div>
           @if (checked()) {
             <small class="match-feedback" [class.feedback-right]="isItemCorrect(item.id)" [class.feedback-wrong]="!isItemCorrect(item.id)" aria-live="polite">
-              @if (isItemCorrect(item.id)) { ✓ {{ language.t('lesson.correct') }} }
+              @if (isItemCorrect(item.id)) { <app-icon name="check" [size]="14" [strokeWidth]="2.5" /> {{ language.t('lesson.correct') }} }
               @else { {{ language.t('lesson.correctAnswer') }} {{ item.accepted[0] }} }
             </small>
           }

@@ -8,6 +8,7 @@ import { AnalyticsService } from '../../services/analytics.service';
 import { SoundService } from '../../services/sound.service';
 import { isWordDue, SavedWord, VocabularyService } from '../../services/vocabulary.service';
 import { AnswerDiffComponent } from '../../shared/answer-diff/answer-diff.component';
+import { IconComponent } from '../../shared/icon/icon.component';
 
 type VocabMode = 'cards' | 'quiz' | 'type' | 'list';
 
@@ -31,7 +32,7 @@ function stableHash(input: string): number {
 @Component({
   selector: 'app-vocabulary',
   standalone: true,
-  imports: [FormsModule, RouterLink, LanguageSwitcherComponent, AnswerDiffComponent],
+  imports: [FormsModule, RouterLink, LanguageSwitcherComponent, AnswerDiffComponent, IconComponent],
   templateUrl: './vocabulary.component.html',
   styleUrl: './vocabulary.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

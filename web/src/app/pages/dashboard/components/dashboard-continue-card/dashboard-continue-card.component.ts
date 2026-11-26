@@ -1,10 +1,12 @@
 import { ChangeDetectionStrategy, Component, inject, input, output } from '@angular/core';
 import { LessonSummary } from '../../../../data/lesson-catalog';
 import { LanguageService } from '../../../../i18n/language.service';
+import { IconComponent } from '../../../../shared/icon/icon.component';
 
 @Component({
   selector: 'app-dashboard-continue-card',
   standalone: true,
+  imports: [IconComponent],
   templateUrl: './dashboard-continue-card.component.html',
   styleUrl: './dashboard-continue-card.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

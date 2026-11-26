@@ -7,6 +7,7 @@ import type { TheoryBlock } from '../../data/lesson-theory';
 import { LanguageSwitcherComponent } from '../../i18n/language-switcher.component';
 import { LanguageService } from '../../i18n/language.service';
 import { AnalyticsService } from '../../services/analytics.service';
+import { IconComponent } from '../../shared/icon/icon.component';
 
 type LevelFilter = 'all' | 'part-1' | 'part-2' | 'part-3';
 
@@ -26,7 +27,7 @@ const QUICK_TOPICS = [
 @Component({
   selector: 'app-grammar-reference',
   standalone: true,
-  imports: [FormsModule, RouterLink, LanguageSwitcherComponent],
+  imports: [FormsModule, RouterLink, LanguageSwitcherComponent, IconComponent],
   templateUrl: './grammar-reference.component.html',
   styleUrl: './grammar-reference.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

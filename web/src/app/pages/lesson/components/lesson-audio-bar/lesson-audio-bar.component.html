@@ -14,7 +14,7 @@
       <button class="audio-btn audio-play" type="button" (click)="togglePlayPause()"
         [attr.aria-label]="playing() ? language.t('lesson.audioPause') : language.t('lesson.audioPlay')"
         [attr.aria-pressed]="playing()">
-        {{ playing() ? '❚❚' : '▶' }}
+        <app-icon [name]="playing() ? 'pause' : 'play'" [size]="16" />
       </button>
 
       <button class="audio-btn audio-rewind" type="button" (click)="rewind5s()"

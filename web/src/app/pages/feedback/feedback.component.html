@@ -3,7 +3,7 @@
     <a class="brand" [href]="language.homeUrl()" [attr.aria-label]="language.t('auth.brand')"><span class="brand-mark">p</span><span>polski<span class="brand-dot">.</span></span></a>
     <app-language-switcher />
   </header>
-  <a class="back-link" [routerLink]="backUrl()">← {{ language.t('feedback.back') }}</a>
+  <a class="back-link" [routerLink]="backUrl()"><app-icon name="arrow-left" [size]="16" /> {{ language.t('feedback.back') }}</a>
 
   <section class="feedback-card">
     <p class="eyebrow">{{ language.t('feedback.eyebrow') }}</p>

@@ -2,11 +2,12 @@ import { ChangeDetectionStrategy, Component, inject, input, output } from '@angu
 import { RouterLink } from '@angular/router';
 import { Lesson } from '../../../../data/lesson-types';
 import { LanguageService } from '../../../../i18n/language.service';
+import { IconComponent } from '../../../../shared/icon/icon.component';
 
 @Component({
   selector: 'app-lesson-completion',
   standalone: true,
-  imports: [RouterLink],
+  imports: [RouterLink, IconComponent],
   templateUrl: './lesson-completion.component.html',
   styleUrl: './lesson-completion.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

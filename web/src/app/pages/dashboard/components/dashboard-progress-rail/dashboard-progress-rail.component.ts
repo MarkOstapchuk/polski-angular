@@ -1,10 +1,13 @@
 import { ChangeDetectionStrategy, Component, inject, input, output } from '@angular/core';
 import { LanguageService } from '../../../../i18n/language.service';
 import { LearnerProgress } from '../../../../services/progress.service';
+import { ChestIconComponent } from '../../../../shared/chest-icon/chest-icon.component';
+import { IconComponent } from '../../../../shared/icon/icon.component';
 
 @Component({
   selector: 'app-dashboard-progress-rail',
   standalone: true,
+  imports: [IconComponent, ChestIconComponent],
   templateUrl: './dashboard-progress-rail.component.html',
   styleUrl: './dashboard-progress-rail.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

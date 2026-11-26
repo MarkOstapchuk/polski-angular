@@ -37,7 +37,8 @@
 .top-stat { display: flex; align-items: center; gap: 6px; color: var(--text-secondary); font-size: 14px; }
 .top-stat strong { font-size: 15px; }
 .top-stat small { color: var(--text-muted); font-size: 12px; }
-.stat-emoji { font-size: 16px; }
+.stat-emoji { display: inline-flex; color: var(--accent); }
+.xp-stat .stat-emoji, .coin-stat .stat-emoji { color: var(--xp-gold); }
 .coin-stat { border: 1px solid var(--border-warm); border-radius: 999px; padding: 6px 11px; min-height: 40px; background: var(--bg-warm); color: var(--text-strong); font: inherit; cursor: pointer; }
 .coin-stat:hover { border-color: var(--border-hover); }
 .install-button { min-height: 44px; border: 1px solid var(--accent-border-soft); border-radius: 10px; padding: 8px 12px; background: var(--bg-elevated); color: var(--accent-text); font-size: 13px; font-weight: 700; cursor: pointer; }
@@ -72,8 +73,8 @@
 .welcome-row h1 { margin: 0; color: var(--text-strong); font-size: clamp(28px, 3vw, 38px); font-weight: 750; letter-spacing: -1.35px; line-height: 1.12; }
 .welcome-copy { margin: 11px 0 0; color: var(--text-muted); font-size: 14px; line-height: 1.5; }
 .wave { color: var(--accent); }
-.daily-pill { flex: none; margin-bottom: 4px; padding: 9px 12px; border-radius: 999px; background: var(--bg-warm); color: var(--text-warm); font-size: 12px; font-weight: 650; }
-.daily-pill span { margin-right: 5px; color: var(--xp-gold); }
+.daily-pill { display: inline-flex; align-items: center; gap: 5px; flex: none; margin-bottom: 4px; padding: 9px 12px; border-radius: 999px; background: var(--bg-warm); color: var(--text-warm); font-size: 12px; font-weight: 650; }
+.daily-pill app-icon { color: var(--xp-gold); }
 .mobile-course-switcher { display: none; }
 
 .section-heading { display: flex; align-items: flex-end; justify-content: space-between; margin: 35px 0 15px; scroll-margin-top: 18px; }
@@ -103,11 +104,12 @@
 .checkpoint-card { border-style: dashed; border-color: var(--accent-border-soft); background: var(--accent-bg-hover); text-decoration: none; color: inherit; }
 .checkpoint-card:hover { border-color: var(--accent-border); }
 .checkpoint-badge { color: var(--accent-text); }
-.path-row.is-chest .chest-node { background: var(--xp-gold); color: #fff; }
-.path-row.is-chest .chest-node:disabled { background: var(--disabled-bg); }
-.path-row.is-chest.is-claimed .chest-node { background: var(--success-shadow); }
+.path-row.is-chest .chest-node { display: grid; place-items: center; background: var(--bg-elevated); border: 2px solid var(--xp-gold); }
+.path-row.is-chest .chest-node:disabled { border-color: var(--border-strong); background: var(--bg-subtle); }
+.path-row.is-chest.is-claimed .chest-node { border-color: var(--success-border); background: var(--success-bg); }
 .chest-card:not(:disabled) { border-style: dashed; border-color: var(--xp-gold); background: var(--bg-warm); }
-.chest-badge { color: var(--xp-text); }
+.chest-badge { display: inline-flex; align-items: center; gap: 4px; color: var(--xp-text); }
+.done-chip { display: inline-flex; align-items: center; gap: 4px; }
 .lesson-card-end { flex: none; margin-left: 10px; }
 .play-chip { display: grid; width: 32px; height: 32px; place-items: center; border-radius: 50%; background: var(--accent-bg); color: var(--accent); font-size: 18px; }
 .done-chip, .lock-chip { color: var(--success-text); font-size: 12px; font-weight: 700; }

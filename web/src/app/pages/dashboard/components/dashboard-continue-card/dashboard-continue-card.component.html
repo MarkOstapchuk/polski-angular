@@ -7,12 +7,13 @@
     <h2>{{ lesson().title }}</h2>
     <p>{{ lesson().subtitle }}</p>
     <div class="continue-meta">
-      <span>◷ 2–4 min</span>
+      <span class="meta-inline"><app-icon name="clock" [size]="13" /> 2–4 min</span>
       <span>•</span>
       <span>{{ lesson().activityCount }} {{ language.t('dashboard.exercise') }}</span>
     </div>
     <button class="primary-button" type="button" (click)="open.emit()">
-      {{ completeCount() === 0 ? language.t('dashboard.startLesson') : language.t('dashboard.continue') }} <span aria-hidden="true">→</span>
+      {{ completeCount() === 0 ? language.t('dashboard.startLesson') : language.t('dashboard.continue') }}
+      <span class="btn-arrow" aria-hidden="true"><app-icon name="arrow-right" [size]="16" /></span>
     </button>
   </div>
   <div class="continue-art" aria-hidden="true">
@@ -20,11 +21,11 @@
     <div class="art-card art-card-back"><span>cześć!</span></div>
     <div class="art-card art-card-front">
       <span class="art-speech">Dzień dobry</span>
-      <span class="art-face">☺</span>
+      <span class="art-face"><app-icon name="smile" [size]="28" /></span>
       <span class="art-caption">miło mi</span>
     </div>
-    <span class="art-star star-one">✦</span>
-    <span class="art-star star-two">✧</span>
+    <span class="art-star star-one"><app-icon name="sparkles" [size]="20" /></span>
+    <span class="art-star star-two"><app-icon name="sparkles" [size]="16" /></span>
   </div>
   <div class="card-number">{{ lessonNumber() }}</div>
 </section>

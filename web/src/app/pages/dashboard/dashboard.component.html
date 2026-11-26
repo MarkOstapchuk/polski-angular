@@ -11,62 +11,62 @@
         <strong>{{ selectedCourse()?.name ?? language.t('nav.chooseCourse') }}</strong>
         <small>{{ selectedCourse() ? selectedCourse()!.level + ' · ' + language.t('dashboard.switchCourse') : language.t('nav.chooseCourse') }}</small>
       </span>
-      <span class="switcher-chevron" aria-hidden="true">⌄</span>
+      <span class="switcher-chevron" aria-hidden="true"><app-icon name="chevron-down" [size]="15" /></span>
     </a>
 
     <nav class="side-nav" [attr.aria-label]="language.t('home.nav')">
       <a class="nav-link" [class.active]="activeNavSection() === 'home'" [routerLink]="dashboardUrl()" (click)="navigateSection($event, 'home')">
-        <span class="nav-icon home-icon">⌂</span><span>{{ language.t('nav.home') }}</span>
+        <span class="nav-icon"><app-icon name="home" [size]="19" /></span><span>{{ language.t('nav.home') }}</span>
       </a>
       <a class="nav-link" [class.active]="activeNavSection() === 'course'"
         [href]="selectedCourse() ? '#lesson-path' : '#course-options'"
         (click)="navigateSection($event, 'course', selectedCourse() ? 'lesson-path' : 'course-options')">
-        <span class="nav-icon book-icon">▤</span><span>{{ language.t('nav.course') }}</span>
+        <span class="nav-icon"><app-icon name="book-open" [size]="19" /></span><span>{{ language.t('nav.course') }}</span>
       </a>
       <a class="nav-link" [class.active]="activeNavSection() === 'progress'" href="#progress-card"
         (click)="navigateSection($event, 'progress', 'progress-card')">
-        <span class="nav-icon stats-icon">▥</span><span>{{ language.t('nav.progress') }}</span>
+        <span class="nav-icon"><app-icon name="chart" [size]="19" /></span><span>{{ language.t('nav.progress') }}</span>
       </a>
       <a class="nav-link" routerLink="/vocabulary">
-        <span class="nav-icon">📖</span><span>{{ language.t('vocab.dashboardCardTitle') }}</span>
+        <span class="nav-icon"><app-icon name="book-marked" [size]="19" /></span><span>{{ language.t('vocab.dashboardCardTitle') }}</span>
         @if (vocabulary.dueCount() > 0) {
           <span class="nav-due-badge">{{ vocabulary.dueCount() }}</span>
         }
       </a>
       <a class="nav-link" routerLink="/mistakes">
-        <span class="nav-icon">↺</span><span>{{ language.t('mistakes.dashboardCardTitle') }}</span>
+        <span class="nav-icon"><app-icon name="rotate-ccw" [size]="19" /></span><span>{{ language.t('mistakes.dashboardCardTitle') }}</span>
       </a>
       <a class="nav-link" routerLink="/trainer">
-        <span class="nav-icon">⚡</span><span>{{ language.t('trainer.dashboardCardTitle') }}</span>
+        <span class="nav-icon"><app-icon name="zap" [size]="19" /></span><span>{{ language.t('trainer.dashboardCardTitle') }}</span>
       </a>
       <a class="nav-link" routerLink="/grammar">
-        <span class="nav-icon">§</span><span>{{ language.t('grammarRef.dashboardCardTitle') }}</span>
+        <span class="nav-icon"><app-icon name="library" [size]="19" /></span><span>{{ language.t('grammarRef.dashboardCardTitle') }}</span>
       </a>
       <button type="button" class="nav-link nav-btn" (click)="openShop()">
-        <span class="nav-icon">🪙</span><span>{{ language.t('shop.navTitle') }}</span>
+        <span class="nav-icon"><app-icon name="store" [size]="19" /></span><span>{{ language.t('shop.navTitle') }}</span>
         <span class="nav-coin-badge">{{ coins() }}</span>
       </button>
       <a class="nav-link" routerLink="/feedback" [queryParams]="{ course: selectedCourse()?.id ?? readActiveCourseId() }">
-        <span class="nav-icon">✎</span><span>{{ language.t('nav.feedback') }}</span>
+        <span class="nav-icon"><app-icon name="message-square" [size]="19" /></span><span>{{ language.t('nav.feedback') }}</span>
       </a>
     </nav>
 
     <div class="sidebar-bottom">
       <div class="sidebar-note">
-        <span class="note-spark">✦</span>
+        <span class="note-spark"><app-icon name="sparkles" [size]="18" /></span>
         <p>{{ language.t('dashboard.shortLesson') }}<br><strong>{{ language.t('dashboard.makesDifference') }}</strong></p>
       </div>
       @if (isGuest()) {
         <a class="profile-button" routerLink="/auth" [queryParams]="{ next: dashboardUrl() }" [attr.aria-label]="language.t('home.login')">
           <span class="profile-avatar">{{ userAvatar() }}</span>
           <span class="profile-copy"><strong>{{ userEmail() }}</strong><small>{{ language.t('home.login') }}</small></span>
-          <span class="profile-menu">→</span>
+          <span class="profile-menu"><app-icon name="arrow-right" [size]="15" /></span>
         </a>
       } @else {
         <button class="profile-button" type="button" (click)="openSignOutConfirm()" [attr.aria-label]="language.t('nav.logout')">
           <span class="profile-avatar">{{ userAvatar() }}</span>
           <span class="profile-copy"><strong>{{ userEmail() }}</strong><small>{{ language.t('nav.logout') }}</small></span>
-          <span class="profile-menu">↗</span>
+          <span class="profile-menu"><app-icon name="log-out" [size]="15" /></span>
         </button>
       }
     </div>
@@ -78,13 +78,13 @@
       <div class="topbar-spacer"></div>
       <app-language-switcher />
       <div class="top-stat streak-stat" [attr.aria-label]="language.t('dashboard.daysInRow')">
-        <span class="stat-emoji">🔥</span><strong>{{ progress().streak }}</strong><small>{{ language.t('nav.days') }}</small>
+        <span class="stat-emoji"><app-icon name="flame" [size]="16" /></span><strong>{{ progress().streak }}</strong><small>{{ language.t('nav.days') }}</small>
       </div>
       <div class="top-stat xp-stat" [attr.aria-label]="language.t('dashboard.experiencePoints')">
-        <span class="stat-emoji">✦</span><strong>{{ progress().totalXp }}</strong><small>XP</small>
+        <span class="stat-emoji"><app-icon name="sparkles" [size]="16" /></span><strong>{{ progress().totalXp }}</strong><small>XP</small>
       </div>
       <button type="button" class="top-stat coin-stat" (click)="openShop()" [attr.aria-label]="language.t('shop.coinsAria')" [title]="language.t('shop.title')">
-        <span class="stat-emoji">🪙</span><strong>{{ coins() }}</strong>
+        <span class="stat-emoji"><app-icon name="coins" [size]="16" /></span><strong>{{ coins() }}</strong>
       </button>
       @if (pwa.installAvailable() || pwa.needsIOSInstructions()) {
         <button class="install-button" type="button" (click)="installApp()">{{ pwa.installAvailable() ? language.t('dashboard.installAppAction') : language.t('dashboard.installHelp') }}</button>
@@ -103,16 +103,16 @@
       @if (selectedCourse(); as course) {
         <section class="welcome-row">
           <div>
-            <p class="eyebrow">{{ greeting() }} <span class="wave">✦</span></p>
+            <p class="eyebrow">{{ greeting() }} <span class="wave"><app-icon name="sparkles" [size]="14" /></span></p>
             <h1>{{ course.name }} · {{ course.level }}</h1>
             <p class="welcome-copy">{{ course.description }}. {{ language.t('dashboard.welcome') }}</p>
           </div>
           <a class="mobile-course-switcher" routerLink="/course/choose" [attr.aria-label]="language.t('nav.chooseCourse')">
             <span class="course-flag">PL</span>
             <span>{{ course.name }} · {{ course.level }}</span>
-            <span class="switcher-chevron" aria-hidden="true">⌄</span>
+            <span class="switcher-chevron" aria-hidden="true"><app-icon name="chevron-down" [size]="14" /></span>
           </a>
-          <div class="daily-pill"><span>☀</span> {{ language.t('dashboard.dailyRhythm') }}</div>
+          <div class="daily-pill"><app-icon name="sun" [size]="14" /> {{ language.t('dashboard.dailyRhythm') }}</div>
         </section>
 
         <app-dashboard-continue-card
@@ -134,7 +134,7 @@
 
         <section class="quick-practice-row">
           <a class="quick-practice-card" routerLink="/vocabulary">
-            <span class="quick-practice-icon">📖</span>
+            <span class="quick-practice-icon"><app-icon name="book-marked" [size]="19" /></span>
             <span class="quick-practice-copy">
               <strong>{{ language.t('vocab.dashboardCardTitle') }}</strong>
               @if (vocabulary.dueCount() > 0) {
@@ -143,31 +143,31 @@
                 <small>{{ vocabulary.count() }} {{ language.t('vocab.dashboardCardMeta') }}</small>
               }
             </span>
-            <span class="quick-practice-arrow">→</span>
+            <span class="quick-practice-arrow"><app-icon name="arrow-right" [size]="16" /></span>
           </a>
           <a class="quick-practice-card" routerLink="/mistakes">
-            <span class="quick-practice-icon">↺</span>
+            <span class="quick-practice-icon"><app-icon name="rotate-ccw" [size]="19" /></span>
             <span class="quick-practice-copy">
               <strong>{{ language.t('mistakes.dashboardCardTitle') }}</strong>
               <small>{{ mistakes.count() }} {{ language.t('mistakes.dashboardCardMeta') }}</small>
             </span>
-            <span class="quick-practice-arrow">→</span>
+            <span class="quick-practice-arrow"><app-icon name="arrow-right" [size]="16" /></span>
           </a>
           <a class="quick-practice-card" routerLink="/trainer">
-            <span class="quick-practice-icon">⚡</span>
+            <span class="quick-practice-icon"><app-icon name="zap" [size]="19" /></span>
             <span class="quick-practice-copy">
               <strong>{{ language.t('trainer.dashboardCardTitle') }}</strong>
               <small>{{ language.t('trainer.dashboardCardMeta') }}</small>
             </span>
-            <span class="quick-practice-arrow">→</span>
+            <span class="quick-practice-arrow"><app-icon name="arrow-right" [size]="16" /></span>
           </a>
           <a class="quick-practice-card" routerLink="/grammar">
-            <span class="quick-practice-icon">§</span>
+            <span class="quick-practice-icon"><app-icon name="library" [size]="19" /></span>
             <span class="quick-practice-copy">
               <strong>{{ language.t('grammarRef.dashboardCardTitle') }}</strong>
               <small>{{ language.t('grammarRef.dashboardCardMeta') }}</small>
             </span>
-            <span class="quick-practice-arrow">→</span>
+            <span class="quick-practice-arrow"><app-icon name="arrow-right" [size]="16" /></span>
           </a>
         </section>
 
@@ -182,8 +182,8 @@
             <article class="path-row" [class.is-locked]="!isUnlocked(lesson)" [class.is-complete]="isComplete(lesson)">
               <button class="path-node" [class]="'path-node node-' + lesson.color" type="button"
                 [disabled]="!isUnlocked(lesson)" (click)="openLesson(lesson)" [attr.aria-label]="language.t('dashboard.open') + ' ' + lessonLabel(lesson)">
-                @if (isComplete(lesson)) { <span>✓</span> }
-                @else if (!isUnlocked(lesson)) { <span>⌑</span> }
+                @if (isComplete(lesson)) { <app-icon name="check" [size]="16" [strokeWidth]="2.6" /> }
+                @else if (!isUnlocked(lesson)) { <app-icon name="lock" [size]="15" /> }
                 @else { <span>{{ lessonNumber(lesson) }}</span> }
               </button>
               <button class="lesson-card" type="button" [disabled]="!isUnlocked(lesson)" (click)="openLesson(lesson)">
@@ -194,11 +194,11 @@
                 </span>
                 <span class="lesson-card-end">
                   @if (isComplete(lesson)) {
-                    <span class="done-chip">{{ language.t('dashboard.completed') }} <b>✓</b></span>
+                    <span class="done-chip">{{ language.t('dashboard.completed') }} <app-icon name="check" [size]="14" [strokeWidth]="2.5" /></span>
                   } @else if (!isUnlocked(lesson)) {
                     <span class="lock-chip">{{ language.t('dashboard.locked') }}</span>
                   } @else {
-                    <span class="play-chip">→</span>
+                    <span class="play-chip"><app-icon name="arrow-right" [size]="16" /></span>
                   }
                 </span>
               </button>
@@ -206,7 +206,7 @@
             @if (checkpointAfter(lesson.id); as cp) {
               <article class="path-row is-checkpoint">
                 <a class="path-node checkpoint-node" [routerLink]="['/course-test', cp.id]" [attr.aria-label]="cp.title[language.locale()]">
-                  <span>✦</span>
+                  <app-icon name="trophy" [size]="17" />
                 </a>
                 <a class="lesson-card checkpoint-card" [routerLink]="['/course-test', cp.id]">
                   <span class="lesson-card-copy">
@@ -216,9 +216,9 @@
                   </span>
                   <span class="lesson-card-end">
                     @if (checkpointScoreLabel(cp.id); as scoreLabel) {
-                      <span class="done-chip">{{ scoreLabel }} <b>✓</b></span>
+                      <span class="done-chip">{{ scoreLabel }} <app-icon name="check" [size]="14" [strokeWidth]="2.5" /></span>
                     } @else {
-                      <span class="play-chip">→</span>
+                      <span class="play-chip"><app-icon name="arrow-right" [size]="16" /></span>
                     }
                   </span>
                 </a>
@@ -230,23 +230,23 @@
                   [disabled]="!isChestUnlocked(chest) || isChestClaimed(chest)"
                   (click)="openPathChest(chest)"
                   [attr.aria-label]="chest.title[language.locale()]">
-                  <span>{{ isChestClaimed(chest) ? '✓' : isChestUnlocked(chest) ? '🎁' : '🔒' }}</span>
+                  <app-chest-icon [state]="isChestClaimed(chest) ? 'open' : isChestUnlocked(chest) ? 'ready' : 'locked'" [size]="38" />
                 </button>
                 <button class="lesson-card chest-card" type="button"
                   [disabled]="!isChestUnlocked(chest) || isChestClaimed(chest)"
                   (click)="openPathChest(chest)">
                   <span class="lesson-card-copy">
-                    <span class="lesson-unit chest-badge">{{ language.t('chest.badge') }} <span class="unit-dot">·</span> +{{ chest.coins }} 🪙</span>
+                    <span class="lesson-unit chest-badge">{{ language.t('chest.badge') }} <span class="unit-dot">·</span> +{{ chest.coins }} <app-icon name="coins" [size]="13" /></span>
                     <strong>{{ chest.title[language.locale()] }}</strong>
                     <small>{{ isChestClaimed(chest) ? language.t('chest.claimedLabel') : isChestUnlocked(chest) ? language.t('chest.readyAction') : language.t('chest.lockedHint') }}</small>
                   </span>
                   <span class="lesson-card-end">
                     @if (isChestClaimed(chest)) {
-                      <span class="done-chip">+{{ chest.coins }} 🪙 <b>✓</b></span>
+                      <span class="done-chip">+{{ chest.coins }} <app-icon name="coins" [size]="13" /> <app-icon name="check" [size]="14" [strokeWidth]="2.5" /></span>
                     } @else if (isChestUnlocked(chest)) {
-                      <span class="play-chip">🎁</span>
+                      <span class="play-chip"><app-icon name="arrow-right" [size]="16" /></span>
                     } @else {
-                      <span class="lock-chip">🔒</span>
+                      <span class="lock-chip"><app-icon name="lock" [size]="14" /></span>
                     }
                   </span>
                 </button>
@@ -255,18 +255,18 @@
           }
         </section>
 
-        <div class="course-end-note"><span>✦</span><div>
+        <div class="course-end-note"><span class="note-award"><app-icon name="award" [size]="20" /></span><div>
           <strong>{{ completeCount() === lessons().length ? language.t('dashboard.partComplete') : language.t('dashboard.learnAtOwnPace') }}</strong>
           <small>{{ completeCount() === lessons().length ? language.t('dashboard.partCompleteHint') : language.t('dashboard.progressSaved') }}</small>
         </div></div>
       } @else {
         <section class="welcome-row">
           <div>
-            <p class="eyebrow">{{ greeting() }} <span class="wave">✦</span></p>
+            <p class="eyebrow">{{ greeting() }} <span class="wave"><app-icon name="sparkles" [size]="14" /></span></p>
             <h1>{{ language.t('dashboard.chooseCourse') }}</h1>
             <p class="welcome-copy">{{ language.t('dashboard.chooseCourseIntro') }}</p>
           </div>
-          <div class="daily-pill"><span>☀</span> {{ language.t('dashboard.dailyRhythm') }}</div>
+          <div class="daily-pill"><app-icon name="sun" [size]="14" /> {{ language.t('dashboard.dailyRhythm') }}</div>
         </section>
         <section class="course-options" id="course-options" [attr.aria-label]="language.t('nav.course')">
           @for (course of courses; track course.id) {
@@ -275,7 +275,7 @@
               <h2>Polski · {{ course.name }}</h2>
               <p>{{ course.description }}</p>
               <span class="course-option-progress">{{ courseCompleteCount(course) }} {{ language.t('lesson.of') }} {{ course.lessons.length }} {{ language.t('dashboard.lessons') }} · {{ courseCompletion(course) }}%</span>
-              <span class="course-option-arrow" aria-hidden="true">→</span>
+              <span class="course-option-arrow" aria-hidden="true"><app-icon name="arrow-right" [size]="18" /></span>
             </button>
           }
         </section>
@@ -307,14 +307,14 @@
     (openShop)="openShop()" />
 
   <nav class="mobile-nav" [attr.aria-label]="language.t('home.nav')">
-    <a class="mobile-nav-item" [class.selected]="activeNavSection() === 'home'" [routerLink]="dashboardUrl()" (click)="navigateSection($event, 'home')"><span>⌂</span><small>{{ language.t('nav.home') }}</small></a>
+    <a class="mobile-nav-item" [class.selected]="activeNavSection() === 'home'" [routerLink]="dashboardUrl()" (click)="navigateSection($event, 'home')"><span><app-icon name="home" [size]="20" /></span><small>{{ language.t('nav.home') }}</small></a>
     <a class="mobile-nav-item" [class.selected]="activeNavSection() === 'course'"
       [href]="selectedCourse() ? '#lesson-path' : '#course-options'"
-      (click)="navigateSection($event, 'course', selectedCourse() ? 'lesson-path' : 'course-options')"><span>▤</span><small>{{ language.t('nav.course') }}</small></a>
+      (click)="navigateSection($event, 'course', selectedCourse() ? 'lesson-path' : 'course-options')"><span><app-icon name="book-open" [size]="20" /></span><small>{{ language.t('nav.course') }}</small></a>
     <a class="mobile-nav-item" [class.selected]="activeNavSection() === 'progress'" href="#progress-card"
-      (click)="navigateSection($event, 'progress', 'progress-card')"><span>▥</span><small>{{ language.t('nav.progress') }}</small></a>
-    <a class="mobile-nav-item" routerLink="/feedback" [queryParams]="{ course: selectedCourse()?.id ?? readActiveCourseId() }"><span>✎</span><small>{{ language.t('nav.feedback') }}</small></a>
-    <button class="mobile-nav-item" type="button" (click)="openSignOutConfirm()" [attr.aria-label]="language.t('nav.logout')"><span>↗</span><small>{{ language.t('nav.logout') }}</small></button>
+      (click)="navigateSection($event, 'progress', 'progress-card')"><span><app-icon name="chart" [size]="20" /></span><small>{{ language.t('nav.progress') }}</small></a>
+    <a class="mobile-nav-item" routerLink="/feedback" [queryParams]="{ course: selectedCourse()?.id ?? readActiveCourseId() }"><span><app-icon name="message-square" [size]="20" /></span><small>{{ language.t('nav.feedback') }}</small></a>
+    <button class="mobile-nav-item" type="button" (click)="openSignOutConfirm()" [attr.aria-label]="language.t('nav.logout')"><span><app-icon name="log-out" [size]="20" /></span><small>{{ language.t('nav.logout') }}</small></button>
   </nav>
 
   <app-dashboard-dialogs

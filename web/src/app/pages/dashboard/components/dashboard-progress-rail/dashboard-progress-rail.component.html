@@ -6,7 +6,7 @@
           <p class="eyebrow">{{ language.t('dashboard.goodHabit') }}</p>
           <h2>{{ language.t('dashboard.yourStreak') }}</h2>
         </div>
-        <span class="flame-badge">🔥</span>
+        <span class="flame-badge"><app-icon name="flame" [size]="18" /></span>
       </div>
       <div class="streak-number">
         <strong>{{ progress().streak }}</strong>
@@ -16,12 +16,14 @@
         @for (day of weekDays(); track $index) {
           <div class="week-day">
             <span>{{ day.label }}</span>
-            <b [class.day-active]="day.active">{{ day.active ? '✓' : '·' }}</b>
+            <b [class.day-active]="day.active">
+              @if (day.active) { <app-icon name="check" [size]="13" [strokeWidth]="2.5" /> } @else { · }
+            </b>
           </div>
         }
       </div>
       <div class="freeze-row">
-        <span>❄️ {{ language.t('shop.freezePill') }}: <strong>{{ progress().streakFreezes ?? 0 }}/3</strong></span>
+        <span class="freeze-info"><app-icon name="snowflake" [size]="14" /> {{ language.t('shop.freezePill') }}: <strong>{{ progress().streakFreezes ?? 0 }}/3</strong></span>
         <button type="button" class="freeze-shop-btn" (click)="openShop.emit()">{{ language.t('shop.getFreeze') }}</button>
       </div>
       <p class="side-caption">{{ language.t('dashboard.smallStep') }}</p>
@@ -33,7 +35,7 @@
           <p class="eyebrow">{{ language.t('dashboard.dailyGoal') }}</p>
           <h2>20 XP</h2>
         </div>
-        <span class="goal-icon">◷</span>
+        <span class="goal-icon"><app-icon name="clock" [size]="18" /></span>
       </div>
       <p class="goal-copy">{{ language.t('dashboard.doOneLesson') }}</p>
       <div class="goal-progress"><span [style.width.%]="goalPercent()"></span></div>
@@ -44,18 +46,18 @@
 
       @if (dailyChestReady()) {
         <button type="button" class="daily-chest-btn is-ready" (click)="claimDailyChest.emit()">
-          <span>🎁 {{ language.t('chest.dailyReady') }}</span>
-          <strong>+{{ dailyChestCoins() }} 🪙</strong>
+          <span class="chest-pill-copy"><app-chest-icon state="ready" [size]="28" /> {{ language.t('chest.dailyReady') }}</span>
+          <strong class="chest-pill-coins">+{{ dailyChestCoins() }} <app-icon name="coins" [size]="14" /></strong>
         </button>
       } @else if (dailyChestClaimed()) {
         <div class="daily-chest-pill is-claimed">
-          <span>✓ {{ language.t('chest.dailyClaimed') }}</span>
-          <strong>+{{ dailyChestCoins() }} 🪙</strong>
+          <span class="chest-pill-copy"><app-chest-icon state="open" [size]="26" /> {{ language.t('chest.dailyClaimed') }}</span>
+          <strong class="chest-pill-coins">+{{ dailyChestCoins() }} <app-icon name="coins" [size]="14" /></strong>
         </div>
       } @else {
         <div class="daily-chest-pill">
-          <span>🔒 {{ language.t('chest.dailyLocked') }}</span>
-          <strong>+{{ dailyChestCoins() }} 🪙</strong>
+          <span class="chest-pill-copy"><app-chest-icon state="locked" [size]="26" /> {{ language.t('chest.dailyLocked') }}</span>
+          <strong class="chest-pill-coins">+{{ dailyChestCoins() }} <app-icon name="coins" [size]="14" /></strong>
         </div>
       }
     </section>
@@ -64,8 +66,8 @@
   <section class="side-card method-card">
     <div class="method-illustration" aria-hidden="true">
       <span class="method-bubble">A?</span>
-      <span class="method-book">▱</span>
-      <span class="method-spark">✦</span>
+      <span class="method-book"><app-icon name="book-open" [size]="38" [strokeWidth]="1.7" /></span>
+      <span class="method-spark"><app-icon name="sparkles" [size]="16" /></span>
     </div>
     <p class="eyebrow">{{ language.t('dashboard.howWeLearn') }}</p>
     <h2>{{ language.t('dashboard.moreThanWords') }}</h2>
@@ -74,7 +76,7 @@
 
   @if (installAvailable() || needsIOSInstructions()) {
     <button class="side-install" type="button" (click)="installClick.emit()">
-      {{ language.t('dashboard.installApp') }} <span>↗</span>
+      {{ language.t('dashboard.installApp') }} <app-icon name="download" [size]="16" />
     </button>
   }
   <p class="source-note">{{ language.t('dashboard.sourceNote') }}</p>

@@ -8,11 +8,12 @@ import { AnalyticsService } from '../../services/analytics.service';
 import { MistakesService, SavedMistake } from '../../services/mistakes.service';
 import { SoundService } from '../../services/sound.service';
 import { AnswerDiffComponent } from '../../shared/answer-diff/answer-diff.component';
+import { IconComponent } from '../../shared/icon/icon.component';
 
 @Component({
   selector: 'app-mistakes',
   standalone: true,
-  imports: [FormsModule, RouterLink, LanguageSwitcherComponent, AnswerDiffComponent],
+  imports: [FormsModule, RouterLink, LanguageSwitcherComponent, AnswerDiffComponent, IconComponent],
   templateUrl: './mistakes.component.html',
   styleUrl: './mistakes.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

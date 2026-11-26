@@ -7,13 +7,14 @@ import { AuthService } from '../../services/auth.service';
 import { ProgressService } from '../../services/progress.service';
 import { LanguageSwitcherComponent } from '../../i18n/language-switcher.component';
 import { LanguageService } from '../../i18n/language.service';
+import { IconComponent } from '../../shared/icon/icon.component';
 
 export type AuthMode = 'sign-in' | 'sign-up' | 'forgot' | 'reset';
 
 @Component({
   selector: 'app-auth',
   standalone: true,
-  imports: [FormsModule, LanguageSwitcherComponent],
+  imports: [FormsModule, LanguageSwitcherComponent, IconComponent],
   templateUrl: './auth.component.html',
   styleUrl: './auth.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

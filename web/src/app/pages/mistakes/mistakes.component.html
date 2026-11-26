@@ -1,5 +1,5 @@
 <header class="page-header">
-  <a class="back-link" routerLink="/course/part-1">← {{ language.t('lesson.back') }}</a>
+  <a class="back-link" routerLink="/course/part-1"><app-icon name="arrow-left" [size]="16" /> {{ language.t('lesson.back') }}</a>
   <app-language-switcher />
 </header>
 
@@ -12,7 +12,7 @@
 
   @if (queue().length === 0) {
     <section class="empty-card">
-      <div class="empty-icon">✓</div>
+      <div class="empty-icon"><app-icon name="check" [size]="36" /></div>
       <h2>{{ language.t('mistakes.emptyTitle') }}</h2>
       <p>{{ language.t('mistakes.emptyBody') }}</p>
       <a class="primary-btn" routerLink="/course/part-1">{{ language.t('checkpoint.backToCourse') }}</a>
@@ -22,7 +22,7 @@
       <div class="card-top">
         <span class="step-chip">{{ index() + 1 }} / {{ queue().length }}</span>
         <a class="source-link" [routerLink]="['/learn', item.lessonId]">
-          {{ item.lessonTitle }} ↗
+          {{ item.lessonTitle }} <app-icon name="arrow-up-right" [size]="14" />
         </a>
       </div>
 
@@ -72,7 +72,7 @@
           [class.anim-correct]="lastCorrect()"
           [class.anim-wrong]="!lastCorrect()">
           @if (lastCorrect()) {
-            <strong>{{ language.t('lesson.correct') }} ✓</strong>
+            <strong>{{ language.t('lesson.correct') }} <app-icon name="check" [size]="15" [strokeWidth]="2.5" /></strong>
           } @else if (!item.options?.length) {
             <div class="feedback-diff-wrap">
               <app-answer-diff [userAnswer]="userAnswer()" [accepted]="item.accepted" />
@@ -84,14 +84,14 @@
             </div>
           }
           <button type="button" class="primary-btn" (click)="next()">
-            {{ language.t('lesson.next') }} →
+            {{ language.t('lesson.next') }} <app-icon name="arrow-right" [size]="15" />
           </button>
         </div>
       }
     </section>
   } @else {
     <section class="empty-card">
-      <div class="empty-icon">✦</div>
+      <div class="empty-icon"><app-icon name="sparkles" [size]="34" /></div>
       <h2>{{ language.t('mistakes.doneTitle') }}</h2>
       <p>{{ fixedCount() }} / {{ queue().length }} {{ language.t('mistakes.doneBody') }}</p>
       <div class="done-actions">

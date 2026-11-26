@@ -1,11 +1,11 @@
 <header class="checkpoint-header">
   @if (test(); as t) {
     <a class="back-link" [routerLink]="['/course', t.courseId]">
-      ← {{ language.t('lesson.back') }}
+      <app-icon name="arrow-left" [size]="16" /> {{ language.t('lesson.back') }}
     </a>
   } @else {
     <a class="back-link" routerLink="/course/part-1">
-      ← {{ language.t('lesson.back') }}
+      <app-icon name="arrow-left" [size]="16" /> {{ language.t('lesson.back') }}
     </a>
   }
   <app-language-switcher />

@@ -1,12 +1,14 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, computed, effect, ElementRef, inject, input, output, signal } from '@angular/core';
 import { ActivityItem } from '../../../../data/lesson-types';
 import { LanguageService } from '../../../../i18n/language.service';
+import { IconComponent } from '../../../../shared/icon/icon.component';
 
 const CHUNK_SIZE = 7;
 
 @Component({
   selector: 'app-match-exercise',
   standalone: true,
+  imports: [IconComponent],
   templateUrl: './match-exercise.component.html',
   styleUrl: './match-exercise.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

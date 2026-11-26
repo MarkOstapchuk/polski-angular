@@ -34,7 +34,7 @@
               [attr.aria-label]="language.t('lesson.zoomImage') + ': ' + image.alt"
               [title]="language.t('lesson.zoomHint')">
               <img class="question-image" [src]="image.src" [alt]="image.alt" loading="lazy">
-              <span class="zoom-badge" aria-hidden="true">⤢</span>
+              <span class="zoom-badge" aria-hidden="true"><app-icon name="maximize" [size]="13" /></span>
             </button>
           }
 
@@ -93,7 +93,9 @@
                   @if (part.trim() && !checked()) {
                     <button type="button" class="slot-clear"
                       [attr.aria-label]="language.t('lesson.wordBankClearSlot')"
-                      (click)="clearSlot(item.id, gapIdx)">×</button>
+                      (click)="clearSlot(item.id, gapIdx)">
+                      <app-icon name="close" [size]="12" />
+                    </button>
                   }
                 </div>
               }
@@ -105,7 +107,7 @@
               <button class="hint-toggle" type="button"
                 [attr.aria-expanded]="isHintShown(item.id)"
                 (click)="toggleHint.emit(item.id)">
-                <span aria-hidden="true">💡</span>
+                <app-icon name="lightbulb" [size]="14" />
                 {{ isHintShown(item.id) ? language.t('lesson.hideHint') : language.t('lesson.showHint') }}
               </button>
               @if (isHintShown(item.id)) {
@@ -116,7 +118,7 @@
 
           @if (checked()) {
             <div class="answer-feedback" [class.feedback-right]="isItemCorrect(item.id)" [class.feedback-wrong]="!isItemCorrect(item.id)" aria-live="polite">
-              @if (isItemCorrect(item.id)) { <span>✓ {{ language.t('lesson.correct') }}</span> }
+              @if (isItemCorrect(item.id)) { <span><app-icon name="check" [size]="15" [strokeWidth]="2.5" /> {{ language.t('lesson.correct') }}</span> }
               @else { <span>{{ language.t('lesson.correctAnswer') }} <strong>{{ item.raw.accepted[0] }}</strong></span> }
             </div>
             @if (item.raw.explanation) { <small class="answer-explanation">{{ item.raw.explanation }}</small> }

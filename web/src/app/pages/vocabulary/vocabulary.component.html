@@ -1,5 +1,5 @@
 <header class="page-header">
-  <a class="back-link" routerLink="/course/part-1">← {{ language.t('lesson.back') }}</a>
+  <a class="back-link" routerLink="/course/part-1"><app-icon name="arrow-left" [size]="16" /> {{ language.t('lesson.back') }}</a>
   <app-language-switcher />
 </header>
 
@@ -12,7 +12,7 @@
 
   @if (vocabulary.count() === 0) {
     <section class="empty-card">
-      <div class="empty-icon">📖</div>
+      <div class="empty-icon"><app-icon name="book-marked" [size]="36" /></div>
       <h2>{{ language.t('vocab.emptyTitle') }}</h2>
       <p>{{ language.t('vocab.emptyBody') }}</p>
       <a class="primary-btn" routerLink="/course/part-1">{{ language.t('checkpoint.backToCourse') }}</a>
@@ -45,16 +45,16 @@
               @if (isDue(item)) {
                 <span class="due-chip">{{ language.t('vocab.dueNowChip') }}</span>
               } @else {
-                <span class="mastery-chip">✓ {{ language.t('vocab.inDays') }} {{ daysUntilReview(item) }}{{ language.t('vocab.dayShort') }}</span>
+                <span class="mastery-chip"><app-icon name="check" [size]="12" [strokeWidth]="2.5" /> {{ language.t('vocab.inDays') }} {{ daysUntilReview(item) }}{{ language.t('vocab.dayShort') }}</span>
               }
-              <button type="button" class="remove-btn" (click)="removeWord(item.id)" [attr.aria-label]="language.t('vocab.remove')">×</button>
+              <button type="button" class="remove-btn" (click)="removeWord(item.id)" [attr.aria-label]="language.t('vocab.remove')"><app-icon name="close" [size]="16" /></button>
             </div>
           </article>
         }
       </section>
     } @else if (deck().length === 0) {
       <section class="done-card">
-        <div class="empty-icon">✦</div>
+        <div class="empty-icon"><app-icon name="sparkles" [size]="34" /></div>
         <h2>{{ language.t('vocab.allDoneTodayTitle') }}</h2>
         <p>{{ language.t('vocab.allDoneTodayBody') }}</p>
         <div class="done-actions">
@@ -66,7 +66,7 @@
       </section>
     } @else if (sessionDone()) {
       <section class="done-card">
-        <div class="empty-icon">✦</div>
+        <div class="empty-icon"><app-icon name="trophy" [size]="34" /></div>
         <h2>{{ language.t('vocab.sessionDoneTitle') }}</h2>
         <p>{{ knownCount() }} / {{ deck().length }} {{ language.t('vocab.sessionDoneBody') }}</p>
         <div class="done-actions">
@@ -104,7 +104,7 @@
                 {{ language.t('vocab.again') }}
               </button>
               <button type="button" class="know-btn" (click)="answerCard(true)">
-                {{ language.t('vocab.know') }} ✓ <small>+{{ nextIntervalDays() }}{{ language.t('vocab.dayShort') }}</small>
+                {{ language.t('vocab.know') }} <app-icon name="check" [size]="15" [strokeWidth]="2.5" /> <small>+{{ nextIntervalDays() }}{{ language.t('vocab.dayShort') }}</small>
               </button>
             </div>
           }
@@ -138,12 +138,12 @@
               [class.anim-correct]="quizCorrect()"
               [class.anim-wrong]="!quizCorrect()">
               @if (quizCorrect()) {
-                <strong>{{ language.t('lesson.correct') }} ✓ (+{{ nextIntervalDays() }}{{ language.t('vocab.dayShort') }})</strong>
+                <strong>{{ language.t('lesson.correct') }} <app-icon name="check" [size]="15" [strokeWidth]="2.5" /> (+{{ nextIntervalDays() }}{{ language.t('vocab.dayShort') }})</strong>
               } @else {
                 <div><strong>{{ language.t('lesson.correctAnswer') }}</strong> <span>{{ card.translations[0] }}</span></div>
               }
               <button type="button" class="primary-btn" (click)="advanceOrFinish()">
-                {{ language.t('lesson.next') }} →
+                {{ language.t('lesson.next') }} <app-icon name="arrow-right" [size]="15" />
               </button>
             </div>
           }
@@ -185,7 +185,7 @@
               [class.anim-wrong]="!typedCorrect()">
               @if (typedCorrect()) {
                 <div class="feedback-ok-copy">
-                  <strong>{{ language.t('lesson.correct') }} ✓</strong>
+                  <strong>{{ language.t('lesson.correct') }} <app-icon name="check" [size]="15" [strokeWidth]="2.5" /></strong>
                   @if (typedAccentHint(); as hint) {
                     <small>{{ language.t('lesson.accentHint') }} <strong lang="pl">{{ hint }}</strong></small>
                   }
@@ -196,7 +196,7 @@
                 </div>
               }
               <button type="button" class="primary-btn" (click)="advanceOrFinish()">
-                {{ language.t('lesson.next') }} →
+                {{ language.t('lesson.next') }} <app-icon name="arrow-right" [size]="15" />
               </button>
             </div>
           }

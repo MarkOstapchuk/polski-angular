@@ -69,7 +69,7 @@
       @if (mode() === 'forgot' || mode() === 'reset') {
         <p class="mode-switch">
           <button type="button" (click)="setMode('sign-in')" [disabled]="busy()">
-            ← {{ language.t('auth.backToSignIn') }}
+            <app-icon name="arrow-left" [size]="15" /> {{ language.t('auth.backToSignIn') }}
           </button>
         </p>
       } @else {

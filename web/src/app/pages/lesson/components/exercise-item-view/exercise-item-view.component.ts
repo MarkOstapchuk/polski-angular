@@ -3,6 +3,7 @@ import { AdaptedItem } from '../../../../data/lesson-types';
 import { WorkbookImage } from '../../../../data/workbook-images';
 import { LanguageService } from '../../../../i18n/language.service';
 import { AnswerDiffComponent } from '../../../../shared/answer-diff/answer-diff.component';
+import { IconComponent } from '../../../../shared/icon/icon.component';
 import { ChoiceExerciseComponent } from '../choice-exercise/choice-exercise.component';
 import { LetterClozeExerciseComponent } from '../letter-cloze-exercise/letter-cloze-exercise.component';
 import { MultiGapExerciseComponent } from '../multi-gap-exercise/multi-gap-exercise.component';
@@ -19,6 +20,7 @@ import { WordOrderExerciseComponent } from '../word-order-exercise/word-order-ex
     WordOrderExerciseComponent,
     LetterClozeExerciseComponent,
     AnswerDiffComponent,
+    IconComponent,
   ],
   templateUrl: './exercise-item-view.component.html',
   styleUrl: './exercise-item-view.component.scss',
