@@ -72,30 +72,30 @@
     </div>
   </aside>
 
-  <main class="main-column">
-    <header class="topbar">
-      <a class="mobile-brand" [routerLink]="dashboardUrl()" (click)="navigateSection($event, 'home')"><span class="brand-mark">p</span> polski<span class="brand-dot">.</span></a>
-      <div class="topbar-spacer"></div>
-      <app-language-switcher />
-      <div class="top-stat streak-stat" [attr.aria-label]="language.t('dashboard.daysInRow')">
-        <span class="stat-emoji"><app-icon name="flame" [size]="16" /></span><strong>{{ progress().streak }}</strong><small>{{ language.t('nav.days') }}</small>
-      </div>
-      <div class="top-stat xp-stat" [attr.aria-label]="language.t('dashboard.experiencePoints')">
-        <span class="stat-emoji"><app-icon name="sparkles" [size]="16" /></span><strong>{{ progress().totalXp }}</strong><small>XP</small>
-      </div>
-      <button type="button" class="top-stat coin-stat" (click)="openShop()" [attr.aria-label]="language.t('shop.coinsAria')" [title]="language.t('shop.title')">
-        <span class="stat-emoji"><app-icon name="coins" [size]="16" /></span><strong>{{ coins() }}</strong>
-      </button>
-      @if (pwa.installAvailable() || pwa.needsIOSInstructions()) {
-        <button class="install-button" type="button" (click)="installApp()">{{ pwa.installAvailable() ? language.t('dashboard.installAppAction') : language.t('dashboard.installHelp') }}</button>
-      }
-      @if (isGuest()) {
-        <a class="top-avatar" routerLink="/auth" [queryParams]="{ next: dashboardUrl() }" [attr.aria-label]="language.t('home.login')" [title]="language.t('home.login')">{{ userAvatar() }}</a>
-      } @else {
-        <button class="top-avatar" type="button" (click)="openSignOutConfirm()" [attr.aria-label]="language.t('nav.logoutAccount') + ' ' + userEmail()" [title]="language.t('nav.logout')">{{ userAvatar() }}</button>
-      }
-    </header>
+  <header class="topbar">
+    <a class="mobile-brand" [routerLink]="dashboardUrl()" (click)="navigateSection($event, 'home')"><span class="brand-mark">p</span> polski<span class="brand-dot">.</span></a>
+    <div class="topbar-spacer"></div>
+    <app-language-switcher />
+    <div class="top-stat streak-stat" [attr.aria-label]="language.t('dashboard.daysInRow')">
+      <span class="stat-emoji"><app-icon name="flame" [size]="16" /></span><strong>{{ progress().streak }}</strong><small>{{ language.t('nav.days') }}</small>
+    </div>
+    <div class="top-stat xp-stat" [attr.aria-label]="language.t('dashboard.experiencePoints')">
+      <span class="stat-emoji"><app-icon name="sparkles" [size]="16" /></span><strong>{{ progress().totalXp }}</strong><small>XP</small>
+    </div>
+    <button type="button" class="top-stat coin-stat" (click)="openShop()" [attr.aria-label]="language.t('shop.coinsAria')" [title]="language.t('shop.title')">
+      <span class="stat-emoji"><app-icon name="coins" [size]="16" /></span><strong>{{ coins() }}</strong>
+    </button>
+    @if (pwa.installAvailable() || pwa.needsIOSInstructions()) {
+      <button class="install-button" type="button" (click)="installApp()">{{ pwa.installAvailable() ? language.t('dashboard.installAppAction') : language.t('dashboard.installHelp') }}</button>
+    }
+    @if (isGuest()) {
+      <a class="top-avatar" routerLink="/auth" [queryParams]="{ next: dashboardUrl() }" [attr.aria-label]="language.t('home.login')" [title]="language.t('home.login')">{{ userAvatar() }}</a>
+    } @else {
+      <button class="top-avatar" type="button" (click)="openSignOutConfirm()" [attr.aria-label]="language.t('nav.logoutAccount') + ' ' + userEmail()" [title]="language.t('nav.logout')">{{ userAvatar() }}</button>
+    }
+  </header>
 
+  <main class="main-column">
     <div class="content-wrap">
       @if (progressService.syncError(); as syncMessage) {
         <p class="sync-message" role="alert">{{ syncMessage }}</p>

@@ -1,7 +1,7 @@
 :host { display: block; min-height: 100vh; color: var(--text); }
 
-.dashboard-shell { min-height: 100vh; display: grid; grid-template-columns: 222px minmax(500px, 1fr) 298px; max-width: 1600px; margin: 0 auto; background: var(--bg); }
-.sidebar { position: sticky; top: 0; height: 100vh; display: flex; flex-direction: column; padding: 24px 16px 18px; border-right: 1px solid var(--border); background: var(--bg-elevated); }
+.dashboard-shell { min-height: 100vh; display: grid; grid-template-columns: 222px minmax(500px, 1fr) 298px; grid-template-rows: auto 1fr; background: var(--bg); }
+.sidebar { grid-column: 1; grid-row: 1 / 3; position: sticky; top: 0; height: 100vh; display: flex; flex-direction: column; padding: 24px 16px 18px; border-right: 1px solid var(--border); background: var(--bg-elevated); }
 .brand, .mobile-brand { display: inline-flex; align-items: center; min-height: 44px; gap: 9px; color: var(--text-strong); text-decoration: none; font-size: 24px; font-weight: 850; letter-spacing: -1.5px; }
 .brand-mark { display: grid; width: 33px; height: 33px; place-items: center; border-radius: 11px 11px 11px 4px; color: #fff; background: var(--accent-strong); font-size: 23px; font-weight: 800; line-height: 1; }
 .brand-dot { color: var(--accent); }
@@ -29,8 +29,8 @@
 .profile-avatar, .top-avatar { display: grid; place-items: center; width: 36px; height: 36px; border: 0; border-radius: 50%; background: var(--success-bg); color: var(--success-text); font-weight: 800; cursor: pointer; }
 .profile-menu { color: var(--text-subtle); letter-spacing: 2px; }
 
-.main-column { min-width: 0; }
-.topbar { height: 74px; display: flex; align-items: center; gap: 18px; padding: 0 clamp(22px, 4vw, 62px); border-bottom: 1px solid var(--border); background: var(--bg-topbar-soft); }
+.main-column { grid-column: 2; grid-row: 2; min-width: 0; }
+.topbar { grid-column: 2 / -1; grid-row: 1; height: 74px; display: flex; align-items: center; gap: 18px; padding: 0 24px; border-bottom: 1px solid var(--border); background: var(--bg-topbar-soft); }
 .topbar-spacer { flex: 1; }
 .mobile-brand { display: none; font-size: 20px; }
 .mobile-brand .brand-mark { width: 29px; height: 29px; font-size: 19px; }
@@ -133,14 +133,16 @@
 .course-option-progress { display: block; margin-top: 21px; color: var(--text-secondary); font-size: 13px; font-weight: 700; }
 .course-option-arrow { position: absolute; right: 20px; bottom: 18px; color: var(--accent); font-size: 20px; }
 
-app-dashboard-progress-rail { padding: 91px 18px 24px 0; }
+app-dashboard-progress-rail { grid-column: 3; grid-row: 2; padding: 28px 18px 24px 0; }
+app-dashboard-dialogs, app-dashboard-rewards-modal { display: contents; }
 .mobile-nav { display: none; }
 
 @media (max-width: 1120px) {
-  .dashboard-shell { grid-template-columns: 190px minmax(0, 1fr); }
-  .sidebar { grid-column: 1; grid-row: 1 / 3; }
-  .main-column { grid-column: 2; grid-row: 1; }
-  app-dashboard-progress-rail { grid-column: 2; grid-row: 2; padding: 0 clamp(22px, 4vw, 62px) 48px; max-width: 930px; width: 100%; margin: 0 auto; }
+  .dashboard-shell { grid-template-columns: 190px minmax(0, 1fr); grid-template-rows: auto auto 1fr; }
+  .sidebar { grid-column: 1; grid-row: 1 / 4; }
+  .topbar { grid-column: 2; grid-row: 1; }
+  .main-column { grid-column: 2; grid-row: 2; }
+  app-dashboard-progress-rail { grid-column: 2; grid-row: 3; padding: 0 clamp(22px, 4vw, 62px) 48px; max-width: 930px; width: 100%; margin: 0 auto; }
 }
 
 @media (max-width: 720px) {
