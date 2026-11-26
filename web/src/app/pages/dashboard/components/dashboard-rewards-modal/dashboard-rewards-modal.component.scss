@@ -22,11 +22,6 @@
   box-shadow: var(--shadow-card);
 }
 
-.reward-dialog {
-  width: min(100%, 390px);
-  text-align: center;
-}
-
 .close-btn {
   display: inline-grid;
   place-items: center;
@@ -41,23 +36,7 @@
   cursor: pointer;
 }
 
-.reward-dialog .close-btn {
-  position: absolute;
-  top: 12px;
-  right: 12px;
-}
-
 .close-btn:hover { background: var(--bg-muted); }
-
-.chest-burst {
-  position: relative;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 96px;
-  height: 96px;
-  margin: 4px auto 12px;
-}
 
 .btn-price {
   display: inline-flex;
@@ -104,45 +83,6 @@
   color: var(--text-strong);
   letter-spacing: -.4px;
 }
-
-.coin-reward-pill {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  margin: 18px 0 10px;
-  padding: 10px 20px;
-  border-radius: 999px;
-  background: var(--warn-bg);
-  color: var(--xp-text);
-  font-size: 24px;
-  font-weight: 850;
-}
-
-.balance-note {
-  margin: 0 0 22px;
-  color: var(--text-muted);
-  font-size: 14px;
-}
-
-.reward-actions {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 10px;
-}
-
-.btn-primary,
-.btn-secondary {
-  min-height: 46px;
-  padding: 10px 14px;
-  border-radius: 11px;
-  font: inherit;
-  font-size: 14px;
-  font-weight: 750;
-  cursor: pointer;
-}
-
-.btn-primary { border: 0; background: var(--accent-strong); color: #fff; }
-.btn-secondary { border: 1px solid var(--border-strong); background: var(--bg); color: var(--text); }
 
 .shop-head {
   display: flex;
@@ -322,8 +262,4 @@
   .avatars-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .freeze-card { flex-wrap: wrap; }
   .buy-btn { width: 100%; }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .chest-emoji { animation: none; }
 }

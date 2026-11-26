@@ -331,6 +331,7 @@
     [shopOpen]="shopOpen()"
     [progress]="progress()"
     [defaultInitial]="userInitial()"
+    (chestOpened)="onChestOpened($event)"
     (closeChest)="closeChestReward()"
     (openShopFromChest)="openShop()"
     (closeShop)="closeShop()"

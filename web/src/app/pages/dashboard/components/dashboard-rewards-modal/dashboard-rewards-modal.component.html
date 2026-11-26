@@ -1,34 +1,10 @@
 @if (chestReward(); as reward) {
-  <div class="rewards-backdrop" role="dialog" aria-modal="true" aria-labelledby="chest-reward-title" (click)="closeChest.emit()">
-    <div class="rewards-card reward-dialog" (click)="$event.stopPropagation()">
-      <button type="button" class="close-btn" (click)="closeChest.emit()" [attr.aria-label]="language.t('shop.close')">
-        <app-icon name="close" [size]="18" />
-      </button>
-
-      <div class="chest-burst" aria-hidden="true">
-        <app-chest-icon state="open" [size]="88" />
-      </div>
-
-      <p class="eyebrow">{{ language.t('chest.rewardEyebrow') }}</p>
-      <h2 id="chest-reward-title">{{ reward.title }}</h2>
-
-      <div class="coin-reward-pill">
-        <app-icon name="coins" [size]="22" />
-        <strong>+{{ reward.coins }}</strong>
-      </div>
-
-      <p class="balance-note">{{ language.t('chest.balanceLabel') }}: <strong>{{ coins() }} <app-icon name="coins" [size]="14" /></strong></p>
-
-      <div class="reward-actions">
-        <button type="button" class="btn-secondary" (click)="openShopFromChest.emit()">
-          {{ language.t('chest.openShop') }}
-        </button>
-        <button type="button" class="btn-primary" (click)="closeChest.emit()">
-          {{ language.t('chest.collect') }}
-        </button>
-      </div>
-    </div>
-  </div>
+  <app-chest-opening-modal
+    [chest]="reward"
+    [currentBalance]="coins()"
+    (opened)="chestOpened.emit($event)"
+    (closed)="closeChest.emit()"
+    (openShop)="openShopFromChest.emit()" />
 } @else if (shopOpen()) {
   <div class="rewards-backdrop" role="dialog" aria-modal="true" aria-labelledby="shop-title" (click)="closeShop.emit()">
     <div class="rewards-card shop-dialog" (click)="$event.stopPropagation()">

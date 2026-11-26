@@ -16,8 +16,25 @@
       <strong>+{{ awardedXp() }} XP</strong>
       <small>{{ awardedXp() ? language.t('lesson.xpAdded') : language.t('lesson.bestScoreSaved') }}</small>
     </div>
+    @if (awardedCoins() > 0) {
+      <div class="stat-coins">
+        <strong>+{{ awardedCoins() }} <app-icon name="coins" [size]="15" /></strong>
+        <small>{{ language.t('chest.coinsEarnedLabel') }}</small>
+      </div>
+    }
   </div>
   <p class="next-unlock">{{ finalScore() === 100 ? language.t('lesson.perfect') : language.t('lesson.mistakesLearn') }}</p>
+
+  @if (pendingChestTitle(); as chestTitle) {
+    <button type="button" class="pending-chest-banner" (click)="openPendingChest.emit()">
+      <app-chest-icon state="ready" [size]="44" />
+      <span class="pending-chest-copy">
+        <small>{{ language.t('chest.pendingBannerTitle') }} · +{{ pendingChestCoins() }}</small>
+        <strong>{{ chestTitle }}</strong>
+      </span>
+      <span class="pending-chest-cta">{{ language.t('chest.openAction') }}</span>
+    </button>
+  }
 
   @if (isGuest()) {
     <div class="guest-save-card">

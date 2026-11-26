@@ -9,11 +9,19 @@
 .score-orb.score-high > strong { color: var(--success); }
 .score-orb strong small { font-size: 17px; }
 .score-orb > span { margin-top: 2px; color: var(--text-muted); font-size: 12px; }
-.completion-stats { display: flex; gap: 10px; width: min(100%, 390px); margin-top: 23px; }
-.completion-stats > div { display: grid; flex: 1; gap: 5px; padding: 13px 9px; border: 1px solid var(--border); border-radius: 11px; background: var(--bg-elevated); }
-.completion-stats strong { color: var(--text-strong); font-size: 15px; }
+.completion-stats { display: flex; flex-wrap: wrap; gap: 10px; width: min(100%, 440px); margin-top: 23px; }
+.completion-stats > div { display: grid; flex: 1 1 110px; gap: 5px; padding: 13px 9px; border: 1px solid var(--border); border-radius: 11px; background: var(--bg-elevated); }
+.completion-stats strong { display: inline-flex; align-items: center; justify-content: center; gap: 5px; color: var(--text-strong); font-size: 15px; }
 .completion-stats small { color: var(--text-muted); font-size: 12px; }
+.completion-stats .stat-coins { border-color: var(--xp-gold); background: var(--warn-bg); }
+.completion-stats .stat-coins strong { color: var(--xp-text); }
 .next-unlock { max-width: 380px; margin: 18px 0 22px; color: var(--text-muted); font-size: 14px; line-height: 1.55; }
+.pending-chest-banner { display: flex; align-items: center; gap: 12px; width: min(100%, 440px); margin: 0 0 20px; padding: 12px 14px; border: 1.5px solid var(--xp-gold); border-radius: 14px; background: var(--warn-bg); color: var(--text-strong); text-align: left; font: inherit; cursor: pointer; transition: transform .15s ease, box-shadow .15s ease; }
+.pending-chest-banner:hover { transform: translateY(-1px); box-shadow: var(--shadow-card); }
+.pending-chest-copy { display: grid; flex: 1; min-width: 0; gap: 2px; }
+.pending-chest-copy small { color: var(--xp-text); font-size: 12px; font-weight: 800; }
+.pending-chest-copy strong { color: var(--text-strong); font-size: 14px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.pending-chest-cta { flex: none; padding: 8px 12px; border-radius: 10px; background: var(--accent-strong); color: #fff; font-size: 12.5px; font-weight: 800; }
 .guest-save-card { width: min(100%, 440px); margin: 0 0 22px; padding: 16px 18px; border: 1.5px solid var(--accent-border-soft); border-radius: 14px; background: var(--accent-bg); text-align: left; }
 .guest-save-card strong { display: block; color: var(--text-strong); font-size: 15px; }
 .guest-save-card p { margin: 6px 0 12px; color: var(--text-secondary); font-size: 13px; line-height: 1.5; }

@@ -90,6 +90,10 @@ export function getChestAfterLesson(courseId: string, lessonId: number): PathChe
   return PATH_CHESTS.find((chest) => chest.courseId === courseId && chest.afterLessonId === lessonId) ?? null;
 }
 
+export function lessonChestId(lessonId: number): string {
+  return `chest-lesson-${lessonId}`;
+}
+
 export function getAvatarEmoji(avatarId: string | null | undefined): string | null {
   if (!avatarId) return null;
   return SHOP_AVATARS.find((item) => item.id === avatarId)?.emoji ?? null;

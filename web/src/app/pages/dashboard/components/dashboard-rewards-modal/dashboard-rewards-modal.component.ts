@@ -6,19 +6,13 @@ import {
 } from '../../../../data/rewards';
 import { LanguageService } from '../../../../i18n/language.service';
 import { LearnerProgress } from '../../../../services/progress.service';
-import { ChestIconComponent } from '../../../../shared/chest-icon/chest-icon.component';
+import { ChestOpeningItem, ChestOpeningModalComponent } from '../../../../shared/chest-opening-modal/chest-opening-modal.component';
 import { IconComponent } from '../../../../shared/icon/icon.component';
-
-export interface ChestRewardModalData {
-  title: string;
-  coins: number;
-  kind: 'path' | 'daily';
-}
 
 @Component({
   selector: 'app-dashboard-rewards-modal',
   standalone: true,
-  imports: [IconComponent, ChestIconComponent],
+  imports: [IconComponent, ChestOpeningModalComponent],
   templateUrl: './dashboard-rewards-modal.component.html',
   styleUrl: './dashboard-rewards-modal.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -26,11 +20,12 @@ export interface ChestRewardModalData {
 export class DashboardRewardsModalComponent {
   readonly language = inject(LanguageService);
 
-  readonly chestReward = input<ChestRewardModalData | null>(null);
+  readonly chestReward = input<ChestOpeningItem | null>(null);
   readonly shopOpen = input<boolean>(false);
   readonly progress = input.required<LearnerProgress>();
   readonly defaultInitial = input<string>('U');
 
+  readonly chestOpened = output<ChestOpeningItem>();
   readonly closeChest = output<void>();
   readonly openShopFromChest = output<void>();
   readonly closeShop = output<void>();
@@ -51,9 +46,7 @@ export class DashboardRewardsModalComponent {
 
   @HostListener('document:keydown.escape')
   onEscape(): void {
-    if (this.chestReward()) {
-      this.closeChest.emit();
-    } else if (this.shopOpen()) {
+    if (!this.chestReward() && this.shopOpen()) {
       this.closeShop.emit();
     }
   }

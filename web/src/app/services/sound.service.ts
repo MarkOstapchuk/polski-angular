@@ -44,6 +44,15 @@ export class SoundService {
     this.vibrate([15, 30, 30]);
   }
 
+  playChestRattle(): void {
+    if (!this.enabled()) return;
+    const notes = [280, 340, 415];
+    notes.forEach((freq, idx) => {
+      this.playTone(freq, idx * 0.135, 0.075, 'triangle', 0.065);
+    });
+    this.vibrate([10, 45, 12, 45, 16]);
+  }
+
   playChestOpen(): void {
     if (!this.enabled()) return;
     const notes = [587.33, 739.99, 880, 1174.66, 1396.91];

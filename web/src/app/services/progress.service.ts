@@ -4,6 +4,7 @@ import {
   LESSON_FIRST_CLEAR_COINS,
   MAX_STREAK_FREEZES,
   STREAK_FREEZE_PRICE,
+  lessonChestId,
 } from '../data/rewards';
 import { AnalyticsService } from './analytics.service';
 import type { SavedMistake, SavedWord } from './learning-data.types';
@@ -327,8 +328,6 @@ export class ProgressService {
       next.completedLessonIds = [...current.completedLessonIds, lessonId].sort((a, b) => a - b);
       next.totalXp += xp;
       next.dailyXp = current.lastStudyDate === today ? current.dailyXp + xp : xp;
-      next.coins = (current.coins ?? 0) + LESSON_FIRST_CLEAR_COINS;
-      next.rewardsUpdatedAt = new Date().toISOString();
     } else if (current.lastStudyDate !== today) {
       next.dailyXp = 0;
     }
@@ -367,6 +366,24 @@ export class ProgressService {
 
   canClaimDailyChest(): boolean {
     return this.progress().dailyXp >= 20 && !this.hasClaimedDailyChestToday();
+  }
+
+  claimLessonChest(lessonId: number, coins = LESSON_FIRST_CLEAR_COINS): boolean {
+    const chestId = lessonChestId(lessonId);
+    const current = this.progress();
+    const claimed = current.claimedChests ?? [];
+    if (claimed.includes(chestId)) return false;
+    void this.save({
+      ...current,
+      coins: (current.coins ?? 0) + coins,
+      claimedChests: [...claimed, chestId],
+      rewardsUpdatedAt: new Date().toISOString(),
+    });
+    this.analytics.track('chest_opened', {
+      lessonId,
+      metadata: { chest_id: chestId, kind: 'lesson', coins },
+    });
+    return true;
   }
 
   claimPathChest(chestId: string, coins: number): boolean {

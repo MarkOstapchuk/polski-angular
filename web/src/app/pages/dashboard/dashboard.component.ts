@@ -15,11 +15,12 @@ import { VocabularyService } from '../../services/vocabulary.service';
 import { LanguageSwitcherComponent } from '../../i18n/language-switcher.component';
 import { LanguageService } from '../../i18n/language.service';
 import { ChestIconComponent } from '../../shared/chest-icon/chest-icon.component';
+import { ChestOpeningItem } from '../../shared/chest-opening-modal/chest-opening-modal.component';
 import { IconComponent } from '../../shared/icon/icon.component';
 import { DashboardContinueCardComponent } from './components/dashboard-continue-card/dashboard-continue-card.component';
 import { DashboardDialogsComponent } from './components/dashboard-dialogs/dashboard-dialogs.component';
 import { DashboardProgressRailComponent } from './components/dashboard-progress-rail/dashboard-progress-rail.component';
-import { ChestRewardModalData, DashboardRewardsModalComponent } from './components/dashboard-rewards-modal/dashboard-rewards-modal.component';
+import { DashboardRewardsModalComponent } from './components/dashboard-rewards-modal/dashboard-rewards-modal.component';
 
 const ACTIVE_COURSE_KEY = 'polski-active-course';
 
@@ -68,7 +69,7 @@ export class DashboardComponent {
   readonly signOutConfirmOpen = signal(false);
   readonly signingOut = signal(false);
   readonly shopOpen = signal(false);
-  readonly chestReward = signal<ChestRewardModalData | null>(null);
+  readonly chestReward = signal<ChestOpeningItem | null>(null);
   readonly dailyChestReady = computed(() => this.progress().dailyXp >= 20 && this.progress().lastDailyChestDate !== this.progressService.todayKey());
   readonly dailyChestClaimed = computed(() => this.progress().lastDailyChestDate === this.progressService.todayKey());
   readonly activeNavSection = signal<'home' | 'course' | 'progress'>('home');
@@ -93,6 +94,15 @@ export class DashboardComponent {
   readonly greeting = computed(() => this.getGreeting());
 
   constructor() {
+    if (this.route.snapshot.queryParamMap.get('shop') === '1') {
+      this.openShop();
+      void this.router.navigate([], {
+        relativeTo: this.route,
+        queryParams: { shop: null },
+        queryParamsHandling: 'merge',
+        replaceUrl: true,
+      });
+    }
     effect(() => {
       const course = this.selectedCourse();
       if (!course) return;
@@ -203,25 +213,31 @@ export class DashboardComponent {
 
   openPathChest(chest: PathChest): void {
     if (!this.isChestUnlocked(chest) || this.isChestClaimed(chest)) return;
-    if (this.progressService.claimPathChest(chest.id, chest.coins)) {
-      this.sound.playChestOpen();
-      this.chestReward.set({
-        title: chest.title[this.language.locale()],
-        coins: chest.coins,
-        kind: 'path',
-      });
-    }
+    this.chestReward.set({
+      id: chest.id,
+      title: chest.title[this.language.locale()],
+      coins: chest.coins,
+      kind: 'path',
+      autoOpen: true,
+    });
   }
 
   claimDailyChest(): void {
-    const awarded = this.progressService.claimDailyChest();
-    if (awarded > 0) {
-      this.sound.playChestOpen();
-      this.chestReward.set({
-        title: this.language.t('chest.dailyTitle'),
-        coins: awarded,
-        kind: 'daily',
-      });
+    if (!this.progressService.canClaimDailyChest()) return;
+    this.chestReward.set({
+      id: `daily-${this.progressService.todayKey()}`,
+      title: this.language.t('chest.dailyTitle'),
+      coins: DAILY_CHEST_COINS,
+      kind: 'daily',
+      autoOpen: true,
+    });
+  }
+
+  onChestOpened(chest: ChestOpeningItem): void {
+    if (chest.kind === 'path') {
+      this.progressService.claimPathChest(chest.id, chest.coins);
+    } else if (chest.kind === 'daily') {
+      this.progressService.claimDailyChest();
     }
   }
 

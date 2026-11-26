@@ -11,9 +11,16 @@ import { loadLessonById, loadLessonTheory } from '../../data/lesson-loader';
 import type { LessonTheory } from '../../data/lesson-theory';
 import { resolveActivityTheory } from '../../data/lesson-theory-blocks';
 import { INSTRUCTION_TRANSLATIONS } from '../../data/instruction-translations';
+import {
+  DAILY_CHEST_COINS,
+  LESSON_FIRST_CLEAR_COINS,
+  getChestAfterLesson,
+  lessonChestId,
+} from '../../data/rewards';
 import { WORKBOOK_IMAGES, WorkbookImage } from '../../data/workbook-images';
 import { LanguageSwitcherComponent } from '../../i18n/language-switcher.component';
 import { LanguageService } from '../../i18n/language.service';
+import { ChestOpeningItem, ChestOpeningModalComponent } from '../../shared/chest-opening-modal/chest-opening-modal.component';
 import { IconComponent } from '../../shared/icon/icon.component';
 import { AnalyticsService } from '../../services/analytics.service';
 import { AuthService } from '../../services/auth.service';
@@ -59,6 +66,7 @@ const FOCUS_ELIGIBLE_MODES = new Set<ActivityUxMode>([
     LessonDictionaryModalComponent,
     LessonFooterComponent,
     LessonCompletionComponent,
+    ChestOpeningModalComponent,
     ExerciseItemViewComponent,
     MobileFocusDeckComponent,
     WordBankExerciseComponent,
@@ -137,6 +145,14 @@ export class LessonComponent {
   readonly checked = signal(false);
   readonly finished = signal(false);
   readonly awardedXp = signal(0);
+  readonly pendingChests = signal<ChestOpeningItem[]>([]);
+  readonly chestModalOpen = signal(false);
+  readonly chestQueueTotal = signal(0);
+  readonly chestQueueOpenedCount = signal(0);
+  readonly awardedCoins = signal(0);
+  private readonly openedChestIds = new Set<string>();
+  readonly activeChest = computed(() => (this.chestModalOpen() ? (this.pendingChests()[0] ?? null) : null));
+  readonly coinsBalance = computed(() => this.progress.progress().coins ?? 0);
   private readonly results = signal<Record<string, Record<string, boolean>>>({});
 
   readonly activity = computed(() => this.lesson()?.activities[this.activeIndex()]);
@@ -1112,6 +1128,7 @@ export class LessonComponent {
       }
     });
     this.finished.set(false);
+    this.chestModalOpen.set(false);
     this.abandonTracked = false;
     this.selectActivity(firstWrongIndex >= 0 ? firstWrongIndex : 0);
   }
@@ -1128,6 +1145,7 @@ export class LessonComponent {
       this.clearActivityAnswers(activity, false);
     }
     this.finished.set(false);
+    this.chestModalOpen.set(false);
     this.abandonTracked = false;
     this.selectActivity(0);
   }
@@ -1163,6 +1181,95 @@ export class LessonComponent {
     this.sound.playComplete();
     this.finished.set(true);
     this.scrollToTop();
+
+    const chests: ChestOpeningItem[] = [];
+    const courseId = this.courseIdFor(lesson.id);
+    const pathChest = getChestAfterLesson(courseId, lesson.id);
+    if (pathChest && !this.progress.hasClaimedChest(pathChest.id)) {
+      chests.push({
+        id: pathChest.id,
+        title: pathChest.title[this.language.locale()],
+        coins: pathChest.coins,
+        kind: 'path',
+        autoOpen: false,
+      });
+    } else if (!alreadyCompleted && !this.progress.hasClaimedChest(lessonChestId(lesson.id))) {
+      chests.push({
+        id: lessonChestId(lesson.id),
+        title: this.language.t('chest.lessonTitle'),
+        subtitle: lesson.title,
+        coins: LESSON_FIRST_CLEAR_COINS,
+        kind: 'lesson',
+        autoOpen: false,
+      });
+    }
+    if (this.progress.canClaimDailyChest()) {
+      chests.push({
+        id: `daily-${this.progress.todayKey()}`,
+        title: this.language.t('chest.dailyTitle'),
+        coins: DAILY_CHEST_COINS,
+        kind: 'daily',
+        autoOpen: false,
+      });
+    }
+    if (chests.length > 0) {
+      this.openedChestIds.clear();
+      this.pendingChests.set(chests);
+      this.chestQueueTotal.set(chests.length);
+      this.chestQueueOpenedCount.set(0);
+      this.chestModalOpen.set(true);
+    }
+  }
+
+  onChestOpened(chest: ChestOpeningItem): void {
+    this.openedChestIds.add(chest.id);
+    if (chest.kind === 'lesson') {
+      const lessonId = this.lesson()?.id;
+      if (lessonId && this.progress.claimLessonChest(lessonId, chest.coins)) {
+        this.awardedCoins.update((coins) => coins + chest.coins);
+      }
+      return;
+    }
+    if (chest.kind === 'path') {
+      if (this.progress.claimPathChest(chest.id, chest.coins)) {
+        this.awardedCoins.update((coins) => coins + chest.coins);
+      }
+      return;
+    }
+    const awarded = this.progress.claimDailyChest();
+    if (awarded > 0) {
+      this.awardedCoins.update((coins) => coins + awarded);
+    }
+  }
+
+  onChestModalClosed(): void {
+    const current = this.pendingChests()[0];
+    if (current && this.openedChestIds.has(current.id)) {
+      const remaining = this.pendingChests().slice(1);
+      this.pendingChests.set(remaining);
+      this.chestQueueOpenedCount.update((count) => count + 1);
+      if (remaining.length === 0) {
+        this.chestModalOpen.set(false);
+      }
+      return;
+    }
+    this.chestModalOpen.set(false);
+  }
+
+  reopenPendingChest(): void {
+    if (this.pendingChests().length > 0) {
+      this.chestModalOpen.set(true);
+    }
+  }
+
+  openShopFromChest(): void {
+    const current = this.pendingChests()[0];
+    if (current && this.openedChestIds.has(current.id)) {
+      this.pendingChests.update((list) => list.slice(1));
+      this.chestQueueOpenedCount.update((count) => count + 1);
+    }
+    this.chestModalOpen.set(false);
+    void this.router.navigate([this.dashboardUrl()], { queryParams: { shop: '1' } });
   }
 
   itemImage(item: ActivityItem): WorkbookImage | undefined {
@@ -1203,6 +1310,12 @@ export class LessonComponent {
 
     this.finished.set(false);
     this.awardedXp.set(0);
+    this.pendingChests.set([]);
+    this.chestModalOpen.set(false);
+    this.chestQueueTotal.set(0);
+    this.chestQueueOpenedCount.set(0);
+    this.awardedCoins.set(0);
+    this.openedChestIds.clear();
     this.wordBankTypeMode.set(false);
     this.wordOrderTypeItems.set({});
     this.retriedActivityIds.set(new Set());

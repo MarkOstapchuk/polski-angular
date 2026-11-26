@@ -339,13 +339,25 @@
         [correctAnswers]="correctAnswers()"
         [totalQuestions]="totalQuestions()"
         [awardedXp]="awardedXp()"
+        [awardedCoins]="awardedCoins()"
+        [pendingChestTitle]="pendingChests()[0]?.title ?? null"
+        [pendingChestCoins]="pendingChests()[0]?.coins ?? 0"
         [nextLesson]="nextLesson()"
         [isGuest]="!auth.user()"
+        (openPendingChest)="reopenPendingChest()"
         (retryWrong)="retryWrongFromCompletion()"
         (retryLesson)="retryLessonFromCompletion()" />
     }
 
     <app-lesson-image-lightbox [image]="lightboxImage()" (closed)="closeLightbox()" />
     <app-lesson-dictionary-modal [(word)]="dictionaryWord" [lessonId]="lesson.id" (closed)="closeDictionary()" />
+    <app-chest-opening-modal
+      [chest]="activeChest()"
+      [currentBalance]="coinsBalance()"
+      [queueIndex]="chestQueueOpenedCount()"
+      [queueTotal]="chestQueueTotal()"
+      (opened)="onChestOpened($event)"
+      (closed)="onChestModalClosed()"
+      (openShop)="openShopFromChest()" />
   </div>
 }
