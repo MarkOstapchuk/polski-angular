@@ -829,3 +829,27 @@ export function resolveActivityTheory(
     totalBlocks: blocks.length,
   };
 }
+
+export function getReferenceBlocksForLesson(
+  lessonId: number,
+  theory: LessonTheory,
+  locale: Language,
+): TheoryBlock[] {
+  const ruDetailed = PART1_THEORY_BLOCKS[lessonId] ?? PART2_THEORY_BLOCKS[lessonId];
+  const customBlocks = theory.blocks
+    ?? LESSON_1_5_BLOCKS[locale]?.[lessonId]
+    ?? PART3_THEORY_BLOCKS[locale]?.[lessonId]
+    ?? (locale === 'ru' ? ruDetailed : undefined);
+
+  if (customBlocks?.length) return customBlocks;
+
+  const tables = (ruDetailed ?? [])
+    .map((b) => b.table)
+    .filter((t): t is NonNullable<typeof t> => !!t);
+  return tables.map((table, idx) => ({
+    id: `ref-l${lessonId}-t${idx + 1}`,
+    title: table.headers[0] ?? '',
+    summary: '',
+    table,
+  }));
+}

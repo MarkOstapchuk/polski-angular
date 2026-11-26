@@ -147,10 +147,18 @@ export const LESSON_09: Lesson = {
         sent('q7', 'niż / kurczak / zdrowszy / gotowany / jest / pieczony', ['Gotowany kurczak jest zdrowszy niż pieczony.']),
       ],
     },
-    typedExercise(9, 4, 'Jaki smak? Jaki kształt?', 'Uzupełnij określenia smaku i kształtu.', [
-      ['Smak 1', 'kwaśny'], ['Smak 2', 'ostry'], ['Smak 3', 'słodki'], ['Smak 4', 'słony'], ['Smak 5', 'gorzki'],
-      ['Kształt 1', 'owalny'], ['Kształt 2', 'okrągły'], ['Kształt 3', 'podłużny'],
-    ]),
+    {
+      id: 'l09-exercise-4', sourceExerciseId: 'WB-L09-E04', sourceLabel: 'Zeszyt ćwiczeń · ćwiczenie 4',
+      kind: ActivityKind.Typed, title: 'Jaki smak? Jaki kształt?',
+      instruction: 'Uzupełnij określenia smaku i kształtu.',
+      items: [
+        typed('q1', 'Smak 1', 'kwaśny'), typed('q2', 'Smak 2', 'ostry'), typed('q3', 'Smak 3', 'słodki'),
+        typed('q4', 'Smak 4', 'słony'), typed('q5', 'Smak 5', 'gorzki'),
+        { ...typed('q6', 'Kształt 1', 'owalny'), image: 1 },
+        { ...typed('q7', 'Kształt 2', 'okrągły'), image: 2 },
+        { ...typed('q8', 'Kształt 3', 'podłużny'), image: 3 },
+      ],
+    },
     typedExercise(9, 5, 'Co to za owoc lub warzywo?', 'Uzupełnij opisy wyrazami z ramki.', [
       ['1. Jest słodka; dodajemy ją do cukru i śmietany.', 'truskawka'],
       ['2. Jest okrągły, średni i czerwony; pasuje do oliwy.', 'pomidor'],

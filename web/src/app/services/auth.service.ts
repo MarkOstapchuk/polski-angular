@@ -83,6 +83,29 @@ export class AuthService {
     this.analytics.reset();
   }
 
+  async requestPasswordReset(email: string): Promise<void> {
+    const redirectTo = typeof window !== 'undefined' ? `${window.location.origin}/auth?mode=reset` : undefined;
+    const { error } = await supabase.auth.resetPasswordForEmail(email, redirectTo ? { redirectTo } : undefined);
+    if (error) throw error;
+  }
+
+  async updatePassword(newPassword: string): Promise<void> {
+    const { data, error } = await supabase.auth.updateUser({ password: newPassword });
+    if (error) throw error;
+    if (data.user) {
+      this.user.set(data.user);
+      this.storeOfflineUser(data.user);
+      this.identifyUser(data.user);
+    }
+  }
+
+  onPasswordRecovery(handler: () => void): () => void {
+    const { data } = supabase.auth.onAuthStateChange((event) => {
+      if (event === 'PASSWORD_RECOVERY') handler();
+    });
+    return () => data.subscription.unsubscribe();
+  }
+
   private identifyUser(user: AppUser): void {
     this.analytics.identify(user.id, {
       email: user.email ?? undefined,

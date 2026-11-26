@@ -168,3 +168,22 @@ img[src$="p013-e12-4.png"] { filter: sepia(1) saturate(6) hue-rotate(180deg); }
 img[src$="p013-e12-5.png"] { filter: sepia(1) saturate(6) hue-rotate(-50deg); }
 img[src$="p013-e12-7.png"] { filter: sepia(1) saturate(6) hue-rotate(245deg); }
 img[src$="p013-e12-8.png"] { filter: sepia(1) saturate(6) hue-rotate(8deg); }
+
+@keyframes feedbackPop {
+  0% { transform: scale(1); }
+  45% { transform: scale(1.015); }
+  100% { transform: scale(1); }
+}
+
+@keyframes feedbackShake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-4px); }
+  65% { transform: translateX(4px); }
+}
+
+.anim-correct { animation: feedbackPop .24s ease-out; }
+.anim-wrong { animation: feedbackShake .26s ease-out; }
+
+@media (prefers-reduced-motion: reduce) {
+  .anim-correct, .anim-wrong { animation: none !important; }
+}

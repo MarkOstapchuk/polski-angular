@@ -6,11 +6,13 @@ import { LanguageSwitcherComponent } from '../../i18n/language-switcher.componen
 import { LanguageService } from '../../i18n/language.service';
 import { AnalyticsService } from '../../services/analytics.service';
 import { MistakesService, SavedMistake } from '../../services/mistakes.service';
+import { SoundService } from '../../services/sound.service';
+import { AnswerDiffComponent } from '../../shared/answer-diff/answer-diff.component';
 
 @Component({
   selector: 'app-mistakes',
   standalone: true,
-  imports: [FormsModule, RouterLink, LanguageSwitcherComponent],
+  imports: [FormsModule, RouterLink, LanguageSwitcherComponent, AnswerDiffComponent],
   templateUrl: './mistakes.component.html',
   styleUrl: './mistakes.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -19,6 +21,7 @@ export class MistakesComponent {
   readonly mistakesService = inject(MistakesService);
   readonly language = inject(LanguageService);
   private readonly analytics = inject(AnalyticsService);
+  private readonly sound = inject(SoundService);
 
   readonly queue = signal<SavedMistake[]>(this.mistakesService.mistakes().slice(0, 10));
   readonly index = signal(0);
@@ -45,8 +48,11 @@ export class MistakesComponent {
     this.lastCorrect.set(ok);
 
     if (ok) {
+      this.sound.playCorrect();
       this.mistakesService.resolveMistake(item.key);
       this.fixedCount.update((n) => n + 1);
+    } else {
+      this.sound.playWrong();
     }
   }
 
@@ -58,6 +64,7 @@ export class MistakesComponent {
       this.lastCorrect.set(false);
     } else {
       this.done.set(true);
+      this.sound.playComplete();
       this.analytics.track('mistakes_session_completed', {
         metadata: { total: this.queue().length, fixed: this.fixedCount() },
       });

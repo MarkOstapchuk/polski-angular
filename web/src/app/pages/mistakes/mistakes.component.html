@@ -66,9 +66,17 @@
       }
 
       @if (checked()) {
-        <div class="feedback-bar" [class.is-ok]="lastCorrect()" [class.is-err]="!lastCorrect()">
+        <div class="feedback-bar"
+          [class.is-ok]="lastCorrect()"
+          [class.is-err]="!lastCorrect()"
+          [class.anim-correct]="lastCorrect()"
+          [class.anim-wrong]="!lastCorrect()">
           @if (lastCorrect()) {
             <strong>{{ language.t('lesson.correct') }} ✓</strong>
+          } @else if (!item.options?.length) {
+            <div class="feedback-diff-wrap">
+              <app-answer-diff [userAnswer]="userAnswer()" [accepted]="item.accepted" />
+            </div>
           } @else {
             <div>
               <strong>{{ language.t('lesson.correctAnswer') }}</strong>

@@ -1,0 +1,152 @@
+<header class="page-header">
+  <a class="back-link" routerLink="/course/part-1">← {{ language.t('lesson.back') }}</a>
+  <app-language-switcher />
+</header>
+
+<main class="page-main">
+  <section class="page-intro">
+    <p class="eyebrow">{{ language.t('grammarRef.eyebrow') }}</p>
+    <h1>{{ language.t('grammarRef.title') }}</h1>
+    <p class="subtitle">{{ language.t('grammarRef.subtitle') }}</p>
+  </section>
+
+  <section class="search-panel">
+    <div class="search-box">
+      <span class="search-icon" aria-hidden="true">⌕</span>
+      <input type="search" class="search-input"
+        [ngModel]="query()"
+        (ngModelChange)="onQueryChange($event)"
+        [placeholder]="language.t('grammarRef.searchPlaceholder')"
+        [attr.aria-label]="language.t('grammarRef.searchPlaceholder')"
+        autocomplete="off" />
+      @if (query()) {
+        <button type="button" class="clear-btn" (click)="clearSearch()" [attr.aria-label]="language.t('grammarRef.clearSearch')">×</button>
+      }
+    </div>
+
+    <div class="chips-row">
+      @for (topic of quickTopics; track topic) {
+        <button type="button" class="topic-chip" [class.active]="query() === topic" (click)="applyQuickTopic(topic)">
+          {{ topic }}
+        </button>
+      }
+    </div>
+
+    <div class="level-tabs">
+      <button type="button" class="level-tab" [class.active]="levelFilter() === 'all'" (click)="levelFilter.set('all')">
+        {{ language.t('grammarRef.allLevels') }} ({{ entries().length }})
+      </button>
+      <button type="button" class="level-tab" [class.active]="levelFilter() === 'part-1'" (click)="levelFilter.set('part-1')">
+        A1–A2 (1–26)
+      </button>
+      <button type="button" class="level-tab" [class.active]="levelFilter() === 'part-2'" (click)="levelFilter.set('part-2')">
+        A2–B1 (27–49)
+      </button>
+      <button type="button" class="level-tab" [class.active]="levelFilter() === 'part-3'" (click)="levelFilter.set('part-3')">
+        B2 (50–70)
+      </button>
+    </div>
+  </section>
+
+  @if (loading()) {
+    <p class="status-note">{{ language.t('grammarRef.loading') }}</p>
+  } @else if (filteredEntries().length === 0) {
+    <section class="empty-card">
+      <p>{{ language.t('grammarRef.noResults') }}</p>
+      <button type="button" class="clear-search-btn" (click)="clearSearch(); levelFilter.set('all')">
+        {{ language.t('grammarRef.clearSearch') }}
+      </button>
+    </section>
+  } @else {
+    <p class="results-meta">{{ language.t('grammarRef.resultsCount') }}: {{ filteredEntries().length }}</p>
+
+    <section class="lesson-list">
+      @for (entry of filteredEntries(); track entry.lessonId) {
+        <article class="lesson-card" [class.is-open]="isExpanded(entry.lessonId)">
+          <div class="lesson-head">
+            <button type="button" class="lesson-toggle"
+              [attr.aria-expanded]="isExpanded(entry.lessonId)"
+              (click)="toggleLesson(entry.lessonId)">
+              <div class="lesson-badges">
+                <span class="level-badge">{{ entry.courseLevel }}</span>
+                <span class="num-badge">{{ language.t('placement.lesson') }} {{ entry.displayNumber }}</span>
+              </div>
+              <strong class="lesson-title">{{ entry.title }}</strong>
+              <span class="lesson-topic">{{ entry.topic }}</span>
+            </button>
+            <a class="open-lesson-link" [routerLink]="['/learn', entry.lessonId]">
+              {{ language.t('grammarRef.openLesson') }} →
+            </a>
+          </div>
+
+          @if (isExpanded(entry.lessonId)) {
+            <div class="lesson-body">
+              <p class="grammar-summary">{{ entry.grammar }}</p>
+
+              @for (block of entry.blocks; track block.id) {
+                <section class="theory-block" [class.is-match]="blockMatches(block)">
+                  @if (block.title) {
+                    <h3>{{ block.title }}</h3>
+                  }
+                  @if (block.summary) {
+                    <p class="block-summary">{{ block.summary }}</p>
+                  }
+                  @if (block.bullets?.length) {
+                    <ul class="block-bullets">
+                      @for (b of block.bullets; track b) {
+                        <li>{{ b }}</li>
+                      }
+                    </ul>
+                  }
+                  @if (block.table; as table) {
+                    <div class="table-scroll">
+                      <table class="grammar-table">
+                        <thead>
+                          <tr>
+                            @for (h of table.headers; track $index) {
+                              <th>{{ h }}</th>
+                            }
+                          </tr>
+                        </thead>
+                        <tbody>
+                          @for (row of table.rows; track $index) {
+                            <tr>
+                              @for (cell of row; track $index) {
+                                <td>{{ cell }}</td>
+                              }
+                            </tr>
+                          }
+                        </tbody>
+                      </table>
+                    </div>
+                  }
+                  @if (block.examples?.length) {
+                    <div class="examples-list">
+                      @for (ex of block.examples; track $index) {
+                        <div class="example-row">
+                          <strong lang="pl">{{ ex.polish }}</strong>
+                          <span>{{ ex.translation }}</span>
+                        </div>
+                      }
+                    </div>
+                  }
+                </section>
+              }
+
+              @if (entry.blocks.length === 0 && entry.examples.length) {
+                <div class="examples-list">
+                  @for (ex of entry.examples; track $index) {
+                    <div class="example-row">
+                      <strong lang="pl">{{ ex.polish }}</strong>
+                      <span>{{ ex.translation }}</span>
+                    </div>
+                  }
+                </div>
+              }
+            </div>
+          }
+        </article>
+      }
+    </section>
+  }
+</main>

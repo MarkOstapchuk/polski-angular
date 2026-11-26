@@ -19,16 +19,65 @@
     </section>
   } @else {
     <div class="mode-tabs" role="tablist">
-      <button type="button" role="tab" [class.active]="mode() === 'cards'" (click)="mode.set('cards')">
-        {{ language.t('vocab.tabCards') }} ({{ deck().length }})
+      <button type="button" role="tab" [class.active]="mode() === 'cards'" (click)="selectMode('cards')">
+        {{ language.t('vocab.tabCards') }} ({{ vocabulary.dueCount() }})
       </button>
-      <button type="button" role="tab" [class.active]="mode() === 'list'" (click)="mode.set('list')">
+      <button type="button" role="tab" [class.active]="mode() === 'quiz'" (click)="selectMode('quiz')">
+        {{ language.t('vocab.tabQuiz') }}
+      </button>
+      <button type="button" role="tab" [class.active]="mode() === 'type'" (click)="selectMode('type')">
+        {{ language.t('vocab.tabType') }}
+      </button>
+      <button type="button" role="tab" [class.active]="mode() === 'list'" (click)="selectMode('list')">
         {{ language.t('vocab.tabList') }} ({{ vocabulary.count() }})
       </button>
     </div>
 
-    @if (mode() === 'cards') {
-      @if (!sessionDone() && currentCard(); as card) {
+    @if (mode() === 'list') {
+      <section class="word-list">
+        @for (item of vocabulary.words(); track item.id) {
+          <article class="word-row">
+            <div class="word-copy">
+              <strong lang="pl">{{ item.word }}</strong>
+              <span>{{ item.translations.join(' · ') }}</span>
+            </div>
+            <div class="word-meta">
+              @if (isDue(item)) {
+                <span class="due-chip">{{ language.t('vocab.dueNowChip') }}</span>
+              } @else {
+                <span class="mastery-chip">✓ {{ language.t('vocab.inDays') }} {{ daysUntilReview(item) }}{{ language.t('vocab.dayShort') }}</span>
+              }
+              <button type="button" class="remove-btn" (click)="removeWord(item.id)" [attr.aria-label]="language.t('vocab.remove')">×</button>
+            </div>
+          </article>
+        }
+      </section>
+    } @else if (deck().length === 0) {
+      <section class="done-card">
+        <div class="empty-icon">✦</div>
+        <h2>{{ language.t('vocab.allDoneTodayTitle') }}</h2>
+        <p>{{ language.t('vocab.allDoneTodayBody') }}</p>
+        <div class="done-actions">
+          <button type="button" class="primary-btn" (click)="restartDeck(true)">
+            {{ language.t('vocab.practiceAllWords') }} ({{ vocabulary.count() }})
+          </button>
+          <a class="secondary-btn" routerLink="/course/part-1">{{ language.t('checkpoint.backToCourse') }}</a>
+        </div>
+      </section>
+    } @else if (sessionDone()) {
+      <section class="done-card">
+        <div class="empty-icon">✦</div>
+        <h2>{{ language.t('vocab.sessionDoneTitle') }}</h2>
+        <p>{{ knownCount() }} / {{ deck().length }} {{ language.t('vocab.sessionDoneBody') }}</p>
+        <div class="done-actions">
+          <button type="button" class="primary-btn" (click)="restartDeck(vocabulary.dueCount() === 0)">
+            {{ language.t('vocab.practiceAgain') }}
+          </button>
+          <a class="secondary-btn" routerLink="/course/part-1">{{ language.t('checkpoint.backToCourse') }}</a>
+        </div>
+      </section>
+    } @else if (currentCard(); as card) {
+      @if (mode() === 'cards') {
         <section class="flashcard-wrap">
           <div class="deck-progress">
             <span>{{ cardIndex() + 1 }} / {{ deck().length }}</span>
@@ -55,41 +104,104 @@
                 {{ language.t('vocab.again') }}
               </button>
               <button type="button" class="know-btn" (click)="answerCard(true)">
-                {{ language.t('vocab.know') }} ✓
+                {{ language.t('vocab.know') }} ✓ <small>+{{ nextIntervalDays() }}{{ language.t('vocab.dayShort') }}</small>
               </button>
             </div>
           }
         </section>
-      } @else {
-        <section class="done-card">
-          <div class="empty-icon">✦</div>
-          <h2>{{ language.t('vocab.sessionDoneTitle') }}</h2>
-          <p>{{ knownCount() }} / {{ deck().length }} {{ language.t('vocab.sessionDoneBody') }}</p>
-          <div class="done-actions">
-            <button type="button" class="primary-btn" (click)="restartDeck()">
-              {{ language.t('vocab.practiceAgain') }}
-            </button>
-            <a class="secondary-btn" routerLink="/course/part-1">{{ language.t('checkpoint.backToCourse') }}</a>
+      } @else if (mode() === 'quiz') {
+        <section class="practice-card">
+          <div class="deck-progress">
+            <span>{{ cardIndex() + 1 }} / {{ deck().length }}</span>
+            <small>{{ language.t('vocab.quizPrompt') }}</small>
           </div>
+
+          <p class="quiz-word" lang="pl">{{ card.word }}</p>
+
+          <div class="quiz-grid">
+            @for (opt of quizOptions(); track opt; let idx = $index) {
+              <button type="button" class="quiz-opt"
+                [disabled]="!!quizSelected()"
+                [class.is-right]="quizSelected() && opt === card.translations[0]"
+                [class.is-wrong]="quizSelected() === opt && opt !== card.translations[0]"
+                (click)="selectQuizOption(opt)">
+                <span class="quiz-num">{{ idx + 1 }}</span>
+                <span>{{ opt }}</span>
+              </button>
+            }
+          </div>
+
+          @if (quizSelected()) {
+            <div class="feedback-bar"
+              [class.is-ok]="quizCorrect()"
+              [class.is-err]="!quizCorrect()"
+              [class.anim-correct]="quizCorrect()"
+              [class.anim-wrong]="!quizCorrect()">
+              @if (quizCorrect()) {
+                <strong>{{ language.t('lesson.correct') }} ✓ (+{{ nextIntervalDays() }}{{ language.t('vocab.dayShort') }})</strong>
+              } @else {
+                <div><strong>{{ language.t('lesson.correctAnswer') }}</strong> <span>{{ card.translations[0] }}</span></div>
+              }
+              <button type="button" class="primary-btn" (click)="advanceOrFinish()">
+                {{ language.t('lesson.next') }} →
+              </button>
+            </div>
+          }
+        </section>
+      } @else if (mode() === 'type') {
+        <section class="practice-card">
+          <div class="deck-progress">
+            <span>{{ cardIndex() + 1 }} / {{ deck().length }}</span>
+            <small>{{ language.t('vocab.typePrompt') }}</small>
+          </div>
+
+          <p class="quiz-word">{{ card.translations.join(' · ') }}</p>
+
+          <div class="diacritic-row">
+            @for (ch of diacritics; track ch) {
+              <button type="button" class="diacritic-btn" [disabled]="typedChecked()" (click)="insertDiacritic(ch)">
+                {{ ch }}
+              </button>
+            }
+          </div>
+
+          <form class="typed-form" (ngSubmit)="checkTyped()">
+            <input #typeInputEl type="text" class="typed-input" name="vocabAnswer" lang="pl"
+              [ngModel]="typedAnswer()" (ngModelChange)="typedAnswer.set($event)"
+              [disabled]="typedChecked()" [placeholder]="language.t('vocab.typePlaceholder')"
+              autocomplete="off" autocapitalize="off" spellcheck="false" />
+            @if (!typedChecked()) {
+              <button type="submit" class="primary-btn" [disabled]="!typedAnswer().trim()">
+                {{ language.t('lesson.check') }}
+              </button>
+            }
+          </form>
+
+          @if (typedChecked()) {
+            <div class="feedback-bar"
+              [class.is-ok]="typedCorrect()"
+              [class.is-err]="!typedCorrect()"
+              [class.anim-correct]="typedCorrect()"
+              [class.anim-wrong]="!typedCorrect()">
+              @if (typedCorrect()) {
+                <div class="feedback-ok-copy">
+                  <strong>{{ language.t('lesson.correct') }} ✓</strong>
+                  @if (typedAccentHint(); as hint) {
+                    <small>{{ language.t('lesson.accentHint') }} <strong lang="pl">{{ hint }}</strong></small>
+                  }
+                </div>
+              } @else {
+                <div class="feedback-diff-wrap">
+                  <app-answer-diff [userAnswer]="typedAnswer()" [accepted]="[card.word]" />
+                </div>
+              }
+              <button type="button" class="primary-btn" (click)="advanceOrFinish()">
+                {{ language.t('lesson.next') }} →
+              </button>
+            </div>
+          }
         </section>
       }
-    } @else {
-      <section class="word-list">
-        @for (item of vocabulary.words(); track item.id) {
-          <article class="word-row">
-            <div class="word-copy">
-              <strong lang="pl">{{ item.word }}</strong>
-              <span>{{ item.translations.join(' · ') }}</span>
-            </div>
-            <div class="word-meta">
-              @if (item.masteredCount > 0) {
-                <span class="mastery-chip">✓ {{ item.masteredCount }}</span>
-              }
-              <button type="button" class="remove-btn" (click)="removeWord(item.id)" [attr.aria-label]="language.t('vocab.remove')">×</button>
-            </div>
-          </article>
-        }
-      </section>
     }
   }
 </main>

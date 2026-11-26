@@ -180,6 +180,13 @@
   gap: 10px;
 }
 
+.focus-panel-toggles {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  flex: none;
+}
+
 .focus-theme-btn {
   display: inline-grid;
   flex: none;
@@ -470,7 +477,7 @@
 .focus-feedback-dock.is-correct { background: var(--success-bg); color: var(--success-text); }
 .focus-feedback-dock.is-wrong { background: var(--error-bg); color: var(--error-text); }
 
-.focus-feedback-text { display: grid; gap: 4px; }
+.focus-feedback-text { display: grid; gap: 4px; min-width: 0; max-height: 112px; overflow-y: auto; }
 .focus-feedback-title { font-size: 15px; line-height: 1.4; }
 .focus-accent-hint { font-size: 13px; color: var(--warn-text); line-height: 1.4; }
 .focus-explanation { font-size: 13px; color: var(--text-secondary); line-height: 1.45; }

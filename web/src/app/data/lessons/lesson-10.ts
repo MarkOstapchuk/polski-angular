@@ -139,12 +139,18 @@ export const LESSON_10: Lesson = {
       ['Dwa razy kawa ze śmietanką.', 'KLIENT'], ['Chciałabym zarezerwować stolik.', 'KLIENT'],
       ['Czy mogę prosić rachunek?', 'KLIENT'], ['Dla mnie to samo.', 'KLIENT'], ['Ile płacę?', 'KLIENT'],
     ]),
-    typedExercise(10, 5, 'Jak smakuje?', 'Uzupełnij krótkie dialogi o jedzeniu.', [
-      ['Piwo jest nie ___, lecz ciepłe.', 'dobre'], ['Naleśniki ze szpinakiem są ___ .', 'przepyszne'],
-      ['Placki ziemniaczane smakują ___ .', 'bardzo dobrze'], ['Pstrąg jest ___ .', 'wyśmienity'],
-      ['Zupa grzybowa jest ___, bo nie lubię grzybów.', 'niedobra'],
-      ['Pączek jest taki sobie, niezbyt ___ .', 'smaczny'],
-    ]),
+    {
+      id: 'l10-exercise-5', ...src(5), kind: ActivityKind.Typed, title: 'Jak smakuje?',
+      instruction: 'Uzupełnij krótkie dialogi o jedzeniu.',
+      items: [
+        { ...typed('q1', 'Piwo jest nie ___, lecz ciepłe.', 'dobre'), image: 1 },
+        { ...typed('q2', 'Naleśniki ze szpinakiem są ___ .', 'przepyszne'), image: 2 },
+        { ...typed('q3', 'Placki ziemniaczane smakują ___ .', 'bardzo dobrze'), image: 2 },
+        { ...typed('q4', 'Pstrąg jest ___ .', 'wyśmienity'), image: 2 },
+        { ...typed('q5', 'Zupa grzybowa jest ___, bo nie lubię grzybów.', 'niedobra'), image: 1 },
+        { ...typed('q6', 'Pączek jest taki sobie, niezbyt ___ .', 'smaczny'), image: 3 },
+      ],
+    },
     typedExercise(10, 8, 'Potrawy z menu', 'Wpisz nazwę potrawy lub produktu z listy.', [
       ['1', 'barszcz'], ['2', 'naleśniki'], ['3', 'gołąbki'], ['4', 'żeberka'], ['5', 'makrela'],
       ['6', 'filet'], ['7', 'surówki'], ['8', 'bigos'], ['9', 'pierogi'],

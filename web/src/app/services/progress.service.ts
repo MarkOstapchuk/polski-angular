@@ -1,5 +1,6 @@
 import { Injectable, inject, signal } from '@angular/core';
 import { AnalyticsService } from './analytics.service';
+import type { SavedMistake, SavedWord } from './learning-data.types';
 import { supabase } from './supabase.client';
 
 export interface LearnerProgress {
@@ -11,6 +12,10 @@ export interface LearnerProgress {
   streak: number;
   bestStreak: number;
   lastStudyDate: string | null;
+  vocabulary?: SavedWord[];
+  vocabularyDeleted?: Record<string, string>;
+  mistakes?: SavedMistake[];
+  mistakesResolved?: Record<string, string>;
 }
 
 export interface SavedActivityProgress {
@@ -30,6 +35,10 @@ const EMPTY_PROGRESS: LearnerProgress = {
   streak: 0,
   bestStreak: 0,
   lastStudyDate: null,
+  vocabulary: [],
+  vocabularyDeleted: {},
+  mistakes: [],
+  mistakesResolved: {},
 };
 
 function localDateKey(date = new Date()): string {
@@ -43,6 +52,82 @@ function shiftDate(dateKey: string, offset: number): string {
   const [year, month, day] = dateKey.split('-').map(Number);
   const date = new Date(year, month - 1, day + offset);
   return localDateKey(date);
+}
+
+export function mergeDeletedMap(
+  a: Record<string, string> | undefined,
+  b: Record<string, string> | undefined,
+  maxEntries = 200,
+): Record<string, string> {
+  const combined: Record<string, string> = {};
+  for (const src of [a, b]) {
+    if (!src) continue;
+    for (const [key, ts] of Object.entries(src)) {
+      if (typeof ts !== 'string') continue;
+      if (!combined[key] || ts > combined[key]) combined[key] = ts;
+    }
+  }
+  const entries = Object.entries(combined)
+    .sort((x, y) => y[1].localeCompare(x[1]))
+    .slice(0, maxEntries);
+  return Object.fromEntries(entries);
+}
+
+export function mergeVocabularyLists(
+  remote: SavedWord[] | undefined,
+  local: SavedWord[] | undefined,
+  deleted: Record<string, string> | undefined,
+): SavedWord[] {
+  const map = new Map<string, SavedWord>();
+  for (const list of [remote, local]) {
+    if (!list) continue;
+    for (const entry of list) {
+      if (!entry?.id) continue;
+      const entryTs = entry.lastReviewedAt ?? entry.addedAt ?? '';
+      const delTs = deleted?.[entry.id];
+      if (delTs && delTs >= entryTs) continue;
+      const existing = map.get(entry.id);
+      if (!existing) {
+        map.set(entry.id, entry);
+        continue;
+      }
+      const existingTs = existing.lastReviewedAt ?? existing.addedAt ?? '';
+      const entryStep = entry.srsStep ?? entry.masteredCount ?? 0;
+      const existingStep = existing.srsStep ?? existing.masteredCount ?? 0;
+      if (entryTs > existingTs || (entryTs === existingTs && entryStep > existingStep)) {
+        map.set(entry.id, entry);
+      }
+    }
+  }
+  return [...map.values()].sort((a, b) => (b.addedAt ?? '').localeCompare(a.addedAt ?? ''));
+}
+
+export function mergeMistakeLists(
+  remote: SavedMistake[] | undefined,
+  local: SavedMistake[] | undefined,
+  resolved: Record<string, string> | undefined,
+): SavedMistake[] {
+  const map = new Map<string, SavedMistake>();
+  for (const list of [remote, local]) {
+    if (!list) continue;
+    for (const entry of list) {
+      if (!entry?.key) continue;
+      const resTs = resolved?.[entry.key];
+      if (resTs && resTs >= (entry.updatedAt ?? '')) continue;
+      const existing = map.get(entry.key);
+      if (!existing) {
+        map.set(entry.key, entry);
+        continue;
+      }
+      if ((entry.updatedAt ?? '') > (existing.updatedAt ?? '')
+        || (entry.updatedAt === existing.updatedAt && entry.wrongCount > existing.wrongCount)) {
+        map.set(entry.key, entry);
+      }
+    }
+  }
+  return [...map.values()]
+    .sort((a, b) => (b.updatedAt ?? '').localeCompare(a.updatedAt ?? ''))
+    .slice(0, 80);
 }
 
 function mergeProgress(remote: LearnerProgress, local: LearnerProgress): LearnerProgress {
@@ -62,6 +147,11 @@ function mergeProgress(remote: LearnerProgress, local: LearnerProgress): Learner
   const localIsNewer = (local.lastStudyDate ?? '') > (remote.lastStudyDate ?? '');
   const sameStudyDay = local.lastStudyDate === remote.lastStudyDate;
 
+  const vocabularyDeleted = mergeDeletedMap(remote.vocabularyDeleted, local.vocabularyDeleted);
+  const vocabulary = mergeVocabularyLists(remote.vocabulary, local.vocabulary, vocabularyDeleted);
+  const mistakesResolved = mergeDeletedMap(remote.mistakesResolved, local.mistakesResolved);
+  const mistakes = mergeMistakeLists(remote.mistakes, local.mistakes, mistakesResolved);
+
   return {
     completedLessonIds,
     scores,
@@ -71,6 +161,10 @@ function mergeProgress(remote: LearnerProgress, local: LearnerProgress): Learner
     streak: localIsNewer ? local.streak : sameStudyDay ? Math.max(remote.streak, local.streak) : remote.streak,
     bestStreak: Math.max(remote.bestStreak, local.bestStreak),
     lastStudyDate: localIsNewer ? local.lastStudyDate : remote.lastStudyDate,
+    vocabulary,
+    vocabularyDeleted,
+    mistakes,
+    mistakesResolved,
   };
 }
 
@@ -90,6 +184,10 @@ export class ProgressService {
     }
   }
 
+  hasAuthenticatedUser(): boolean {
+    return this.userId !== null;
+  }
+
   async loadForUser(userId: string): Promise<void> {
     const sameUser = this.userId === userId;
     const localKey = `${STORAGE_KEY}:${userId}`;
@@ -105,7 +203,17 @@ export class ProgressService {
         .maybeSingle();
       if (error) throw error;
       const saved = data?.progress as Partial<LearnerProgress> | undefined;
-      remote = saved ? { ...EMPTY_PROGRESS, ...saved, activityProgress: saved.activityProgress ?? {} } : null;
+      remote = saved
+        ? {
+            ...EMPTY_PROGRESS,
+            ...saved,
+            activityProgress: saved.activityProgress ?? {},
+            vocabulary: saved.vocabulary ?? [],
+            vocabularyDeleted: saved.vocabularyDeleted ?? {},
+            mistakes: saved.mistakes ?? [],
+            mistakesResolved: saved.mistakesResolved ?? {},
+          }
+        : null;
     } catch {
       let progress = { ...EMPTY_PROGRESS };
       for (const saved of [local, legacy, pending]) if (saved) progress = mergeProgress(progress, saved);
@@ -199,6 +307,26 @@ export class ProgressService {
     });
   }
 
+  saveVocabulary(vocabulary: SavedWord[], vocabularyDeleted?: Record<string, string>): void {
+    const current = this.progress();
+    const mergedDeleted = mergeDeletedMap(current.vocabularyDeleted, vocabularyDeleted);
+    void this.save({
+      ...current,
+      vocabulary,
+      vocabularyDeleted: mergedDeleted,
+    });
+  }
+
+  saveMistakes(mistakes: SavedMistake[], mistakesResolved?: Record<string, string>): void {
+    const current = this.progress();
+    const mergedResolved = mergeDeletedMap(current.mistakesResolved, mistakesResolved);
+    void this.save({
+      ...current,
+      mistakes,
+      mistakesResolved: mergedResolved,
+    });
+  }
+
   private readProgress(): LearnerProgress {
     return this.readStoredProgress(STORAGE_KEY) ?? { ...EMPTY_PROGRESS };
   }
@@ -210,6 +338,10 @@ export class ProgressService {
       if (!raw) return null;
       const progress = { ...EMPTY_PROGRESS, ...JSON.parse(raw) } as LearnerProgress;
       progress.activityProgress ??= {};
+      progress.vocabulary ??= [];
+      progress.vocabularyDeleted ??= {};
+      progress.mistakes ??= [];
+      progress.mistakesResolved ??= {};
       return progress;
     } catch {
       return null;

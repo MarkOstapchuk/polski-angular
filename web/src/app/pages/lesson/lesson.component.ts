@@ -18,6 +18,7 @@ import { AnalyticsService } from '../../services/analytics.service';
 import { AuthService } from '../../services/auth.service';
 import { MistakesService } from '../../services/mistakes.service';
 import { ProgressService } from '../../services/progress.service';
+import { SoundService } from '../../services/sound.service';
 import { ClassifyExerciseComponent } from './components/classify-exercise/classify-exercise.component';
 import { ExerciseItemViewComponent } from './components/exercise-item-view/exercise-item-view.component';
 import { AudioPlayerTrack, LessonAudioBarComponent } from './components/lesson-audio-bar/lesson-audio-bar.component';
@@ -73,6 +74,7 @@ export class LessonComponent {
   private readonly progress = inject(ProgressService);
   private readonly mistakes = inject(MistakesService);
   private readonly analytics = inject(AnalyticsService);
+  private readonly sound = inject(SoundService);
   readonly auth = inject(AuthService);
   readonly language = inject(LanguageService);
   readonly syncError = this.progress.syncError;
@@ -190,7 +192,7 @@ export class LessonComponent {
   readonly allImages = computed(() => WORKBOOK_IMAGES[this.activity()?.sourceExerciseId ?? ''] ?? []);
   readonly images = computed(() => {
     const used = new Set(this.activity()?.items.map((item) => item.image).filter(Boolean));
-    return this.allImages().filter((_, index) => !used.has(index + 1));
+    return used.size > 0 ? [] : this.allImages();
   });
 
   readonly activityProgress = computed(() => {
@@ -939,6 +941,11 @@ export class LessonComponent {
     if (!lesson || !activity || !item || this.focusItemChecked() || !this.isItemAnswered(item)) return;
 
     const ok = this.evaluateAndRecordItem(lesson, activity, item);
+    if (ok) {
+      this.sound.playCorrect();
+    } else {
+      this.sound.playWrong();
+    }
     const updatedResults = { ...this.focusItemResults(), [item.id]: ok };
     this.focusItemResults.set(updatedResults);
     this.focusItemChecked.set(true);
@@ -1026,6 +1033,13 @@ export class LessonComponent {
     const result: Record<string, boolean> = {};
     for (const item of activity.items) {
       result[item.id] = this.evaluateAndRecordItem(lesson, activity, item);
+    }
+    const resValues = Object.values(result);
+    const okCount = resValues.filter(Boolean).length;
+    if (okCount === resValues.length || okCount / Math.max(resValues.length, 1) >= 0.7) {
+      this.sound.playCorrect();
+    } else {
+      this.sound.playWrong();
     }
     await this.finalizeActivityCheck(lesson, activity, result, isRetry, false);
   }
@@ -1144,6 +1158,7 @@ export class LessonComponent {
         is_first_completion: !alreadyCompleted,
       },
     });
+    this.sound.playComplete();
     this.finished.set(true);
     this.scrollToTop();
   }

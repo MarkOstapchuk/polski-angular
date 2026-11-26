@@ -163,6 +163,8 @@
 .feedback-bar.is-ok { background: var(--success-bg); color: var(--success-text); }
 .feedback-bar.is-err { background: var(--error-bg); color: var(--error-text); }
 .feedback-bar span { margin-left: 6px; font-weight: 700; }
+.feedback-diff-wrap { min-width: 0; flex: 1 1 220px; }
+.feedback-diff-wrap span { margin-left: 0; font-weight: inherit; }
 
 .done-actions {
   display: flex;

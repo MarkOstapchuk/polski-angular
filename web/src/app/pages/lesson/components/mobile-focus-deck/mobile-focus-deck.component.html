@@ -57,12 +57,21 @@
       <div class="focus-context-panel">
         <div class="focus-panel-head">
           <h1 class="focus-ex-title">{{ activity().title }}</h1>
-          <button type="button" class="focus-theme-btn"
-            (click)="theme.toggle()"
-            [attr.aria-label]="theme.isDark() ? language.t('theme.switchToLight') : language.t('theme.switchToDark')"
-            [title]="theme.isDark() ? language.t('theme.switchToLight') : language.t('theme.switchToDark')">
-            <span aria-hidden="true">{{ theme.isDark() ? '☀️' : '🌙' }}</span>
-          </button>
+          <div class="focus-panel-toggles">
+            <button type="button" class="focus-theme-btn"
+              (click)="sound.toggle()"
+              [attr.aria-pressed]="!sound.enabled()"
+              [attr.aria-label]="sound.enabled() ? language.t('sound.mute') : language.t('sound.unmute')"
+              [title]="sound.enabled() ? language.t('sound.mute') : language.t('sound.unmute')">
+              <span aria-hidden="true">{{ sound.enabled() ? '🔊' : '🔇' }}</span>
+            </button>
+            <button type="button" class="focus-theme-btn"
+              (click)="theme.toggle()"
+              [attr.aria-label]="theme.isDark() ? language.t('theme.switchToLight') : language.t('theme.switchToDark')"
+              [title]="theme.isDark() ? language.t('theme.switchToLight') : language.t('theme.switchToDark')">
+              <span aria-hidden="true">{{ theme.isDark() ? '☀️' : '🌙' }}</span>
+            </button>
+          </div>
         </div>
         @if (instructionTranslation(); as tr) {
           <p class="focus-ex-instruction">{{ tr }}</p>
@@ -192,13 +201,20 @@
         {{ language.t('lesson.focusCheck') }}
       </button>
     } @else {
-      <div class="focus-feedback-dock" [class.is-correct]="itemCorrect()" [class.is-wrong]="!itemCorrect()" aria-live="polite">
+      <div class="focus-feedback-dock"
+        [class.is-correct]="itemCorrect()"
+        [class.is-wrong]="!itemCorrect()"
+        [class.anim-correct]="itemChecked() && itemCorrect()"
+        [class.anim-wrong]="itemChecked() && !itemCorrect()"
+        aria-live="polite">
         <div class="focus-feedback-text">
           @if (itemCorrect()) {
             <strong class="focus-feedback-title">✓ {{ language.t('lesson.correct') }}</strong>
             @if (accentHint(); as hint) {
               <small class="focus-accent-hint">{{ language.t('lesson.accentHint') }} <strong>{{ hint }}</strong></small>
             }
+          } @else if (activeItem()?.uxMode !== 'choice' && activeItem()?.raw?.accepted; as accepted) {
+            <app-answer-diff [userAnswer]="activeAnswer()" [accepted]="accepted" [compact]="true" />
           } @else {
             <strong class="focus-feedback-title">{{ language.t('lesson.correctAnswer') }} <span>{{ expectedAnswer() }}</span></strong>
           }

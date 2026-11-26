@@ -112,12 +112,19 @@
   }
 
   @if (checked() && showFeedback()) {
-    <div class="answer-feedback" [class.feedback-right]="isCorrect()" [class.feedback-wrong]="!isCorrect()" aria-live="polite">
+    <div class="answer-feedback"
+      [class.feedback-right]="isCorrect()"
+      [class.feedback-wrong]="!isCorrect()"
+      [class.anim-correct]="checked() && isCorrect()"
+      [class.anim-wrong]="checked() && !isCorrect()"
+      aria-live="polite">
       @if (isCorrect()) {
         <span>✓ {{ language.t('lesson.correct') }}</span>
         @if (accentHint(); as hint) {
           <small class="accent-warning" data-accent-warning>{{ language.t('lesson.accentHint') }} <strong>{{ hint }}</strong></small>
         }
+      } @else if (item().uxMode !== 'choice') {
+        <app-answer-diff [userAnswer]="answer()" [accepted]="item().raw.accepted" />
       } @else {
         <span>{{ language.t('lesson.correctAnswer') }} <strong>{{ expectedAnswer() }}</strong></span>
       }

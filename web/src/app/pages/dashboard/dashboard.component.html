@@ -29,9 +29,18 @@
       </a>
       <a class="nav-link" routerLink="/vocabulary">
         <span class="nav-icon">📖</span><span>{{ language.t('vocab.dashboardCardTitle') }}</span>
+        @if (vocabulary.dueCount() > 0) {
+          <span class="nav-due-badge">{{ vocabulary.dueCount() }}</span>
+        }
       </a>
       <a class="nav-link" routerLink="/mistakes">
         <span class="nav-icon">↺</span><span>{{ language.t('mistakes.dashboardCardTitle') }}</span>
+      </a>
+      <a class="nav-link" routerLink="/trainer">
+        <span class="nav-icon">⚡</span><span>{{ language.t('trainer.dashboardCardTitle') }}</span>
+      </a>
+      <a class="nav-link" routerLink="/grammar">
+        <span class="nav-icon">§</span><span>{{ language.t('grammarRef.dashboardCardTitle') }}</span>
       </a>
       <a class="nav-link" routerLink="/feedback" [queryParams]="{ course: selectedCourse()?.id ?? readActiveCourseId() }">
         <span class="nav-icon">✎</span><span>{{ language.t('nav.feedback') }}</span>
@@ -121,7 +130,11 @@
             <span class="quick-practice-icon">📖</span>
             <span class="quick-practice-copy">
               <strong>{{ language.t('vocab.dashboardCardTitle') }}</strong>
-              <small>{{ vocabulary.count() }} {{ language.t('vocab.dashboardCardMeta') }}</small>
+              @if (vocabulary.dueCount() > 0) {
+                <small><span class="due-pill">{{ language.t('vocab.dueToday') }}: {{ vocabulary.dueCount() }}</span></small>
+              } @else {
+                <small>{{ vocabulary.count() }} {{ language.t('vocab.dashboardCardMeta') }}</small>
+              }
             </span>
             <span class="quick-practice-arrow">→</span>
           </a>
@@ -130,6 +143,22 @@
             <span class="quick-practice-copy">
               <strong>{{ language.t('mistakes.dashboardCardTitle') }}</strong>
               <small>{{ mistakes.count() }} {{ language.t('mistakes.dashboardCardMeta') }}</small>
+            </span>
+            <span class="quick-practice-arrow">→</span>
+          </a>
+          <a class="quick-practice-card" routerLink="/trainer">
+            <span class="quick-practice-icon">⚡</span>
+            <span class="quick-practice-copy">
+              <strong>{{ language.t('trainer.dashboardCardTitle') }}</strong>
+              <small>{{ language.t('trainer.dashboardCardMeta') }}</small>
+            </span>
+            <span class="quick-practice-arrow">→</span>
+          </a>
+          <a class="quick-practice-card" routerLink="/grammar">
+            <span class="quick-practice-icon">§</span>
+            <span class="quick-practice-copy">
+              <strong>{{ language.t('grammarRef.dashboardCardTitle') }}</strong>
+              <small>{{ language.t('grammarRef.dashboardCardMeta') }}</small>
             </span>
             <span class="quick-practice-arrow">→</span>
           </a>

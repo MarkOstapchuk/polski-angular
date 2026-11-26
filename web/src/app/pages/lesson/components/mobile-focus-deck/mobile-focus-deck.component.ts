@@ -4,7 +4,9 @@ import type { ResolvedActivityTheory } from '../../../../data/lesson-theory-bloc
 import { Activity, AdaptedItem, Lesson } from '../../../../data/lesson-types';
 import { WorkbookImage } from '../../../../data/workbook-images';
 import { LanguageService } from '../../../../i18n/language.service';
+import { SoundService } from '../../../../services/sound.service';
 import { ThemeService } from '../../../../services/theme.service';
+import { AnswerDiffComponent } from '../../../../shared/answer-diff/answer-diff.component';
 import { ExerciseItemViewComponent } from '../exercise-item-view/exercise-item-view.component';
 
 export interface FocusSummaryItem {
@@ -16,7 +18,7 @@ export interface FocusSummaryItem {
 @Component({
   selector: 'app-mobile-focus-deck',
   standalone: true,
-  imports: [RouterLink, ExerciseItemViewComponent],
+  imports: [RouterLink, ExerciseItemViewComponent, AnswerDiffComponent],
   templateUrl: './mobile-focus-deck.component.html',
   styleUrl: './mobile-focus-deck.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -24,6 +26,7 @@ export interface FocusSummaryItem {
 export class MobileFocusDeckComponent {
   readonly language = inject(LanguageService);
   readonly theme = inject(ThemeService);
+  readonly sound = inject(SoundService);
 
   readonly dashboardUrl = input.required<string>();
   readonly lesson = input.required<Lesson>();

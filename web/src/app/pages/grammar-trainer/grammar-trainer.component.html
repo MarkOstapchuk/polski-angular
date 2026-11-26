@@ -1,0 +1,164 @@
+<header class="page-header">
+  <a class="back-link" routerLink="/course/part-1">← {{ language.t('lesson.back') }}</a>
+  <app-language-switcher />
+</header>
+
+<main class="page-main">
+  <section class="page-intro">
+    <p class="eyebrow">{{ language.t('trainer.eyebrow') }}</p>
+    <h1>{{ language.t('trainer.title') }}</h1>
+    <p class="subtitle">{{ language.t('trainer.subtitle') }}</p>
+  </section>
+
+  @if (stage() === 'setup') {
+    <section class="category-grid" [attr.aria-label]="language.t('trainer.chooseTopic')">
+      <button type="button" class="category-card" [class.is-selected]="selectedCategory() === 'mix'" (click)="selectedCategory.set('mix')">
+        <span class="cat-icon">⚡</span>
+        <div class="cat-copy">
+          <strong>{{ language.t('trainer.catMix') }}</strong>
+          <small>{{ language.t('trainer.catMixDesc') }}</small>
+        </div>
+        <span class="cat-count">{{ categoryCounts.mix }}</span>
+      </button>
+      <button type="button" class="category-card" [class.is-selected]="selectedCategory() === 'cases'" (click)="selectedCategory.set('cases')">
+        <span class="cat-icon">7</span>
+        <div class="cat-copy">
+          <strong>{{ language.t('trainer.catCases') }}</strong>
+          <small>{{ language.t('trainer.catCasesDesc') }}</small>
+        </div>
+        <span class="cat-count">{{ categoryCounts.cases }}</span>
+      </button>
+      <button type="button" class="category-card" [class.is-selected]="selectedCategory() === 'verbs'" (click)="selectedCategory.set('verbs')">
+        <span class="cat-icon">↻</span>
+        <div class="cat-copy">
+          <strong>{{ language.t('trainer.catVerbs') }}</strong>
+          <small>{{ language.t('trainer.catVerbsDesc') }}</small>
+        </div>
+        <span class="cat-count">{{ categoryCounts.verbs }}</span>
+      </button>
+      <button type="button" class="category-card" [class.is-selected]="selectedCategory() === 'numbers'" (click)="selectedCategory.set('numbers')">
+        <span class="cat-icon">◷</span>
+        <div class="cat-copy">
+          <strong>{{ language.t('trainer.catNumbers') }}</strong>
+          <small>{{ language.t('trainer.catNumbersDesc') }}</small>
+        </div>
+        <span class="cat-count">{{ categoryCounts.numbers }}</span>
+      </button>
+    </section>
+
+    <section class="filter-panel">
+      <div class="filter-group">
+        <span class="filter-label">{{ language.t('trainer.levelLabel') }}</span>
+        <div class="pill-row">
+          <button type="button" class="pill-btn" [class.active]="selectedLevel() === 'all'" (click)="selectedLevel.set('all')">{{ language.t('trainer.levelAll') }}</button>
+          <button type="button" class="pill-btn" [class.active]="selectedLevel() === 'A1'" (click)="selectedLevel.set('A1')">A1</button>
+          <button type="button" class="pill-btn" [class.active]="selectedLevel() === 'A2'" (click)="selectedLevel.set('A2')">A2</button>
+          <button type="button" class="pill-btn" [class.active]="selectedLevel() === 'B1'" (click)="selectedLevel.set('B1')">B1</button>
+        </div>
+      </div>
+      <div class="filter-group">
+        <span class="filter-label">{{ language.t('trainer.modeLabel') }}</span>
+        <div class="pill-row">
+          <button type="button" class="pill-btn" [class.active]="selectedInputMode() === 'mixed'" (click)="selectedInputMode.set('mixed')">{{ language.t('trainer.modeMixed') }}</button>
+          <button type="button" class="pill-btn" [class.active]="selectedInputMode() === 'choice'" (click)="selectedInputMode.set('choice')">{{ language.t('trainer.modeChoice') }}</button>
+          <button type="button" class="pill-btn" [class.active]="selectedInputMode() === 'typed'" (click)="selectedInputMode.set('typed')">{{ language.t('trainer.modeTyped') }}</button>
+        </div>
+      </div>
+      <button type="button" class="start-btn" (click)="startSession()">
+        {{ language.t('trainer.startSet') }} →
+      </button>
+    </section>
+  } @else if (stage() === 'session' && current(); as item) {
+    <section class="practice-card">
+      <div class="card-top">
+        <div class="badges-row">
+          <span class="step-chip">{{ index() + 1 }} / {{ queue().length }}</span>
+          <span class="subtag-chip">{{ item.subtag }}</span>
+          <span class="level-chip">{{ item.level }}</span>
+        </div>
+        <button type="button" class="quit-link" (click)="backToSetup()">{{ language.t('trainer.changeTopic') }}</button>
+      </div>
+
+      <div class="progress-track" aria-hidden="true">
+        <span [style.width.%]="progressPct()"></span>
+      </div>
+
+      <p class="prompt" lang="pl">{{ item.prompt }}</p>
+
+      @if (item.mode === 'choice' && item.options?.length) {
+        <div class="options-grid">
+          @for (opt of item.options; track opt; let idx = $index) {
+            <button type="button" class="option-btn"
+              [disabled]="checked()"
+              [class.is-selected]="userAnswer() === opt"
+              [class.is-right]="checked() && item.accepted.includes(opt)"
+              [class.is-wrong]="checked() && userAnswer() === opt && !lastCorrect()"
+              (click)="selectOption(opt)">
+              <span class="option-num">{{ idx + 1 }}</span>
+              <span>{{ opt }}</span>
+            </button>
+          }
+        </div>
+      } @else {
+        <div class="diacritic-row">
+          @for (ch of diacritics; track ch) {
+            <button type="button" class="diacritic-btn" [disabled]="checked()" (click)="insertDiacritic(ch)">
+              {{ ch }}
+            </button>
+          }
+        </div>
+        <form class="typed-form" (ngSubmit)="checkCurrent()">
+          <input #typedInputEl type="text" class="typed-input" name="trainerAnswer" lang="pl"
+            [ngModel]="userAnswer()" (ngModelChange)="userAnswer.set($event)"
+            [disabled]="checked()" [placeholder]="language.t('lesson.yourAnswer')"
+            autocomplete="off" autocapitalize="off" spellcheck="false" />
+          @if (!checked()) {
+            <button type="submit" class="primary-btn" [disabled]="!userAnswer().trim()">
+              {{ language.t('lesson.check') }}
+            </button>
+          }
+        </form>
+      }
+
+      @if (checked()) {
+        <div class="feedback-box"
+          [class.is-ok]="lastCorrect()"
+          [class.is-err]="!lastCorrect()"
+          [class.anim-correct]="lastCorrect()"
+          [class.anim-wrong]="!lastCorrect()">
+          <div class="feedback-main">
+            @if (lastCorrect()) {
+              <strong>{{ language.t('lesson.correct') }} ✓</strong>
+              @if (accentHint(); as hint) {
+                <small class="accent-note">{{ language.t('lesson.accentHint') }} <strong lang="pl">{{ hint }}</strong></small>
+              }
+            } @else if (item.mode === 'typed') {
+              <app-answer-diff [userAnswer]="userAnswer()" [accepted]="item.accepted" />
+            } @else {
+              <strong>{{ language.t('lesson.correctAnswer') }} <span lang="pl">{{ item.accepted[0] }}</span></strong>
+            }
+            <p class="explanation-text">{{ item.explanation[language.locale()] }}</p>
+          </div>
+          <button type="button" class="primary-btn" (click)="next()">
+            {{ index() + 1 < queue().length ? language.t('lesson.next') : language.t('lesson.focusSummary') }} →
+          </button>
+        </div>
+      }
+    </section>
+  } @else {
+    <section class="done-card">
+      <div class="done-badge">✦</div>
+      <h2>{{ language.t('trainer.doneTitle') }}</h2>
+      <p class="done-score">{{ correctCount() }} / {{ queue().length }} · {{ accuracyPct() }}%</p>
+      <p class="done-copy">{{ language.t('trainer.doneBody') }}</p>
+      <div class="done-actions">
+        <button type="button" class="primary-btn" (click)="startSession()">
+          {{ language.t('trainer.anotherSet') }}
+        </button>
+        <button type="button" class="secondary-btn" (click)="backToSetup()">
+          {{ language.t('trainer.chooseTopic') }}
+        </button>
+      </div>
+    </section>
+  }
+</main>

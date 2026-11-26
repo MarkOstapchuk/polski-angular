@@ -7,9 +7,11 @@ import { authGuard, optionalAuthGuard } from './services/auth.service';
 export const routes: Routes = [
   { path: 'auth', component: AuthComponent, title: 'Konto · Polski' },
   { path: 'test', loadComponent: () => import('./pages/placement-test/placement-test.component').then((m) => m.PlacementTestComponent), title: 'Test poziomujący · Polski' },
-  { path: '', component: PublicHomeComponent, title: 'Kurs języka polskiego online A1–A2 · polski.' },
+  { path: '', component: PublicHomeComponent, title: 'Kurs języka polskiego online A1–B2 · polski.' },
   { path: 'course/:courseId', component: DashboardComponent, canActivate: [optionalAuthGuard], title: 'Kurs · Polski' },
   { path: 'course-test/:testId', loadComponent: () => import('./pages/checkpoint-test/checkpoint-test.component').then((m) => m.CheckpointTestComponent), canActivate: [optionalAuthGuard], title: 'Test kontrolny · Polski' },
+  { path: 'trainer', loadComponent: () => import('./pages/grammar-trainer/grammar-trainer.component').then((m) => m.GrammarTrainerComponent), canActivate: [optionalAuthGuard], title: 'Trener gramatyki · Polski' },
+  { path: 'grammar', loadComponent: () => import('./pages/grammar-reference/grammar-reference.component').then((m) => m.GrammarReferenceComponent), canActivate: [optionalAuthGuard], title: 'Gramatyka · Polski' },
   { path: 'vocabulary', loadComponent: () => import('./pages/vocabulary/vocabulary.component').then((m) => m.VocabularyComponent), canActivate: [optionalAuthGuard], title: 'Słownik · Polski' },
   { path: 'mistakes', loadComponent: () => import('./pages/mistakes/mistakes.component').then((m) => m.MistakesComponent), canActivate: [optionalAuthGuard], title: 'Błędy · Polski' },
   { path: 'feedback', loadComponent: () => import('./pages/feedback/feedback.component').then((m) => m.FeedbackComponent), canActivate: [authGuard], title: 'Opinie · Polski' },
