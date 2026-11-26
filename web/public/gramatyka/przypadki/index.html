@@ -16,9 +16,10 @@
   <link rel="alternate" hreflang="ru" href="__SITE_URL__/ru/padezhi">
   <link rel="alternate" hreflang="en" href="__SITE_URL__/en/polish-cases">
   <link rel="stylesheet" href="/seo.css">
+  <script>(function(){try{var s=localStorage.getItem('polski-theme-v1');var d=s==='dark'||(s!=='light'&&window.matchMedia&&window.matchMedia('(prefers-color-scheme: dark)').matches);var m=d?'dark':'light';document.documentElement.dataset.theme=m;document.documentElement.style.colorScheme=m;}catch(e){}})();</script>
 </head>
 <body>
-  <header class="wrap nav"><a class="brand" href="/">polski<span>.</span></a><a href="/auth">Przejdź do kursu</a></header>
+  <header class="wrap nav"><a class="brand" href="/">polski<span>.</span></a><div class="nav-actions"><button type="button" class="theme-toggle" data-theme-toggle aria-label="Włącz tryb ciemny" title="Włącz tryb ciemny"><span aria-hidden="true">🌙</span></button><a href="/auth?lang=pl">Przejdź do kursu</a></div></header>
   <main class="wrap">
     <nav class="crumbs" aria-label="Okruszki"><a href="/">Strona główna</a> / Gramatyka / Przypadki</nav>
     <p class="eyebrow">Gramatyka · poziom A1–A2</p>
@@ -55,5 +56,6 @@
     <div class="actions"><a class="button" href="/test">Sprawdź poziom i dobierz lekcję</a><a class="button secondary" href="/course/part-1">Ćwicz polską gramatykę</a></div>
   </main>
   <footer><div class="wrap"><p><a href="/">polski.</a> · <a href="/slownictwo/podstawowe-zwroty">Podstawowe zwroty</a></p></div></footer>
+  <script src="/seo-demo.js" defer></script>
 </body>
 </html>

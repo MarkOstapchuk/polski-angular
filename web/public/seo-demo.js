@@ -36,6 +36,66 @@
     });
   });
 
+  const THEME_KEY = 'polski-theme-v1';
+  const THEME_META_COLORS = { light: '#fbfaf7', dark: '#151613' };
+  const themeLabels = {
+    pl: { toLight: 'Włącz tryb jasny', toDark: 'Włącz tryb ciemny' },
+    ru: { toLight: 'Включить светлую тему', toDark: 'Включить тёмную тему' },
+    en: { toLight: 'Switch to light mode', toDark: 'Switch to dark mode' },
+  };
+  const docLang = document.documentElement.lang || 'pl';
+  const labels = themeLabels[docLang] || themeLabels.pl;
+  const mediaQuery = typeof window.matchMedia === 'function'
+    ? window.matchMedia('(prefers-color-scheme: dark)')
+    : null;
+
+  const readStoredTheme = () => {
+    try {
+      const saved = localStorage.getItem(THEME_KEY);
+      return saved === 'light' || saved === 'dark' ? saved : null;
+    } catch {
+      return null;
+    }
+  };
+
+  const getInitialTheme = () => readStoredTheme() || (mediaQuery && mediaQuery.matches ? 'dark' : 'light');
+
+  const applyTheme = (mode) => {
+    document.documentElement.dataset.theme = mode;
+    document.documentElement.style.colorScheme = mode;
+    const meta = document.querySelector('meta[name="theme-color"]');
+    if (meta) meta.content = THEME_META_COLORS[mode];
+    const isDark = mode === 'dark';
+    const label = isDark ? labels.toLight : labels.toDark;
+    document.querySelectorAll('[data-theme-toggle]').forEach((btn) => {
+      const icon = btn.querySelector('span');
+      if (icon) icon.textContent = isDark ? '☀️' : '🌙';
+      btn.setAttribute('aria-label', label);
+      btn.setAttribute('title', label);
+      btn.setAttribute('aria-pressed', String(isDark));
+    });
+  };
+
+  let currentTheme = getInitialTheme();
+  applyTheme(currentTheme);
+
+  document.querySelectorAll('[data-theme-toggle]').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      currentTheme = currentTheme === 'dark' ? 'light' : 'dark';
+      try { localStorage.setItem(THEME_KEY, currentTheme); } catch {}
+      applyTheme(currentTheme);
+      capture('theme_toggled', { theme: currentTheme });
+    });
+  });
+
+  if (mediaQuery && typeof mediaQuery.addEventListener === 'function') {
+    mediaQuery.addEventListener('change', (event) => {
+      if (readStoredTheme() !== null) return;
+      currentTheme = event.matches ? 'dark' : 'light';
+      applyTheme(currentTheme);
+    });
+  }
+
   const root = document.querySelector('[data-demo-quiz]');
   if (!root) return;
   const lang = root.getAttribute('data-lang') || 'pl';

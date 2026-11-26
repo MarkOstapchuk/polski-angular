@@ -17,6 +17,7 @@
   <link rel="alternate" hreflang="ru" href="__SITE_URL__/ru/padezhi">
   <link rel="alternate" hreflang="en" href="__SITE_URL__/en/polish-cases">
   <link rel="stylesheet" href="/seo.css">
+  <script>(function(){try{var s=localStorage.getItem('polski-theme-v1');var d=s==='dark'||(s!=='light'&&window.matchMedia&&window.matchMedia('(prefers-color-scheme: dark)').matches);var m=d?'dark':'light';document.documentElement.dataset.theme=m;document.documentElement.style.colorScheme=m;}catch(e){}})();</script>
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -32,6 +33,7 @@
   <header class="wrap nav">
     <a class="brand" href="/ru">polski<span>.</span></a>
     <div class="nav-actions">
+      <button type="button" class="theme-toggle" data-theme-toggle aria-label="Включить тёмную тему" title="Включить тёмную тему"><span aria-hidden="true">🌙</span></button>
       <a href="/test?lang=ru">Тест уровня</a>
       <a href="/course/part-1?lang=ru">Открыть курс</a>
     </div>
@@ -72,5 +74,6 @@
   <footer>
     <div class="wrap"><p><a href="/ru">polski.</a> · <a href="/ru/glagoly-dvizheniya">Глаголы движения</a> · <a href="/ru/ekzamen-b1-b2">Экзамен B1–B2</a></p></div>
   </footer>
+  <script src="/seo-demo.js" defer></script>
 </body>
 </html>
