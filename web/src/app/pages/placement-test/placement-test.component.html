@@ -1,5 +1,5 @@
 <header class="test-header">
-  <a class="brand" routerLink="/">polski<span>.</span></a>
+  <a class="brand" [href]="language.homeUrl()">polski<span>.</span></a>
   <div class="header-actions">
     <app-language-switcher />
     <a class="login-link" routerLink="/auth">{{ language.t('home.login') }}</a>

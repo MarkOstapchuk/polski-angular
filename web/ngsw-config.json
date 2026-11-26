@@ -4,6 +4,12 @@
   "navigationUrls": [
     "/**",
     "!/",
+    "!/ru",
+    "!/ru/**",
+    "!/en",
+    "!/en/**",
+    "!/seo",
+    "!/seo/**",
     "!/nauka/**",
     "!/gramatyka/**",
     "!/slownictwo/**",

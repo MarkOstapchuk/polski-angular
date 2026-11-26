@@ -493,6 +493,11 @@ export class LanguageService {
     return messages[this.locale()][key] ?? messages.pl[key] ?? key;
   }
 
+  homeUrl(): string {
+    const current = this.locale();
+    return current === 'ru' ? '/ru' : current === 'en' ? '/en' : '/';
+  }
+
   setLanguage(language: Language): void {
     if (!['pl', 'ru', 'en'].includes(language)) return;
     const previous = this.locale();
@@ -517,6 +522,15 @@ export class LanguageService {
       if (this.isLanguage(fromUrl)) {
         try { localStorage.setItem('polski-language', fromUrl); } catch {}
         return fromUrl;
+      }
+      const pathname = window.location.pathname;
+      if (pathname === '/ru' || pathname.startsWith('/ru/')) {
+        try { localStorage.setItem('polski-language', 'ru'); } catch {}
+        return 'ru';
+      }
+      if (pathname === '/en' || pathname.startsWith('/en/')) {
+        try { localStorage.setItem('polski-language', 'en'); } catch {}
+        return 'en';
       }
       try {
         const stored = localStorage.getItem('polski-language');

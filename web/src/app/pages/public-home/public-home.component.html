@@ -1,5 +1,5 @@
 <header class="public-header">
-    <a class="brand" href="/">polski<span>.</span></a>
+    <a class="brand" [href]="language.homeUrl()">polski<span>.</span></a>
   <nav [attr.aria-label]="language.t('home.nav')">
     <app-language-switcher />
     <a href="#materials">{{ language.t('home.materials') }}</a>

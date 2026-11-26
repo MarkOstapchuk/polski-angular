@@ -9,7 +9,17 @@
     }
   };
 
-  document.querySelectorAll('a[href="/auth"]').forEach((link) => {
+  const langMap = { '/': 'pl', '/ru': 'ru', '/en': 'en' };
+  document.querySelectorAll('.language-links a, footer a[href="/"], footer a[href="/ru"], footer a[href="/en"]').forEach((link) => {
+    link.addEventListener('click', () => {
+      const targetLang = langMap[link.getAttribute('href')];
+      if (targetLang) {
+        try { localStorage.setItem('polski-language', targetLang); } catch {}
+      }
+    });
+  });
+
+  document.querySelectorAll('a[href="/auth"], a[href^="/auth?"]').forEach((link) => {
     link.addEventListener('click', () => {
       const ctaLocation = link.hasAttribute('data-demo-cta')
         ? 'demo_finish'
