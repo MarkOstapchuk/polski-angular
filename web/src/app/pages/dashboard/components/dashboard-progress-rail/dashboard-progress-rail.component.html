@@ -20,6 +20,10 @@
           </div>
         }
       </div>
+      <div class="freeze-row">
+        <span>❄️ {{ language.t('shop.freezePill') }}: <strong>{{ progress().streakFreezes ?? 0 }}/3</strong></span>
+        <button type="button" class="freeze-shop-btn" (click)="openShop.emit()">{{ language.t('shop.getFreeze') }}</button>
+      </div>
       <p class="side-caption">{{ language.t('dashboard.smallStep') }}</p>
     </section>
 
@@ -37,6 +41,23 @@
         <strong>{{ progress().dailyXp >= 20 ? language.t('dashboard.goalReached') : progress().dailyXp + ' / 20 XP' }}</strong>
         <span>{{ goalPercent() }}%</span>
       </div>
+
+      @if (dailyChestReady()) {
+        <button type="button" class="daily-chest-btn is-ready" (click)="claimDailyChest.emit()">
+          <span>🎁 {{ language.t('chest.dailyReady') }}</span>
+          <strong>+{{ dailyChestCoins() }} 🪙</strong>
+        </button>
+      } @else if (dailyChestClaimed()) {
+        <div class="daily-chest-pill is-claimed">
+          <span>✓ {{ language.t('chest.dailyClaimed') }}</span>
+          <strong>+{{ dailyChestCoins() }} 🪙</strong>
+        </div>
+      } @else {
+        <div class="daily-chest-pill">
+          <span>🔒 {{ language.t('chest.dailyLocked') }}</span>
+          <strong>+{{ dailyChestCoins() }} 🪙</strong>
+        </div>
+      }
     </section>
   </div>
 

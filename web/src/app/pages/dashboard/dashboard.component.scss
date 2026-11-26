@@ -17,6 +17,8 @@
 .nav-link.active, .nav-link:hover { background: var(--accent-bg); color: var(--accent-text); }
 .nav-icon { width: 20px; text-align: center; font-size: 20px; line-height: 1; }
 .nav-due-badge { margin-left: auto; padding: 2px 7px; border-radius: 999px; background: var(--accent); color: #fff; font-size: 11px; font-weight: 800; }
+.nav-btn { width: 100%; border: 0; background: none; font: inherit; text-align: left; cursor: pointer; }
+.nav-coin-badge { margin-left: auto; font-size: 12px; font-weight: 800; color: var(--xp-text); }
 .sidebar-bottom { margin-top: auto; }
 .sidebar-note { display: flex; align-items: flex-start; gap: 11px; margin: 0 4px 16px; padding: 13px 11px; border-radius: 13px; background: var(--bg-warm); color: var(--text-warm); }
 .note-spark { color: var(--xp-gold); font-size: 19px; }
@@ -36,6 +38,8 @@
 .top-stat strong { font-size: 15px; }
 .top-stat small { color: var(--text-muted); font-size: 12px; }
 .stat-emoji { font-size: 16px; }
+.coin-stat { border: 1px solid var(--border-warm); border-radius: 999px; padding: 6px 11px; min-height: 40px; background: var(--bg-warm); color: var(--text-strong); font: inherit; cursor: pointer; }
+.coin-stat:hover { border-color: var(--border-hover); }
 .install-button { min-height: 44px; border: 1px solid var(--accent-border-soft); border-radius: 10px; padding: 8px 12px; background: var(--bg-elevated); color: var(--accent-text); font-size: 13px; font-weight: 700; cursor: pointer; }
 .top-avatar { width: 44px; height: 44px; }
 .content-wrap { max-width: 930px; margin: 0 auto; padding: 35px clamp(22px, 4vw, 62px) 64px; }
@@ -99,6 +103,11 @@
 .checkpoint-card { border-style: dashed; border-color: var(--accent-border-soft); background: var(--accent-bg-hover); text-decoration: none; color: inherit; }
 .checkpoint-card:hover { border-color: var(--accent-border); }
 .checkpoint-badge { color: var(--accent-text); }
+.path-row.is-chest .chest-node { background: var(--xp-gold); color: #fff; }
+.path-row.is-chest .chest-node:disabled { background: var(--disabled-bg); }
+.path-row.is-chest.is-claimed .chest-node { background: var(--success-shadow); }
+.chest-card:not(:disabled) { border-style: dashed; border-color: var(--xp-gold); background: var(--bg-warm); }
+.chest-badge { color: var(--xp-text); }
 .lesson-card-end { flex: none; margin-left: 10px; }
 .play-chip { display: grid; width: 32px; height: 32px; place-items: center; border-radius: 50%; background: var(--accent-bg); color: var(--accent); font-size: 18px; }
 .done-chip, .lock-chip { color: var(--success-text); font-size: 12px; font-weight: 700; }

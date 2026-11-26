@@ -42,6 +42,10 @@
       <a class="nav-link" routerLink="/grammar">
         <span class="nav-icon">§</span><span>{{ language.t('grammarRef.dashboardCardTitle') }}</span>
       </a>
+      <button type="button" class="nav-link nav-btn" (click)="openShop()">
+        <span class="nav-icon">🪙</span><span>{{ language.t('shop.navTitle') }}</span>
+        <span class="nav-coin-badge">{{ coins() }}</span>
+      </button>
       <a class="nav-link" routerLink="/feedback" [queryParams]="{ course: selectedCourse()?.id ?? readActiveCourseId() }">
         <span class="nav-icon">✎</span><span>{{ language.t('nav.feedback') }}</span>
       </a>
@@ -54,13 +58,13 @@
       </div>
       @if (isGuest()) {
         <a class="profile-button" routerLink="/auth" [queryParams]="{ next: dashboardUrl() }" [attr.aria-label]="language.t('home.login')">
-          <span class="profile-avatar">{{ userInitial() }}</span>
+          <span class="profile-avatar">{{ userAvatar() }}</span>
           <span class="profile-copy"><strong>{{ userEmail() }}</strong><small>{{ language.t('home.login') }}</small></span>
           <span class="profile-menu">→</span>
         </a>
       } @else {
         <button class="profile-button" type="button" (click)="openSignOutConfirm()" [attr.aria-label]="language.t('nav.logout')">
-          <span class="profile-avatar">{{ userInitial() }}</span>
+          <span class="profile-avatar">{{ userAvatar() }}</span>
           <span class="profile-copy"><strong>{{ userEmail() }}</strong><small>{{ language.t('nav.logout') }}</small></span>
           <span class="profile-menu">↗</span>
         </button>
@@ -79,13 +83,16 @@
       <div class="top-stat xp-stat" [attr.aria-label]="language.t('dashboard.experiencePoints')">
         <span class="stat-emoji">✦</span><strong>{{ progress().totalXp }}</strong><small>XP</small>
       </div>
+      <button type="button" class="top-stat coin-stat" (click)="openShop()" [attr.aria-label]="language.t('shop.coinsAria')" [title]="language.t('shop.title')">
+        <span class="stat-emoji">🪙</span><strong>{{ coins() }}</strong>
+      </button>
       @if (pwa.installAvailable() || pwa.needsIOSInstructions()) {
         <button class="install-button" type="button" (click)="installApp()">{{ pwa.installAvailable() ? language.t('dashboard.installAppAction') : language.t('dashboard.installHelp') }}</button>
       }
       @if (isGuest()) {
-        <a class="top-avatar" routerLink="/auth" [queryParams]="{ next: dashboardUrl() }" [attr.aria-label]="language.t('home.login')" [title]="language.t('home.login')">{{ userInitial() }}</a>
+        <a class="top-avatar" routerLink="/auth" [queryParams]="{ next: dashboardUrl() }" [attr.aria-label]="language.t('home.login')" [title]="language.t('home.login')">{{ userAvatar() }}</a>
       } @else {
-        <button class="top-avatar" type="button" (click)="openSignOutConfirm()" [attr.aria-label]="language.t('nav.logoutAccount') + ' ' + userEmail()" [title]="language.t('nav.logout')">{{ userInitial() }}</button>
+        <button class="top-avatar" type="button" (click)="openSignOutConfirm()" [attr.aria-label]="language.t('nav.logoutAccount') + ' ' + userEmail()" [title]="language.t('nav.logout')">{{ userAvatar() }}</button>
       }
     </header>
 
@@ -217,6 +224,34 @@
                 </a>
               </article>
             }
+            @if (chestAfter(lesson.id); as chest) {
+              <article class="path-row is-chest" [class.is-claimed]="isChestClaimed(chest)">
+                <button class="path-node chest-node" type="button"
+                  [disabled]="!isChestUnlocked(chest) || isChestClaimed(chest)"
+                  (click)="openPathChest(chest)"
+                  [attr.aria-label]="chest.title[language.locale()]">
+                  <span>{{ isChestClaimed(chest) ? '✓' : isChestUnlocked(chest) ? '🎁' : '🔒' }}</span>
+                </button>
+                <button class="lesson-card chest-card" type="button"
+                  [disabled]="!isChestUnlocked(chest) || isChestClaimed(chest)"
+                  (click)="openPathChest(chest)">
+                  <span class="lesson-card-copy">
+                    <span class="lesson-unit chest-badge">{{ language.t('chest.badge') }} <span class="unit-dot">·</span> +{{ chest.coins }} 🪙</span>
+                    <strong>{{ chest.title[language.locale()] }}</strong>
+                    <small>{{ isChestClaimed(chest) ? language.t('chest.claimedLabel') : isChestUnlocked(chest) ? language.t('chest.readyAction') : language.t('chest.lockedHint') }}</small>
+                  </span>
+                  <span class="lesson-card-end">
+                    @if (isChestClaimed(chest)) {
+                      <span class="done-chip">+{{ chest.coins }} 🪙 <b>✓</b></span>
+                    } @else if (isChestUnlocked(chest)) {
+                      <span class="play-chip">🎁</span>
+                    } @else {
+                      <span class="lock-chip">🔒</span>
+                    }
+                  </span>
+                </button>
+              </article>
+            }
           }
         </section>
 
@@ -264,7 +299,12 @@
     [weekDays]="weekDays()"
     [installAvailable]="pwa.installAvailable()"
     [needsIOSInstructions]="pwa.needsIOSInstructions()"
-    (installClick)="installApp()" />
+    [dailyChestReady]="dailyChestReady()"
+    [dailyChestClaimed]="dailyChestClaimed()"
+    [dailyChestCoins]="dailyChestCoins"
+    (installClick)="installApp()"
+    (claimDailyChest)="claimDailyChest()"
+    (openShop)="openShop()" />
 
   <nav class="mobile-nav" [attr.aria-label]="language.t('home.nav')">
     <a class="mobile-nav-item" [class.selected]="activeNavSection() === 'home'" [routerLink]="dashboardUrl()" (click)="navigateSection($event, 'home')"><span>⌂</span><small>{{ language.t('nav.home') }}</small></a>
@@ -285,4 +325,16 @@
     (closeInstall)="pwa.closeInstructions()"
     (cancelSignOut)="cancelSignOut()"
     (confirmSignOut)="confirmSignOut()" />
+
+  <app-dashboard-rewards-modal
+    [chestReward]="chestReward()"
+    [shopOpen]="shopOpen()"
+    [progress]="progress()"
+    [defaultInitial]="userInitial()"
+    (closeChest)="closeChestReward()"
+    (openShopFromChest)="openShop()"
+    (closeShop)="closeShop()"
+    (buyFreeze)="handleBuyFreeze()"
+    (buyAvatar)="handleBuyAvatar($event)"
+    (equipAvatar)="handleEquipAvatar($event)" />
 </div>

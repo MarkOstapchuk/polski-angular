@@ -16,5 +16,10 @@ export class DashboardProgressRailComponent {
   readonly weekDays = input.required<{ label: string; active: boolean }[]>();
   readonly installAvailable = input(false);
   readonly needsIOSInstructions = input(false);
+  readonly dailyChestReady = input(false);
+  readonly dailyChestClaimed = input(false);
+  readonly dailyChestCoins = input(20);
   readonly installClick = output<void>();
+  readonly claimDailyChest = output<void>();
+  readonly openShop = output<void>();
 }

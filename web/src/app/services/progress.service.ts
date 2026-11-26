@@ -1,4 +1,10 @@
 import { Injectable, inject, signal } from '@angular/core';
+import {
+  DAILY_CHEST_COINS,
+  LESSON_FIRST_CLEAR_COINS,
+  MAX_STREAK_FREEZES,
+  STREAK_FREEZE_PRICE,
+} from '../data/rewards';
 import { AnalyticsService } from './analytics.service';
 import type { SavedMistake, SavedWord } from './learning-data.types';
 import { supabase } from './supabase.client';
@@ -16,6 +22,14 @@ export interface LearnerProgress {
   vocabularyDeleted?: Record<string, string>;
   mistakes?: SavedMistake[];
   mistakesResolved?: Record<string, string>;
+  coins?: number;
+  claimedChests?: string[];
+  lastDailyChestDate?: string | null;
+  streakFreezes?: number;
+  streakFrozenDate?: string | null;
+  ownedAvatars?: string[];
+  selectedAvatar?: string | null;
+  rewardsUpdatedAt?: string | null;
 }
 
 export interface SavedActivityProgress {
@@ -39,6 +53,14 @@ const EMPTY_PROGRESS: LearnerProgress = {
   vocabularyDeleted: {},
   mistakes: [],
   mistakesResolved: {},
+  coins: 0,
+  claimedChests: [],
+  lastDailyChestDate: null,
+  streakFreezes: 0,
+  streakFrozenDate: null,
+  ownedAvatars: [],
+  selectedAvatar: null,
+  rewardsUpdatedAt: null,
 };
 
 function localDateKey(date = new Date()): string {
@@ -152,6 +174,20 @@ function mergeProgress(remote: LearnerProgress, local: LearnerProgress): Learner
   const mistakesResolved = mergeDeletedMap(remote.mistakesResolved, local.mistakesResolved);
   const mistakes = mergeMistakeLists(remote.mistakes, local.mistakes, mistakesResolved);
 
+  const claimedChests = [...new Set([...(remote.claimedChests ?? []), ...(local.claimedChests ?? [])])];
+  const ownedAvatars = [...new Set([...(remote.ownedAvatars ?? []), ...(local.ownedAvatars ?? [])])];
+  const lastDailyChestDate = [remote.lastDailyChestDate, local.lastDailyChestDate]
+    .filter((d): d is string => !!d)
+    .sort()
+    .at(-1) ?? null;
+  const streakFrozenDate = [remote.streakFrozenDate, local.streakFrozenDate]
+    .filter((d): d is string => !!d)
+    .sort()
+    .at(-1) ?? null;
+  const remoteRewardsTs = remote.rewardsUpdatedAt ?? '';
+  const localRewardsTs = local.rewardsUpdatedAt ?? '';
+  const useLocalRewards = localRewardsTs > remoteRewardsTs;
+
   return {
     completedLessonIds,
     scores,
@@ -165,6 +201,20 @@ function mergeProgress(remote: LearnerProgress, local: LearnerProgress): Learner
     vocabularyDeleted,
     mistakes,
     mistakesResolved,
+    coins: localRewardsTs === remoteRewardsTs
+      ? Math.max(remote.coins ?? 0, local.coins ?? 0)
+      : (useLocalRewards ? (local.coins ?? 0) : (remote.coins ?? 0)),
+    claimedChests,
+    lastDailyChestDate,
+    streakFreezes: localRewardsTs === remoteRewardsTs
+      ? Math.max(remote.streakFreezes ?? 0, local.streakFreezes ?? 0)
+      : (useLocalRewards ? (local.streakFreezes ?? 0) : (remote.streakFreezes ?? 0)),
+    streakFrozenDate,
+    ownedAvatars,
+    selectedAvatar: useLocalRewards
+      ? (local.selectedAvatar ?? null)
+      : (remote.selectedAvatar ?? local.selectedAvatar ?? null),
+    rewardsUpdatedAt: useLocalRewards ? (local.rewardsUpdatedAt ?? null) : (remote.rewardsUpdatedAt ?? null),
   };
 }
 
@@ -212,6 +262,14 @@ export class ProgressService {
             vocabularyDeleted: saved.vocabularyDeleted ?? {},
             mistakes: saved.mistakes ?? [],
             mistakesResolved: saved.mistakesResolved ?? {},
+            coins: saved.coins ?? 0,
+            claimedChests: saved.claimedChests ?? [],
+            lastDailyChestDate: saved.lastDailyChestDate ?? null,
+            streakFreezes: saved.streakFreezes ?? 0,
+            streakFrozenDate: saved.streakFrozenDate ?? null,
+            ownedAvatars: saved.ownedAvatars ?? [],
+            selectedAvatar: saved.selectedAvatar ?? null,
+            rewardsUpdatedAt: saved.rewardsUpdatedAt ?? null,
           }
         : null;
     } catch {
@@ -269,18 +327,122 @@ export class ProgressService {
       next.completedLessonIds = [...current.completedLessonIds, lessonId].sort((a, b) => a - b);
       next.totalXp += xp;
       next.dailyXp = current.lastStudyDate === today ? current.dailyXp + xp : xp;
+      next.coins = (current.coins ?? 0) + LESSON_FIRST_CLEAR_COINS;
+      next.rewardsUpdatedAt = new Date().toISOString();
     } else if (current.lastStudyDate !== today) {
       next.dailyXp = 0;
     }
 
     if (current.lastStudyDate !== today) {
-      next.streak = current.lastStudyDate === shiftDate(today, -1) ? current.streak + 1 : 1;
+      const missedYesterday = current.lastStudyDate === shiftDate(today, -2);
+      if (current.lastStudyDate === shiftDate(today, -1)) {
+        next.streak = current.streak + 1;
+      } else if (missedYesterday && (current.streakFreezes ?? 0) > 0 && current.streak > 0) {
+        next.streakFreezes = (current.streakFreezes ?? 0) - 1;
+        next.streakFrozenDate = shiftDate(today, -1);
+        next.streak = current.streak + 1;
+        next.rewardsUpdatedAt = new Date().toISOString();
+      } else {
+        next.streak = 1;
+      }
       next.lastStudyDate = today;
       next.bestStreak = Math.max(current.bestStreak, next.streak);
     }
 
     this.syncPersonProperties(next);
     return this.save(next);
+  }
+
+  todayKey(): string {
+    return localDateKey();
+  }
+
+  hasClaimedChest(chestId: string): boolean {
+    return (this.progress().claimedChests ?? []).includes(chestId);
+  }
+
+  hasClaimedDailyChestToday(): boolean {
+    return this.progress().lastDailyChestDate === localDateKey();
+  }
+
+  canClaimDailyChest(): boolean {
+    return this.progress().dailyXp >= 20 && !this.hasClaimedDailyChestToday();
+  }
+
+  claimPathChest(chestId: string, coins: number): boolean {
+    const current = this.progress();
+    const claimed = current.claimedChests ?? [];
+    if (claimed.includes(chestId)) return false;
+    void this.save({
+      ...current,
+      coins: (current.coins ?? 0) + coins,
+      claimedChests: [...claimed, chestId],
+      rewardsUpdatedAt: new Date().toISOString(),
+    });
+    this.analytics.track('chest_opened', {
+      metadata: { chest_id: chestId, kind: 'path', coins },
+    });
+    return true;
+  }
+
+  claimDailyChest(): number {
+    if (!this.canClaimDailyChest()) return 0;
+    const current = this.progress();
+    void this.save({
+      ...current,
+      coins: (current.coins ?? 0) + DAILY_CHEST_COINS,
+      lastDailyChestDate: localDateKey(),
+      rewardsUpdatedAt: new Date().toISOString(),
+    });
+    this.analytics.track('chest_opened', {
+      metadata: { kind: 'daily', coins: DAILY_CHEST_COINS },
+    });
+    return DAILY_CHEST_COINS;
+  }
+
+  buyStreakFreeze(): boolean {
+    const current = this.progress();
+    const coins = current.coins ?? 0;
+    const freezes = current.streakFreezes ?? 0;
+    if (coins < STREAK_FREEZE_PRICE || freezes >= MAX_STREAK_FREEZES) return false;
+    void this.save({
+      ...current,
+      coins: coins - STREAK_FREEZE_PRICE,
+      streakFreezes: freezes + 1,
+      rewardsUpdatedAt: new Date().toISOString(),
+    });
+    this.analytics.track('shop_item_purchased', {
+      metadata: { item: 'streak_freeze', price: STREAK_FREEZE_PRICE, owned_after: freezes + 1 },
+    });
+    return true;
+  }
+
+  buyAvatar(avatarId: string, price: number): boolean {
+    const current = this.progress();
+    const coins = current.coins ?? 0;
+    const owned = current.ownedAvatars ?? [];
+    if (owned.includes(avatarId) || coins < price) return false;
+    void this.save({
+      ...current,
+      coins: coins - price,
+      ownedAvatars: [...owned, avatarId],
+      selectedAvatar: avatarId,
+      rewardsUpdatedAt: new Date().toISOString(),
+    });
+    this.analytics.track('shop_item_purchased', {
+      metadata: { item: 'avatar', avatar_id: avatarId, price },
+    });
+    return true;
+  }
+
+  equipAvatar(avatarId: string | null): void {
+    const current = this.progress();
+    if (avatarId !== null && !(current.ownedAvatars ?? []).includes(avatarId)) return;
+    void this.save({
+      ...current,
+      selectedAvatar: avatarId,
+      rewardsUpdatedAt: new Date().toISOString(),
+    });
   }
 
   activityFor(lessonId: number, activityId: string): SavedActivityProgress | null {
@@ -342,6 +504,14 @@ export class ProgressService {
       progress.vocabularyDeleted ??= {};
       progress.mistakes ??= [];
       progress.mistakesResolved ??= {};
+      progress.coins ??= 0;
+      progress.claimedChests ??= [];
+      progress.lastDailyChestDate ??= null;
+      progress.streakFreezes ??= 0;
+      progress.streakFrozenDate ??= null;
+      progress.ownedAvatars ??= [];
+      progress.selectedAvatar ??= null;
+      progress.rewardsUpdatedAt ??= null;
       return progress;
     } catch {
       return null;

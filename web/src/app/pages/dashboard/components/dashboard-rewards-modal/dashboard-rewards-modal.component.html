@@ -1,0 +1,106 @@
+@if (chestReward(); as reward) {
+  <div class="rewards-backdrop" role="dialog" aria-modal="true" aria-labelledby="chest-reward-title" (click)="closeChest.emit()">
+    <div class="rewards-card reward-dialog" (click)="$event.stopPropagation()">
+      <button type="button" class="close-btn" (click)="closeChest.emit()" [attr.aria-label]="language.t('shop.close')">×</button>
+
+      <div class="chest-burst" aria-hidden="true">
+        <span class="chest-spark s1">✦</span>
+        <span class="chest-emoji">🎁</span>
+        <span class="chest-spark s2">✦</span>
+      </div>
+
+      <p class="eyebrow">{{ language.t('chest.rewardEyebrow') }}</p>
+      <h2 id="chest-reward-title">{{ reward.title }}</h2>
+
+      <div class="coin-reward-pill">
+        <span>🪙</span>
+        <strong>+{{ reward.coins }}</strong>
+      </div>
+
+      <p class="balance-note">{{ language.t('chest.balanceLabel') }}: <strong>{{ coins() }} 🪙</strong></p>
+
+      <div class="reward-actions">
+        <button type="button" class="btn-secondary" (click)="openShopFromChest.emit()">
+          {{ language.t('chest.openShop') }}
+        </button>
+        <button type="button" class="btn-primary" (click)="closeChest.emit()">
+          {{ language.t('chest.collect') }}
+        </button>
+      </div>
+    </div>
+  </div>
+} @else if (shopOpen()) {
+  <div class="rewards-backdrop" role="dialog" aria-modal="true" aria-labelledby="shop-title" (click)="closeShop.emit()">
+    <div class="rewards-card shop-dialog" (click)="$event.stopPropagation()">
+      <div class="shop-head">
+        <div>
+          <p class="eyebrow">{{ language.t('shop.eyebrow') }}</p>
+          <h2 id="shop-title">{{ language.t('shop.title') }}</h2>
+        </div>
+        <div class="shop-head-right">
+          <span class="balance-badge">🪙 {{ coins() }}</span>
+          <button type="button" class="close-btn" (click)="closeShop.emit()" [attr.aria-label]="language.t('shop.close')">×</button>
+        </div>
+      </div>
+
+      <section class="shop-section">
+        <div class="freeze-card">
+          <div class="freeze-icon">❄️</div>
+          <div class="freeze-copy">
+            <div class="freeze-title-row">
+              <strong>{{ language.t('shop.freezeTitle') }}</strong>
+              <span class="freeze-count">{{ language.t('shop.freezeOwned') }}: {{ freezes() }} / {{ maxFreezes }}</span>
+            </div>
+            <p>{{ language.t('shop.freezeDesc') }}</p>
+          </div>
+          <button type="button" class="buy-btn" [disabled]="!canBuyFreeze()" (click)="buyFreeze.emit()">
+            @if (freezeMaxed()) {
+              {{ language.t('shop.freezeMax') }}
+            } @else {
+              {{ freezePrice }} 🪙
+            }
+          </button>
+        </div>
+      </section>
+
+      <section class="shop-section">
+        <h3 class="section-label">{{ language.t('shop.avatarsTitle') }}</h3>
+        <div class="avatars-grid">
+          <div class="avatar-card" [class.is-equipped]="selectedAvatar() === null">
+            <span class="avatar-preview is-letter">{{ defaultInitial() }}</span>
+            <strong class="avatar-name">{{ language.t('shop.defaultAvatar') }}</strong>
+            <button type="button" class="avatar-action"
+              [class.is-active]="selectedAvatar() === null"
+              [disabled]="selectedAvatar() === null"
+              (click)="equipAvatar.emit(null)">
+              {{ selectedAvatar() === null ? language.t('shop.equipped') : language.t('shop.equip') }}
+            </button>
+          </div>
+
+          @for (item of avatars; track item.id) {
+            @let owned = ownedAvatars().has(item.id);
+            @let equipped = selectedAvatar() === item.id;
+            <div class="avatar-card" [class.is-equipped]="equipped">
+              <span class="avatar-preview">{{ item.emoji }}</span>
+              <strong class="avatar-name">{{ item.name[language.locale()] }}</strong>
+              @if (owned) {
+                <button type="button" class="avatar-action"
+                  [class.is-active]="equipped"
+                  [disabled]="equipped"
+                  (click)="equipAvatar.emit(item.id)">
+                  {{ equipped ? language.t('shop.equipped') : language.t('shop.equip') }}
+                </button>
+              } @else {
+                <button type="button" class="avatar-action is-buy"
+                  [disabled]="coins() < item.price"
+                  (click)="buyAvatar.emit({ id: item.id, price: item.price })">
+                  {{ item.price }} 🪙
+                </button>
+              }
+            </div>
+          }
+        </div>
+      </section>
+    </div>
+  </div>
+}

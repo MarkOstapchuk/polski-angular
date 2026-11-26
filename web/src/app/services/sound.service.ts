@@ -44,6 +44,22 @@ export class SoundService {
     this.vibrate([15, 30, 30]);
   }
 
+  playChestOpen(): void {
+    if (!this.enabled()) return;
+    const notes = [587.33, 739.99, 880, 1174.66, 1396.91];
+    notes.forEach((freq, idx) => {
+      this.playTone(freq, idx * 0.06, idx === notes.length - 1 ? 0.18 : 0.09, 'sine', 0.09);
+    });
+    this.vibrate([15, 25, 15, 25, 35]);
+  }
+
+  playPurchase(): void {
+    if (!this.enabled()) return;
+    this.playTone(987.77, 0, 0.075, 'sine', 0.08);
+    this.playTone(1318.51, 0.065, 0.11, 'sine', 0.08);
+    this.vibrate(15);
+  }
+
   private playTone(freq: number, delaySec: number, durationSec: number, type: OscillatorType, peakGain: number): void {
     if (typeof window === 'undefined') return;
     try {
