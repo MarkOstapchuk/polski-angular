@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, DestroyRef, computed, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { COURSES } from '../../data/lesson-catalog';
@@ -19,10 +19,15 @@ import { IconComponent } from '../../shared/icon/icon.component';
 })
 export class FeedbackComponent {
   readonly courses = COURSES;
+  private readonly destroyRef = inject(DestroyRef);
   private readonly analytics = inject(AnalyticsService);
   private readonly auth = inject(AuthService);
   private readonly route = inject(ActivatedRoute);
   readonly language = inject(LanguageService);
+
+  readonly contactEmail = 'contact@passolabs.tech';
+  readonly copied = signal(false);
+  private copyTimer: ReturnType<typeof setTimeout> | null = null;
 
   private readonly returnCourseId = signal<'part-1' | 'part-2' | 'part-3'>(this.resolveInitialCourseId());
   readonly backUrl = computed(() => `/course/${this.returnCourseId()}`);
@@ -32,6 +37,23 @@ export class FeedbackComponent {
   readonly sending = signal(false);
   readonly error = signal('');
   readonly sent = signal(false);
+
+  constructor() {
+    this.destroyRef.onDestroy(() => {
+      if (this.copyTimer) clearTimeout(this.copyTimer);
+    });
+  }
+
+  async copyEmail(): Promise<void> {
+    try {
+      await navigator.clipboard?.writeText(this.contactEmail);
+      this.copied.set(true);
+      if (this.copyTimer) clearTimeout(this.copyTimer);
+      this.copyTimer = setTimeout(() => this.copied.set(false), 2000);
+    } catch {
+      // Clipboard API may be unavailable in restricted browser contexts.
+    }
+  }
 
   async submit(): Promise<void> {
     const user = this.auth.user();

@@ -267,6 +267,12 @@ const messages: Record<Language, Record<string, string>> = {
     'shop.coinsAria': 'Monety i mini-sklep',
     'shop.freezePill': 'Zamrożenia',
     'shop.getFreeze': 'Sklep →',
+    'feedback.directContactEyebrow': 'BEZPOŚREDNI KONTAKT',
+    'feedback.directContactTitle': 'Wolisz napisać e-mail?',
+    'feedback.directContactHint': 'Odpowiadamy na pytania dotyczące konta, kursu i błędów.',
+    'feedback.copyEmail': 'Kopiuj',
+    'feedback.copiedEmail': 'Skopiowano',
+    'auth.needHelp': 'Masz problem z logowaniem? Napisz:',
   },
   ru: {
     language: 'Язык',
@@ -531,6 +537,12 @@ const messages: Record<Language, Record<string, string>> = {
     'shop.coinsAria': 'Монеты и мини-магазин',
     'shop.freezePill': 'Заморозка',
     'shop.getFreeze': 'Магазин →',
+    'feedback.directContactEyebrow': 'ПРЯМАЯ СВЯЗЬ',
+    'feedback.directContactTitle': 'Удобнее написать на почту?',
+    'feedback.directContactHint': 'Отвечаем по вопросам аккаунта, курса и техническим проблемам.',
+    'feedback.copyEmail': 'Копировать',
+    'feedback.copiedEmail': 'Скопировано',
+    'auth.needHelp': 'Проблемы со входом? Напишите:',
   },
   en: {
     language: 'Language',
@@ -795,6 +807,12 @@ const messages: Record<Language, Record<string, string>> = {
     'shop.coinsAria': 'Coins and mini-shop',
     'shop.freezePill': 'Freezes',
     'shop.getFreeze': 'Shop →',
+    'feedback.directContactEyebrow': 'DIRECT CONTACT',
+    'feedback.directContactTitle': 'Prefer sending an email?',
+    'feedback.directContactHint': 'Reach out anytime about your account, course content, or bugs.',
+    'feedback.copyEmail': 'Copy',
+    'feedback.copiedEmail': 'Copied',
+    'auth.needHelp': 'Need help signing in? Email',
   },
 };
 

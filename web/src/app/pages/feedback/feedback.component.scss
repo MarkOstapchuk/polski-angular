@@ -21,4 +21,12 @@ select:focus, textarea:focus { border-color: var(--success-border); box-shadow: 
 .form-message { margin: 0 0 17px; padding: 11px 12px; border-radius: 9px; font-size: 14px; line-height: 1.45; }
 .error-message { background: var(--error-bg); color: var(--error-text); }
 .success-message { background: var(--success-bg); color: var(--success-text); }
-@media (max-width: 480px) { .feedback-page { width: min(100% - 28px, 620px); padding-top: 20px; } .feedback-card { padding: 26px 21px; } }
+.contact-card { margin-top: 18px; padding: 24px 28px; border: 1px solid var(--border); border-radius: 18px; background: var(--bg-warm); }
+.contact-card h2 { margin: 0; font-size: 20px; letter-spacing: -.4px; }
+.contact-hint { margin: 6px 0 16px; color: var(--text-muted); font-size: 14px; line-height: 1.5; }
+.contact-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
+.contact-mail-link { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding: 0 14px; border: 1px solid var(--border-strong); border-radius: 10px; background: var(--bg-elevated); color: var(--accent-text); font-size: 14px; font-weight: 700; text-decoration: none; }
+.contact-mail-link:hover { border-color: var(--border-hover); background: var(--accent-bg-hover); }
+.copy-email-button { display: inline-flex; align-items: center; gap: 6px; min-height: 44px; padding: 0 14px; border: 1px solid var(--border-strong); border-radius: 10px; background: var(--bg-elevated); color: var(--text-secondary); font: inherit; font-size: 13px; font-weight: 700; cursor: pointer; }
+.copy-email-button:hover { background: var(--bg-subtle); color: var(--text-strong); }
+@media (max-width: 480px) { .feedback-page { width: min(100% - 28px, 620px); padding-top: 20px; } .feedback-card { padding: 26px 21px; } .contact-card { padding: 20px 18px; } }

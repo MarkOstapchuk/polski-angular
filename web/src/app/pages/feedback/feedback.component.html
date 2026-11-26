@@ -38,4 +38,19 @@
       <button class="submit-button" type="submit" [disabled]="sending() || !message().trim()">{{ sending() ? language.t('feedback.sending') : language.t('feedback.send') }}</button>
     </form>
   </section>
+
+  <section class="contact-card" aria-labelledby="direct-contact-title">
+    <p class="eyebrow">{{ language.t('feedback.directContactEyebrow') }}</p>
+    <h2 id="direct-contact-title">{{ language.t('feedback.directContactTitle') }}</h2>
+    <p class="contact-hint">{{ language.t('feedback.directContactHint') }}</p>
+    <div class="contact-actions">
+      <a class="contact-mail-link" [href]="'mailto:' + contactEmail">
+        <app-icon name="mail" [size]="17" /> {{ contactEmail }}
+      </a>
+      <button class="copy-email-button" type="button" (click)="copyEmail()">
+        <app-icon [name]="copied() ? 'check' : 'copy'" [size]="15" />
+        {{ copied() ? language.t('feedback.copiedEmail') : language.t('feedback.copyEmail') }}
+      </button>
+    </div>
+  </section>
 </main>
