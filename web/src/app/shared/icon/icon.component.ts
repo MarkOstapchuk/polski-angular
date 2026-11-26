@@ -49,7 +49,7 @@ import {
   Zap,
 } from 'lucide';
 
-type LucideNode = readonly [string, Record<string, string | number>];
+type LucideNode = readonly [string, Record<string, string | number | undefined>];
 
 const ICONS = {
   'arrow-down': ArrowDown,
