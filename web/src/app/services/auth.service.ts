@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import type { CanActivateFn } from '@angular/router';
 import type { User } from '@supabase/supabase-js';
 import { AnalyticsService } from './analytics.service';
+import { LanguageService } from '../i18n/language.service';
 import { ProgressService } from './progress.service';
 import { supabase } from './supabase.client';
 
@@ -12,6 +13,7 @@ type AppUser = Pick<User, 'id' | 'email'>;
 @Injectable({ providedIn: 'root' })
 export class AuthService {
   private readonly analytics = inject(AnalyticsService);
+  private readonly language = inject(LanguageService);
   readonly user = signal<AppUser | null>(null);
 
   async currentUser(): Promise<AppUser | null> {
@@ -56,7 +58,10 @@ export class AuthService {
     const { data, error } = await supabase.auth.signUp({
       email,
       password,
-      options: { emailRedirectTo: window.location.origin },
+      options: {
+        emailRedirectTo: window.location.origin,
+        data: { lang: this.language.locale() },
+      },
     });
     if (error) throw error;
     const createdUser = data.session?.user ?? data.user ?? null;

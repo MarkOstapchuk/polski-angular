@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="{{ if and .Data.lang (eq .Data.lang "ru") }}ru{{ else if and .Data.lang (eq .Data.lang "en") }}en{{ else }}pl{{ end }}">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <title>{{ if and .Data.lang (eq .Data.lang "ru") }}Восстановление пароля — polski.{{ else if and .Data.lang (eq .Data.lang "en") }}Reset your password — polski.{{ else }}Odzyskiwanie hasła — polski.{{ end }}</title>
+  <style>
+    @media only screen and (max-width: 520px) {
+      .email-shell { padding: 20px 12px !important; }
+      .email-card { padding: 26px 20px !important; border-radius: 16px !important; }
+      .email-title { font-size: 23px !important; }
+      .email-cta { width: 100% !important; text-align: center !important; box-sizing: border-box !important; }
+    }
+  </style>
+</head>
+<body style="margin:0;padding:0;background-color:#fbfaf7;color:#282922;font-family:Inter,-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;-webkit-font-smoothing:antialiased;">
+  <div style="display:none;max-height:0;overflow:hidden;opacity:0;mso-hide:all;font-size:1px;line-height:1px;color:#fbfaf7;">
+    {{ if and .Data.lang (eq .Data.lang "ru") }}Ссылка для установки нового пароля от вашего аккаунта polski.{{ else if and .Data.lang (eq .Data.lang "en") }}Use this link to set a new password for your polski. account.{{ else }}Użyj tego linku, aby ustawić nowe hasło do swojego konta polski.{{ end }}
+  </div>
+
+  <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="background-color:#fbfaf7;">
+    <tr>
+      <td align="center" class="email-shell" style="padding:32px 16px;">
+        <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="max-width:520px;">
+          <!-- Brand Header -->
+          <tr>
+            <td style="padding:0 0 20px 4px;">
+              <table role="presentation" cellpadding="0" cellspacing="0" border="0">
+                <tr>
+                  <td width="34" height="34" align="center" valign="middle" style="width:34px;height:34px;background-color:#bd5d3f;border-radius:11px 11px 11px 4px;color:#ffffff;font-family:Inter,-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-size:21px;font-weight:800;line-height:34px;text-align:center;">
+                    <a href="{{ .SiteURL }}" style="color:#ffffff;text-decoration:none;display:block;width:34px;height:34px;line-height:34px;">p</a>
+                  </td>
+                  <td valign="middle" style="padding-left:10px;">
+                    <a href="{{ .SiteURL }}" style="color:#2d2e28;text-decoration:none;font-family:Inter,-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-size:23px;font-weight:800;letter-spacing:-0.8px;line-height:1;">polski<span style="color:#d97956;">.</span></a>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+
+          <!-- Main Card -->
+          <tr>
+            <td class="email-card" style="background-color:#ffffff;border:1px solid #eeece6;border-radius:20px;padding:36px 34px;">
+              <p style="margin:0 0 10px;font-size:11px;font-weight:800;letter-spacing:1.3px;text-transform:uppercase;color:#8c887d;line-height:1.4;">
+                {{ if and .Data.lang (eq .Data.lang "ru") }}БЕЗОПАСНОСТЬ АККАУНТА{{ else if and .Data.lang (eq .Data.lang "en") }}ACCOUNT SECURITY{{ else }}BEZPIECZEŃSTWO KONTA{{ end }}
+              </p>
+
+              <h1 class="email-title" style="margin:0 0 14px;font-size:26px;font-weight:800;letter-spacing:-0.6px;line-height:1.25;color:#282922;">
+                {{ if and .Data.lang (eq .Data.lang "ru") }}Восстановление пароля{{ else if and .Data.lang (eq .Data.lang "en") }}Reset your password{{ else }}Odzyskiwanie hasła{{ end }}
+              </h1>
+
+              <p style="margin:0 0 26px;font-size:15px;line-height:1.6;color:#5c5950;">
+                {{ if and .Data.lang (eq .Data.lang "ru") }}Мы получили запрос на сброс пароля для вашего аккаунта <strong>polski.</strong> Нажмите на кнопку ниже, чтобы задать новый пароль.{{ else if and .Data.lang (eq .Data.lang "en") }}We received a request to reset the password for your <strong>polski.</strong> account. Click the button below to choose a new password.{{ else }}Otrzymaliśmy prośbę o zmianę hasła do Twojego konta <strong>polski.</strong> Kliknij przycisk poniżej, aby ustawić nowe hasło.{{ end }}
+              </p>
+
+              <!-- Bulletproof CTA Button -->
+              <table role="presentation" cellpadding="0" cellspacing="0" border="0">
+                <tr>
+                  <td align="center" style="background-color:#bd5d3f;border-radius:10px;">
+                    <a class="email-cta" href="{{ .ConfirmationURL }}" style="display:inline-block;padding:14px 28px;font-family:Inter,-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-size:15px;font-weight:700;color:#ffffff;text-decoration:none;border-radius:10px;line-height:1.2;">
+                      {{ if and .Data.lang (eq .Data.lang "ru") }}Установить новый пароль{{ else if and .Data.lang (eq .Data.lang "en") }}Set a new password{{ else }}Ustaw nowe hasło{{ end }}
+                    </a>
+                  </td>
+                </tr>
+              </table>
+
+              <!-- Warm Security Note -->
+              <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="margin-top:26px;">
+                <tr>
+                  <td style="background-color:#faf6ed;border:1px solid #eeece6;border-radius:12px;padding:14px 16px;font-size:13px;line-height:1.55;color:#6b5b43;">
+                    {{ if and .Data.lang (eq .Data.lang "ru") }}Срок действия ссылки ограничен. Если вы не запрашивали смену пароля, просто проигнорируйте это письмо — ваш текущий пароль останется без изменений.{{ else if and .Data.lang (eq .Data.lang "en") }}This reset link expires automatically. If you didn't request a password reset, ignore this message — your current password will remain unchanged.{{ else }}Link wygasa automatycznie po pewnym czasie. Jeśli nie prosiłeś(-aś) o zmianę hasła, zignoruj tę wiadomość — Twoje obecne hasło pozostanie bez zmian.{{ end }}
+                  </td>
+                </tr>
+              </table>
+
+              <!-- Fallback URL -->
+              <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="margin-top:24px;">
+                <tr>
+                  <td style="border-top:1px solid #eeece6;padding-top:18px;font-size:12px;line-height:1.5;color:#7c786e;">
+                    {{ if and .Data.lang (eq .Data.lang "ru") }}Если кнопка не работает, скопируйте и откройте эту ссылку в браузере:{{ else if and .Data.lang (eq .Data.lang "en") }}If the button doesn't work, copy and paste this link into your browser:{{ else }}Jeśli przycisk nie działa, skopiuj i otwórz ten link w przeglądarce:{{ end }}
+                    <br>
+                    <a href="{{ .ConfirmationURL }}" style="color:#a54d31;text-decoration:underline;word-break:break-all;">{{ .ConfirmationURL }}</a>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+
+          <!-- Footer -->
+          <tr>
+            <td align="center" style="padding:20px 12px 0;font-size:12px;line-height:1.6;color:#8c887d;text-align:center;">
+              <p style="margin:0 0 4px;">
+                {{ if and .Data.lang (eq .Data.lang "ru") }}polski. — изучайте польский шаг за шагом{{ else if and .Data.lang (eq .Data.lang "en") }}polski. — learn Polish step by step{{ else }}polski. — ucz się krok po kroku{{ end }}
+              </p>
+              <p style="margin:0;">
+                <a href="{{ .SiteURL }}" style="color:#7c786e;text-decoration:underline;">{{ .SiteURL }}</a>
+                &nbsp;·&nbsp;
+                <a href="mailto:contact@passolabs.tech" style="color:#7c786e;text-decoration:underline;">contact@passolabs.tech</a>
+              </p>
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>
