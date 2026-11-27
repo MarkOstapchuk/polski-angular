@@ -1,5 +1,5 @@
-import { ChangeDetectionStrategy, Component, HostListener, computed, inject, signal } from '@angular/core';
-import { Meta } from '@angular/platform-browser';
+import { ChangeDetectionStrategy, Component, DestroyRef, HostListener, computed, effect, inject, signal } from '@angular/core';
+import { Meta, Title } from '@angular/platform-browser';
 import { Router, RouterLink } from '@angular/router';
 import {
   PLACEMENT_QUESTIONS,
@@ -11,6 +11,24 @@ import { LanguageService } from '../../i18n/language.service';
 import { AnalyticsService } from '../../services/analytics.service';
 import { AuthService } from '../../services/auth.service';
 import { IconComponent } from '../../shared/icon/icon.component';
+
+const PLACEMENT_SEO_META = {
+  pl: {
+    title: 'Test poziomujący z języka polskiego A1–B2 | polski.',
+    description:
+      'Darmowy test poziomujący z języka polskiego (A1–B2). 12 krótkich pytań bez rejestracji — sprawdź, od której lekcji najlepiej zacząć.',
+  },
+  ru: {
+    title: 'Тест на уровень польского языка A1–B2 онлайн | polski.',
+    description:
+      'Бесплатный тест на определение уровня польского языка (A1–B2). 12 коротких вопросов без регистрации — узнайте, с какого урока начать.',
+  },
+  en: {
+    title: 'Polish Placement Test Online (A1–B2) | polski.',
+    description:
+      'Free online Polish placement test (A1–B2). Answer 12 quick questions without sign-up to find your exact starting lesson.',
+  },
+} as const;
 
 @Component({
   selector: 'app-placement-test',
@@ -47,11 +65,47 @@ export class PlacementTestComponent {
 
   constructor() {
     const meta = inject(Meta);
-    meta.updateTag({
-      name: 'description',
-      content: 'Darmowy test poziomujący z języka polskiego (A1–B2). 12 krótkich pytań bez rejestracji — sprawdź, od której lekcji najlepiej zacząć.',
-    });
+    const title = inject(Title);
+    const destroyRef = inject(DestroyRef);
+
+    const origin =
+      typeof window !== 'undefined' && window.location?.origin
+        ? window.location.origin
+        : 'https://polski.passolabs.tech';
+    const canonicalUrl = `${origin}/test`;
+
     meta.updateTag({ name: 'robots', content: 'index,follow' });
+
+    if (typeof document !== 'undefined' && document.head) {
+      const existingCanonical = document.head.querySelector<HTMLLinkElement>('link[rel="canonical"]');
+      const created = !existingCanonical;
+      const previousHref = existingCanonical?.getAttribute('href') ?? null;
+      const canonicalLink = existingCanonical ?? document.createElement('link');
+      canonicalLink.setAttribute('rel', 'canonical');
+      canonicalLink.setAttribute('href', canonicalUrl);
+      if (created) {
+        document.head.appendChild(canonicalLink);
+      }
+
+      destroyRef.onDestroy(() => {
+        if (created) {
+          canonicalLink.remove();
+        } else if (previousHref !== null) {
+          canonicalLink.setAttribute('href', previousHref);
+        }
+      });
+    }
+
+    effect(() => {
+      const locale = this.language.locale();
+      const seo = PLACEMENT_SEO_META[locale as keyof typeof PLACEMENT_SEO_META] ?? PLACEMENT_SEO_META.pl;
+      title.setTitle(seo.title);
+      meta.updateTag({ name: 'description', content: seo.description });
+      meta.updateTag({ property: 'og:title', content: seo.title });
+      meta.updateTag({ property: 'og:description', content: seo.description });
+      meta.updateTag({ property: 'og:url', content: canonicalUrl });
+    });
+
     this.analytics.trackOnce('placement_test_started', 'placement_test_started', {
       metadata: { locale: this.language.locale() },
     });

@@ -2,10 +2,31 @@
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "buildCommand": "npm run build",
   "outputDirectory": "dist/polski-platform/browser",
+  "trailingSlash": false,
+  "redirects": [
+    { "source": "/seo", "destination": "/", "permanent": true },
+    { "source": "/seo/index.html", "destination": "/", "permanent": true }
+  ],
   "headers": [
-    { "source": "/app.html", "headers": [{ "key": "Cache-Control", "value": "no-cache, no-store, must-revalidate" }] },
+    {
+      "source": "/app.html",
+      "headers": [
+        { "key": "Cache-Control", "value": "no-cache, no-store, must-revalidate" },
+        { "key": "X-Robots-Tag", "value": "noindex, nofollow" }
+      ]
+    },
     { "source": "/ngsw.json", "headers": [{ "key": "Cache-Control", "value": "no-cache, no-store, must-revalidate" }] },
-    { "source": "/ngsw-worker.js", "headers": [{ "key": "Cache-Control", "value": "no-cache, must-revalidate" }] }
+    { "source": "/ngsw-worker.js", "headers": [{ "key": "Cache-Control", "value": "no-cache, must-revalidate" }] },
+    { "source": "/test", "headers": [{ "key": "X-Robots-Tag", "value": "index, follow" }] },
+    { "source": "/auth", "headers": [{ "key": "X-Robots-Tag", "value": "noindex, nofollow" }] },
+    { "source": "/course/:path*", "headers": [{ "key": "X-Robots-Tag", "value": "noindex, nofollow" }] },
+    { "source": "/course-test/:path*", "headers": [{ "key": "X-Robots-Tag", "value": "noindex, nofollow" }] },
+    { "source": "/trainer", "headers": [{ "key": "X-Robots-Tag", "value": "noindex, nofollow" }] },
+    { "source": "/grammar", "headers": [{ "key": "X-Robots-Tag", "value": "noindex, nofollow" }] },
+    { "source": "/vocabulary", "headers": [{ "key": "X-Robots-Tag", "value": "noindex, nofollow" }] },
+    { "source": "/mistakes", "headers": [{ "key": "X-Robots-Tag", "value": "noindex, nofollow" }] },
+    { "source": "/learn/:path*", "headers": [{ "key": "X-Robots-Tag", "value": "noindex, nofollow" }] },
+    { "source": "/feedback", "headers": [{ "key": "X-Robots-Tag", "value": "noindex, nofollow" }] }
   ],
   "rewrites": [
     { "source": "/", "destination": "/seo/index.html" },
@@ -22,6 +43,8 @@
     { "source": "/test", "destination": "/app.html" },
     { "source": "/course/:path*", "destination": "/app.html" },
     { "source": "/course-test/:path*", "destination": "/app.html" },
+    { "source": "/trainer", "destination": "/app.html" },
+    { "source": "/grammar", "destination": "/app.html" },
     { "source": "/vocabulary", "destination": "/app.html" },
     { "source": "/mistakes", "destination": "/app.html" },
     { "source": "/learn/:path*", "destination": "/app.html" },
