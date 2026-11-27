@@ -1,0 +1,113 @@
+@if (pwa.modalVisible()) {
+  <div class="install-backdrop" role="presentation" (click)="!pwa.installing() && pwa.dismissModal('backdrop')">
+    <section
+      class="install-sheet"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="mobile-install-title"
+      (click)="$event.stopPropagation()"
+    >
+      <div class="install-handle" aria-hidden="true"></div>
+
+      <button
+        class="install-close"
+        type="button"
+        [disabled]="pwa.installing()"
+        (click)="pwa.dismissModal('close_btn')"
+        [attr.aria-label]="language.t('dashboard.close')"
+      >
+        <app-icon name="close" [size]="18" />
+      </button>
+
+      <div class="install-head">
+        <img class="install-app-icon" src="/icons/icon-192.png" width="48" height="48" alt="" aria-hidden="true" />
+        <div class="install-head-copy">
+          <p class="install-eyebrow">{{ language.t('installModal.eyebrow') }}</p>
+          <h2 id="mobile-install-title">{{ language.t('installModal.title') }}</h2>
+        </div>
+      </div>
+
+      <p class="install-subtitle">{{ language.t('installModal.subtitle') }}</p>
+
+      @switch (pwa.modalMode()) {
+        @case ('native_prompt') {
+          <div class="install-actions">
+            <button
+              class="install-btn install-btn-primary"
+              type="button"
+              [disabled]="pwa.installing()"
+              (click)="pwa.install()"
+            >
+              <app-icon name="download" [size]="18" />
+              <span>{{ pwa.installing() ? language.t('installModal.installing') : language.t('installModal.installCta') }}</span>
+            </button>
+            <button
+              class="install-btn install-btn-secondary"
+              type="button"
+              [disabled]="pwa.installing()"
+              (click)="pwa.dismissModal('later_btn')"
+            >
+              {{ language.t('installModal.later') }}
+            </button>
+          </div>
+        }
+
+        @case ('ios_safari') {
+          <ol class="install-steps">
+            <li>
+              <span>{{ language.t('installModal.iosSafariStep1') }}</span>
+              <span class="share-badge" aria-hidden="true">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M12 3v12" />
+                  <path d="m7 8 5-5 5 5" />
+                  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-7" />
+                </svg>
+              </span>
+            </li>
+            <li>{{ language.t('installModal.iosSafariStep2') }}</li>
+            <li>{{ language.t('installModal.iosSafariStep3') }}</li>
+          </ol>
+          <div class="install-actions">
+            <button class="install-btn install-btn-primary" type="button" (click)="pwa.dismissModal('later_btn')">
+              {{ language.t('installModal.gotIt') }}
+            </button>
+          </div>
+        }
+
+        @case ('ios_other') {
+          <ol class="install-steps">
+            <li>{{ language.t('installModal.iosOtherStep1') }}</li>
+            <li>
+              <span>{{ language.t('installModal.iosOtherStep2') }}</span>
+              <span class="share-badge" aria-hidden="true">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M12 3v12" />
+                  <path d="m7 8 5-5 5 5" />
+                  <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-7" />
+                </svg>
+              </span>
+            </li>
+            <li>{{ language.t('installModal.iosOtherStep3') }}</li>
+          </ol>
+          <div class="install-actions">
+            <button class="install-btn install-btn-primary" type="button" (click)="pwa.dismissModal('later_btn')">
+              {{ language.t('installModal.gotIt') }}
+            </button>
+          </div>
+        }
+
+        @case ('android_manual') {
+          <ol class="install-steps">
+            <li>{{ language.t('installModal.androidStep1') }}</li>
+            <li>{{ language.t('installModal.androidStep2') }}</li>
+          </ol>
+          <div class="install-actions">
+            <button class="install-btn install-btn-primary" type="button" (click)="pwa.dismissModal('later_btn')">
+              {{ language.t('installModal.gotIt') }}
+            </button>
+          </div>
+        }
+      }
+    </section>
+  </div>
+}

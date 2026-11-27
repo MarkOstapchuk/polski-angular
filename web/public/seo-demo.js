@@ -96,6 +96,367 @@
     });
   }
 
+  (() => {
+    const DISMISS_KEY = 'polski-mobile-install-dismissed-v1';
+    const INSTALLED_KEY = 'polski-pwa-installed-v1';
+    const COOLDOWN_MS = 7 * 24 * 60 * 60 * 1000;
+    const SHOW_DELAY_MS = 2500;
+
+    const ua = navigator.userAgent || '';
+    const isIOS = /iPad|iPhone|iPod/.test(ua)
+      || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+    const isIOSPhone = /iPhone|iPod/i.test(ua);
+    const isAndroid = /Android/i.test(ua);
+    const isAndroidPhone = isAndroid && /Mobile/i.test(ua);
+    const isOtherMobilePhone = /Mobile|Windows Phone|webOS|BlackBerry|IEMobile|Opera Mini/i.test(ua)
+      && !/iPad|Tablet/i.test(ua);
+    const isMobilePhone = isIOSPhone
+      || isAndroidPhone
+      || isOtherMobilePhone
+      || (typeof window.matchMedia === 'function' && window.matchMedia('(pointer: coarse)').matches && window.innerWidth <= 767);
+
+    const isInAppBrowser = /FBAN|FBAV|Instagram|Telegram|Line\/|MicroMessenger|Snapchat|TikTok|BytedanceWebview|Twitter|LinkedInApp|wv\)/i.test(ua);
+    const isIOSSafari = isIOS
+      && /Safari/i.test(ua)
+      && !/CriOS|FxiOS|EdgiOS|OPiOS|DuckDuckGo|YaBrowser/i.test(ua)
+      && !isInAppBrowser;
+
+    const isStandalone = (typeof window.matchMedia === 'function'
+      && (window.matchMedia('(display-mode: standalone)').matches || window.matchMedia('(display-mode: fullscreen)').matches))
+      || ('standalone' in navigator && Boolean(navigator.standalone))
+      || document.referrer.startsWith('android-app://');
+
+    const isBot = Boolean(navigator.webdriver)
+      || /bot|crawl|spider|slurp|googlebot|bingbot|yandex|duckduckbot|baidu|lighthouse|pagespeed/i.test(ua);
+
+    const i18n = {
+      pl: {
+        eyebrow: 'APLIKACJA NA TELEFON',
+        title: 'Zainstaluj polski.',
+        subtitle: 'Szybki dostęp z ekranu głównego, pełny ekran i nauka offline.',
+        installCta: 'Zainstaluj aplikację',
+        installing: 'Instalowanie…',
+        later: 'Później',
+        gotIt: 'Rozumiem',
+        close: 'Zamknij',
+        iosSafariStep1: 'Dotknij przycisku „Udostępnij” na dolnym pasku Safari.',
+        iosSafariStep2: 'Wybierz „Dodaj do ekranu początkowego”.',
+        iosSafariStep3: 'Potwierdź, klikając „Dodaj”.',
+        iosOtherStep1: 'Otwórz tę stronę w przeglądarce Safari.',
+        iosOtherStep2: 'Dotknij „Udostępnij” na pasku Safari.',
+        iosOtherStep3: 'Wybierz „Dodaj do ekranu początkowego” → „Dodaj”.',
+        androidStep1: 'Otwórz menu przeglądarki (⋮) w prawym górnym rogu.',
+        androidStep2: 'Wybierz „Zainstaluj aplikację” lub „Dodaj do ekranu głównego”.',
+      },
+      ru: {
+        eyebrow: 'ПРИЛОЖЕНИЕ НА ТЕЛЕФОН',
+        title: 'Установите polski.',
+        subtitle: 'Быстрый запуск с главного экрана, полный экран и работа офлайн.',
+        installCta: 'Установить приложение',
+        installing: 'Установка…',
+        later: 'Позже',
+        gotIt: 'Понятно',
+        close: 'Закрыть',
+        iosSafariStep1: 'Нажмите «Поделиться» в нижней панели Safari.',
+        iosSafariStep2: 'Выберите «На экран Домой».',
+        iosSafariStep3: 'Нажмите «Добавить» в правом верхнем углу.',
+        iosOtherStep1: 'Откройте эту страницу в браузере Safari.',
+        iosOtherStep2: 'Нажмите «Поделиться» в нижней панели.',
+        iosOtherStep3: 'Выберите «На экран Домой» → «Добавить».',
+        androidStep1: 'Откройте меню браузера (⋮) в правом верхнем углу.',
+        androidStep2: 'Выберите «Установить приложение» или «Добавить на главный экран».',
+      },
+      en: {
+        eyebrow: 'MOBILE APP',
+        title: 'Install polski.',
+        subtitle: 'One-tap launch from your home screen, full screen, and offline access.',
+        installCta: 'Install app',
+        installing: 'Installing…',
+        later: 'Not now',
+        gotIt: 'Got it',
+        close: 'Close',
+        iosSafariStep1: 'Tap the “Share” button in the Safari toolbar.',
+        iosSafariStep2: 'Select “Add to Home Screen”.',
+        iosSafariStep3: 'Tap “Add” in the top-right corner.',
+        iosOtherStep1: 'Open this page in Safari.',
+        iosOtherStep2: 'Tap “Share” in the browser toolbar.',
+        iosOtherStep3: 'Choose “Add to Home Screen” → “Add”.',
+        androidStep1: 'Open the browser menu (⋮) in the top-right corner.',
+        androidStep2: 'Choose “Install app” or “Add to Home screen”.',
+      },
+    };
+    const m = i18n[docLang] || i18n.pl;
+
+    let installPrompt = window.__polskiInstallPrompt || null;
+    if (installPrompt) {
+      delete window.__polskiInstallPrompt;
+      try { localStorage.removeItem(INSTALLED_KEY); } catch {}
+    }
+
+    let backdropEl = null;
+    let bodyHostEl = null;
+    let closeBtnEl = null;
+    let currentMode = null;
+    let installing = false;
+    let autoTimer = null;
+
+    const withinCooldown = () => {
+      try {
+        const raw = localStorage.getItem(DISMISS_KEY);
+        if (!raw) return false;
+        const ts = Number(raw);
+        return Number.isFinite(ts) && Date.now() - ts < COOLDOWN_MS;
+      } catch {
+        return false;
+      }
+    };
+
+    const isMarkedInstalled = () => {
+      if (installPrompt) return false;
+      try { return localStorage.getItem(INSTALLED_KEY) === '1'; } catch { return false; }
+    };
+
+    const recordDismissal = () => {
+      try { localStorage.setItem(DISMISS_KEY, String(Date.now())); } catch {}
+    };
+
+    const markInstalled = () => {
+      try { localStorage.setItem(INSTALLED_KEY, '1'); } catch {}
+    };
+
+    const resolveMode = () => {
+      if (installPrompt) return 'native_prompt';
+      if (isIOS) return isIOSSafari ? 'ios_safari' : 'ios_other';
+      return 'android_manual';
+    };
+
+    const isEligible = () => isMobilePhone && !isStandalone && !isBot && !isMarkedInstalled() && !withinCooldown();
+
+    const makeShareBadge = () => {
+      const span = document.createElement('span');
+      span.className = 'pwa-share-badge';
+      span.setAttribute('aria-hidden', 'true');
+      span.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="m7 8 5-5 5 5"/><path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-7"/></svg>';
+      return span;
+    };
+
+    const closeModal = (reason) => {
+      if (!backdropEl || installing) return;
+      backdropEl.remove();
+      backdropEl = null;
+      bodyHostEl = null;
+      closeBtnEl = null;
+      document.removeEventListener('keydown', onEscape);
+      if (reason) {
+        recordDismissal();
+        capture('pwa_mobile_modal_dismissed', { surface: 'seo_landing', mode: currentMode, reason });
+      }
+      currentMode = null;
+    };
+
+    const onEscape = (event) => {
+      if (event.key === 'Escape' && backdropEl && !installing) {
+        event.preventDefault();
+        closeModal('escape');
+      }
+    };
+
+    const triggerNativeInstall = async (primaryBtn, secondaryBtn) => {
+      if (!installPrompt || installing) return;
+      const promptEvent = installPrompt;
+      installing = true;
+      primaryBtn.disabled = true;
+      secondaryBtn.disabled = true;
+      if (closeBtnEl) closeBtnEl.disabled = true;
+      primaryBtn.lastChild.textContent = m.installing;
+      capture('pwa_install_clicked', { surface: 'seo_landing', platform: 'prompt' });
+      try {
+        await promptEvent.prompt();
+        const choice = await promptEvent.userChoice;
+        capture('pwa_install_prompt_result', {
+          surface: 'seo_landing',
+          outcome: choice.outcome,
+          platform: choice.platform,
+        });
+        installPrompt = null;
+        if (choice.outcome === 'accepted') {
+          markInstalled();
+        } else {
+          recordDismissal();
+        }
+      } finally {
+        installing = false;
+        closeModal(null);
+      }
+    };
+
+    const renderModeBody = (mode) => {
+      if (!bodyHostEl) return;
+      currentMode = mode;
+      bodyHostEl.innerHTML = '';
+
+      if (mode === 'native_prompt') {
+        const actions = document.createElement('div');
+        actions.className = 'pwa-actions';
+
+        const installBtn = document.createElement('button');
+        installBtn.type = 'button';
+        installBtn.className = 'pwa-btn pwa-btn-primary';
+        installBtn.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>';
+        const labelSpan = document.createElement('span');
+        labelSpan.textContent = m.installCta;
+        installBtn.appendChild(labelSpan);
+
+        const laterBtn = document.createElement('button');
+        laterBtn.type = 'button';
+        laterBtn.className = 'pwa-btn pwa-btn-secondary';
+        laterBtn.textContent = m.later;
+
+        installBtn.addEventListener('click', () => { void triggerNativeInstall(installBtn, laterBtn); });
+        laterBtn.addEventListener('click', () => closeModal('later_btn'));
+
+        actions.append(installBtn, laterBtn);
+        bodyHostEl.appendChild(actions);
+        return;
+      }
+
+      const list = document.createElement('ol');
+      list.className = 'pwa-steps';
+
+      if (mode === 'ios_safari') {
+        const li1 = document.createElement('li');
+        const s1 = document.createElement('span');
+        s1.textContent = m.iosSafariStep1;
+        li1.append(s1, makeShareBadge());
+        const li2 = document.createElement('li');
+        li2.textContent = m.iosSafariStep2;
+        const li3 = document.createElement('li');
+        li3.textContent = m.iosSafariStep3;
+        list.append(li1, li2, li3);
+      } else if (mode === 'ios_other') {
+        const li1 = document.createElement('li');
+        li1.textContent = m.iosOtherStep1;
+        const li2 = document.createElement('li');
+        const s2 = document.createElement('span');
+        s2.textContent = m.iosOtherStep2;
+        li2.append(s2, makeShareBadge());
+        const li3 = document.createElement('li');
+        li3.textContent = m.iosOtherStep3;
+        list.append(li1, li2, li3);
+      } else {
+        const li1 = document.createElement('li');
+        li1.textContent = m.androidStep1;
+        const li2 = document.createElement('li');
+        li2.textContent = m.androidStep2;
+        list.append(li1, li2);
+      }
+
+      const actions = document.createElement('div');
+      actions.className = 'pwa-actions';
+      const gotItBtn = document.createElement('button');
+      gotItBtn.type = 'button';
+      gotItBtn.className = 'pwa-btn pwa-btn-primary';
+      gotItBtn.textContent = m.gotIt;
+      gotItBtn.addEventListener('click', () => closeModal('later_btn'));
+      actions.appendChild(gotItBtn);
+
+      bodyHostEl.append(list, actions);
+    };
+
+    const openModal = () => {
+      if (backdropEl || !isEligible()) return;
+      const mode = resolveMode();
+
+      const backdrop = document.createElement('div');
+      backdrop.className = 'pwa-backdrop';
+      backdrop.setAttribute('role', 'presentation');
+      backdrop.addEventListener('click', () => closeModal('backdrop'));
+
+      const sheet = document.createElement('section');
+      sheet.className = 'pwa-sheet';
+      sheet.setAttribute('role', 'dialog');
+      sheet.setAttribute('aria-modal', 'true');
+      sheet.setAttribute('aria-labelledby', 'pwa-install-title');
+      sheet.addEventListener('click', (e) => e.stopPropagation());
+
+      const handle = document.createElement('div');
+      handle.className = 'pwa-handle';
+      handle.setAttribute('aria-hidden', 'true');
+
+      const closeBtn = document.createElement('button');
+      closeBtn.type = 'button';
+      closeBtn.className = 'pwa-close';
+      closeBtn.setAttribute('aria-label', m.close);
+      closeBtn.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>';
+      closeBtn.addEventListener('click', () => closeModal('close_btn'));
+
+      const head = document.createElement('div');
+      head.className = 'pwa-head';
+      const icon = document.createElement('img');
+      icon.className = 'pwa-icon';
+      icon.src = '/icons/icon-192.png';
+      icon.width = 48;
+      icon.height = 48;
+      icon.alt = '';
+      icon.setAttribute('aria-hidden', 'true');
+
+      const headCopy = document.createElement('div');
+      headCopy.className = 'pwa-head-copy';
+      const eyebrow = document.createElement('p');
+      eyebrow.className = 'pwa-eyebrow';
+      eyebrow.textContent = m.eyebrow;
+      const title = document.createElement('h2');
+      title.className = 'pwa-title';
+      title.id = 'pwa-install-title';
+      title.textContent = m.title;
+      headCopy.append(eyebrow, title);
+      head.append(icon, headCopy);
+
+      const sub = document.createElement('p');
+      sub.className = 'pwa-sub';
+      sub.textContent = m.subtitle;
+
+      const bodyHost = document.createElement('div');
+      sheet.append(handle, closeBtn, head, sub, bodyHost);
+      backdrop.appendChild(sheet);
+      document.body.appendChild(backdrop);
+
+      backdropEl = backdrop;
+      bodyHostEl = bodyHost;
+      closeBtnEl = closeBtn;
+      renderModeBody(mode);
+      document.addEventListener('keydown', onEscape);
+      capture('pwa_mobile_modal_shown', { surface: 'seo_landing', mode, trigger: 'auto' });
+    };
+
+    window.addEventListener('beforeinstallprompt', (event) => {
+      event.preventDefault();
+      installPrompt = event;
+      try { localStorage.removeItem(INSTALLED_KEY); } catch {}
+      if (backdropEl && currentMode === 'android_manual') {
+        renderModeBody('native_prompt');
+      }
+    });
+
+    window.addEventListener('appinstalled', () => {
+      installPrompt = null;
+      if (autoTimer !== null) {
+        clearTimeout(autoTimer);
+        autoTimer = null;
+      }
+      markInstalled();
+      closeModal(null);
+      capture('pwa_installed', { surface: 'seo_landing' });
+    });
+
+    if (isEligible()) {
+      autoTimer = window.setTimeout(() => {
+        autoTimer = null;
+        openModal();
+      }, SHOW_DELAY_MS);
+    }
+  })();
+
   const root = document.querySelector('[data-demo-quiz]');
   if (!root) return;
   const lang = root.getAttribute('data-lang') || 'pl';

@@ -12,11 +12,9 @@ import { IconComponent } from '../../../../shared/icon/icon.component';
 })
 export class DashboardDialogsComponent {
   readonly language = inject(LanguageService);
-  readonly installVisible = input(false);
   readonly signOutVisible = input(false);
   readonly userEmail = input('');
   readonly busy = input(false);
-  readonly closeInstall = output<void>();
   readonly cancelSignOut = output<void>();
   readonly confirmSignOut = output<void>();
 
@@ -25,9 +23,6 @@ export class DashboardDialogsComponent {
     if (this.signOutVisible() && !this.busy()) {
       event.preventDefault();
       this.cancelSignOut.emit();
-    } else if (this.installVisible()) {
-      event.preventDefault();
-      this.closeInstall.emit();
     }
   }
 }

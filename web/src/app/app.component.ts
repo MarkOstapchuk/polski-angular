@@ -1,17 +1,18 @@
 import { ChangeDetectionStrategy, Component, DestroyRef, inject } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { Router, RouterOutlet } from '@angular/router';
 import { SwUpdate, VersionReadyEvent } from '@angular/service-worker';
 import { filter } from 'rxjs';
 import { LanguageService } from './i18n/language.service';
 import { AnalyticsService } from './services/analytics.service';
 import { PwaInstallService } from './services/pwa-install.service';
 import { ThemeService } from './services/theme.service';
+import { MobileInstallModalComponent } from './shared/mobile-install-modal/mobile-install-modal.component';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet],
-  template: '<router-outlet />',
+  imports: [RouterOutlet, MobileInstallModalComponent],
+  template: '<router-outlet /><app-mobile-install-modal />',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AppComponent {
@@ -25,7 +26,8 @@ export class AppComponent {
     const language = inject(LanguageService);
     inject(ThemeService);
     inject(AnalyticsService).init(language.locale());
-    inject(PwaInstallService);
+    const pwa = inject(PwaInstallService);
+    pwa.initAutoPrompt(inject(Router));
     if (!this.swUpdate.isEnabled || typeof window === 'undefined') return;
 
     this.swUpdate.versionUpdates

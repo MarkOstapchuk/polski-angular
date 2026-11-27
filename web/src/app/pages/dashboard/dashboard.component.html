@@ -318,11 +318,9 @@
   </nav>
 
   <app-dashboard-dialogs
-    [installVisible]="pwa.instructionsVisible()"
     [signOutVisible]="signOutConfirmOpen()"
     [userEmail]="userEmail()"
     [busy]="signingOut()"
-    (closeInstall)="pwa.closeInstructions()"
     (cancelSignOut)="cancelSignOut()"
     (confirmSignOut)="confirmSignOut()" />
 
